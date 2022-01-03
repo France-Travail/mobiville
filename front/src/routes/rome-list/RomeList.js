@@ -155,11 +155,11 @@ const RomeList = () => {
     setIsLoading(true)
 
     axios.get('/api/ogrs').then((response) => {
-      response.data.data.sort((a, b) =>
+      response.data.sort((a, b) =>
         deburr(a.romeLabel) < deburr(b.romeLabel) ? 1 : -1
       )
 
-      const groupedData = sortBy(response.data.data, [
+      const groupedData = sortBy(response.data, [
         'romeLabel',
         'ogrLabel',
       ]).reduce(
