@@ -40,7 +40,15 @@ export default (sequelizeInstance, Model) => {
   Model.cacheLoadAverageHouseRent = null
 
   Model.syncCities = async ({ cities }) => {
-    await Model.deleteAll()
+    const oldRegions = await Model.models.oldRegions.findAll()
+
+    const oldRegionsToNewRegionsMap = oldRegions.reduce(
+      (prev, oldRegion) => ({
+        ...prev,
+        [oldRegion.former_code]: oldRegion.new_code,
+      }),
+      {}
+    )
 
     for (let i = 0; i < cities.length; i++) {
       const city = cities[i]
@@ -52,6 +60,8 @@ export default (sequelizeInstance, Model) => {
         z_moyen: city.altitude_moyenne,
         nom_region: city.region,
         code_reg: city.code_region,
+        new_code_region:
+          oldRegionsToNewRegionsMap[parseInt(city.code_region, 10)],
         insee_com: city.code_insee,
         code_dept: city.code_departement,
         geo_point_2d_x: city.geo_point_2d
@@ -69,7 +79,7 @@ export default (sequelizeInstance, Model) => {
         population: city.population,
       }
 
-      await Model.create(jsonToUpdate)
+      await Model.upsert(jsonToUpdate)
     }
 
     return {
@@ -77,79 +87,20 @@ export default (sequelizeInstance, Model) => {
     }
   }
 
-  Model.regionHasTension = async (regionId, codeRome) => {
-    const l = await Model.allTensionsCities({
-      codeRegion: [regionId],
-      codeRome: [codeRome],
-    })
-
-    return l.length !== 0
-  }
-
-  Model.allTensionsCities = async ({
-    where,
-    codeRome,
-    codeRegion = [],
-    methodName = 'findAll',
-    logging = true,
-  }) => {
-    let whereRegion = {}
-    if (codeRegion.length) {
-      whereRegion = {
-        where: {
-          new_code: codeRegion,
-        },
-      }
-    }
-
-    return await Model[methodName]({
-      where: {
-        ...where,
-      },
-      group: ['id'],
-      include: [
-        {
-          attributes: [],
-          model: Model.models.bassins,
-          required: true,
-          include: [
-            {
-              attributes: [],
-              model: Model.models.tensions,
-              required: true,
-              where: {
-                rome: codeRome,
-              },
-              order: [['ind_t', 'desc']],
-            },
-            {
-              attributes: ['number'],
-              model: Model.models.bassinsJobs,
-              required: false,
-              where: {
-                rome_id: codeRome,
-              },
-              order: [['number', 'desc']],
-            },
-          ],
-        },
-        {
-          model: Model.models.regions,
-          required: true,
-          ...whereRegion,
-        },
-      ],
-      raw: true,
-      logging,
-    })
-  }
-
   Model.search = async ({
     codeRegion = [],
     codeCriterion = [],
     codeRome = [],
-    logging = true,
+    onlySearchInTension = true,
+    order = [['population', 'desc']],
+    offset = 0,
   }) => {
+    /*
+      https://github.com/sequelize/sequelize/issues/9869
+      prevents us from using limit / offset correctly in this query, so we truncate manually in the js
+      once the issue is fixed, adding the parameters to the query will improve performance
+    */
+
     const usedCriterions = codeCriterion.map((key) =>
       CRITERIONS.find((criterion) => criterion.key === key)
     )
@@ -216,13 +167,51 @@ export default (sequelizeInstance, Model) => {
       }
     }, [])
 
-    const result = await Model.allTensionsCities({
+    let whereRegion = {}
+    if (codeRegion.length) {
+      whereRegion = {
+        where: {
+          code: codeRegion,
+        },
+      }
+    }
+
+    let bassinsToInclude = []
+
+    if (onlySearchInTension) {
+      bassinsToInclude.push({
+        attributes: [],
+        model: Model.models.tensions,
+        required: true,
+        where: {
+          rome: codeRome,
+        },
+      })
+    }
+
+    const result = await Model.findAll({
       where: { [Op.and]: whereAnd },
-      codeRegion,
-      codeRome,
-      logging,
+      order,
+      include: [
+        {
+          attributes: [],
+          model: Model.models.bassins,
+          required: true,
+          include: bassinsToInclude,
+        },
+        {
+          attributes: [],
+          model: Model.models.newRegions,
+          required: true,
+          ...whereRegion,
+        },
+      ],
+      raw: true,
     })
-    return result
+
+    // Once the github Sequelize issue is resolved
+    // return both the result of a findAll() and a count()
+    return Promise.all([result.slice(offset, offset + 10), result.length])
   }
 
   Model.getCity = async ({ insee }) => {
@@ -230,7 +219,7 @@ export default (sequelizeInstance, Model) => {
       where: { insee_com: insee },
       include: [
         {
-          model: Model.models.regions,
+          model: Model.models.oldRegions,
           required: true,
         },
       ],
@@ -245,6 +234,16 @@ export default (sequelizeInstance, Model) => {
 
     return city
   }
+
+  Model.getCitiesForAutoComplete = async (query) =>
+    await Model.findAll({
+      attributes: ['nom_comm', 'insee_com', 'postal_code'],
+      where: {
+        nom_comm: { [Op.like]: `${query}%` },
+      },
+      order: ['nom_comm'],
+      limit: 10,
+    })
 
   Model.checkAndStartSyncCity = () => {
     if (!Model.cityOnSync) {

@@ -11,7 +11,7 @@ stages:
 
 variables:
   PACKAGE_NAME: mobiville
-  PACKAGE_VERSION: 1.0.0
+  VERSION: $CI_COMMIT_SHORT_SHA
   DATABASEDUMP_VERSION: 1.0.0
   IP_TEST: 192.168.4.134
   RECETTE:
@@ -26,6 +26,12 @@ variables:
   PROD_BRANCH:
     value: "master"
     description: name of the production deployment branch
+  FORCE_DEPLOY:
+    value: ""
+    description: target to do force deploy api, front or config
+  FORCE_VERSION:
+    value: ""
+    description: version of the FORCE_DEPLOY target api or front to deploy
   FORCE_INSTALL:
     value: "NO"
     description: production install from scratch mobiville with "YES"
@@ -37,21 +43,23 @@ variables:
 
 include:
   - template: Security/Secret-Detection.gitlab-ci.yml
+    rules:
+      - if: '$CI_COMMIT_BRANCH == "develop"' # https://docs.gitlab.com/ee/ci/yaml/index.html#rules-with-include
 
 
 test:sonar:
   extends: .sonarqube-check
   stage: test
   rules:
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == ""'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $FORCE_DEPLOY == ""'
 
 
 test:a11y:
   extends: .a11y
   stage: test
   rules:
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == ""'
 
 
 package 1/2:
@@ -70,9 +78,12 @@ package 1/2:
       - front/dist
     expire_in: 1 week
   rules:
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH'
+    - if: '($CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $PROD_BRANCH) && $FORCE_DEPLOY == ""'
       changes:
         - front/**/*
+    - if: '$FORCE_DEPLOY == "front" && $FORCE_VERSION == ""'
+      when: manual
+
 
 
 package 2/2:
@@ -82,12 +93,16 @@ package 2/2:
     - apt-get install -y -qq curl
   script:
     - cd ./front
-    - tar -czvf "${PACKAGE_NAME}.${PACKAGE_VERSION}.tar.gz" dist
-    - 'curl --header "job-token: $CI_JOB_TOKEN" --upload-file ${PACKAGE_NAME}.${PACKAGE_VERSION}.tar.gz "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_NAME}.${PACKAGE_VERSION}.tar.gz"'
+    - PUB_BRANCH=${CI_COMMIT_BRANCH//\//_}
+    - tar -czvf "${PACKAGE_NAME}-${PUB_BRANCH}.${VERSION}.tar.gz" dist
+    - echo "${PACKAGE_NAME}-${PUB_BRANCH}.${VERSION}.tar.gz"
+    - 'curl --header "job-token: $CI_JOB_TOKEN" --upload-file ${PACKAGE_NAME}-${PUB_BRANCH}.${VERSION}.tar.gz "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/front/${PUB_BRANCH}/${PACKAGE_NAME}.${PUB_BRANCH}-${VERSION}.tar.gz" --upload-file ${PACKAGE_NAME}-${PUB_BRANCH}.${VERSION}.tar.gz "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/front/${PUB_BRANCH}/${PACKAGE_NAME}.${PUB_BRANCH}-latest.tar.gz"'
   rules:
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH'
+    - if: '($CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $PROD_BRANCH) && $FORCE_DEPLOY == ""'
       changes:
         - front/**/*
+    - if: '$FORCE_DEPLOY == "front" && $FORCE_VERSION == ""'
+      when: manual
 
 
 publish api image:
@@ -96,22 +111,27 @@ publish api image:
       name: gcr.io/kaniko-project/executor:debug
       entrypoint: [""]
   script:
-    # on construit l'image docker du composant front et on la sauvegarde dans le registry gitlab
+    # on construit l'image docker du composant api et on la sauvegarde dans le registry gitlab
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dockerfile_api --destination $CI_REGISTRY_IMAGE:api
+    - PUB_BRANCH=${CI_COMMIT_BRANCH//\//_}
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dockerfile_api --destination $CI_REGISTRY_IMAGE:api-${PUB_BRANCH}-${VERSION} --destination $CI_REGISTRY_IMAGE:api-${PUB_BRANCH}-latest
   rules:
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH'
+    - if: '($CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $PROD_BRANCH) && $FORCE_DEPLOY == ""'
       changes:
         - api/**/*
+    - if: '$FORCE_DEPLOY == "api" && $FORCE_VERSION == ""'
+      when: manual
 
 
 deploy front staging:
   extends: .deploy_front
   stage: deploy_staging
   rules:
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == ""'
       changes:
         - front/**/*
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == "api"'
+      when: manual
   variables:
     IP_SERVER: $RECETTE
     SSH_PKEY: $SSH_PRIVATE_KEY
@@ -124,9 +144,11 @@ deploy api staging:
   extends: .deploy_api
   stage: deploy_staging
   rules:
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == ""'
       changes:
         - api/**/*
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == "api"'
+      when: manual
   variables:
     IP_SERVER: $RECETTE
     ENV_TARGET: recette
@@ -140,12 +162,14 @@ deploy conf staging:
   extends: .deploy_conf
   stage: config_staging
   rules:
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == ""'
       changes:
         - nginx/**/*
         - /package.json
         - docker-compose.yml
         - docker-compose.recette.yml
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == "config"'
+      when: manual
   variables:
     IP_SERVER: $RECETTE
     ENV_TARGET: recette
@@ -159,9 +183,11 @@ deploy front production:
   extends: .deploy_front
   stage: deploy_production
   rules:
-    - if: '$CI_COMMIT_BRANCH == $PROD_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == $PROD_BRANCH && $FORCE_DEPLOY == ""'
       changes:
         - front/**/*
+      when: manual
+    - if: '$CI_COMMIT_BRANCH == $PROD_BRANCH && $FORCE_DEPLOY == "front"'
       when: manual
   variables:
     IP_SERVER: $PRODUCTION
@@ -176,9 +202,11 @@ deploy api production:
   extends: .deploy_api
   stage: deploy_production
   rules:
-    - if: '$CI_COMMIT_BRANCH == $PROD_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == $PROD_BRANCH && $FORCE_DEPLOY == ""'
       changes:
         - api/**/*
+      when: manual
+    - if: '$CI_COMMIT_BRANCH == $PROD_BRANCH && $FORCE_DEPLOY == "api"'
       when: manual
   variables:
     IP_SERVER: $PRODUCTION
@@ -193,12 +221,14 @@ deploy conf production:
   extends: .deploy_conf
   stage: config_production
   rules:
-    - if: '$CI_COMMIT_BRANCH == $PROD_BRANCH'
+    - if: '$CI_COMMIT_BRANCH == $PROD_BRANCH && $FORCE_DEPLOY == ""'
       changes:
         - nginx/**/*
         - /package.json
         - docker-compose.yml
         - docker-compose.production.yml
+      when: manual
+    - if: '$CI_COMMIT_BRANCH == $PROD_BRANCH && $FORCE_DEPLOY == "config"'
       when: manual
   variables:
     IP_SERVER: $PRODUCTION
@@ -221,8 +251,11 @@ deploy conf production:
     - ssh -o StrictHostKeyChecking=no gitlab@$IP_SERVER "
                 cd $WORKDIR_SERVER &&
                 docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD &&
-                docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml pull &&
-                docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml up -d &&
+                VERSION=${FORCE_VERSION:-$VERSION} &&
+                PUB_BRANCH=${CI_COMMIT_BRANCH//\//_} &&
+                echo \"API_VERSION=\${PUB_BRANCH}-\${VERSION}\" > .api_env &&
+                API_VERSION=\"\${PUB_BRANCH}-\${VERSION}\" docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml pull &&
+                API_VERSION=\"\${PUB_BRANCH}-\${VERSION}\" docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml up -d &&
                 docker logout $CI_REGISTRY"
 
 
@@ -237,10 +270,16 @@ deploy conf production:
   script:
     # on livre le livrable dist sur la machine de recette
     - ssh -o StrictHostKeyChecking=no gitlab@$IP_SERVER "mkdir -p $WORKDIR_SERVER/nginx/front"
-    - 'ssh -o StrictHostKeyChecking=no gitlab@$IP_SERVER "cd $WORKDIR_SERVER && curl -O --header \"deploy-token: $PACKAGE_REGISTRY_TOKEN\" \"https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_NAME}.${PACKAGE_VERSION}.tar.gz\""'
-    - ssh -o StrictHostKeyChecking=no gitlab@$IP_SERVER "cd $WORKDIR_SERVER/nginx/front && tar -xzvf ../../${PACKAGE_NAME}.${PACKAGE_VERSION}.tar.gz && find . -ctime +1 -delete"
-
-
+    - 'ssh -o StrictHostKeyChecking=no gitlab@$IP_SERVER "
+                PUB_BRANCH=${CI_COMMIT_BRANCH//\//_} &&
+                cd $WORKDIR_SERVER &&
+                VERSION=${FORCE_VERSION:-$VERSION} &&
+                echo \"PACKAGE_VERSION=\${PUB_BRANCH}-\${VERSION}\" > .package_env &&
+                echo \"${PACKAGE_NAME}.\${PUB_BRANCH}-\${VERSION}.tar.gz\" &&
+                curl -O --header \"deploy-token: $PACKAGE_REGISTRY_TOKEN\" \"https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/generic/front/\${PUB_BRANCH}/${PACKAGE_NAME}.\${PUB_BRANCH}-\${VERSION}.tar.gz\" &&
+                  cd $WORKDIR_SERVER/nginx/front && tar -xzvf ../../${PACKAGE_NAME}.\${PUB_BRANCH}-\${VERSION}.tar.gz && find . -ctime +1 -delete
+                  "'
+#NOTE: docker-compose will update with the "latest" and not with the commit hash
 .deploy_conf:
   before_script:
     - apt-get update -qq
@@ -259,9 +298,13 @@ deploy conf production:
     - ssh -o StrictHostKeyChecking=no gitlab@$IP_SERVER "
                 cd $WORKDIR_SERVER &&
                 chmod 640 nginx/.htpasswd &&
-                docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml up -d &&
-                docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml exec -T nginx bash -c 'nginx -t && nginx -s reload'"
-
+                docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD &&
+                VERSION=${FORCE_VERSION:-$VERSION} &&
+                PUB_BRANCH=${CI_COMMIT_BRANCH//\//_} &&
+                echo \"API_VERSION=\${PUB_BRANCH}-\${VERSION}\" > .api_env &&
+                API_VERSION=\"\${PUB_BRANCH}-\${VERSION}\" docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml up -d &&
+                API_VERSION=\"\${PUB_BRANCH}-\${VERSION}\" docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml exec -T nginx bash -c 'nginx -t && nginx -s reload' &&
+                docker logout $CI_REGISTRY"
 
 
 .sonarqube-check:
@@ -320,7 +363,7 @@ renew production tls:
     name: production
     url: https://mobiville.beta.pole-emploi.fr
 
-
+#TODO add init.sh script to initialize/sync database data
 install production:
   stage: install
   before_script:
@@ -333,11 +376,12 @@ install production:
   script:
     - ssh -o StrictHostKeyChecking=no gitlab@$PRODUCTION "mkdir $WORKDIR_SERVER"
     - echo -e "DATABASE_URL=$DATABASE_URL\nMYSQL_DATABASE=$MYSQL_DATABASE\nMYSQL_USER=$MYSQL_USER\nMYSQL_PASSWORD=$MYSQL_PASSWORD\nEMPLOI_STORE_URL=$EMPLOI_STORE_URL\nENTERPRISE_URL=$ENTERPRISE_URL\nEMPLOI_STORE_ID=$EMPLOI_STORE_ID\nEMPLOI_STORE_SECRET=$EMPLOI_STORE_SECRET" > .env
-    - mkdir nginx/ssl
+    - mkdir -p nginx/ssl
     - echo "$SSL_dhparam_pem" > nginx/ssl/dhparam.pem
     - echo "$SSL_entrust_mobiville_pole_emploi_fr_key_pem" > nginx/ssl/entrust-mobiville.pole-emploi.fr-key.pem
     - echo "$SSL_mobiville_pole_emploi_fr_crt" > nginx/ssl/mobiville.pole-emploi.fr.crt
     - echo "$htpasswd" > nginx/.htpasswd
+    - echo "PACKAGE_VERSION=latest" > .package_env
     - scp -o StrictHostKeyChecking=no package.json docker-compose.yml docker-compose.production.yml .env gitlab@$PRODUCTION:$WORKDIR_SERVER
     - ssh -o StrictHostKeyChecking=no gitlab@$PRODUCTION "mkdir -p $WORKDIR_SERVER/nginx/front && mkdir -p $WORKDIR_SERVER/nginx/conf.d"
     - scp -o StrictHostKeyChecking=no nginx/conf.d/production.conf gitlab@$PRODUCTION:$WORKDIR_SERVER/nginx/conf.d
@@ -345,15 +389,18 @@ install production:
     - scp -o StrictHostKeyChecking=no nginx/.htpasswd gitlab@$PRODUCTION:$WORKDIR_SERVER/nginx/
     - 'ssh -o StrictHostKeyChecking=no gitlab@$PRODUCTION "cd $WORKDIR_SERVER && curl -O --header \"deploy-token: $PACKAGE_REGISTRY_TOKEN\" \"https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/generic/database/${DATABASEDUMP_VERSION}/database.${DATABASEDUMP_VERSION}.tar.gz\""'
     - ssh -o StrictHostKeyChecking=no gitlab@$PRODUCTION "cd $WORKDIR_SERVER && tar -xzvf database.${DATABASEDUMP_VERSION}.tar.gz"
-    - 'ssh -o StrictHostKeyChecking=no gitlab@$PRODUCTION "cd $WORKDIR_SERVER && curl -O --header \"deploy-token: $PACKAGE_REGISTRY_TOKEN\" \"https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/generic/${PACKAGE_NAME}/${PACKAGE_VERSION}/${PACKAGE_NAME}.${PACKAGE_VERSION}.tar.gz\""'
-    - ssh -o StrictHostKeyChecking=no gitlab@$PRODUCTION "cd $WORKDIR_SERVER/nginx/front && tar -xzvf ../../${PACKAGE_NAME}.${PACKAGE_VERSION}.tar.gz"
+    - 'ssh -o StrictHostKeyChecking=no gitlab@$PRODUCTION "cd $WORKDIR_SERVER && PUB_BRANCH=${CI_COMMIT_BRANCH//\//_} && curl -O --header \"deploy-token: $PACKAGE_REGISTRY_TOKEN\" \"https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/generic/front/${PUB_BRANCH}/${PACKAGE_NAME}.${PUB_BRANCH}-latest.tar.gz\""'
+    - ssh -o StrictHostKeyChecking=no gitlab@$PRODUCTION "cd $WORKDIR_SERVER/nginx/front && tar -xzvf ../../${PACKAGE_NAME}.${BUILD_ENV}-latest.tar.gz"
     - ssh -o StrictHostKeyChecking=no gitlab@$PRODUCTION "
                 cd $WORKDIR_SERVER &&
                 chmod 640 nginx/ssl/* &&
                 chmod 640 nginx/.htpasswd &&
+                VERSION=${FORCE_VERSION:-$VERSION} &&
+                PUB_BRANCH=${CI_COMMIT_BRANCH//\//_} &&
+                echo \"API_VERSION=\${PUB_BRANCH}-\${VERSION}\" > .api_env &&
                 docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD &&
-                docker-compose -f docker-compose.yml -f docker-compose.production.yml pull &&
-                docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d &&
+                API_VERSION=\"\${PUB_BRANCH}-\${VERSION}\" docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml pull &&
+                API_VERSION=\"\${PUB_BRANCH}-\${VERSION}\" docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml up -d &&
                 docker logout $CI_REGISTRY"
   rules:
     - if: '$FORCE_INSTALL == "YES"'

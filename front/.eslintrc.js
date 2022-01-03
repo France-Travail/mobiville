@@ -1,22 +1,17 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
   },
-  extends: [
-    'react-app',
-    'prettier'
-  ],
+  extends: ['react-app', 'prettier'],
   parserOptions: {
     ecmaFeatures: {
-      jsx: true
+      jsx: true,
     },
     ecmaVersion: 12,
-    sourceType: 'module'
+    sourceType: 'module',
   },
-  plugins: [
-    'react'
-  ],
+  plugins: ['react'],
   rules: {
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     semi: [2, 'never'],
@@ -27,7 +22,7 @@ module.exports = {
     'react/jsx-one-expression-per-line': 0,
     'comma-dangle': 0,
     'react-hooks/exhaustive-deps': 0, // reactivate asap
-    'react/jsx-no-target-blank': 0
-
-  }
+    'react/jsx-no-target-blank': 0,
+    'no-console': 2,
+  },
 }

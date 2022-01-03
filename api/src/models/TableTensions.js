@@ -2,7 +2,7 @@ import { getPCSByRome } from '../utils/api'
 
 export default (sequelizeInstance, Model) => {
   Model.syncTensions = async ({ tensions }) => {
-    await Model.deleteAll()
+    await Model.destroy({ truncate: true })
 
     let nbInserted = 0
     for (let i = 0; i < tensions.length; i++) {

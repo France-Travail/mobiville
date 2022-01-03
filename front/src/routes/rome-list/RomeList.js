@@ -5,7 +5,7 @@ import axios from 'axios'
 import { deburr, sortBy } from 'lodash'
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
 
-import { MainLayout } from '../../components/main-layout'
+import MainLayout from '../../components/MainLayout'
 import { isMobileView } from '../../constants/mobile'
 import { useWindowSize } from '../../common/hooks/window-size'
 

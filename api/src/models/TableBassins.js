@@ -1,6 +1,6 @@
 export default (sequelizeInstance, Model) => {
   Model.sync = async ({ bassins }) => {
-    await Model.deleteAll()
+    await Model.destroy({ truncate: true })
 
     let nbInserted = 0
     for (let i = 0; i < bassins.length; i++) {

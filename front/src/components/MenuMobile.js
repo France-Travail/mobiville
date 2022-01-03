@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { Typography } from '@mui/material'
 import { COLOR_PRIMARY, COLOR_TEXT_SECONDARY } from '../constants/colors'
 import { ReactComponent as HomeIcon } from '../assets/images/home.svg'
-import { ReactComponent as MagnifyingGlassIcon } from '../assets/images/superhero-outlined.svg'
-import { ReactComponent as SuperHeroIcon } from '../assets/images/magnifying-glass-outlined.svg'
+import { ReactComponent as SuperHeroIcon } from '../assets/images/superhero-outlined.svg'
+import { ReactComponent as MagnifyingGlassIcon } from '../assets/images/magnifying-glass-outlined.svg'
 
 const Nav = styled.nav`
   position: fixed;

@@ -78,3 +78,7 @@ export const ucFirstOnly = (s) => {
 }
 
 export const thereAre = (date) => moment(date).fromNow()
+
+const numberFormatter = Intl.NumberFormat()
+export const formatNumber = (number) =>
+  numberFormatter.format(Math.floor(number))

@@ -4,7 +4,6 @@ import config from 'config'
 import Sequelize from 'sequelize'
 
 import db from '../db'
-import { addUtilsFunctionInTable } from './addUtilsFunctionInTable'
 import { ucFirst } from '../utils/utils'
 
 if (!config.database.url) {
@@ -41,9 +40,8 @@ function initModelsByPath(sequelizeInstance, folderPath, globalName) {
     if (models[modelName].associate) {
       models[modelName].associate(models)
     }
-
-    addUtilsFunctionInTable(models[modelName], sequelizeInstance)
   }
+
   global[globalName] = models
   return global[globalName]
 }

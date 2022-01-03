@@ -1,14 +1,14 @@
 import { CronJob } from 'cron'
 import { getBassinJobsCount } from '../utils/api'
 
-const citiesCron = async (env) => {
+const citiesCron = async (models) => {
   console.log('START CRONS : bassinsJobs')
 
   const loadAndSync = async () =>
     getBassinJobsCount()
       .then((data) => {
         console.log('Now starting sync - bassinsJobs')
-        env.models.bassinsJobs.sync(data)
+        models.bassinsJobs.sync(data)
         console.log('sync finished - bassinsJobs')
       })
       .catch((err) => console.error('Error syncing bassinsJobs', err))

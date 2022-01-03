@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MainLayout } from '../../components/main-layout'
+import MainLayout from '../../components/MainLayout'
 
 const Container = styled.div`
   margin: 124px 16px;

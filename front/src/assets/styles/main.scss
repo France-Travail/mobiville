@@ -1,5 +1,4 @@
 @import '../fonts/Roboto/roboto.scss';
-@import './button.scss';
 @import './form.scss';
 
 html,
@@ -40,4 +39,24 @@ a,
 a:hover {
   text-decoration: none;
   color: #191970;
+}
+
+select,
+textarea,
+input[type='text'],
+input[type='password'],
+input[type='datetime'],
+input[type='datetime-local'],
+input[type='date'],
+input[type='month'],
+input[type='time'],
+input[type='week'],
+input[type='number'],
+input[type='email'],
+input[type='url'],
+input[type='search'],
+input[type='tel'],
+input[type='color'] {
+  /* avoids safari mobile zooming in on input, which because of autocompletes is not necessarily zoomed out */
+  font-size: 16px;
 }

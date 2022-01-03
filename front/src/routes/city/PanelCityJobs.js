@@ -250,6 +250,7 @@ const PanelCityJobs = ({
     onSearchInfosTravail,
     professions,
   } = useProfessions()
+
   const size = useWindowSize()
   const [infosTravail, setInfosTravail] = useState(null)
   const [dateFilter, setDateFilter] = useState('')

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MainLayout } from '../../components/main-layout'
+import MainLayout from '../../components/MainLayout'
 
 import techErrorPic from '../../assets/images/technical-error.svg'
 

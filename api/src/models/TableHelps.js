@@ -1,7 +1,7 @@
 export default (sequelizeInstance, Model) => {
   Model.sync = async (helps) => {
     console.log('START SYNC HELPS')
-    await Model.deleteAll()
+    await Model.destroy({ truncate: true })
 
     let nbInserted = 0
     console.log('START SYNC HELPS')

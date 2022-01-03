@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet'
 
 import { useHelps } from '../../common/contexts/helpsContext'
 import { useWindowSize } from '../../common/hooks/window-size'
-import { MainLayout } from '../../components/main-layout'
+import MainLayout from '../../components/MainLayout'
 import {
   COLOR_GRAY,
   COLOR_PRIMARY,

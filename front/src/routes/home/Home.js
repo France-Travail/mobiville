@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
-import { MainLayout } from '../../components/main-layout'
+import MainLayout from '../../components/MainLayout'
 import { COLOR_PRIMARY, COLOR_BACKGROUND } from '../../constants/colors'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
@@ -41,7 +41,7 @@ const MainNavButtonsContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 32px;
+  padding: ${({ isMobile }) => (isMobile ? '32px 0' : '32px')};
   flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
 `
 
@@ -57,7 +57,7 @@ const MainNavButton = styled(Link)`
   font-weight: 500;
   font-size: 18px;
   padding: 16px;
-  max-width: 424px;
+  max-width: ${({ isMobile }) => (isMobile ? 'inherit' : '424px')};
   width: 100%;
 
   &:first-of-type {
@@ -207,7 +207,7 @@ const HomePage = () => {
       </Helmet>
 
       <TopBlockContainer isMobile={isMobile}>
-        <TopBlock>
+        <TopBlock isMobile={isMobile}>
           <H1 isMobile={isMobile}>
             Trouver l’emploi et la ville qui va avec !
           </H1>
@@ -240,7 +240,10 @@ const HomePage = () => {
                 <MapPointerIcon />
               </AdvantageIconContainer>
               <div>
-                <AdvantageH3>Identifiez la meilleure destination</AdvantageH3>
+                <AdvantageH3>
+                  Identifiez
+                  <br /> la meilleure destination
+                </AdvantageH3>
                 <AdvantageTextP>
                   Mobiville vous donne une visibilité sur le marché de l’emploi,
                   de l’immobilier et le cadre de vie afin de choisir une ville
@@ -253,7 +256,10 @@ const HomePage = () => {
                 <PrizeIcon />
               </AdvantageIconContainer>
               <div>
-                <AdvantageH3>Évitez la concurrence</AdvantageH3>
+                <AdvantageH3>
+                  Évitez
+                  <br /> la concurrence
+                </AdvantageH3>
                 <AdvantageTextP>
                   Notre service vous propose en priorité les villes avec peu de
                   candidats sur le territoire afin d’optimiser votre recherche
@@ -266,7 +272,10 @@ const HomePage = () => {
                 <MoneyClockIcon />
               </AdvantageIconContainer>
               <div>
-                <AdvantageH3>Gagnez du temps et de l’argent</AdvantageH3>
+                <AdvantageH3>
+                  Gagnez
+                  <br /> du temps et de l’argent
+                </AdvantageH3>
                 <AdvantageTextP>
                   Découvrez des conseils et des aides financières,
                   administratives ou humaines que vous pouvez mobiliser dans

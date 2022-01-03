@@ -3,7 +3,7 @@ export default (sequelizeInstance, Model) => {
     if (city) {
       const social = await Model.findOne({
         where: {
-          code_reg: city['region.new_code'],
+          code_reg: city['oldRegion.new_code'],
         },
         raw: true,
       })

@@ -8,7 +8,18 @@ import reportWebVitals from './reportWebVitals'
 import Providers from './common/contexts'
 import 'react-toastify/dist/ReactToastify.css'
 
-const theme = createTheme({})
+import { COLOR_PRIMARY, COLOR_SECONDARY } from './constants/colors'
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: COLOR_PRIMARY,
+    },
+    secondary: {
+      main: COLOR_SECONDARY,
+    },
+  },
+})
 
 ReactDOM.render(
   <React.StrictMode>

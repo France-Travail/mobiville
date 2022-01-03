@@ -16,7 +16,7 @@ services:
           cpus: '0.5'
 
   api:
-    image: registry.beta.pole-emploi.fr/mobiville/mobiville:api
+    image: registry.beta.pole-emploi.fr/mobiville/mobiville:api-${API_VERSION:-master-latest}
     environment:
       - NODE_ENV=production
     volumes:

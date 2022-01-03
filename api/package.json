@@ -5,8 +5,8 @@
     "node": "12.18.4"
   },
   "scripts": {
-    "start": "nodemon --exec babel-node src/index.js",
-    "start:production": "node --optimize_for_size --max_old_space_size=2000 --gc_interval=100 dist/index.js",
+    "start": "nodemon --exec babel-node src/index.koa.js",
+    "start:production": "node --optimize_for_size --max_old_space_size=2000 --gc_interval=100 dist/index.koa.js",
     "build:production": "npm run _rm-build-prod && npm run _build-prod",
     "_build-prod": "babel src --out-dir dist --copy-files",
     "_rm-build-prod": "rm -rf dist",
@@ -22,6 +22,8 @@
     "sync:helps": "babel-node ./src/scripts/syncHelps.js"
   },
   "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "@koa/router": "^10.1.1",
     "async": "^3.2.0",
     "axios": "0.21.0",
     "bcryptjs": "^2.4.3",
@@ -34,9 +36,12 @@
     "fs": "0.0.1-security",
     "html-entities": "^1.3.1",
     "jsonwebtoken": "^8.5.1",
-    "koa-body": "^4.0.6",
+    "koa": "^2.13.4",
+    "koa-body": "^4.2.0",
+    "koa-compress": "^5.1.0",
+    "koa-helmet": "^6.1.0",
     "koa-session": "^6.1.0",
-    "koa-smart": "^2.2.0",
+    "koa2-ratelimit": "^0.9.1",
     "lodash": "^4.17.20",
     "mariadb": "^2.5.1",
     "moment": "^2.29.1",

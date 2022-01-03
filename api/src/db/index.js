@@ -55,7 +55,7 @@ function getUmzug(
       sequelize: client,
       tableName,
     },
-    logging: config.database.logging,
+    logging: !!config.database.logging,
     migrations: {
       params: [client.getQueryInterface(), Sequelize, client.models],
       path: `${process.cwd()}/src/db/${folder}`,

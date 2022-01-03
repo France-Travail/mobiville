@@ -1,6 +1,6 @@
 import React from 'react'
 import CssBaseline from '@mui/material/CssBaseline'
-import { Routes } from './routes/routes'
+import { Routes } from './routes/Routes'
 
 function App() {
   // import tag commander

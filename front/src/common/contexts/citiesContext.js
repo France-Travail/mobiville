@@ -1,5 +1,5 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useCallback, useEffect } from 'react'
+import { isEqual } from 'lodash'
 import {
   getCriterions,
   loadCity,
@@ -9,11 +9,14 @@ import {
   getCityTenement,
   getCityEquipments,
   searchJobLabels,
+  fetchAutocompleteCities,
 } from '../../api/cities.api'
 
 const EMPTY_CITY = { id: null, nom_comm: 'Non trouvée', description: '' }
 
 const CitiesContext = React.createContext()
+
+let lastSearchParams = {}
 
 export function CitiesProvider(props) {
   const [cities, _setCities] = useState([])
@@ -36,15 +39,26 @@ export function CitiesProvider(props) {
   const [environmentCriterions, _setEnvironmentCriterions] = useState([])
   const [cityCriterions, _setCityCriterions] = useState([])
   const [regionCriterions, _setRegionCriterions] = useState([])
+  const [autocompletedCities, setAutocompletedCities] = useState([])
+  const [isLoadingAutocomplete, setIsLoadingAutocomplete] = useState(false)
 
-  const onSearch = useCallback((params, index = 0, oldCities = []) => {
+  const onSearch = (params, index = 0, oldCities = []) => {
+    if (isLoading && isEqual(lastSearchParams, params)) return
+
     _setIsLoading(true)
-    if (index === 0) {
+    lastSearchParams = { ...params }
+
+    if (
+      index === 0 ||
+      lastSearchParams.onlySearchInTension !== params.onlySearchInTension
+    ) {
       _setCities([])
     }
 
     apiSearchCities({ ...params, index })
       .then((c) => {
+        if (!isEqual(params, lastSearchParams)) return
+
         if (index === 0) {
           _setCities(c.list)
         } else {
@@ -55,7 +69,10 @@ export function CitiesProvider(props) {
       .then(() => {
         _setIsLoading(false)
       })
-  }, [])
+      .catch(() => {
+        _setIsLoading(false)
+      })
+  }
 
   const onLoadCity = useCallback((id) => {
     _setIsLoadingCity(true)
@@ -63,6 +80,8 @@ export function CitiesProvider(props) {
       .then(setCity)
       .then(() => _setIsLoadingCity(false))
   })
+
+  const unloadCity = () => setCity(null)
 
   const onSearchByLocation = useCallback(({ latitude, longitude }) => {
     _setIsLoadingLocation(true)
@@ -141,6 +160,18 @@ export function CitiesProvider(props) {
     [criterions]
   )
 
+  const initializeJobsAutocomplete = () => setAutocompletedCities([])
+
+  const onAutocomplete = useCallback((query) => {
+    setIsLoadingAutocomplete(true)
+    return fetchAutocompleteCities({ query })
+      .then((result) => {
+        setAutocompletedCities(result)
+        setIsLoadingAutocomplete(false)
+      })
+      .catch((err) => setIsLoadingAutocomplete(false))
+  })
+
   useEffect(() => {
     getCriterions()
       .then((results) => {
@@ -194,10 +225,13 @@ export function CitiesProvider(props) {
         environmentCriterions,
         cityCriterions,
         regionCriterions,
+        autocompletedCities,
+        isLoadingAutocomplete,
         // function
         setCity,
         onSearch,
         onLoadCity,
+        unloadCity,
         onSearchByLocation,
         onSearchByName,
         onSearchById,
@@ -205,6 +239,8 @@ export function CitiesProvider(props) {
         onGetCityTenement,
         onGetCityEquipments,
         onSearchJobLabels,
+        onAutocomplete,
+        initializeJobsAutocomplete,
       }}
     />
   )

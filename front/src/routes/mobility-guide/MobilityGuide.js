@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { Link as _Link } from 'react-router-dom'
 import _ArrowForward from '@mui/icons-material/ArrowForward'
 
-import { MainLayout } from '../../components/main-layout'
+import MainLayout from '../../components/MainLayout'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import { useScroll } from '../../common/hooks/use-scroll'

@@ -9,7 +9,7 @@ export default (sequelizeInstance, Model) => {
     console.log('START SYNC REGIONS TENSIONS CRITERIONS')
 
     const jobList = await Model.models.tensions.fetchJobList()
-    const regionsList = await Model.models.regions.findAll()
+    const regionsList = await Model.models.oldRegions.findAll()
 
     const regionsTensionsTemp = []
 
@@ -18,14 +18,12 @@ export default (sequelizeInstance, Model) => {
 
       for (const job of jobList) {
         const { rome } = job
-        const citiesGroupedByRegion = groupBy(
-          await Model.models.cities.search({
-            codeCriterion: [criterion.key],
-            codeRome: [rome],
-            logging: false,
-          }),
-          'region.new_code'
-        )
+        const [searchResult] = await Model.models.cities.search({
+          codeCriterion: [criterion.key],
+          codeRome: [rome],
+          logging: false,
+        })
+        const citiesGroupedByRegion = groupBy(searchResult, 'region.new_code')
 
         Object.keys(citiesGroupedByRegion).forEach((regionCode) => {
           if (!romesByRegion[regionCode]) {

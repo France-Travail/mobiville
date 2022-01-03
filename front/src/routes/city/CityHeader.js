@@ -10,7 +10,7 @@ import {
   COLOR_TEXT_SECONDARY,
   COLOR_SECONDARY,
 } from '../../constants/colors'
-import { ucFirstOnly } from '../../utils/utils'
+import { formatNumber, ucFirstOnly } from '../../utils/utils'
 import { isMobileView } from '../../constants/mobile'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { useScroll } from '../../common/hooks/use-scroll'
@@ -339,7 +339,7 @@ const CityHeader = ({ tabList, tabSelected, onSelectTab }) => {
             <img src="/icons/people.svg" alt="people" />
             <PreviewItem>
               Habitants
-              <b>{parseInt(city.population * 1000, 10)}</b>
+              <b>{formatNumber(city.population * 1000)}</b>
             </PreviewItem>
             <PersonIconGreen />
             <PreviewItem>

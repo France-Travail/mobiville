@@ -7,7 +7,7 @@ const LYON_CODE = 69123
 
 export default (sequelizeInstance, Model) => {
   Model.sync = async ({ equipments }) => {
-    await Model.deleteAll()
+    await Model.destroy({ truncate: true })
 
     let nbInserted = 0
     console.log('START SYNC EQUIPMENTS')

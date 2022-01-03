@@ -68,9 +68,17 @@ const HeaderDesktop = () => {
 
   return (
     <Header>
-      <Link to="/" style={{ flexShrink: 0 }}>
-        <img src={LOGO_FR} alt="" style={{ height: 70, marginRight: 16 }} />
-        <img src={LOGO} alt="" style={{ height: 48 }} />
+      <Link to="/" style={{ flexShrink: 0 }} title="Retour à l’accueil">
+        <img
+          src={LOGO_FR}
+          alt="Retour à la page d’accueil"
+          style={{ height: 70, marginRight: 16 }}
+        />
+        <img
+          src={LOGO}
+          alt="Retour à la page d’accueil"
+          style={{ height: 48 }}
+        />
       </Link>
       <IconsContainer style={{ flexGrow: 1 }}>
         <Item to="/" selected={homeSelected}>

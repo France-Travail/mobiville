@@ -1,4 +1,5 @@
 // A script to execute all syncs that were previously done in the sync route
+import { uniqBy } from 'lodash'
 import { getAllRegions, getRegionsSocialHousing } from '../utils/api'
 
 import db from '../models'
@@ -8,12 +9,25 @@ const models = db.initModels()
 const doSync = async () => {
   try {
     const regions = await getAllRegions()
+
+    const newRegions = uniqBy(
+      regions.map((region) => ({
+        code: region.new_code,
+        name: region.new_name,
+        name_normalized: region.new_name_normalized,
+      })),
+      'code'
+    )
+
     const socialHousingData = getRegionsSocialHousing()
-    const status = await models.regions.syncRegions({
+    await models.oldRegions.syncRegions({
       regions,
       socialHousingData,
     })
-    console.log('Success! Status:', status)
+
+    await models.newRegions.syncRegions(newRegions)
+
+    console.log('Success!')
     process.exit(0)
   } catch (err) {
     console.error(err)

@@ -6,7 +6,7 @@ import { Link, useHistory, useParams } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
 import { useCities } from '../../common/contexts/citiesContext'
-import { MainLayout } from '../../components/main-layout'
+import MainLayout from '../../components/MainLayout'
 import CityHeader from './CityHeader'
 import PanelCityJobs from './PanelCityJobs'
 import PanelCityLife from './PanelCityLife'
@@ -25,13 +25,20 @@ const HelpButton = styled.button`
   bottom: 32px;
   left: 50%;
   transform: translateX(-50%);
-  height: 48px !important;
+  height: 48px;
+  display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px !important;
   cursor: pointer;
   width: ${(props) => (props.isMobile ? 'calc(100% - 32px)' : '')};
-  padding: ${(props) => (props.isMobile ? '0 12px' : '0 48px')} !important;
+  padding: ${(props) => (props.isMobile ? '0 12px' : '0 48px')};
+  border: none;
+  font-size: 14px;
+  margin: 0;
+  border-radius: 32px;
+  background-color: #191970;
+  color: white;
 `
 
 const CityPage = ({ location: { pathname, search } }) => {
@@ -40,7 +47,8 @@ const CityPage = ({ location: { pathname, search } }) => {
     { key: 'life', label: 'Cadre de vie' },
     { key: 'tenement', label: 'Logement' },
   ]
-  const { onLoadCity, isLoadingCity, city, criterions } = useCities()
+  const { onLoadCity, isLoadingCity, city, criterions, unloadCity } =
+    useCities()
   const { insee, place } = useParams()
   const params = queryString.parse(search)
   const size = useWindowSize()
@@ -51,9 +59,11 @@ const CityPage = ({ location: { pathname, search } }) => {
   )
 
   useEffect(() => {
-    const extract = insee.split('-')
-    if (extract && extract.length) {
-      onLoadCity(extract[0])
+    const [inseeCode] = insee.split('-')
+    onLoadCity(inseeCode)
+
+    return () => {
+      unloadCity()
     }
   }, [])
 
@@ -133,7 +143,6 @@ const CityPage = ({ location: { pathname, search } }) => {
             {tabKey === 'tenement' && <PanelCityHousing city={city} />}
             <Link to="/mobility-guide" style={{ cursor: 'pointer' }}>
               <HelpButton
-                className="btn primary"
                 type="button"
                 isMobile={isMobileView(size)}
               >

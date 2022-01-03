@@ -1,11 +1,9 @@
 import axios from 'axios'
 
 export const apiLoadHelpPreviews = () =>
-  axios
-    .get('/api/helps/get-previews')
-    .then((response) => (response.data ? response.data.data : []))
+  axios.get('/api/helps/get-previews').then((response) => response.data || [])
 
 export const apiLoadHelpPreview = (slug) =>
   axios
-    .get(`/api/helps/get-preview/${slug}`)
-    .then((response) => (response.data ? response.data.data : null))
+    .get(`/api/helps/get-previews/${slug}`)
+    .then((response) => response.data || null)

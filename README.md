@@ -37,9 +37,9 @@ Entrer dans le container api
 Et exécuter les commandes de synchronisation :
 
 ```
+yarn run sync:regions # almost instant. Do this before cities.
 yarn run sync:cities # 2 minutes long
 yarn run sync:professionsInTension # 2 minutes long
-yarn run sync:regions # almost instant
 yarn run sync:equipments # This will take about 10 minutes
 yarn run sync:equipmentsSpecial # This will take about 2 minutes, needs to be run after the previous script
 yarn run sync:romeOgrs # almost instant
@@ -126,7 +126,6 @@ Format d'une ville:
 - photo: Url de photo de la ville. (Valeur à null puis un cron demande à l'api wikipedia la photo),
 
 Liste des villes en tensions -> Fichier importé depuis le fichier `cities-tension-utf8.csv` (Un appel depuis la route http://localhost/api/sync/sync-profession-in-tension)
-
 Liste des villes <-> bassins -> Fichier importé depuis le fichier `lexique-bassins.csv` (Un appel depuis la route http://localhost/api/sync/sync-cities)
 
 Liste des regions, nouvelle nomenclature -> Fichier importé depuis le fichier `anciennes-nouvelles-regions.json` (Un appel depuis la route http://localhost/api/sync/sync-regions)
@@ -137,15 +136,67 @@ API Offre d'emploi, pour afficher la liste des offres pour une ville et un méti
 
 API Info travail, pour afficher la tranche de salaire d'une region et d'un métier sur la fiche ville
 
-# Mise en prod
+## Déploiement
 
-Lors d'un commit sur develop (recette) l'image de l'api est poussé si besoin et un package des sources compilés est également poussé si besoin.
-Pour mettre en prod la dernière image de l'API et/ou du dernier package, il faut créer une merge request de develop sur la master.
-Se rendre ensuite dans le pipeline et faire la mep manuellement en cliquant sur le bouton.
+### workflow
 
-Pour revenir en arrière il faut se positionner sur la pipeline qui convient et republier l'API et/ou le package pour le repousser en production manuellement via la pipeline.
+Le déploiement se fait avec la pipeline de gitlab.
 
-En cours: gestion des numéro de version pour facilité le rollback.
+Une image versionnée est produite pour l'API si un commit de code de l'API est poussé sur la branche de reccette ou de production. De même qu'une archive versionnée est créée en cas de commit sur la branche de recette ou de production. L'image et/ou l'archive sont ensuite déployées sur les environements concernés.
+
+```plantuml
+ left to right direction
+
+  state "commit d3a2370" as ci
+  ci : branche\ndevelop ou master
+  state "build & publish" as build {
+    state file <<choice>>
+    state "build package" as p
+    p : front-master-latest.tar.gz\nfront-master-d3a2370.tar.gz
+    state "build image" as i
+    i : api-master-latest\napi-master-d3a2370
+    state "publication" as r
+    r : registry
+    file --> p : si code front change
+    file --> i : si code api change
+    p --> r
+    i --> r
+  }
+
+
+  [*] --> ci
+  ci --> build :si commit sur master
+  build --> test
+  test --> deploy :action manuelle
+```
+
+### rollback
+
+Pour faire un rollback de l'api et/ou du front suivre la procédure suivante:
+
+1. récupérer le hash raccourci du commit sur lequel on veut faire le rollback et s'assurer que l'image ou l'archive correspondant à ce commit existe bien.
+
+2. Dans le gitlab > CI/CD > Pipelines actionner _Run pipeline_
+
+3. Choisir la branche correspondante à l'environement surlequel le rollback doit être fait
+
+4. Renseigner les variables suivantes : `FORCE_VERSION: {hash commit de la version à rollbacker}
+
+5. valider les étapes manuellement pour ce rollback
+
+Si besoin de déployer depuis une autre branche que celle de recette ou de production dans ce cas, se positionner sur la branche et renseigner `FORCE_DEPLOY: true` si aucun paquet ou image n'existe encore pour cette branche alors ne pas renseigner de version de commit, l'image ou le paquet sera créé en fonction du dernier commit de cette même branche cible.
+
+### typologie des fichiers de livraisons
+
+- Pour le front : gitlab > Packages & registry > Package registry > front >
+
+`mobiville.{branche}-latest.tar.gz`
+`mobiville.{branche}-{hash commit raccourci}.tar.gz`
+
+- Pour l'API : gitlab > Packages & registry > Image registry > Root image
+
+`api-{branch}-latest`
+`api-{branch}-{hash commit taccourci}`
 
 ## Divers
 

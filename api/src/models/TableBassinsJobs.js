@@ -8,7 +8,7 @@ export default (sequelizeInstance, Model) => {
       .filter(
         ({ bassin_id, rome_id, number }) => bassin_id && rome_id && number
       )
-    await Model.deleteAll()
+    await Model.destroy({ truncate: true })
     await Model.bulkCreate(dataToSync)
   }
 
