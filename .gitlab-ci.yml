@@ -289,7 +289,7 @@ deploy conf production:
     - ssh-add <(echo "$SSH_PKEY")
     - mkdir -p ~/.ssh
   script:
-    - echo -e "DATABASE_URL=$DATABASE_URL\nMYSQL_DATABASE=$MYSQL_DATABASE\nMYSQL_USER=$MYSQL_USER\nMYSQL_PASSWORD=$MYSQL_PASSWORD\nEMPLOI_STORE_URL=$EMPLOI_STORE_URL\nENTERPRISE_URL=$ENTERPRISE_URL\nEMPLOI_STORE_ID=$EMPLOI_STORE_ID\nEMPLOI_STORE_SECRET=$EMPLOI_STORE_SECRET" > .env
+    - echo -e "DATABASE_URL=$DATABASE_URL\nMYSQL_DATABASE=$MYSQL_DATABASE\nMYSQL_USER=$MYSQL_USER\nMYSQL_PASSWORD=$MYSQL_PASSWORD\nEMPLOI_STORE_URL=$EMPLOI_STORE_URL\nENTERPRISE_URL=$ENTERPRISE_URL\nEMPLOI_STORE_ID=$EMPLOI_STORE_ID\nEMPLOI_STORE_SECRET=$EMPLOI_STORE_SECRET\nSENTRY_DNS=$SENTRY_DNS" > .env
     - echo "$htpasswd" > nginx/.htpasswd
     - scp -o StrictHostKeyChecking=no package.json docker-compose.yml docker-compose.$ENV_TARGET.yml .env gitlab@$IP_SERVER:$WORKDIR_SERVER
     - ssh -o StrictHostKeyChecking=no gitlab@$IP_SERVER "mkdir -p $WORKDIR_SERVER/nginx/conf.d"
@@ -299,7 +299,7 @@ deploy conf production:
                 cd $WORKDIR_SERVER &&
                 chmod 640 nginx/.htpasswd &&
                 docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD &&
-                VERSION=${FORCE_VERSION:-$VERSION} &&
+                VERSION=${FORCE_VERSION:-latest} &&
                 PUB_BRANCH=${CI_COMMIT_BRANCH//\//_} &&
                 echo \"API_VERSION=\${PUB_BRANCH}-\${VERSION}\" > .api_env &&
                 API_VERSION=\"\${PUB_BRANCH}-\${VERSION}\" docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml up -d &&
@@ -375,7 +375,7 @@ install production:
     - mkdir -p ~/.ssh
   script:
     - ssh -o StrictHostKeyChecking=no gitlab@$PRODUCTION "mkdir $WORKDIR_SERVER"
-    - echo -e "DATABASE_URL=$DATABASE_URL\nMYSQL_DATABASE=$MYSQL_DATABASE\nMYSQL_USER=$MYSQL_USER\nMYSQL_PASSWORD=$MYSQL_PASSWORD\nEMPLOI_STORE_URL=$EMPLOI_STORE_URL\nENTERPRISE_URL=$ENTERPRISE_URL\nEMPLOI_STORE_ID=$EMPLOI_STORE_ID\nEMPLOI_STORE_SECRET=$EMPLOI_STORE_SECRET" > .env
+    - echo -e "DATABASE_URL=$DATABASE_URL\nMYSQL_DATABASE=$MYSQL_DATABASE\nMYSQL_USER=$MYSQL_USER\nMYSQL_PASSWORD=$MYSQL_PASSWORD\nEMPLOI_STORE_URL=$EMPLOI_STORE_URL\nENTERPRISE_URL=$ENTERPRISE_URL\nEMPLOI_STORE_ID=$EMPLOI_STORE_ID\nEMPLOI_STORE_SECRET=$EMPLOI_STORE_SECRET\nSENTRY_DNS=$SENTRY_DNS" > .env
     - mkdir -p nginx/ssl
     - echo "$SSL_dhparam_pem" > nginx/ssl/dhparam.pem
     - echo "$SSL_entrust_mobiville_pole_emploi_fr_key_pem" > nginx/ssl/entrust-mobiville.pole-emploi.fr-key.pem

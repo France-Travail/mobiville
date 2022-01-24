@@ -53,17 +53,35 @@ router.post(
 )
 
 router.post(
-  '/search-by-location',
+  '/search-close-cities',
   async ({
     request: {
-      body: { latitude, longitude },
+      body: { latitude, longitude, codeRome, inseeCode },
     },
     models,
     response,
   }) => {
-    response.body = await models.cities.searchByLocation({
+    response.body = await models.cities.searchCloseCities({
       latitude,
       longitude,
+      codeRome,
+      inseeCode,
+    })
+  }
+)
+
+router.post(
+  '/search-similar-cities',
+  async ({
+    request: {
+      body: { codeRome, city },
+    },
+    models,
+    response,
+  }) => {
+    response.body = await models.cities.searchSimilarCities({
+      codeRome,
+      city,
     })
   }
 )

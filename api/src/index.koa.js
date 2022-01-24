@@ -8,6 +8,8 @@ import { start as startCrons } from './crons'
 import session from 'koa-session'
 import { RateLimit } from 'koa2-ratelimit'
 
+import * as Sentry from '@sentry/node'
+
 import db from './models'
 
 import citiesRoutes from './routes/cities'
@@ -25,6 +27,11 @@ db.migrations().then(() => {
   db.seeders().then(async () => {
     startCrons(app.context.models) // start crons
   })
+})
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  tracesSampleRate: 1.0,
 })
 
 // we add the relevant middlewares to our API
@@ -47,5 +54,14 @@ app.use(helpsRoutes.routes()).use(helpsRoutes.allowedMethods())
 app.use(ogrsRoutes.routes()).use(ogrsRoutes.allowedMethods())
 app.use(compress({}))
 app.use(session(config.SESSION_CONFIG, app))
+
+app.on('error', (err, ctx) => {
+  Sentry.withScope((scope) => {
+    scope.addEventProcessor((event) => {
+      return Sentry.Handlers.parseRequest(event, ctx.request)
+    })
+    Sentry.captureException(err)
+  })
+})
 
 app.listen(config.port)

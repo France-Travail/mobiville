@@ -1,5 +1,5 @@
 import { Op } from 'sequelize'
-import { mean } from 'lodash'
+import { compact, mean } from 'lodash'
 import {
   ALT_IS_MOUNTAIN,
   CRITERIONS,
@@ -200,7 +200,7 @@ export default (sequelizeInstance, Model) => {
           include: bassinsToInclude,
         },
         {
-          attributes: [],
+          attributes: ['name'],
           model: Model.models.newRegions,
           required: true,
           ...whereRegion,
@@ -440,7 +440,12 @@ export default (sequelizeInstance, Model) => {
     }
   }
 
-  Model.searchByLocation = async ({ latitude, longitude }) => {
+  Model.searchCloseCities = async ({
+    latitude,
+    longitude,
+    codeRome,
+    inseeCode,
+  }) => {
     const cities = await Model.findAll({
       where: {
         [Op.and]: [
@@ -448,32 +453,96 @@ export default (sequelizeInstance, Model) => {
           { geo_point_2d_x: { [Op.gt]: latitude - 0.5 } },
           { geo_point_2d_y: { [Op.lt]: longitude + 0.5 } },
           { geo_point_2d_y: { [Op.gt]: longitude - 0.5 } },
+          { insee_com: { [Op.notLike]: inseeCode } },
         ],
       },
+      include: [
+        {
+          attributes: [],
+          model: Model.models.bassins,
+          required: true,
+          include: [
+            {
+              attributes: [],
+              model: Model.models.tensions,
+              required: true,
+              where: {
+                rome: codeRome,
+              },
+            },
+          ],
+        },
+        {
+          attributes: ['name'],
+          model: Model.models.newRegions,
+          required: true,
+        },
+      ],
+      order: [['population', 'desc']],
       raw: true,
     })
 
-    let minDistance = null
-    let city = null
-    cities.map((c) => {
-      let dist = distanceBetweenToCoordinates(
-        c.geo_point_2d_x,
-        c.geo_point_2d_y,
+    /*
+      https://github.com/sequelize/sequelize/issues/9869
+      prevents us from using limit / offset correctly in this query, so we truncate manually in the js
+      once the issue is fixed, adding the parameters to the query will improve performance
+    */
+    return cities.slice(0, 3).map((city) => {
+      let distance = distanceBetweenToCoordinates(
+        city.geo_point_2d_x,
+        city.geo_point_2d_y,
         latitude,
         longitude,
         'K'
       )
-      if (dist < 0) {
-        dist *= -1
+      if (distance < 0) {
+        distance *= -1
       }
 
-      if (dist < minDistance || !minDistance) {
-        minDistance = dist
-        city = c
+      return {
+        ...city,
+        distance,
       }
     })
+  }
 
-    return city
+  Model.searchSimilarCities = async ({ city, codeRome }) => {
+    const citySizeType =
+      city.population < IS_SMALL_CITY
+        ? CRIT_SMALL_CITY
+        : city.population < IS_MEDIUM_CITY
+        ? CRIT_MEDIUM_CITY
+        : city.population < IS_LARGE_CITY
+        ? CRIT_LARGE_CITY
+        : CRIT_EXTRA_LARGE_CITY
+
+    const isCloseToSea = city.distance_from_sea < SIDE_SEA
+    const isMountain = city.z_moyen > ALT_IS_MOUNTAIN
+    const isCampaign =
+      city.z_moyen <= ALT_IS_MOUNTAIN &&
+      city.distance_from_sea >= SIDE_SEA &&
+      city.population < IS_SMALL_CITY
+
+    const criterions = compact([
+      citySizeType,
+      isCloseToSea && CRIT_SIDE_SEA,
+      isCampaign && CRIT_CAMPAGNE,
+      isMountain && CRIT_MOUNTAIN,
+    ])
+
+    const [result] = await Model.search({
+      codeRome,
+      codeCriterion: criterions,
+    })
+
+    return {
+      // Ignoring base city in case it was returned
+      result: result
+        .slice(0, 4)
+        .filter((similarCity) => similarCity !== city.id)
+        .slice(0, 3),
+      criterions,
+    }
   }
 
   Model.searchById = async ({ id }) => {

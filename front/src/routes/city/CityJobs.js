@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import moment from 'moment'
+import { Helmet } from 'react-helmet'
 import {
   FormControl,
   MenuItem,
@@ -19,7 +20,6 @@ import EuroIcon from '@mui/icons-material/Euro'
 import DescriptionIcon from '@mui/icons-material/Description'
 import ScheduleIcon from '@mui/icons-material/Schedule'
 
-import { useProfessions } from '../../common/contexts/professionsContext'
 import {
   COLOR_GRAY,
   COLOR_PRIMARY,
@@ -28,56 +28,8 @@ import {
 import { thereAre, ucFirstOnly } from '../../utils/utils'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
-
-const MainLayout = styled.div`
-  display: flex;
-  align-items: flex-start;
-  margin: auto;
-  max-width: 1024px;
-  flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
-`
-
-const StatistiqueLayout = styled.div`
-  background: #ffffff;
-  border-radius: 8px;
-  width: 400px;
-  padding: 16px;
-  margin-right: 16px;
-  text-align: center;
-  background: #ffffff;
-  border: 1px solid ${COLOR_GRAY};
-  border-radius: 8px;
-
-  ${({ isMobile }) =>
-    isMobile
-      ? `
-      margin-right: 0;
-      box-shadow: none;
-      border-radius: 0;
-      width: 100%;
-  `
-      : ''}
-`
-
-const StatistiqueTitleLayout = styled.h3`
-  font-size: 12px;
-  margin-bottom: 32px;
-  margin-top: 0;
-`
-
-const StatsContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-`
-
-const StatsItem = styled.div`
-  flex: 0 1 40%;
-
-  img {
-    display: block;
-    margin: auto;
-  }
-`
+import MainLayout from '../../components/MainLayout'
+import SubHeader from '../../components/SubHeader'
 
 const JobLoading = styled.div`
   margin: auto;
@@ -92,16 +44,9 @@ const JobLayout = styled.div`
 const JobContentLayout = styled.div`
   display: flex;
   flex-wrap: wrap;
-`
-
-const JobSearchFormControl = styled(FormControl)`
-  && {
-    padding: 16px;
-    margin-bottom: 8px;
-    background: #ffffff;
-    border: 1px solid ${COLOR_GRAY};
-    border-radius: 8px;
-  }
+  margin: auto;
+  width: 100%;
+  max-width: 688px;
 `
 
 const JobTitleLayout = styled.div`
@@ -109,22 +54,20 @@ const JobTitleLayout = styled.div`
   align-items: center;
   font-weight: bold;
   font-size: 14px;
-  padding-bottom: 16px;
-  padding: 16px;
-  background: #ffffff;
-  border: 1px solid ${COLOR_GRAY};
-  border-radius: 8px;
+  flex-wrap: wrap;
 `
 
-const JobTitleText = styled.h3`
-  flex: 0 1 30%;
+const JobTitleText = styled.h1`
+  flex: 1 1 30%;
+  font-size: 18px;
+  line-height: 21px;
 `
 
-const JobTitleFilters = styled.div`
+const JobFilters = styled.div`
   display: flex;
   justify-content: flex-end;
-  flex-wrap: wrap;
   flex: 1 0 60%;
+  flex-wrap: ${({ isMobile }) => (isMobile ? 'wrap' : 'nowrap')};
 `
 
 const JobItem = styled.div`
@@ -143,7 +86,7 @@ const JobItemHeader = styled.div`
   justify-content: space-between;
 `
 
-const JobItemTitle = styled.h4`
+const JobItemTitle = styled.h2`
   margin: 0;
   font-size: 14px;
 `
@@ -164,7 +107,8 @@ const StyledFormControl = styled(FormControl).attrs({
   variant: 'filled',
 })`
   && {
-    width: 100px;
+    flex: 1 1 auto;
+    min-width: 120px;
     margin-left: 16px;
     margin-bottom: 8px;
 
@@ -237,22 +181,17 @@ const CONTRACT_TYPES = ['CDI', 'CDD', 'MIS', OTHER_CONTRACTS]
 const OTHER_DURATIONS = 'Non renseigné'
 const DURATION_TYPES = ['Temps plein', 'Temps partiel', OTHER_DURATIONS]
 
-const PanelCityJobs = ({
+const CityJobs = ({
+  backLink,
   city,
   codeRome,
   romeLabel,
+  isLoading,
+  jobs,
   searchValue,
   setSearchValue,
 }) => {
-  const {
-    isLoading: isLoadingProfessions,
-    onSearch: onSearchProfessions,
-    onSearchInfosTravail,
-    professions,
-  } = useProfessions()
-
   const size = useWindowSize()
-  const [infosTravail, setInfosTravail] = useState(null)
   const [dateFilter, setDateFilter] = useState('')
   const [contractFilters, setContractFilters] = useState([])
   const [durationFilters, setDurationFilters] = useState([])
@@ -261,27 +200,15 @@ const PanelCityJobs = ({
   const toggleFullJobDisplay = (id) =>
     setFullJobsOnDisplay({ ...fullJobsOnDisplay, [id]: !fullJobsOnDisplay[id] })
 
-  useEffect(() => {
-    if (city && codeRome) {
-      onSearchProfessions({ codeRome: [codeRome], insee: [city.insee_com] })
-      onSearchInfosTravail({ codeRome: codeRome, insee: city.insee_com }).then(
-        setInfosTravail
-      )
-    }
-  }, [city, codeRome])
-
-  const bassinTension = infosTravail?.bassinTension
-  const deptTension = infosTravail?.deptTension
-
   const contractCountObject = {}
   const durationCountObject = {}
 
-  const displayedProfessions = professions.filter((profession) => {
-    if (!profession.id) return false
+  const displayedJobs = jobs.filter((job) => {
+    if (!job.id) return false
 
     if (dateFilter) {
       const currentMoment = moment()
-      const creationMoment = moment(profession.dateCreation)
+      const creationMoment = moment(job.dateCreation)
 
       if (
         dateFilter === ONE_DAY &&
@@ -315,8 +242,8 @@ const PanelCityJobs = ({
       // - It’s a contract type we handle specifically (eg. CDI, CDD, MIS)
       // - It’s a contract type we do not handle (and we only match it when "others" is selected)
       if (
-        !contractFilters.includes(profession.typeContrat) &&
-        CONTRACT_TYPES.includes(profession.typeContrat)
+        !contractFilters.includes(job.typeContrat) &&
+        CONTRACT_TYPES.includes(job.typeContrat)
       ) {
         return false
       }
@@ -326,9 +253,9 @@ const PanelCityJobs = ({
     // or it’s undefined in the data, which means it’s in our "other" category
     if (
       durationFilters.length &&
-      ((profession.dureeTravailLibelleConverti &&
-        !durationFilters.includes(profession.dureeTravailLibelleConverti)) ||
-        (!profession.dureeTravailLibelleConverti &&
+      ((job.dureeTravailLibelleConverti &&
+        !durationFilters.includes(job.dureeTravailLibelleConverti)) ||
+        (!job.dureeTravailLibelleConverti &&
           !durationFilters.includes(OTHER_DURATIONS)))
     ) {
       return false
@@ -337,7 +264,7 @@ const PanelCityJobs = ({
     // Finally, this search filter
     // Another way would be to access one by one every property we might want to search
     // but this is faster and less error prone that accessing these objects with lose structure
-    const dataToSearch = JSON.stringify(profession).toLowerCase()
+    const dataToSearch = JSON.stringify(job).toLowerCase()
 
     if (!dataToSearch.includes(searchValue.trim().toLowerCase())) {
       return false
@@ -346,189 +273,180 @@ const PanelCityJobs = ({
     return true
   })
 
-  displayedProfessions.forEach(
-    ({ typeContrat, dureeTravailLibelleConverti }) => {
-      if (CONTRACT_TYPES.includes(typeContrat)) {
-        contractCountObject[typeContrat] =
-          (contractCountObject[typeContrat] || 0) + 1
-      } else {
-        contractCountObject[OTHER_CONTRACTS] =
-          (contractCountObject[typeContrat] || 0) + 1
-      }
-
-      if (DURATION_TYPES.includes(dureeTravailLibelleConverti)) {
-        durationCountObject[dureeTravailLibelleConverti] =
-          (durationCountObject[dureeTravailLibelleConverti] || 0) + 1
-      } else {
-        durationCountObject[OTHER_DURATIONS] =
-          (durationCountObject[OTHER_DURATIONS] || 0) + 1
-      }
+  displayedJobs.forEach(({ typeContrat, dureeTravailLibelleConverti }) => {
+    if (CONTRACT_TYPES.includes(typeContrat)) {
+      contractCountObject[typeContrat] =
+        (contractCountObject[typeContrat] || 0) + 1
+    } else {
+      contractCountObject[OTHER_CONTRACTS] =
+        (contractCountObject[typeContrat] || 0) + 1
     }
-  )
+
+    if (DURATION_TYPES.includes(dureeTravailLibelleConverti)) {
+      durationCountObject[dureeTravailLibelleConverti] =
+        (durationCountObject[dureeTravailLibelleConverti] || 0) + 1
+    } else {
+      durationCountObject[OTHER_DURATIONS] =
+        (durationCountObject[OTHER_DURATIONS] || 0) + 1
+    }
+  })
 
   const isMobile = isMobileView(size)
 
+  const searchTextField = (
+    <TextField
+      label="Rechercher"
+      variant="filled"
+      value={searchValue}
+      onChange={(event) => setSearchValue(event.target.value)}
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <SearchIcon />
+          </InputAdornment>
+        ),
+      }}
+      inputProps={{
+        id: 'search-in-jobs',
+      }}
+    />
+  )
+
+  const jobFilters = (
+    <JobFilters isMobile={isMobile}>
+      <StyledFormControl>
+        <InputLabel htmlFor="filter-date-creation">
+          Date de publication
+        </InputLabel>
+        <Select
+          inputProps={{
+            id: 'filter-date-creation',
+          }}
+          label="Date de publication"
+          value={dateFilter}
+          onChange={(event) => setDateFilter(event.target.value)}
+        >
+          <MenuItem value={ONE_DAY}>Un jour</MenuItem>
+          <MenuItem value={THREE_DAY}>Trois jours</MenuItem>
+          <MenuItem value={ONE_WEEK}>Une semaine</MenuItem>
+          <MenuItem value={TWO_WEEKS}>Deux semaines</MenuItem>
+          <MenuItem value={ONE_MONTH}>Un mois</MenuItem>
+          <MenuItem value={ALL_TIME}>Toutes les offres</MenuItem>
+        </Select>
+      </StyledFormControl>
+
+      <StyledFormControl>
+        <InputLabel htmlFor="filter-contract">Contrat</InputLabel>
+        <Select
+          inputProps={{
+            id: 'filter-contract',
+          }}
+          label="Contrat"
+          multiple
+          value={contractFilters}
+          onChange={(event) => {
+            setContractFilters(event.target.value)
+          }}
+          // quick & dirty replace of the only label that needs it
+          renderValue={(selected) =>
+            selected.join(', ').replace('MIS', 'Intérim')
+          }
+        >
+          {CONTRACT_TYPES.map((filter) => {
+            const isChecked = contractFilters.includes(filter)
+            const label = filter.concat(
+              contractFilters.length === 0 || isChecked
+                ? ` (${contractCountObject[filter] || 0})`
+                : ''
+            )
+            return (
+              <MenuItem value={filter}>
+                <Checkbox checked={isChecked} />
+                <ListItemText
+                  // quick & dirty replace of the only label that needs it
+                  primary={label.replace('MIS', 'Intérim')}
+                />
+              </MenuItem>
+            )
+          })}
+        </Select>
+      </StyledFormControl>
+
+      <StyledFormControl>
+        <InputLabel htmlFor="filter-duration">Durée hebdo</InputLabel>
+        <Select
+          inputProps={{
+            id: 'filter-duration',
+          }}
+          label="Durée hebdo"
+          multiple
+          value={durationFilters}
+          onChange={(event) => {
+            setDurationFilters(event.target.value)
+          }}
+          renderValue={(selected) => selected.join(', ')}
+        >
+          {DURATION_TYPES.map((filter) => {
+            const isChecked = durationFilters.includes(filter)
+            const label = filter.concat(
+              durationFilters.length === 0 || isChecked
+                ? ` (${durationCountObject[filter] || 0})`
+                : ''
+            )
+
+            return (
+              <MenuItem value={filter}>
+                <Checkbox checked={durationFilters.includes(filter)} />
+                <ListItemText primary={label} />
+              </MenuItem>
+            )
+          })}
+        </Select>
+      </StyledFormControl>
+
+      <StyledFormControl>{searchTextField}</StyledFormControl>
+    </JobFilters>
+  )
+
+  const subHeaderNode = (
+    <JobTitleLayout>
+      <JobTitleText>
+        {displayedJobs.length} offre
+        {displayedJobs.length > 1 ? 's' : ''}
+        {' pour '}
+        {romeLabel}
+        <br />
+        <span style={{ fontSize: 12 }}>
+          Dans un rayon de 30 km de {ucFirstOnly(city.nom_comm)}
+        </span>
+      </JobTitleText>
+      {!isMobile && jobFilters}
+    </JobTitleLayout>
+  )
+
   return (
     <MainLayout isMobile={isMobile}>
-      <StatistiqueLayout isMobile={isMobile}>
-        <StatistiqueTitleLayout>
-          Statistiques pour {romeLabel} à {ucFirstOnly(city.nom_comm)}
-        </StatistiqueTitleLayout>
-        <StatsContainer>
-          {(bassinTension || deptTension) && (
-            <StatsItem>
-              <div>
-                <img src="/icons/trending-up.svg" alt="" />
-                <b>
-                  {bassinTension || deptTension} offres pour 10 demandeurs{' '}
-                  {bassinTension
-                    ? 'dans ce bassin d’emploi'
-                    : 'dans ce département'}
-                </b>
-              </div>
-            </StatsItem>
-          )}
-
-          <StatsItem>
-            <img src="/icons/euro.svg" alt="" />
-            <b>Salaire brut</b>
-            <br />
-            {infosTravail?.min > 0 ? (
-              <b>
-                {infosTravail.min}€ à {infosTravail.max}€
-              </b>
-            ) : (
-              <b>A venir</b>
-            )}
-          </StatsItem>
-        </StatsContainer>
-      </StatistiqueLayout>
-
-      {isLoadingProfessions ? (
+      <Helmet>
+        <title>
+          Travailler dans {romeLabel} à {ucFirstOnly(city.nom_comm)} - Mobiville
+        </title>
+        <meta
+          name="description"
+          content={`Explorez le marché de l'emploi de ${ucFirstOnly(
+            city.nom_comm
+          )} pour le métier de ${{
+            romeLabel,
+          }}. Offres disponibles, salaires, …`}
+        />
+      </Helmet>
+      <SubHeader backLink={backLink} node={subHeaderNode} isMobile={isMobile} />
+      {isLoading ? (
         <JobLoading>Chargement des offres...</JobLoading>
       ) : (
         <JobLayout isMobile={isMobile}>
-          <JobSearchFormControl fullWidth>
-            <TextField
-              label="Rechercher dans les offres"
-              variant="standard"
-              value={searchValue}
-              onChange={(event) => setSearchValue(event.target.value)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </JobSearchFormControl>
-
-          <JobTitleLayout>
-            <JobTitleText>
-              {displayedProfessions.length} offre
-              {displayedProfessions.length > 1 ? 's' : ''}
-              {' pour '}
-              {romeLabel}
-              <br />
-              <span style={{ fontSize: 12 }}>Dans un rayon de 30 km</span>
-            </JobTitleText>
-
-            <JobTitleFilters>
-              <StyledFormControl>
-                <InputLabel htmlFor="filter-date-creation">
-                  Date de publication
-                </InputLabel>
-                <Select
-                  inputProps={{
-                    id: 'filter-date-creation',
-                  }}
-                  label="Date de publication"
-                  value={dateFilter}
-                  onChange={(event) => setDateFilter(event.target.value)}
-                >
-                  <MenuItem value={ONE_DAY}>Un jour</MenuItem>
-                  <MenuItem value={THREE_DAY}>Trois jours</MenuItem>
-                  <MenuItem value={ONE_WEEK}>Une semaine</MenuItem>
-                  <MenuItem value={TWO_WEEKS}>Deux semaines</MenuItem>
-                  <MenuItem value={ONE_MONTH}>Un mois</MenuItem>
-                  <MenuItem value={ALL_TIME}>Toutes les offres</MenuItem>
-                </Select>
-              </StyledFormControl>
-
-              <StyledFormControl>
-                <InputLabel htmlFor="filter-contract">Contrat</InputLabel>
-                <Select
-                  inputProps={{
-                    id: 'filter-contract',
-                  }}
-                  label="Contrat"
-                  multiple
-                  value={contractFilters}
-                  onChange={(event) => {
-                    setContractFilters(event.target.value)
-                  }}
-                  // quick & dirty replace of the only label that needs it
-                  renderValue={(selected) =>
-                    selected.join(', ').replace('MIS', 'Intérim')
-                  }
-                >
-                  {CONTRACT_TYPES.map((filter) => {
-                    const isChecked = contractFilters.includes(filter)
-                    const label = filter.concat(
-                      contractFilters.length === 0 || isChecked
-                        ? ` (${contractCountObject[filter] || 0})`
-                        : ''
-                    )
-                    return (
-                      <MenuItem value={filter}>
-                        <Checkbox checked={isChecked} />
-                        <ListItemText
-                          // quick & dirty replace of the only label that needs it
-                          primary={label.replace('MIS', 'Intérim')}
-                        />
-                      </MenuItem>
-                    )
-                  })}
-                </Select>
-              </StyledFormControl>
-
-              <StyledFormControl>
-                <InputLabel htmlFor="filter-duration">Durée hebdo</InputLabel>
-                <Select
-                  inputProps={{
-                    id: 'filter-duration',
-                  }}
-                  label="Durée hebdo"
-                  multiple
-                  value={durationFilters}
-                  onChange={(event) => {
-                    setDurationFilters(event.target.value)
-                  }}
-                  renderValue={(selected) => selected.join(', ')}
-                >
-                  {DURATION_TYPES.map((filter) => {
-                    const isChecked = durationFilters.includes(filter)
-                    const label = filter.concat(
-                      durationFilters.length === 0 || isChecked
-                        ? ` (${durationCountObject[filter] || 0})`
-                        : ''
-                    )
-
-                    return (
-                      <MenuItem value={filter}>
-                        <Checkbox checked={durationFilters.includes(filter)} />
-                        <ListItemText primary={label} />
-                      </MenuItem>
-                    )
-                  })}
-                </Select>
-              </StyledFormControl>
-            </JobTitleFilters>
-          </JobTitleLayout>
-
+          {isMobile && jobFilters}
           <JobContentLayout>
-            {displayedProfessions.map((p) => {
+            {displayedJobs.map((p) => {
               // We truncate too long descriptions. "?", as it seems they can be absent.
               const shortDescription =
                 p.description?.length > MAX_DESCRIPTION_LENGTH
@@ -664,11 +582,17 @@ const PanelCityJobs = ({
   )
 }
 
-PanelCityJobs.propTypes = {
+CityJobs.propTypes = {
+  backLink: PropTypes.string.isRequired,
   city: PropTypes.object.isRequired,
   codeRome: PropTypes.string.isRequired,
+  romeLabel: PropTypes.string.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  jobs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  searchValue: PropTypes.func.isRequired,
+  setSearchValue: PropTypes.func.isRequired,
 }
 
-PanelCityJobs.defaultProps = {}
+CityJobs.defaultProps = {}
 
-export default PanelCityJobs
+export default CityJobs

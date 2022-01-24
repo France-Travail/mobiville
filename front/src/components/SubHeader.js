@@ -14,7 +14,6 @@ const HeaderContainer = styled.div`
   right: 0;
   background-color: white;
   top: 76;
-  height: ${HEIGHT}px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -22,7 +21,7 @@ const HeaderContainer = styled.div`
   z-index: 10;
 `
 
-const HeaderLink = styled(Link)`
+const HeaderSubContainer = styled.div`
   display: flex;
   flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
   align-items: ${({ isMobile }) => (isMobile ? 'flex-start' : 'center')};
@@ -33,14 +32,9 @@ const HeaderLink = styled(Link)`
   width: 100%;
   margin: auto;
   padding: ${PADDING}px;
-
-  &,
-  &:hover {
-    color: ${COLOR_TEXT_PRIMARY};
-  }
 `
 
-const HeaderArrowContainer = styled.div`
+const HeaderArrowLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,6 +43,11 @@ const HeaderArrowContainer = styled.div`
   border-radius: 50%;
   background: ${COLOR_GRAY};
   margin-right: 40px;
+
+  &,
+  &:hover {
+    color: ${COLOR_TEXT_PRIMARY};
+  }
 `
 
 const H1 = styled.h1`
@@ -56,23 +55,22 @@ const H1 = styled.h1`
   font-weight: 700;
 `
 
-const SubHeader = ({ backLink, desktopTitleWidth, isMobile, title }) => (
+const SubHeader = ({ backLink, desktopTitleWidth, isMobile, node, title }) => (
   <>
-    <HeaderContainer isMobile={isMobile}>
-      <HeaderLink
+    <HeaderContainer isMobile={isMobile} style={{ height: HEIGHT }}>
+      <HeaderSubContainer
         isMobile={isMobile}
-        to={backLink}
         style={{
           maxWidth: desktopTitleWidth
             ? `calc(${desktopTitleWidth}px + ${PADDING}px * 2)`
             : null,
         }}
       >
-        <HeaderArrowContainer>
+        <HeaderArrowLink to={backLink} title="Retour">
           <ArrowBackIcon color="primary" fontSize="large" />
-        </HeaderArrowContainer>
-        <H1>{title}</H1>
-      </HeaderLink>
+        </HeaderArrowLink>
+        {node ? node : <H1>{title}</H1>}
+      </HeaderSubContainer>
     </HeaderContainer>
     {!isMobile && <div style={{ height: HEIGHT, marginBottom: PADDING }} />}
   </>
@@ -82,6 +80,7 @@ SubHeader.props = {
   backLink: PropTypes.string,
   desktopTitleWidth: PropTypes.number,
   isMobile: PropTypes.bool,
+  node: PropTypes.node,
   title: PropTypes.string,
 }
 

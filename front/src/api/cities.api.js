@@ -18,9 +18,14 @@ export const loadCity = (insee) =>
     .get(`/api/cities/load/${insee}`)
     .then((response) => response.data || null)
 
-export const searchCityByLocation = (body) =>
+export const searchCloseCities = (body) =>
   axios
-    .post('/api/cities/search-by-location', body)
+    .post('/api/cities/search-close-cities', body)
+    .then((response) => response.data || null)
+
+export const searchSimilarCities = (body) =>
+  axios
+    .post('/api/cities/search-similar-cities', body)
     .then((response) => response.data || null)
 
 export const searchCityByName = (body) =>

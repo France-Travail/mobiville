@@ -30,6 +30,7 @@ services:
       - ENTERPRISE_URL=${ENTERPRISE_URL}
       - EMPLOI_STORE_ID=${EMPLOI_STORE_ID}
       - EMPLOI_STORE_SECRET=${EMPLOI_STORE_SECRET}
+      - SENTRY_DSN=${SENTRY_DSN}
     stdin_open: true
 
   db:
