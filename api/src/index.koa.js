@@ -32,6 +32,7 @@ db.migrations().then(() => {
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   tracesSampleRate: 1.0,
+  environment: process.env.NODE_ENV,
 })
 
 // we add the relevant middlewares to our API
