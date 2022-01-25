@@ -94,7 +94,8 @@ const CityHousing = ({ backLink, city, nbSocialHousing }) => {
     setSquareMeters(Number.isNaN(result) ? null : result.toFixed())
   }
   const calculateHousingCost = (value) => {
-    const result = parseInt(value, 10) / city.average_houseselled
+    const result =
+      parseInt(value.replace(/ /g, ''), 10) * city.average_houseselled
     setHousingCost(Number.isNaN(result) ? null : result.toFixed())
   }
 
@@ -213,7 +214,7 @@ const CityHousing = ({ backLink, city, nbSocialHousing }) => {
             />
             <p>
               Vous pouvez occuper un logement de :<br />
-              <b>{squareMeters || '__'}m²</b>
+              <b>{formatNumber(squareMeters) || '__'}m²</b>
             </p>
           </div>
         )}
@@ -223,21 +224,14 @@ const CityHousing = ({ backLink, city, nbSocialHousing }) => {
               <b>Pour un achat</b>
             </div>
             <TextField
-              label="Nombre de m²"
+              label="Nombre de m2"
               variant="filled"
               onChange={(event) => calculateHousingCost(event.target.value)}
               fullWidth
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Euro />
-                  </InputAdornment>
-                ),
-              }}
             />
             <p>
-              Vous pouvez occuper un logement de :<br />
-              <b>{housingCost || '__'}m²</b>
+              Votre logement va coûter :<br />
+              <b>{formatNumber(housingCost) || '__'}€</b>
             </p>
           </div>
         )}
