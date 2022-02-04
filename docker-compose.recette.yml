@@ -29,3 +29,7 @@ services:
         limits:
           memory: 8G
           cpus: '1.0'
+
+  backup:
+    environment:
+      - ENV_TYPE=recette
