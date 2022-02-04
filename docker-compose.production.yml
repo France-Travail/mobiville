@@ -27,20 +27,13 @@ services:
           memory: 4G
           cpus: '2.5'
 
-  backups:
-    image: registry.beta.pole-emploi.fr/customize-docker-images/backups
-    restart: always
-    hostname: backups
-    volumes:
-    - ./:/home/docker
-    - ./backups:/backups
-    - /mnt:/mnt
-    - /etc/timezone:/etc/timezone:ro
-    - /etc/localtime:/etc/localtime:ro
-
   db:
     deploy:
       resources:
         limits:
           memory: 8G
           cpus: '4.0'
+
+  backup:
+    environment:
+      - ENV_TYPE=production

@@ -198,6 +198,20 @@ Si besoin de déployer depuis une autre branche que celle de recette ou de produ
 `api-{branch}-latest`
 `api-{branch}-{hash commit taccourci}`
 
+### installation from scratch
+
+Il est possible de réinstaller from scratch avec la pipeline.
+
+1. "Run pipelines"  
+2 Renseigner les champs suivant:  
+    - branche pour laquelle le pipeline sera lancée  
+    - mettre l'IP du serveur de PRODUCTION  
+    - PROD_BRANCH: doit correspondre à la branche selectionnée  
+    - FORCE_DEPLOY : install  
+    - FORCE_INSTALL: {branche des images à déployer} (master, develop ou autre en latest)  
+3. Lancer l'installation  
+
+
 ## Divers
 
 Paris, Lyon et Marseille sont trois villes avec des spéciales : Le référentiel INSEE dont nous disposons ne comporte que leurs arrondissements, pas les villes elles-mêmes. En cas de mise à jour du référenciel (`cities-france.csv`), il faut donc ajouter manuellement ces trois lignes afin de correctement créer ces villes lors de la prochaine synchro.
