@@ -4,7 +4,6 @@ services:
     volumes:
       - './nginx/conf.d:/etc/nginx/conf.d'
       - './nginx/front/dist:/home/front'
-      - './nginx/front-admin/dist:/home/front/admin'
     deploy:
       resources:
         limits:

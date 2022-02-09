@@ -121,9 +121,6 @@ const RegionName = styled.h2`
   padding: 0;
 `
 
-const SERVICES_KEY = 'services'
-const HEALTH_KEY = 'health'
-const CULTURE_KEY = 'culture'
 const BAKERY_CODE = 'B203'
 const DOCTORS_CODE = 'A504'
 const RESTAURANTS_CODE = 'D201'
@@ -142,12 +139,8 @@ const CityPage = ({ location: { pathname, search } }) => {
     closeCities,
     similarCities,
     similarCitiesCriterionsQueryString,
-    onGetCityEquipments,
     onSearchCloseCities,
     onSearchSimilarCities,
-    cityEquipments,
-    onGetCityTenement,
-    cityTenement,
   } = useCities()
 
   const {
@@ -195,8 +188,6 @@ const CityPage = ({ location: { pathname, search } }) => {
       onSearchInfosTravail({ codeRome: codeRome, insee: city.insee_com }).then(
         setInfosTravail
       )
-      onGetCityTenement(city.insee_com)
-      onGetCityEquipments(city.insee_com)
       onSearchSimilarCities({
         codeRome,
         city,
@@ -214,16 +205,14 @@ const CityPage = ({ location: { pathname, search } }) => {
   let doctorsNumber
   let restaurantsNumber
 
-  if (cityEquipments?.length) {
-    bakeriesNumber = cityEquipments
-      .find(({ key }) => key === SERVICES_KEY)
-      .tab.find(({ code }) => BAKERY_CODE === code)?.total
-    doctorsNumber = cityEquipments
-      .find(({ key }) => key === HEALTH_KEY)
-      .tab.find(({ code }) => DOCTORS_CODE === code)?.total
-    restaurantsNumber = cityEquipments
-      .find(({ key }) => key === CULTURE_KEY)
-      .tab.find(({ code }) => RESTAURANTS_CODE === code)?.total
+  if (city?.equipments?.length) {
+    bakeriesNumber =
+      city.equipments.find(({ typequ }) => typequ === BAKERY_CODE)?.total || 0
+    doctorsNumber =
+      city.equipments.find(({ typequ }) => typequ === DOCTORS_CODE)?.total || 0
+    restaurantsNumber =
+      city.equipments.find(({ typequ }) => typequ === RESTAURANTS_CODE)
+        ?.total || 0
   }
 
   let romeLabel = ''
@@ -273,7 +262,7 @@ const CityPage = ({ location: { pathname, search } }) => {
   if (section === HOUSING)
     return (
       <CityHousing
-        nbSocialHousing={cityTenement?.nbSocialHousing}
+        nbSocialHousing={city.oldRegion?.socialhousing?.nb_2019}
         city={city}
         backLink={childrenComponentsBacklink}
       />
@@ -284,7 +273,7 @@ const CityPage = ({ location: { pathname, search } }) => {
       <CityLife
         city={city}
         backLink={childrenComponentsBacklink}
-        cityEquipments={cityEquipments}
+        cityEquipments={city.equipments}
       />
     )
 

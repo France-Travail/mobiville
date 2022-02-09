@@ -153,6 +153,10 @@ export default (sequelizeInstance) => {
       foreignKey: 'code',
       sourceKey: 'new_code_region',
     })
+    Model.hasMany(models.equipments, {
+      foreignKey: 'depcom',
+      sourceKey: 'insee_com',
+    })
 
     return models
   }

@@ -53,7 +53,7 @@ const SelectedMarkerImg = styled.img`
 
 const Image = styled.div`
   min-height: ${(props) => (props.isMobile ? '172px' : '160px')};
-  border-top-left-radius: ${(props) => (props.isMobile ? '8px' : '8px')};
+  border-top-left-radius: 8px;
   border-top-right-radius: ${(props) => (props.isMobile ? '8px' : '0')};
   border-bottom-left-radius: ${(props) => (props.isMobile ? '0' : '8px')};
   margin-bottom: ${(props) => (props.isMobile ? '16px' : '0')};

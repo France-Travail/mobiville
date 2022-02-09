@@ -1,5 +1,4 @@
 import { CRITERIONS } from '../constants/criterion'
-import { ALL_LIFE_CRITERIONS_LIST } from '../constants/lifeCriterions'
 import { compact } from 'lodash'
 import Router from '@koa/router'
 
@@ -87,27 +86,6 @@ router.post(
 )
 
 router.post(
-  '/search-by-name',
-  async ({
-    request: {
-      body: { id, name },
-    },
-    models,
-    response,
-  }) => {
-    let result
-
-    if (id) {
-      result = await models.cities.searchById({ id })
-    } else {
-      result = await models.cities.searchByName({ name })
-    }
-
-    response.body = result
-  }
-)
-
-router.post(
   '/search-by-skill',
   async ({
     request: {
@@ -159,35 +137,5 @@ router.get('/criterions', async ({ models, response }) => {
 router.get('/load/:insee', async ({ params: { insee }, models, response }) => {
   response.body = await models.cities.getCity({ insee })
 })
-
-router.get(
-  '/tenement/:insee',
-  async ({ params: { insee }, models, response }) => {
-    const details = await models.cities.getCity({ insee })
-
-    response.body = {
-      nbSocialHousing: await models.socialhousings.getNbSocialHousing(details),
-    }
-  }
-)
-
-router.get(
-  '/equipments/:insee',
-  async ({ params: { insee }, models, response }) => {
-    const cacheList =
-      (await models.cities.getCacheLivingEnvironment(insee)) || {}
-    const list = JSON.parse(JSON.stringify(ALL_LIFE_CRITERIONS_LIST))
-
-    for (let i = 0; i < list.length; i++) {
-      for (let x = 0; x < list[i].tab.length; x++) {
-        list[i].tab[x].total =
-          cacheList[list[i].key + '-' + list[i].tab[x].label] || 0
-      }
-      list[i].tab = list[i].tab.filter((i) => i.total)
-    }
-
-    response.body = list
-  }
-)
 
 export default router

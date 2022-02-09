@@ -19,6 +19,10 @@ export default (sequelizeInstance) => {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
+      total: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
     },
     {
       timestamps: false,
@@ -29,6 +33,11 @@ export default (sequelizeInstance) => {
   )
 
   Model.associate = function (models) {
+    Model.hasOne(models.cities, {
+      foreignKey: 'insee_com',
+      sourceKey: 'depcom',
+    })
+
     return models
   }
 

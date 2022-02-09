@@ -6,14 +6,9 @@ import {
   searchCities as apiSearchCities,
   searchCloseCities,
   searchSimilarCities,
-  searchCityByName,
-  getCityTenement,
-  getCityEquipments,
   searchJobLabels,
   fetchAutocompleteCities,
 } from '../../api/cities.api'
-
-const EMPTY_CITY = { id: null, nom_comm: 'Non trouvée', description: '' }
 
 const CitiesContext = React.createContext()
 
@@ -22,7 +17,6 @@ let lastSearchParams = {}
 export function CitiesProvider(props) {
   const [cities, _setCities] = useState([])
   const [totalCities, _setTotalCities] = useState(0)
-  const [searchCities, _setSearchCities] = useState([])
   const [jobsMatchingCriterions, setJobsMatchingCriterions] = useState([])
   const [city, setCity] = useState(null)
   const [closeCities, _setCloseCities] = useState([])
@@ -36,14 +30,10 @@ export function CitiesProvider(props) {
   const [isLoading, _setIsLoading] = useState(true)
   const [isLoadingCity, _setIsLoadingCity] = useState(false)
   const [isLoadingCloseCities, _setIsLoadingLocation] = useState(false)
-  const [isLoadingTenement, _setIsLoadingTenement] = useState(false)
-  const [isLoadingEquipments, _setIsLoadingEquipments] = useState(false)
   const [isLoadingSimilarCities, _setIsLoadingSimilarCities] = useState(false)
   const [isLoadingJobsMatchingCriterion, setIsLoadingJobsMatchingCriterion] =
     useState(false)
   const [sortCriterions, setSortCriterions] = useState('')
-  const [cityTenement, _setCityTenement] = useState(null)
-  const [cityEquipments, _setCityEquipments] = useState(null)
   const [environmentCriterions, _setEnvironmentCriterions] = useState([])
   const [cityCriterions, _setCityCriterions] = useState([])
   const [regionCriterions, _setRegionCriterions] = useState([])
@@ -120,48 +110,6 @@ export function CitiesProvider(props) {
       .then(() => _setIsLoadingSimilarCities(false))
   }
 
-  const onSearchByName = useCallback(({ id, name }) => {
-    _setIsLoadingLocation(true)
-    searchCityByName({ id, name })
-      .then((c) => {
-        if (c.length === 0) {
-          _setSearchCities([EMPTY_CITY])
-        } else {
-          _setSearchCities(c)
-        }
-
-        return c
-      })
-      .then(() => _setIsLoadingLocation(false))
-      .catch(() => {
-        _setSearchCities([EMPTY_CITY])
-        _setIsLoadingLocation(false)
-      })
-  })
-
-  const onSearchById = useCallback((id) =>
-    searchCityByName({ id }).then((c) => {
-      if (c.length === 0) {
-        return EMPTY_CITY
-      }
-      return c[0]
-    })
-  )
-
-  const onGetCityTenement = useCallback((id) => {
-    _setIsLoadingTenement(true)
-    getCityTenement(id)
-      .then(_setCityTenement)
-      .then(() => _setIsLoadingTenement(false))
-  })
-
-  const onGetCityEquipments = useCallback((id) => {
-    _setIsLoadingEquipments(true)
-    getCityEquipments(id)
-      .then(_setCityEquipments)
-      .then(() => _setIsLoadingEquipments(false))
-  })
-
   const onSearchJobLabels = useCallback(
     (label) => {
       if (!label.trim()) {
@@ -237,7 +185,6 @@ export function CitiesProvider(props) {
       {...props}
       value={{
         cities,
-        searchCities,
         city,
         criterions,
         criterionsError,
@@ -247,10 +194,6 @@ export function CitiesProvider(props) {
         isLoadingJobsMatchingCriterion,
         isLoadingSimilarCities,
         sortCriterions,
-        isLoadingTenement,
-        cityTenement,
-        isLoadingEquipments,
-        cityEquipments,
         totalCities,
         closeCities,
         similarCities,
@@ -268,11 +211,7 @@ export function CitiesProvider(props) {
         unloadCity,
         onSearchCloseCities,
         onSearchSimilarCities,
-        onSearchByName,
-        onSearchById,
         setSortCriterions,
-        onGetCityTenement,
-        onGetCityEquipments,
         onSearchJobLabels,
         onAutocomplete,
         initializeJobsAutocomplete,

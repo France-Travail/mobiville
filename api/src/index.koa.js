@@ -56,13 +56,15 @@ app.use(ogrsRoutes.routes()).use(ogrsRoutes.allowedMethods())
 app.use(compress({}))
 app.use(session(config.SESSION_CONFIG, app))
 
-app.on('error', (err, ctx) => {
-  Sentry.withScope((scope) => {
-    scope.addEventProcessor((event) => {
-      return Sentry.Handlers.parseRequest(event, ctx.request)
+if (process.env.NODE_ENV !== 'development') {
+  app.on('error', (err, ctx) => {
+    Sentry.withScope((scope) => {
+      scope.addEventProcessor((event) => {
+        return Sentry.Handlers.parseRequest(event, ctx.request)
+      })
+      Sentry.captureException(err)
     })
-    Sentry.captureException(err)
   })
-})
+}
 
 app.listen(config.port)

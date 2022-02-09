@@ -14,6 +14,15 @@ import {
   COLOR_GRAY,
 } from '../../constants/colors'
 
+import {
+  CULTURE_CRITERION,
+  TRANSPORT_CRITERION,
+  HEALTH_CRITERION,
+  SERVICES_CRITERION,
+  SERVICES_EDUCATION,
+  SERVICES_ENVIRONMENT,
+} from '../../constants/lifeCriterions'
+
 import { ucFirstOnly } from '../../utils/utils'
 import SubHeader from '../../components/SubHeader'
 import MainLayout from '../../components/MainLayout'
@@ -162,12 +171,66 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
   let environment = []
 
   if (cityEquipments) {
-    transports = cityEquipments.find((k) => k.key === 'transport')?.tab
-    culture = cityEquipments.find((k) => k.key === 'culture')?.tab
-    health = cityEquipments.find((k) => k.key === 'health')?.tab
-    services = cityEquipments.find((k) => k.key === 'services')?.tab
-    education = cityEquipments.find((k) => k.key === 'education')?.tab
-    environment = cityEquipments.find((k) => k.key === 'environment')?.tab
+    transports = cityEquipments.reduce((prev, equipmentData) => {
+      const criterionData = TRANSPORT_CRITERION.find(
+        ({ code }) => code === equipmentData.typequ
+      )
+      if (!criterionData) return prev
+      return prev.concat({
+        ...criterionData,
+        total: equipmentData.total,
+      })
+    }, [])
+    culture = cityEquipments.reduce((prev, equipmentData) => {
+      const criterionData = CULTURE_CRITERION.find(
+        ({ code }) => code === equipmentData.typequ
+      )
+      if (!criterionData) return prev
+      return prev.concat({
+        ...criterionData,
+        total: equipmentData.total,
+      })
+    }, [])
+    health = cityEquipments.reduce((prev, equipmentData) => {
+      const criterionData = HEALTH_CRITERION.find(
+        ({ code }) => code === equipmentData.typequ
+      )
+      if (!criterionData) return prev
+      return prev.concat({
+        ...criterionData,
+        total: equipmentData.total,
+      })
+    }, [])
+    services = cityEquipments.reduce((prev, equipmentData) => {
+      const criterionData = SERVICES_CRITERION.find(
+        ({ code }) => code === equipmentData.typequ
+      )
+      if (!criterionData) return prev
+      return prev.concat({
+        ...criterionData,
+        total: equipmentData.total,
+      })
+    }, [])
+    education = cityEquipments.reduce((prev, equipmentData) => {
+      const criterionData = SERVICES_EDUCATION.find(
+        ({ code }) => code === equipmentData.typequ
+      )
+      if (!criterionData) return prev
+      return prev.concat({
+        ...criterionData,
+        total: equipmentData.total,
+      })
+    }, [])
+    environment = cityEquipments.reduce((prev, equipmentData) => {
+      const criterionData = SERVICES_ENVIRONMENT.find(
+        ({ code }) => code === equipmentData.typequ
+      )
+      if (!criterionData) return prev
+      return prev.concat({
+        ...criterionData,
+        total: equipmentData.total,
+      })
+    }, [])
   }
 
   const description = (city.description || '').replace('Écouter', '')

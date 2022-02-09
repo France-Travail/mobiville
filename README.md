@@ -46,8 +46,10 @@ yarn run sync:romeOgrs # almost instant
 yarn run sync:romeSkills # almost instant
 yarn run sync:tensionsPCS # almost instant
 yarn run sync:regionsTensionsCriterions # Takes about 5 minutes
-
 ```
+
+## Génération de migration
+In the directory `~/api/src/db`, run `npx sequelize-cli migration:generate --name migration-skeleton`
 
 ## Construire les images
 

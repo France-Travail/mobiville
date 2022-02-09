@@ -1,4 +1,0 @@
---require babel-core/register
---recursive
-./test/**/*.spec.js
---timeout 4000

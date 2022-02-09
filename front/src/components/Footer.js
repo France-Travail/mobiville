@@ -84,7 +84,11 @@ const Footer = () => {
               <CustomLink to="/accessibility">Accessibilité</CustomLink>
             </Item>
             <Item>
-              <a href="/stats" target="_blank" rel="noreferrer">
+              <a
+                href="https://nextcloud.beta.pole-emploi.fr/s/Dsmn2peD6fgPMTX"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Statistiques
               </a>
             </Item>

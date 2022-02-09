@@ -9,7 +9,6 @@
 		"build:recette": "docker-compose -f docker-compose.yml -f docker-compose.recette.yml build && rm -rf images-docker && mkdir images-docker && docker save -o ./images-docker/nginx_recette nginx_recette:latest && docker save -o ./images-docker/api_recette api_recette:latest",
 		"log:api": "docker logs --tail=200 -f mobiville_api_1",
 		"log:front": "docker logs --tail=200 -f mobiville_front_1",
-		"log:front-admin": "docker logs --tail=200 -f mobiville_front-admin_1",
 		"test": "cd front && yarn lint",
 		"prepare": "husky install",
 		"postinstall": "husky install",

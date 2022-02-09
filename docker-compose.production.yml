@@ -8,7 +8,6 @@ services:
       - './nginx/conf.d:/etc/nginx/conf.d'
       - './nginx/ssl:/etc/nginx/ssl'
       - './nginx/front/dist:/home/front'
-      - './nginx/front-admin/dist:/home/front/admin'
     deploy:
       resources:
         limits:

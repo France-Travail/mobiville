@@ -8,15 +8,15 @@ const models = db.initModels()
 const doSync = async () => {
   try {
     const bassins = await getAllBassins()
-    const statusBassins = await models.bassins.sync({ bassins })
+    await models.bassins.sync({ bassins })
 
     const tensions = await getAllTensions()
     for (let i = 0; i < tensions.length; i++) {
       tensions[i].rome_label = await getRomeLabel(tensions[i].rome)
     }
-    const statusTensions = await models.tensions.syncTensions({ tensions })
+    await models.tensions.syncTensions({ tensions })
 
-    console.log('Success! Status:', statusTensions, statusBassins)
+    console.log('Success!')
     process.exit(0)
   } catch (err) {
     console.error(err)
