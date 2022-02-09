@@ -36,9 +36,12 @@ export default (sequelizeInstance, Model) => {
   }
 
   Model.searchByLabel = async (searchedWords) => {
-    const labelForQuery = `*${(searchedWords || '').split(' ').join('*')}*`
-      .replace(/[+-<>()~"@*]/gi, ' ') // filter special characters
-      .replace(/\*+/gi, '*') // remove multiple instances of * (which will crash it all)
+    const workLabel = `${(searchedWords || '').split(' ').join('*')}`
+      .replace(/[+-<>()~"@]/gi, ' ') // filter special characters
+      .replace(/\*+/gi, '') // remove instances of * (which will crash it all)
+
+    const labelForQuery = `*${workLabel}*`
+    console.log({ labelForQuery })
 
     const queryResult = await sequelizeInstance.query(
       `
