@@ -56,5 +56,4 @@ export default {
   instance: dbInstance,
   initModels,
   migrations: db.migrations(dbInstance),
-  seeders: db.seeders(dbInstance),
 }

@@ -70,7 +70,7 @@ function getUmzug(
   })
 }
 
-function runMigartions(dbInstance) {
+function runMigrations(dbInstance) {
   return () => {
     const client = dbInstance
     const migrator = getUmzug({}, dbInstance)
@@ -78,18 +78,6 @@ function runMigartions(dbInstance) {
   }
 }
 
-function runSeeders(dbInstance) {
-  return () => {
-    const client = dbInstance
-    const folder = `seeders/${
-      process.env.NODE_ENV || process.env.ENV || 'development'
-    }`
-    const migrator = getUmzug({ folder }, dbInstance)
-    return client.authenticate().then(() => migrator.up())
-  }
-}
-
 export default {
-  migrations: runMigartions,
-  seeders: runSeeders,
+  migrations: runMigrations,
 }

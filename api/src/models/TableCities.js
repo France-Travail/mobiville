@@ -261,6 +261,7 @@ export default (sequelizeInstance, Model) => {
 
     const result = await Model.findAll({
       where: { [Op.and]: whereAnd },
+      logging: true,
       order,
       include: [
         {
@@ -270,10 +271,18 @@ export default (sequelizeInstance, Model) => {
           include: bassinsToInclude,
         },
         {
-          attributes: ['name'],
+          attributes: ['name', 'code'],
           model: Model.models.newRegions,
           required: true,
           ...whereRegion,
+        },
+        {
+          attributes: ['number'],
+          model: Model.models.citiesJobs,
+          required: false,
+          where: {
+            rome_id: codeRome,
+          },
         },
       ],
       raw: true,
@@ -386,7 +395,7 @@ export default (sequelizeInstance, Model) => {
       }
 
       await city.update(options)
-      console.log(`[DONE] Sync city ${city.id}`, options)
+      console.log(`[DONE] Sync city ${city.id}`)
 
       if (isHttpLoad) {
         await sleep(700) // wait and restart command

@@ -41,7 +41,6 @@ export default (sequelizeInstance, Model) => {
       .replace(/\*+/gi, '') // remove instances of * (which will crash it all)
 
     const labelForQuery = `*${workLabel}*`
-    console.log({ labelForQuery })
 
     const queryResult = await sequelizeInstance.query(
       `

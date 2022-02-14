@@ -1,7 +1,7 @@
 import cities from './cron-cities'
-import bassinsJobsCron from './cron-bassinsJobs'
+import citiesJobsCron from './cron-citiesJobs'
 
 export const start = (models) => {
   cities(models)
-  bassinsJobsCron(models)
+  citiesJobsCron(models)
 }

@@ -23,10 +23,12 @@ app.context.models = db.initModels()
 app.context.sequelize = db.instance
 app.keys = config.koaKeys
 
-db.migrations().then(() => {
-  db.seeders().then(async () => {
-    startCrons(app.context.models) // start crons
-  })
+// TODO separate db migrations from this file so they are not
+// started each time this process is started
+// (which is problematic in dev, since when a migration file is created,
+// the creation is "done", even before the migration content has been written on it)
+db.migrations().then(async () => {
+  startCrons(app.context.models) // start crons
 })
 
 Sentry.init({

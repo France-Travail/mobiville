@@ -16,10 +16,14 @@ RUN echo "$TIMEZONE" >/etc/timezone; \
     dpkg-reconfigure -f noninteractive tzdata;
 
 ARG ENV_TYPE=${ENV_TYPE:-developpement}
+ARG DB_HOST=${DB_HOST:-db}
+ARG DB_NAME=${DB_NAME:-mobiville}
+ARG DB_USER=${DB_USER}
+ARG DB_PASSWORD=${DB_PASSWORD}
 ENV ENV_TYPE=${ENV_TYPE}
 ENV LANG=fr_FR.UTF-8
 
-RUN echo "0 2 * * * root ENV_TYPE=${ENV_TYPE} /bin/bash /backups/BACKUP.sh /backups >/dev/null 2>&1" >>/etc/cron.d/backups;
+RUN echo "0 2 * * * root ENV_TYPE=${ENV_TYPE} DB_HOST=${DB_HOST} DB_NAME=${DB_NAME} DB_USER=${DB_USER} DB_PASSWORD=${DB_PASSWORD} /bin/bash /backups/BACKUP.sh /backups >/dev/null 2>&1" >>/etc/cron.d/backups;
 
 WORKDIR /backups
 

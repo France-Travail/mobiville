@@ -2,7 +2,7 @@ import Sequelize from 'sequelize'
 
 export default (sequelizeInstance) => {
   const Model = sequelizeInstance.define(
-    'bassinsJobs',
+    'citiesJobs',
     {
       id: {
         type: Sequelize.INTEGER,
@@ -11,8 +11,8 @@ export default (sequelizeInstance) => {
         autoIncrement: true,
         unique: true,
       },
-      bassin_id: {
-        type: Sequelize.INTEGER,
+      insee_code: {
+        type: Sequelize.STRING(10),
         allowNull: false,
       },
       rome_id: {
@@ -29,7 +29,7 @@ export default (sequelizeInstance) => {
       paranoid: false,
       underscored: true,
       indexes: [
-        { fields: ['bassin_id', 'rome_id'] },
+        { fields: ['insee_code', 'rome_id'] },
         { fields: ['rome_id'] },
         { fields: ['number'] },
       ],
@@ -37,9 +37,9 @@ export default (sequelizeInstance) => {
   )
 
   Model.associate = function (models) {
-    Model.hasOne(models.bassins, {
-      foreignKey: 'bassin_id',
-      sourceKey: 'bassin_id',
+    Model.hasOne(models.cities, {
+      foreignKey: 'insee_com',
+      sourceKey: 'insee_code',
     })
 
     return models

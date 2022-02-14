@@ -178,11 +178,9 @@ export function getEquipmentsDatas() {
   })
 }
 
-export function getBassinJobsCount() {
+export function getCitiesJobsCount() {
   const fromDatalakeDir = '/mnt/datalakepe/depuis_datalake'
   const files = readdirSync(fromDatalakeDir)
-
-  if (files.length === 0) return Promise.reject()
 
   const filesSortedByDate = files
     .map((fileName) => ({
@@ -191,6 +189,12 @@ export function getBassinJobsCount() {
     }))
     .sort((a, b) => b.time - a.time)
     .map((file) => file.name)
+    // multiple files can be here, this one has "offre" in its name (at the time of writing, the complete name
+    // of the files is still subject to change)
+    .filter((filename) => filename.includes('offre'))
+
+  if (filesSortedByDate.length === 0)
+    return Promise.reject(new Error('No eligible file'))
 
   return new Promise((resolve, reject) => {
     readFile(
