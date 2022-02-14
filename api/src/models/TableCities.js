@@ -395,7 +395,7 @@ export default (sequelizeInstance, Model) => {
       }
 
       await city.update(options)
-      console.log(`[DONE] Sync city ${city.id}`, options)
+      console.log(`[DONE] Sync city ${city.id}`)
 
       if (isHttpLoad) {
         await sleep(700) // wait and restart command
