@@ -1,6 +1,7 @@
 import config from 'config'
 import axios from 'axios'
 import { stringify } from 'querystring'
+import HttpsProxyAgent from 'https-proxy-agent';
 
 export function getAccessToken() {
   return axios
@@ -16,6 +17,9 @@ export function getAccessToken() {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
+        // proxy PE + bug d'axios voir: https://github.com/axios/axios/issues/2072#issuecomment-609650888
+        ...(config.PE_ENV && {proxy: false}),
+        ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
       }
     )
     .then((result) => result.data)
@@ -34,6 +38,8 @@ export async function searchJob({ codeRome = [], insee = [], distance = 10 }) {
           distance,
         },
         headers: { Authorization: `Bearer ${token}` },
+        ...(config.PE_ENV && {proxy: false}),
+        ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
       }
     )
     .then((result) => result.data)
@@ -47,6 +53,8 @@ export async function infosTravail({ codeProfession, codeDept }) {
       `https://api.emploi-store.fr/partenaire/infotravail/v1/datastore_search_sql?sql=SELECT * FROM "d9090eaf-65cd-41cb-816f-7249897a3e51" WHERE "AREA_CODE" = '${codeDept}' AND "AREA_TYPE_CODE" = 'D' AND "PCS_PROFESSION_CODE" = '${codeProfession}'`,
       {
         headers: { Authorization: `Bearer ${token}` },
+        ...(config.PE_ENV && {proxy: false}),
+        ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
       }
     )
     .then((result) => result.data)
@@ -59,12 +67,16 @@ export async function infosTensionTravail({ codeRome, codeDept, bassinId }) {
       `https://api.emploi-store.fr/partenaire/infotravail/v1/datastore_search_sql?sql=SELECT * FROM "266f691f-bce8-4443-808e-8e5aa125cf17" WHERE "ROME_PROFESSION_CARD_CODE" LIKE '${codeRome}' AND "AREA_TYPE_CODE" = 'B' AND "AREA_CODE" = '${bassinId}'`,
       {
         headers: { Authorization: `Bearer ${token}` },
+        ...(config.PE_ENV && {proxy: false}),
+        ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
       }
     ),
     axios.get(
       `https://api.emploi-store.fr/partenaire/infotravail/v1/datastore_search_sql?sql=SELECT * FROM "266f691f-bce8-4443-808e-8e5aa125cf17" WHERE "ROME_PROFESSION_CARD_CODE" LIKE '${codeRome}' AND "AREA_TYPE_CODE" = 'D' AND "AREA_CODE" = '${codeDept}'`,
       {
         headers: { Authorization: `Bearer ${token}` },
+        ...(config.PE_ENV && {proxy: false}),
+        ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
       }
     ),
   ]).then(([bassinResult, deptResult]) => ({
@@ -80,6 +92,8 @@ export async function getOgrFromRome(codeRome) {
       `https://api.emploi-store.fr/partenaire/rome/v1/metier/${codeRome}/appellation`,
       {
         headers: { Authorization: `Bearer ${token}` },
+        ...(config.PE_ENV && {proxy: false}),
+        ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
       }
     )
     .then((result) => result.data)
@@ -92,6 +106,8 @@ export async function getSkillFromLabel(label) {
       `https://api.emploi-store.fr/partenaire/explorateurmetiers/v1/explorateurmetiers?libelle=${label}&nombre=20&type=metier`,
       {
         headers: { Authorization: `Bearer ${token}` },
+        ...(config.PE_ENV && {proxy: false}),
+        ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
       }
     )
     .then((result) => result.data)
@@ -104,6 +120,8 @@ export async function getSkillFromRome(codeRome) {
       `https://api.emploi-store.fr/partenaire/rome/v1/metier/${codeRome}/competence`,
       {
         headers: { Authorization: `Bearer ${token}` },
+        ...(config.PE_ENV && {proxy: false}),
+        ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
       }
     )
     .then((result) => result.data)
