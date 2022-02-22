@@ -110,7 +110,6 @@ const CategoryTag = styled(Link)`
 
 const SituationTag = styled(Link)`
   background: ${({ selected }) => (selected ? COLOR_PRIMARY : COLOR_GRAY)};
-  color: ${({ selected }) => (selected ? '#fff' : COLOR_TEXT_PRIMARY)};
   border-radius: 44px;
   padding: 8px;
   margin-right: 8px;
@@ -119,6 +118,10 @@ const SituationTag = styled(Link)`
   cursor: pointer;
   font-weight: 500;
   font-size: 12px;
+  &,
+  &:hover {
+    color: ${({ selected }) => (selected ? '#fff' : COLOR_TEXT_PRIMARY)};
+  }
 `
 
 const TitleHelps = styled.h3`
