@@ -36,7 +36,7 @@ export default (sequelizeInstance, Model) => {
   }
 
   Model.searchByLabel = async (searchedWords) => {
-    const workLabel = `${(searchedWords || '').split(' ').join('*')}`
+    const workLabel = (searchedWords || '')
       .replace(/[+-<>()~"@]/gi, ' ') // filter special characters
       .replace(/\*+/gi, '') // remove instances of * (which will crash it all)
 
