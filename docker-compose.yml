@@ -50,30 +50,30 @@ services:
     volumes:
       - './db/var/lib/mysql:/var/lib/mysql'
 
-  backup:
-    restart: unless-stopped
-    build:
-      context: ./backups
-      dockerfile: Dockerfile
-      args:
-      - ENV_TYPE=${ENV_TYPE:-developpement}
-      - TIMEZONE=${TIMEZONE:-Europe/Paris}
-      - DB_USER=${MYSQL_USER}
-      - DB_PASSWORD=${MYSQL_PASSWORD}
-    container_name: mobiville-backup
-    hostname: backups
-    environment:
-      - DB_HOST=db
-      - DB_NAME=${MYSQL_DATABASE}
-      - DB_USER=${MYSQL_USER}
-      - DB_PASSWORD=${MYSQL_PASSWORD}
-    volumes:
-      - .:/home/docker/mobiville
-      - /mnt/backups:/mnt/backups
-      - ./backups:/backups
-    networks:
-      mobiville_network:
-        ipv4_address: 173.0.0.80
+  # backup:
+  #   restart: unless-stopped
+  #   build:
+  #     context: ./backups
+  #     dockerfile: Dockerfile
+  #     args:
+  #     - ENV_TYPE=${ENV_TYPE:-developpement}
+  #     - TIMEZONE=${TIMEZONE:-Europe/Paris}
+  #     - DB_USER=${MYSQL_USER}
+  #     - DB_PASSWORD=${MYSQL_PASSWORD}
+  #   container_name: mobiville-backup
+  #   hostname: backups
+  #   environment:
+  #     - DB_HOST=db
+  #     - DB_NAME=${MYSQL_DATABASE}
+  #     - DB_USER=${MYSQL_USER}
+  #     - DB_PASSWORD=${MYSQL_PASSWORD}
+  #   volumes:
+  #     - .:/home/docker/mobiville
+  #     - /mnt/backups:/mnt/backups
+  #     - ./backups:/backups
+  #   networks:
+  #     mobiville_network:
+  #       ipv4_address: 173.0.0.80
 
 networks:
   mobiville_network:

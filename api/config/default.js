@@ -6,6 +6,7 @@ module.exports = {
   ENTERPRISE_URL: process.env.ENTERPRISE_URL,
   EMPLOI_STORE_ID: process.env.EMPLOI_STORE_ID,
   EMPLOI_STORE_SECRET: process.env.EMPLOI_STORE_SECRET,
+  PE_ENV: process.env.PE_ENV,
   preloadSearch: false,
   database: {
     url: process.env.DATABASE_URL,

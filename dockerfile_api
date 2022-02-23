@@ -6,13 +6,22 @@ WORKDIR /home/api
 #RUN apt-get -y install iptables cron
 
 CMD (which yarn || npm i -g yarn@1.15.2) && \
-    echo "$NODE_ENV"; \
+    echo "NODE_EN=$NODE_ENV"; \
+    echo "PE_ENV=$PE_ENV"; \
+    if [ "$PE_ENV" = "true" ]; then \
+        export NO_PROXY="localhost,.internal,.intra" ; \
+        export HTTPS_PROXY="http://host.docker.internal:9000" ; \
+        export HTTP_PROXY="http://host.docker.internal:9000" ; \
+        yarn config set https-proxy 'http://host.docker.internal:9000' -g ; \
+        yarn config set http-proxy 'http://host.docker.internal:9000' -g ; \
+        yarn config set strict-ssl false ; \
+    fi; \
     yarn install --production=false && \
-    if [ "$NODE_ENV" = "production" ] || [ "$NODE_ENV" = "recette" ] || [ "$NODE_ENV" = "test" ]; then \
+    if [ "$NODE_ENV" = "production" ] || [ "$NODE_ENV" = "recette" ] || [ "$NODE_ENV" = "test" ]; then \
         yarn build:production && \ 
 	    yarn start:production; \
     else \
-        yarn start; \
+        yarn start --verbose; \
     fi; 
     # Utile pour debugguer et rentrer dans le conteneur si celui-ci n'est plus OK
     #sleep infinity;
