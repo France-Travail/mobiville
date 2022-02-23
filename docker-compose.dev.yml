@@ -32,6 +32,8 @@ services:
       mobiville_network:
         ipv4_address: 173.0.0.30
     stdin_open: true
-  # backup:
-  #   deploy:
-  #     replicas: 0
+  backup:
+    deploy:
+      replicas: 0
+    environment:
+      - PE_ENV=${PE_ENV}
