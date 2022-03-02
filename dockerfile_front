@@ -3,6 +3,15 @@ FROM node:12.18.0
 WORKDIR /home/front
 
 CMD (which yarn || npm i -g yarn@1.15.2) && \
+        echo "$PE_ENV" && \
+        ( [ $PE_ENV = "true" ] && \
+                (export NO_PROXY="localhost,.internal,.intra" && \
+                export HTTPS_PROXY="http://host.docker.internal:9000" && \
+                export HTTP_PROXY="http://host.docker.internal:9000" && \
+                yarn config set https-proxy 'http://host.docker.internal:9000' -g && \
+                yarn config set http-proxy 'http://host.docker.internal:9000' -g && \
+                yarn config set strict-ssl false ; \
+                ) \
+        || echo 'pas de proxy PE'); \ 
         yarn install && \
-        yarn start; \
-    
+        yarn start; 

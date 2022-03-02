@@ -10,6 +10,7 @@ services:
       dockerfile: dockerfile_api
     environment:
       - NODE_ENV=development
+      - PE_ENV=${PE_ENV}
     volumes:
       - './api:/home/api'
       - './api/src/assets/datas/depuis_datalake_mockdata:/mnt/datalakepe/depuis_datalake'
@@ -23,15 +24,16 @@ services:
       - '3000'
     environment:
       - TZ=Europe/Paris
+      - PE_ENV=${PE_ENV}
+      - NODE_ENV=development
     volumes:
       - './front:/home/front'
     networks:
       mobiville_network:
         ipv4_address: 173.0.0.30
     stdin_open: true
-    environment:
-      - NODE_ENV=development
-
   backup:
     deploy:
       replicas: 0
+    environment:
+      - PE_ENV=${PE_ENV}
