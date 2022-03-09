@@ -13,6 +13,7 @@ services:
       - PE_ENV=${PE_ENV}
     volumes:
       - './api:/home/api'
+      - '/home/api/node_modules'
       - './api/src/assets/datas/depuis_datalake_mockdata:/mnt/datalakepe/depuis_datalake'
 
   front:

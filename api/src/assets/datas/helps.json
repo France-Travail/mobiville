@@ -27,7 +27,7 @@
       "section": "recherche logement, temporaire",
       "situation": "je recherche un logement",
       "slug": "logement-temporaire",
-      "logo": "action-logement.png",
+      "logo": "action-logement-2.png",
       "type": "Accès au logement",
       "partner": "Action logement"
     },
@@ -251,7 +251,7 @@
       "section": "logement",
       "situation": "Je déménage",
       "slug": "mon-job-mon-logement",
-      "logo": "action-logement.png",
+      "logo": "action-logement-2.png",
       "type": "Aide financière",
       "partner": "Action logement"
     },
@@ -283,7 +283,7 @@
       "section": "logement",
       "situation": "Je recherche un logement, Je déménage",
       "slug": "louer-pour-l-emploi",
-      "logo": "action-logement.png",
+      "logo": "action-logement-2.png",
       "type": "Accompagnement du projet",
       "partner": "Action logement"
     }
