@@ -382,10 +382,14 @@ const HelpsPage = ({ location: { search } }) => {
                   </div>
                   <HelpItemTags style={{ color: COLOR_TEXT_SECONDARY }}>
                     Public concerné :{' '}
-                    {item.who
-                      .split(',')
-                      .map((t) => ucFirstOnly(t))
-                      .join(' · ')}
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: item.who
+                          .split(',')
+                          .map((t) => ucFirstOnly(t))
+                          .join(' · '),
+                      }}
+                    ></span>
                   </HelpItemTags>
                   <HelpItemType>
                     {helpIcon}
