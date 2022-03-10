@@ -32,7 +32,7 @@ export default (sequelizeInstance) => {
         allowNull: true,
       },
       cumulable: {
-        type: Sequelize.STRING(255),
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       link: {
