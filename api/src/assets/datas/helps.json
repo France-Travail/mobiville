@@ -112,8 +112,8 @@
       "partner": "Agence pour l'information sur le logement"
     },
     {
-      "title": "Mobilize: Garages solidaires",
-      "goal": "Accedez à la location de véhicules neufs ou reparation à prix réduit",
+      "title": "Renault Group - Care Makers",
+      "goal": "Vous êtes particulier, acteur social, acteur de l’emploi ou garage Renault ou Dacia ? \n\n Les garages solidaires Renault et Dacia proposent des produits et des services accessibles à tarifs très préférentiels.",
       "description": "Des garages du réseau Renault se portent volontaires par conviction pour aider les personnes qui ne peuvent pas assurer financièrement l'usage d'une voiture mais qui en ont besoin pour rechercher, trouver ou conserver un emploi. <br />Ces garages effectuent les mêmes prestations de qualité que pour toute autre personne mais les prix réduits sont préalablement définis pour tenir compte des situations personnelles particulières. ",
       "when": "A tout moment",
       "conditions": "Les offres Mobilize sont accessibles aux personnes : habitant en France métropolitaine, ayant un besoin de mobilité lié au projet professionnel, majeures et titulaires du permis de conduire, éligibles aux conditions de ressources du programme, éventuellement en situation d’incident bancaire (sur étude du dossier)",
@@ -123,7 +123,7 @@
       "section": "transport",
       "situation": "je recherche un emploi",
       "slug": "mobilize-garages-solidaires",
-      "logo": "mobilize.jpg",
+      "logo": "renault-group.png",
       "type": "Aide transport",
       "partner": "Renault"
     },
