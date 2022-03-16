@@ -1,13 +1,13 @@
 [
     {
-      "title": "Mobili-jeune",
+      "title": "Aide MOBILI-JEUNE®",
       "goal": "Une prise en charge d'une partie de votre loyer pendant un an",
       "description": "L’AIDE MOBILI-JEUNE est une subvention permettant de prendre en charge une partie du loyer (entre 10 € et 100 € maximum) chaque mois et pendant un an. <br />Elle s’adresse aux jeunes de moins de 30 ans, en formation en alternance (sous contrat d’apprentissage ou de professionnalisation) au sein d’une entreprise du secteur privé non agricole.",
-      "when": "Au plus tard la veille de votre trentième anniversaire. \n3 mois avant le début de votre formation ou au plus tard dans les 6 mois à compter du démarrage de celle-ci. \nSi la formation dure plusieurs années, la date de démarrage pourra être celle de début de l’une d’entre elles. Dans ce cas l’aide sera versée pour l’année de formation restant.",
-      "conditions": "Vous avez moins de 30 ans; \nVous n'avez pas de dossier MOBILI-JEUNE® en cours chez Action Logement ;Vous êtes salarié.e d’une entreprise du secteur privé non agricole ; \nVous êtes en contrat d’apprentissage ou de professionnalisation ; \nVous allez être locataire d'un logement en proximité géographique avec le lieu de votre formation ou de votre entreprise ; Votre salaire mensuel brut est inférieur ou égal à 100 % du SMIC.",
-      "cumulable": "Cumulable avec la Garantie visale, l'aide mobili-pass et l'avance loca-pass",
+      "when": "Votre demande doit être déposée 3 mois avant la date de démarrage de votre contrat d’alternance ou jusqu’à 6 mois après cette date.",
+      "conditions": "Être locataire d’un logement* à proximité de son lieu de travail ou de formation.<br/>Le logement, occupé à titre de résidence principale, doit faire l’objet de la signature d’un bail, d’une convention d’occupation en foyer ou résidence sociale ou d’un avenant à un bail de colocation.<br/><br/><i><small>Aide soumise à conditions (notamment de ressources), disponible dans la limite du montant maximal de l’enveloppe fixée par la réglementation en vigueur, et octroyée sous réserve de l’accord d’Action Logement Services.</i></small>",
+      "cumulable": "Cumulable, sous conditions, avec d'autres aides Action Logement :<br/>L'AVANCE LOCA-PASS® : une aide pour avancer le montant de votre dépôt de garantie,<br/>La garantie VISALE : une caution gratuite accordée par Action Logement pour faciliter votre accès au logement<br/>L’aide Mon job Mon logement : une subvention de <span style=\"white-space:nowrap;\">1 000 €</span> pour vous installer près de votre emploi.",
       "link": "https://www.actionlogement.fr/l-aide-mobili-jeune",
-      "who": "salarié^ moins de 26 ans",
+      "who": "<span style=\"display:none\">salarié^ moins de 26 ans</span>Avoir moins de 30 ans et être en alternance dans une entreprise du secteur privé non agricole avec un revenu ne dépassant pas 100 % du Smic<br/>Si vous êtes en alternance dans une entreprise du secteur agricole de<br/>50 salariés et plus, toutes les informations sur l’aide AGRI-MOBILI-JEUNE : actionlogement.fr/le-secteur-agricole",
       "section": "financement logement",
       "situation": "je déménage",
       "slug": "mobili-jeune",
@@ -39,7 +39,7 @@
       "conditions": "La garantie Visale est ouverte aux étudiants ou alternants, pour tous types de logements (parc privé, social et assimilé), et aux jeunes de 30 ans au plus, en structures collectives.<br/><br/><i>Aide soumise à conditions et octroyée sous réserve de l’accord d’Action Logement Services.</i>",
       "cumulable": "Cumulable, sous conditions, avec d'autres aides Action Logement :<br/>L'AVANCE LOCA-PASS® : une aide pour avancer le montant de votre dépôt de garantie, <br/>L'AIDE MOBILI-JEUNE® : une subvention jusqu'à 100 € par mois pour alléger le loyer des alternants ",
       "link": "https://www.visale.fr/",
-      "who": "<span style=\"display:none\">salarié^ alternance^ moins de 26 ans^ plus de 26 ans</span><br/>^Salariés de plus de 30 ans mutés ou nouvellement embauchés.<br/>^Salariés percevant des revenus jusqu’à 1 500 € nets par mois.<br/>^Jeunes de 18 à 30 ans inclus.<br/>^Personnes signataires d’un bail mobilité.",
+      "who": "<span style=\"display:none\">salarié^ alternance^ moins de 26 ans^ plus de 26 ans</span><br/>^Salariés de plus de 30 ans mutés ou nouvellement embauchés.<br/>^Salariés percevant des revenus jusqu’à <span style=\"white-space:nowrap;\">1 500 €</span> nets par mois.<br/>^Jeunes de 18 à 30 ans inclus.<br/>^Personnes signataires d’un bail mobilité.",
       "section": "dossier logement",
       "situation": "je recherche un logement",
       "slug": "garantie-visale",
@@ -144,9 +144,9 @@
       "partner": "Réseau SAM"
     },
     {
-      "title": "AL'IN",
+      "title": "Logement social",
       "goal": "Simplifiez votre recherche de logement social",
-      "description": "Une recherche de logement simplifiée avec <a href=\"https://al-in.fr\">al-in.fr</a>, la plateforme d’offres de logement d’Action Logement pour les salariés.",
+      "description": "Une recherche de logement simplifiée avec al-in.fr, la plateforme d’offres de logement d’Action Logement pour les salariés.",
       "when": "A tout moment",
       "conditions": "Le logement recherché devra être la résidence principale du salarié<br/>Il est nécessaire de justifier de ressources égales ou inférieures à des plafonds de ressources réglementaires (ces plafonds varient en fonction du nombre de personnes dans le foyer, de la norme du logement et du secteur géographique)<br/>Il faut détenir un Numéro Unique d’enregistrement (NUD-NUR) qui est l’identifiant indispensable pour être candidat à une offre de logement social (voir le site <a href=\"https://www.demande-logement-social.gouv.fr\">demande-logement social.gouv.fr</a>)",
       "cumulable": "Cumulable, sous conditions, avec d'autres aides Action Logement :<br/>L'AVANCE LOCA-PASS® : une aide pour avancer le montant de votre dépôt de garantie,<br/>La garantie VISALE : une caution gratuite accordée par Action Logement pour faciliter votre accès au logement<br/>L'AIDE MOBILI-JEUNE® : une subvention jusqu'à 100 € par mois pour alléger le loyer des alternants<br/>L’aide Mon job Mon logement : une subvention de 1 000 € pour vous installer près de votre emploi.",
@@ -160,8 +160,8 @@
       "partner": "Action logement"
     },
     {
-      "title": "Subvention Mobili-pass",
-      "goal": "Demandez une subvention pour financer des frais d'agence ainsi qu'une assistance pour les démarches administratives",
+      "title": "Aide Mobili-Pass",
+      "goal": "Une opportunité professionnelle dans une autre région ? Emménagez sereinement grâce à L'AIDE MOBILI-PASS®, qui permet de financer certains frais liés à votre mobilité géographique",
       "description": "Une solution complète de financement pour faciliter votre mobilité professionnelle<br/><br/>L’AIDE MOBILI-PASS® prend la forme :<br/>- d’une subvention jusqu’à 2 200 € pour financer les frais d’accompagnement à la recherche d’un logement locatif par un opérateur spécialisé* choisi par le salarié<br/>- et/ou d’un prêt à faible taux pour régler une partie des dépenses liées à la mobilité professionnelle (double charge de logement, frais d’agence...).<br/><br/>Un crédit vous engage et doit être remboursé.<br/>Vérifiez vos capacités de remboursement avant de vous engager.<br/><br/>* <small><i>Les services d’accompagnement à la recherche de logement peuvent être délivrés par des sociétés filiales d’Action Logement ou des opérateurs indépendants. Ces professionnels de la mobilité s’engagent à respecter une charte de qualité de service.<br/><br/>AIDE MOBILI-PASS® est une marque déposée pour le compte d’Action Logement.</i></small>",
       "when": " Jusqu’à 6 mois après la date d’embauche ou de mutation,",
       "conditions": "Sauf en cas de déménagement de l'entreprise ou dans le cadre d’une procédure collective, la distance entre l’ancienne et la nouvelle résidence doit être supérieure à 70 km ou bien, la distance entre le nouveau lieu de travail et l’ancienne résidence occasionne un temps de transport supérieur à 1 h 15.<br/><br/><i><small>Aide soumise à conditions (notamment de ressources), disponible dans la limite du montant maximal de l’enveloppe fixée par la réglementation en vigueur, et octroyée sous réserve de l’accord de l’employeur et d’Action Logement Services.</i></small>",
@@ -245,7 +245,7 @@
       "description": "Aide de 1000 € sous forme de subvention pour aider à s’installer près de son emploi ou de son lieu de formation",
       "when": "Maximum 3 mois après la signature du bail",
       "conditions": "Être locataire depuis moins de 3 mois, d’un logement situé sur le territoire français et qui constitue sa résidence principale.<br/><br/>Pour les salariés qui démarrent une activité professionnelle, le délai entre la date <br/>d’entrée dans le logement et la date de début du contrat de travail ne doit pas <br/>excéder 3 mois. <br/><br/><i><small>Aide soumise à conditions (notamment de ressources), disponible dans la limite du montant maximal de l’enveloppe fixée par la réglementation en vigueur, et octroyée sous réserve de l’accord d’Action Logement Services.</i></small>",
-      "cumulable": ", Non cumulable avec avec l’aide à la mobilité et l’aide jeunes actifs précédemment proposées par Action Logement<br/>, Cumulable, sous conditions, avec d'autres aides Action Logement :<br/>L'AVANCE LOCA-PASS® : une aide pour avancer le montant de votre dépôt de garantie,<br/>La garantie VISALE : une caution gratuite accordée par Action Logement pour faciliter votre accès au logement<br/>L'AIDE MOBILI-JEUNE® : une subvention jusqu'à 100 € par mois pour alléger le loyer des alternants",
+      "cumulable": "• Non cumulable avec avec l’aide à la mobilité et l’aide jeunes actifs précédemment proposées par Action Logement<br/>• Cumulable, sous conditions, avec d'autres aides Action Logement :<br/>L'AVANCE LOCA-PASS® : une aide pour avancer le montant de votre dépôt de garantie,<br/>La garantie VISALE : une caution gratuite accordée par Action Logement pour faciliter votre accès au logement<br/>L'AIDE MOBILI-JEUNE® : une subvention jusqu'à 100 € par mois pour alléger le loyer des alternants",
       "link": "https://www.actionlogement.fr/aide-mon-job-mon-logement",
       "who": "<span style=\"display:none\">salarié^ moins de 26 ans^ plus de 26 ans</span><br/>^ Salariés d’entreprises du secteur privé (y compris agricole) :<br/>- en reprise d’emploi, alternance ou 1er emploi<br/>- ou qui justifient un rapprochement domicile/ travail<br/>Et dont les revenus ne dépassent pas 1.5 fois le Smic<br/><br/>^ Jeunes actifs* de moins de 25 ans (hors alternants) avec un contrat de travail de moins de 6 mois et un revenu compris entre 30 % et 100 % du Smic<br/><br/><i><small>* salariés d’entreprises du secteur privé (y compris agricole)</i></small>",
       "section": "logement",
@@ -272,7 +272,7 @@
       "partner": "Keeseek"
     },
     {
-      "title": "Louer pour l'emploi",
+      "title": "Logement privé",
       "goal": "Bénéficiez d'un ensemble de services gratuits: loyers plafonnées, caution gratuite, mobilisation d'un conseiller logement…",
       "description": "Un meilleur accès au logement privé avec les dispositifs d'Action Logement dédiés aux logements à niveau de loyer très social, social et intermédiaire :<br/>- le dispositif Louer Pour l'Emploi (LPE) : plus d'infos sur <a href=\"https://louerpourlemploi.actionlogement.fr\">louerpourlemploi.actionlogement.fr</a> <br/>- le dispositif Action Coeur de Ville (ACV) : plus d'infos sur <a href=\"https://www.actionlogement.fr/louer-en-centre-ville\">actionlogement.fr/louer-en-centre-ville</a>",
       "when": "À tout moment",
@@ -295,7 +295,7 @@
       "conditions": "Le logement doit faire l’objet de la signature d’un bail, d’une convention d’occupation en foyer ou résidence sociale ou d’un avenant à un bail de colocation.<br/>Il doit être situé sur le territoire français et constituer la résidence principale.<br/><br/><small><i>Prêt soumis à conditions, disponible dans la limite du montant maximal de l’enveloppe fixée par la réglementation en vigueur, et octroyé sous réserve de l’accord d’Action Logement Services.</i></small>",
       "cumulable": "Cumulable, sous conditions, avec d'autres aides Action Logement :<br/><br/>La garantie VISALE : une caution gratuite accordée par Action Logement pour faciliter votre accès au logement<br/><br/>L'AIDE MOBILI-JEUNE® : une subvention jusqu'à <span style=\"white-space:nowrap;\">100 €</span> par mois pour alléger le loyer des alternants<br/><br/>L’aide Mon job Mon logement : une subvention de <span style=\"white-space:nowrap;\">1 000 €</span> pour vous installer près de votre emploi.",
       "link": "https://www.actionlogement.fr/l-avance-loca-pass-jeunes",
-      "who": "<span style=\"display:none;\">Moins de 26 ans^Plus de 26 ans^Salarié^Demandeur d'emploi</span> <br/>^Salariés d’entreprises du secteur privé non agricole<br/>^Jeunes de moins de 30 ans en recherche d’emploi, en situation d’emploi (hors fonctionnaires titulaires) ou en formation en alternance.<br/>^ Étudiants boursiers d’État, ou étudiants justifiant d’une expérience professionnelle cumulée d’au moins 3 mois dans les 6 derniers mois<br/><br/>Pour les salariés d’entreprises du secteur agricole de 50 salariés et plus, toutes les informations sur l’<span style=\"text-transform:uppercase;\">AVANCE AGRI-LOCA-PASS</span> : actionlogement.fr/le-secteur-agricole",
+      "who": "<span style=\"display:none;\">Moins de 26 ans^Plus de 26 ans^Salarié^Demandeur d'emploi</span> <br/>^Salariés d’entreprises du secteur privé non agricole<br/>^Jeunes de moins de 30 ans en recherche d’emploi, en situation d’emploi (hors fonctionnaires titulaires) ou en formation en alternance.<br/>^ Étudiants boursiers d’État, ou étudiants justifiant d’une expérience professionnelle cumulée d’au moins 3 mois dans les 6 derniers mois<br/><br/>Pour les salariés d’entreprises du secteur agricole de 50 salariés et plus, toutes les informations sur l’AVANCE AGRI-LOCA-PASS : actionlogement.fr/le-secteur-agricole",
       "section": "logement",
       "situation": "je déménage",
       "slug": "avance-loca-pass",
