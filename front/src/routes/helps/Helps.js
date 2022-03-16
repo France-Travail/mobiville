@@ -385,7 +385,7 @@ const HelpsPage = ({ location: { search } }) => {
                     <span
                       dangerouslySetInnerHTML={{
                         __html: item.who
-                          .split(',')
+                          .split('^')
                           .map((t) => ucFirstOnly(t))
                           .join(' · '),
                       }}
