@@ -22,7 +22,7 @@ import {
   COLOR_TEXT_SECONDARY,
 } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
-import { ucFirstOnly } from '../../utils/utils'
+import { ucFirst } from '../../utils/utils'
 import helpsPic from '../../assets/images/Generique_Aides.png'
 
 const Title = styled.h1`
@@ -386,7 +386,7 @@ const HelpsPage = ({ location: { search } }) => {
                       dangerouslySetInnerHTML={{
                         __html: item.who
                           .split('^')
-                          .map((t) => ucFirstOnly(t))
+                          .map((t) => ucFirst(t))
                           .join(' · '),
                       }}
                     ></span>

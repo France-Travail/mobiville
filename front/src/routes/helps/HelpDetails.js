@@ -12,7 +12,7 @@ import {
   COLOR_TEXT_SECONDARY,
 } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
-import { ucFirstOnly } from '../../utils/utils'
+import { ucFirst } from '../../utils/utils'
 import SubHeader from '../../components/SubHeader'
 
 const Container = styled.div`
@@ -203,7 +203,7 @@ const HelpDetailsPage = () => {
                 dangerouslySetInnerHTML={{
                   __html: help.who
                     .split('^')
-                    .map((t) => ucFirstOnly(t))
+                    .map((t) => ucFirst(t))
                     .join(' · '),
                 }}
               ></span>
