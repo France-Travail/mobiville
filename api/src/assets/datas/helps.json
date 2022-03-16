@@ -23,7 +23,7 @@
       "conditions": "Être célibataire, en couple sans enfant ou seul avec 1 enfant en bas-âge<br/>Être majeur ou mineur émancipé.",
       "cumulable": "Cumulable, sous conditions, avec d'autres aides Action Logement :<br/>L'AVANCE LOCA-PASS® : une aide pour avancer le montant de votre dépôt de garantie,<br/>La garantie VISALE : une caution gratuite accordée par Action Logement pour faciliter votre accès au logement<br/>L'AIDE MOBILI-JEUNE® : une subvention jusqu'à 100 € par mois pour alléger le loyer des alternants",
       "link": "https://www.actionlogement.fr/les-residences-temporaires",
-      "who": "<span style=\"display:none\">salarié^ demandeur d'emploi avec promesse d'embauche^ alternance^ moins de 26 ans^ plus de 26 ans</span> Être salarié d'une entreprise du secteur privé non agricole d'au moins 10 salariés ou d'une entreprise du secteur agricole d'au moins 50 salariés (CDI, CDD, intérim, stage ou alternance)",
+      "who": "<span style=\"display:none\">salarié^ alternance^ moins de 26 ans^ plus de 26 ans</span> Être salarié d'une entreprise du secteur privé non agricole d'au moins 10 salariés ou d'une entreprise du secteur agricole d'au moins 50 salariés (CDI, CDD, intérim, stage ou alternance)",
       "section": "recherche logement, temporaire",
       "situation": "je recherche un logement",
       "slug": "logement-temporaire",
