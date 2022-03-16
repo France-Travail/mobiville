@@ -11,7 +11,7 @@
       "section": "financement logement",
       "situation": "je déménage",
       "slug": "mobili-jeune",
-      "logo": "mobili-jeune.png",
+      "logo": "action-logement-2.png",
       "type": "Aide financière",
       "partner": "Action logement"
     },
@@ -43,7 +43,7 @@
       "section": "dossier logement",
       "situation": "je recherche un logement",
       "slug": "garantie-visale",
-      "logo": "visale.jpg",
+      "logo": "action-logement-2.png",
       "type": "Aide administrative",
       "partner": "Action logement"
     },
@@ -155,7 +155,7 @@
       "section": "logement",
       "situation": "je déménage, je recherche un logement",
       "slug": "alin",
-      "logo": "al-in.jpg",
+      "logo": "action-logement-2.png",
       "type": "Accès au logement",
       "partner": "Action logement"
     },
@@ -171,7 +171,7 @@
       "section": "logement, accompagnement",
       "situation": "je déménage, je recherche un logement",
       "slug": "subvention-mobili-pass",
-      "logo": "mobili-pass.jpg",
+      "logo": "action-logement-2.png",
       "type": "Accompagnement du projet, accès au logement",
       "partner": "Action logement"
     },
@@ -187,7 +187,7 @@
       "section": "logement, accompagnement",
       "situation": "je recherche un logement, je déménage",
       "slug": "pret-mobili-pass",
-      "logo": "mobili-pass.jpg",
+      "logo": "action-logement-2.png",
       "type": "Aide financière",
       "partner": "Action logement"
     },
