@@ -202,7 +202,7 @@ const HelpDetailsPage = () => {
               <span
                 dangerouslySetInnerHTML={{
                   __html: help.who
-                    .split(',')
+                    .split('^')
                     .map((t) => ucFirstOnly(t))
                     .join(' · '),
                 }}
