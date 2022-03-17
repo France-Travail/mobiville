@@ -208,7 +208,7 @@ const Footer = () => {
             </a>
           </div>
           <CopyRight>
-            Copyright 2022 ©Mobiville propulsé par Pôle Emploi
+            Un site crée par Pole Emploi 2020-2022 -tous droits réservés
           </CopyRight>
         </WrapperLogos>
       </div>
