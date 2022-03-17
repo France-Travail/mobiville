@@ -12,7 +12,7 @@ const Container = styled.div`
 
 const AccessibilityPage = () => {
   return (
-    <MainLayout footer topMobileMenu>
+    <MainLayout topMobileMenu>
       <Container>
         <div className="wrapper">
           <h1>Accessibilité</h1>

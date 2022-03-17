@@ -197,7 +197,11 @@ const HomePage = () => {
   const isMobile = isMobileView(windowsSize)
 
   return (
-    <MainLayout footer topMobileMenu style={{ background: '#fff' }}>
+    <MainLayout
+      isMobile={isMobile}
+      topMobileMenu
+      style={{ background: '#fff' }}
+    >
       <Helmet>
         <title>Mobiville - La Mobilité Facile en France</title>
         <meta
