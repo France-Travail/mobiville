@@ -51,7 +51,7 @@ const GoToMainContent = styled.a`
   }
 `
 
-const MainLayout = ({ children, menu, footer, topMobileMenu, style = {} }) => {
+const MainLayout = ({ children, menu, topMobileMenu, style = {} }) => {
   const size = useWindowSize()
   const location = useLocation()
 
@@ -76,7 +76,7 @@ const MainLayout = ({ children, menu, footer, topMobileMenu, style = {} }) => {
       >
         {children}
       </Main>
-      {footer && <Footer />}
+      <Footer />
     </Container>
   )
 }
@@ -87,7 +87,7 @@ MainLayout.propTypes = {
     PropTypes.node,
   ]).isRequired,
   menu: PropTypes.oneOfType([PropTypes.object]),
-  footer: PropTypes.bool,
+  isMobile: PropTypes.bool,
   topMobileMenu: PropTypes.bool,
   style: PropTypes.object,
 }
@@ -96,7 +96,7 @@ MainLayout.defaultProps = {
   menu: {
     visible: true,
   },
-  footer: false,
+  isMobile: false,
   topMobileMenu: false,
   style: {},
 }

@@ -128,7 +128,7 @@ const CopyRight = styled.p`
 const Footer = () => {
   return (
     <MainSpace>
-      <div class="footer">
+      <div className="footer">
         <Wrapper className="descriptif">
           <p>
             Mobiville est un service vous permettant de trouver la ville qui
@@ -163,13 +163,17 @@ const Footer = () => {
           </Item>
         </WrapperLinks>
         <WrapperLogos>
-          <div class="logos">
+          <div className="logos">
             <a
               href="https://www.pole-emploi.fr/"
               target="_blank"
               rel="noreferrer"
             >
-              <img class="logo-pe" src="/logos/logo_pe.svg" alt="pole emploi" />
+              <img
+                className="logo-pe"
+                src="/logos/logo_pe.svg"
+                alt="pole emploi"
+              />
             </a>
             <a
               href="https://www.actionlogement.fr/"
@@ -177,20 +181,20 @@ const Footer = () => {
               rel="noreferrer"
             >
               <img
-                class="logo-al"
+                className="logo-al"
                 src="/help-logos/action-logement-2.png"
                 alt="action logement"
               />
             </a>
             <a href="http://www.fse.gouv.fr/" target="_blank" rel="noreferrer">
               <img
-                class="logo-fse"
+                className="logo-fse"
                 src="/logos/logo_fonds_social_eu.svg"
                 alt="fond social européen"
               />
             </a>
             <a
-              class="europe"
+              className="europe"
               href="http://www.fse.gouv.fr/"
               target="_blank"
               rel="noreferrer"
