@@ -529,6 +529,7 @@ const CityPage = ({ location: { pathname, search } }) => {
           </Block>
         )}
       </BlockContainer>
+      <br />
     </MainLayout>
   )
 }

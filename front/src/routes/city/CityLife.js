@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import ArrowBackwardIcon from '@mui/icons-material/ArrowBack'
 import { IconButton, Tooltip } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 import { useWindowSize } from '../../common/hooks/window-size'
@@ -254,11 +255,23 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
         <ItemTitleLayout>Description de la ville</ItemTitleLayout>
         <ItemContentLayout>
           {displayedDescription}
-          {description.length > MAX_DESCRIPTION_LENGTH && !showFullDescription && (
+          {description.length > MAX_DESCRIPTION_LENGTH && (
             <div>
-              <ViewMore onClick={() => setShowFullDescription(true)}>
-                En savoir plus
-                <ArrowForwardIcon fontSize="small" style={{ marginLeft: 8 }} />
+              <ViewMore
+                onClick={() => setShowFullDescription(!showFullDescription)}
+              >
+                {showFullDescription ? 'Lire moins' : 'En savoir plus'}
+                {showFullDescription ? (
+                  <ArrowBackwardIcon
+                    fontSize="small"
+                    style={{ marginLeft: 8 }}
+                  />
+                ) : (
+                  <ArrowForwardIcon
+                    fontSize="small"
+                    style={{ marginLeft: 8 }}
+                  />
+                )}
               </ViewMore>
             </div>
           )}
