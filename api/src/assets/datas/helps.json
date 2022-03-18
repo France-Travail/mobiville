@@ -176,22 +176,6 @@
       "partner": "Action logement"
     },
     {
-      "title": "Prêt Mobili-pass",
-      "goal": "Demandez un prêt à 1% pour financer les frais liés à votre départ",
-      "description": "Le prêt de l’AIDE MOBILI-PASS, permet de financer certains des frais annexes liés à la mobilité professionnelle : <br />sur le site de départ (frais d’assistance à la mise en location ou à la vente de mon logement, indemnités de remboursement anticipé de mon prêt immobilier ou des intérêts intercalaires de mon prêt relais),<br />sur le site d’arrivée (frais d’agence immobilière ou de notaire dans le cadre de la signature de mon nouveau bail.)",
-      "when": "suite à une embauche, une mutation",
-      "conditions": "Etre salarié d’une entreprise du secteur privé non agricole de 10 salariés et plus.",
-      "cumulable": "oui",
-      "link": "https://www.actionlogement.fr/financement-mobilite",
-      "who": "salarié^ demandeur d'emploi avec promesse d'embauche^ alternance^ moins de 26 ans",
-      "section": "logement, accompagnement",
-      "situation": "je recherche un logement, je déménage",
-      "slug": "pret-mobili-pass",
-      "logo": "action-logement-2.png",
-      "type": "Aide financière",
-      "partner": "Action logement"
-    },
-    {
       "title": "Changement d'adresse en ligne",
       "goal": "Déclarez, par internet et en une seule opération, le changement d'adresse à plusieurs organismes",
       "description": "Pour déclarer vos nouvelles coordonnées, simultanément auprès de plusieurs services de l'administration et de fournisseurs d'énergie.<br />Permet d'informer plusieurs organismes publics et privés simultanément : Caisses de sécurité sociale et de retraite, Énergie (EDF, Engie) Pôle emploi, Service des impôts, Services en charge des cartes grises (SIV)",
