@@ -12,7 +12,7 @@ import {
   COLOR_TEXT_SECONDARY,
 } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
-import { ucFirstOnly } from '../../utils/utils'
+import { ucFirst } from '../../utils/utils'
 import SubHeader from '../../components/SubHeader'
 
 const Container = styled.div`
@@ -199,10 +199,14 @@ const HelpDetailsPage = () => {
             </Panel>
             <Panel isMobile={isMobile}>
               <PanelTitle>Public concerné</PanelTitle>
-              {help.who
-                .split(',')
-                .map((t) => ucFirstOnly(t))
-                .join(' · ')}
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: help.who
+                    .split('^')
+                    .map((t) => ucFirst(t))
+                    .join(' · '),
+                }}
+              ></span>
             </Panel>
           </DoublePanelsContainer>
         </PanelsContainer>
