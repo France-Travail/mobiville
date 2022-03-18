@@ -9,10 +9,6 @@ import LOGO_FR from '../assets/images/marianne-logo.png'
 import LOGO_AL from '../assets/images/logo-action-logement.png'
 import LOGO_PE from '../assets/images/logo-pole-emploi.png'
 
-import { ReactComponent as HomeIcon } from '../assets/images/home.svg'
-import { ReactComponent as MagnifyingGlassIcon } from '../assets/images/superhero-outlined.svg'
-import { ReactComponent as SuperHeroIcon } from '../assets/images/magnifying-glass-outlined.svg'
-
 const Header = styled.header`
   position: fixed;
   height: 102px;
@@ -26,12 +22,14 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 16px;
+  padding: 16px 70px;
 `
 
 const Item = styled(Link)`
   && {
-    margin-left: 70px;
+    &:nth-child(2) {
+      margin-left: 22px;
+    }
     text-decoration: none;
     position: relative;
     display: flex;
@@ -43,6 +41,8 @@ const Item = styled(Link)`
 
 const IconsContainer = styled.div`
   display: flex;
+  justify-content: center;
+  flex-grow: 1;
 `
 
 const Text = styled(Typography)`
@@ -62,7 +62,6 @@ const LogoImagePartner = styled.img`
 const HeaderDesktop = () => {
   const location = useLocation()
 
-  const homeSelected = location.pathname === '/'
   const searchSelected = location.pathname.includes('rechercher')
   const helpSelected = location.pathname.includes('aides')
 
@@ -80,30 +79,12 @@ const HeaderDesktop = () => {
           style={{ height: 48 }}
         />
       </Link>
-      <IconsContainer style={{ flexGrow: 1 }}>
-        <Item to="/" selected={homeSelected}>
-          <HomeIcon
-            style={{
-              fill: homeSelected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY,
-            }}
-          />
-          <Text>Accueil</Text>
-        </Item>
+      <IconsContainer>
         <Item to="/rechercher" selected={searchSelected}>
-          <MagnifyingGlassIcon
-            style={{
-              fill: searchSelected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY,
-            }}
-          />
-          <Text>Recherche</Text>
+          <Text>Rechercher une ville</Text>
         </Item>
         <Item to="/aides" selected={helpSelected}>
-          <SuperHeroIcon
-            style={{
-              fill: helpSelected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY,
-            }}
-          />
-          <Text>Aides</Text>
+          <Text>Rechercher une aide</Text>
         </Item>
       </IconsContainer>
       <div style={{ flexShrink: 0 }}>
