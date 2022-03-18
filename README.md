@@ -14,8 +14,15 @@ Mobiville est un outil d’aide à la décision pour orienter les candidats à l
 
 Pré-requis: [docker, docker-compose](https://www.docker.com/get-started) et [yarn](https://yarnpkg.com/getting-started/install)
 
-### Construire et démarrer les conteneurs
+### Version de nodeJS
+Il faut s'assurer d'etre sous **node 12.18.4**
+Avec [nvm](https://github.com/nvm-sh/nvm) pour Windows et un poste PE il faut ouvrir un cmd en self élévation:
+```bash
+nvm install 12.18.4
+nvm use 12.18.4
+``` 
 
+### Construire et démarrer les conteneurs
 1. Remplir les données .env (exemple voir .env.exemple dans le repo)
 2. `yarn build` (toute modification du .env demandera un nouveau build)
 3. `yarn start`
@@ -29,8 +36,8 @@ Et exécuter les commandes de synchronisation suivantes, dans l’ordre :
 
 ```
 yarn sync:regions # almost instantaneous. Run this first.
-yarn sync:cities # 2 minutes long
-yarn sync:professionsInTension # 2 minutes long
+yarn sync:cities # 1 minutes long
+yarn sync:professionsInTension # 1 minutes long
 yarn sync:helps # almost instantaneous
 yarn sync:equipments # This will take a few minutes minutes
 yarn sync:equipmentsSpecial # almost instantaneous, needs to be run after the previous script
@@ -61,12 +68,7 @@ Les tables suivantes sont présentes dans la base :
 
 ## Génération de migration
 
-<<<<<<< HEAD
-In the directory `~/api/src/db`, run `npx sequelize-cli migration:generate --name migration-skeleton`
-=======
 Dans le répertoire `~/api/src/db`, exécuter `npx sequelize-cli migration:generate --name migration-skeleton`
-
-> > > > > > > docs: cleanup README.md
 
 ## Construire les images
 
@@ -216,3 +218,21 @@ mobiville --> [Docker Backup]
 Data --> [Docker API]
 [datalake] -l--> datalakefile
 ```
+### Comment récuperer et appliquer un backup de bdd ?
+##### Récupération du backup 
+Pour télécharger le backup avec le nom `mobivillerecette_dimanche` :
+Sur le serveur distant :
+- `docker cp mobiville-backup:/backups/mobivillerecette_dimanche.sql.bz2 /tmp/`
+
+Sur son poste ensuite :
+- `scp $USER@$IP_DU_SERVEUR_DISTANT:/tmp/mobivillerecette_dimanche.sql.bz2 ./`
+
+##### Procedure de restore
+Pour un backup dont le nom serait `mobivillerecette_dimanche` :
+```bash
+docker cp ./mobivillerecette_dimanche.sql mobiville_db_1:/
+docker exec -it mobiville_db_1 mariadb -u $MOBIVILLE_USER -p$MOBIVILLE_PASS mobiville -e "DROP DATABASE mobiville"
+docker exec -it mobiville_db_1 mariadb -u $MOBIVILLE_USER -p$MOBIVILLE_PASS -e "CREATE DATABASE mobiville"
+docker exec -it mobiville_db_1 bash -c "mysql -u $MOBIVILLE_USER -p$MOBIVILLE_PASS mobiville < mobivillerecette_dimanche.sql"
+```
+TADA !
