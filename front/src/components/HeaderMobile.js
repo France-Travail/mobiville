@@ -10,11 +10,10 @@ const Header = styled.header`
   top: 0;
   left: 0;
   right: 0;
-  position: fixed;
+  position: absolute;
   padding: 0 16px;
   display: flex;
   align-items: center;
-  z-index: 10;
 `
 
 const HeaderMobile = () => (
