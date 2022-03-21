@@ -90,6 +90,7 @@ const WrapperLogos = styled(Wrapper)`
   }
   @media (max-width: ${MOBILE_WIDTH}px) {
     margin-left: 20px;
+    margin-top: 32px;
     margin-bottom: 20px;
   }
 
