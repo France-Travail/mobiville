@@ -133,12 +133,16 @@ const MobilityGuideBlock = styled(Block)`
   background: #c3e9e9;
   border-radius: 16px;
   margin-bottom: 22px;
-  padding: 40px 40px 40px 64px;
+  padding: ${({ isMobile }) => (isMobile ? '12px' : '40px 40px 40px 64px')};
   display: flex;
-  flex-direction: ${({ isMobile }) => (isMobile ? 'column-reverse' : 'row')};
+  flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  text-align: ${({ isMobile }) => (isMobile ? 'center' : 'start')};
+  text-align: start;
+  .mobility-container {
+    display: flex;
+    flex-direction: column;
+  }
 `
 
 const SurveyBlock = styled(Block)`
@@ -147,11 +151,11 @@ const SurveyBlock = styled(Block)`
   color: white;
   background: ${COLOR_PRIMARY};
   border-radius: 16px;
-  margin-bottom: 89px;
+  margin-bottom: ${({ isMobile }) => (isMobile ? '0px' : '89px')};
 `
 
 const MobilityGuideBlockH2 = styled.h2`
-  font-size: ${({ isMobile }) => (isMobile ? '18px' : '24px')};
+  font-size: 24px;
   font-weight: 900;
   line-height: 28px;
   margin-block-start: unset;
@@ -159,7 +163,7 @@ const MobilityGuideBlockH2 = styled.h2`
 `
 const SurveyBlockH2 = MobilityGuideBlockH2
 const MobilityGuideBlockH3 = styled.h3`
-  font-size: ${({ isMobile }) => (isMobile ? '14px' : '22px')};
+  font-size: 22px;
   font-weight: 400;
   line-height: 27px;
   margin-block-start: 8px;
@@ -169,10 +173,12 @@ const SurveyBlockH3 = MobilityGuideBlockH3
 
 const ActionButtonContainer = styled.div`
   display: flex;
-  margin-top: 16px;
+  margin-top: ${({ isMobile }) => (isMobile ? '0px' : '16px')};
+  margin-bottom: ${({ isMobile }) => (isMobile ? '12px' : '0px')};
   justify-content: ${({ isMobile }) => (isMobile ? 'center' : 'flex-start')};
   a {
-    max-width: 327px;
+    text-align: center;
+    max-width: ${({ isMobile }) => (isMobile ? '225px' : '327px')};
     font-weight: 700;
     box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.14),
       0px 3px 14px rgba(0, 0, 0, 0.12), 0px 4px 5px rgba(0, 0, 0, 0.2);
@@ -182,7 +188,7 @@ const ActionButtonContainer = styled.div`
 const actionButtonStyle = `
   text-decoration: none;
   background-color: ${COLOR_PRIMARY};
-  height: 48px;
+  height: 50px;
   font-size: 18px;
   cursor: pointer;
   border-radius: 48px;
@@ -311,20 +317,24 @@ const HomePage = () => {
         </Block>
 
         <MobilityGuideBlock isMobile={isMobile}>
-          <div>
+          <div className="mobility-container">
             <MobilityGuideBlockH2 isMobile={isMobile}>
-              Par où commencer ?... Où aller ?... Comment faire ?...
+              Par où commencer ?...{isMobile && <br />} Où aller ?...
+              {isMobile && <br />} Comment faire ?...
             </MobilityGuideBlockH2>
             <MobilityGuideBlockH3 isMobile={isMobile}>
               Les réponses se trouvent dans notre guide à la mobilité
             </MobilityGuideBlockH3>
+            {isMobile && (
+              <img className="centered" src={mobilityHomepagePic} alt="" />
+            )}
             <ActionButtonContainer isMobile={isMobile}>
               <ActionButton to="/mobility-guide">
-                Consultez notre guide sur la mobilité
+                Consultez notre guide {isMobile && <br />}sur la mobilité
               </ActionButton>
             </ActionButtonContainer>
           </div>
-          <img src={mobilityHomepagePic} alt="" />
+          {!isMobile && <img src={mobilityHomepagePic} alt="" />}
         </MobilityGuideBlock>
 
         <SurveyBlock>
