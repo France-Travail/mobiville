@@ -8,7 +8,7 @@ import { COLOR_PRIMARY, COLOR_BACKGROUND } from '../../constants/colors'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 
-import heroHomepagePic from '../../assets/images/00-Hero-Homepage.png'
+import mobilityHomepagePic from '../../assets/images/02-Mobility-Homepage.png'
 import { ReactComponent as MagnifyingGlassIcon } from '../../assets/images/magnifying-glass.svg'
 import { ReactComponent as SuperheroIcon } from '../../assets/images/superhero.svg'
 import { ReactComponent as MapPointerIcon } from '../../assets/images/map-pointer.svg'
@@ -132,11 +132,12 @@ const MobilityGuideBlock = styled(Block)`
   padding: ${({ isMobile }) => (isMobile ? '0 16px 16px' : '0 64px')};
   background: #c3e9e9;
   border-radius: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 22px;
+  padding: 40px 40px 40px 64px;
   display: flex;
   flex-direction: ${({ isMobile }) => (isMobile ? 'column-reverse' : 'row')};
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   text-align: ${({ isMobile }) => (isMobile ? 'center' : 'start')};
 `
 
@@ -146,25 +147,36 @@ const SurveyBlock = styled(Block)`
   color: white;
   background: ${COLOR_PRIMARY};
   border-radius: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 89px;
 `
 
 const MobilityGuideBlockH2 = styled.h2`
   font-size: ${({ isMobile }) => (isMobile ? '18px' : '24px')};
   font-weight: 900;
   line-height: 28px;
+  margin-block-start: unset;
+  margin-block-end: unset;
 `
 const SurveyBlockH2 = MobilityGuideBlockH2
 const MobilityGuideBlockH3 = styled.h3`
   font-size: ${({ isMobile }) => (isMobile ? '14px' : '22px')};
   font-weight: 400;
   line-height: 27px;
+  margin-block-start: 8px;
+  margin-block-end: unset;
 `
 const SurveyBlockH3 = MobilityGuideBlockH3
 
 const ActionButtonContainer = styled.div`
   display: flex;
+  margin-top: 16px;
   justify-content: ${({ isMobile }) => (isMobile ? 'center' : 'flex-start')};
+  a {
+    max-width: 327px;
+    font-weight: 700;
+    box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.14),
+      0px 3px 14px rgba(0, 0, 0, 0.12), 0px 4px 5px rgba(0, 0, 0, 0.2);
+  }
 `
 
 const actionButtonStyle = `
@@ -194,6 +206,10 @@ const ActionButtonSecondary = styled.a`
   background-color: #fff;
   color: ${COLOR_PRIMARY};
   margin: auto;
+  margin-top: 15px;
+  filter: drop-shadow(0px 8px 10px rgba(0, 0, 0, 0.14))
+    drop-shadow(0px 3px 14px rgba(0, 0, 0, 0.12))
+    drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.2));
 `
 
 const HomePage = () => {
@@ -303,10 +319,12 @@ const HomePage = () => {
               Les réponses se trouvent dans notre guide à la mobilité
             </MobilityGuideBlockH3>
             <ActionButtonContainer isMobile={isMobile}>
-              <ActionButton to="/mobility-guide">Accéder au guide</ActionButton>
+              <ActionButton to="/mobility-guide">
+                Consultez notre guide sur la mobilité
+              </ActionButton>
             </ActionButtonContainer>
           </div>
-          <img src={heroHomepagePic} alt="" />
+          <img src={mobilityHomepagePic} alt="" />
         </MobilityGuideBlock>
 
         <SurveyBlock>
