@@ -151,10 +151,14 @@ const SurveyBlock = styled(Block)`
 
 const MobilityGuideBlockH2 = styled.h2`
   font-size: ${({ isMobile }) => (isMobile ? '18px' : '24px')};
+  font-weight: 900;
+  line-height: 28px;
 `
 const SurveyBlockH2 = MobilityGuideBlockH2
 const MobilityGuideBlockH3 = styled.h3`
-  font-size: ${({ isMobile }) => (isMobile ? '14px' : '18px')};
+  font-size: ${({ isMobile }) => (isMobile ? '14px' : '22px')};
+  font-weight: 400;
+  line-height: 27px;
 `
 const SurveyBlockH3 = MobilityGuideBlockH3
 
@@ -316,6 +320,7 @@ const HomePage = () => {
             href="https://startupsbeta.typeform.com/to/kPDt1Rfk"
             target="_blank"
             rel="noreferrer noopener"
+            style={{ fontWeight: 700, lineHeight: 21 }}
           >
             Répondre à l’enquête
           </ActionButtonSecondary>
