@@ -23,13 +23,16 @@ const Header = styled.header`
   align-items: center;
   justify-content: space-around;
   padding: 16px 70px;
+
+  .taille-fixe {
+    flex-shrink: 0;
+    width: 300px;
+  }
 `
 
 const Item = styled(Link)`
   && {
-    &:nth-child(2) {
-      margin-left: 22px;
-    }
+    margin: 0px 11px;
     text-decoration: none;
     position: relative;
     display: flex;
@@ -50,7 +53,6 @@ const Text = styled(Typography)`
     font-weight: 500;
     font-size: 14px;
     color: inherit;
-    margin-left: 10px;
   }
 `
 
@@ -67,7 +69,7 @@ const HeaderDesktop = () => {
 
   return (
     <Header>
-      <Link to="/" style={{ flexShrink: 0 }} title="Retour à l’accueil">
+      <Link to="/" className="taille-fixe" title="Retour à l’accueil">
         <img
           src={LOGO_FR}
           alt="Retour à la page d’accueil"
@@ -87,20 +89,26 @@ const HeaderDesktop = () => {
           <Text>Rechercher une aide</Text>
         </Item>
       </IconsContainer>
-      <div style={{ flexShrink: 0 }}>
-        <Text style={{ color: COLOR_TEXT_SECONDARY, paddingBottom: 8 }}>
-          Proposé par
-        </Text>
-        <a
-          href="https://www.actionlogement.fr/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <LogoImagePartner src={LOGO_AL} alt="Action logement" />
-        </a>
-        <a href="https://www.pole-emploi.fr/" target="_blank" rel="noreferrer">
-          <LogoImagePartner src={LOGO_PE} alt="Pôle Emploi" />
-        </a>
+      <div className="taille-fixe" style={{ display: 'flex' }}>
+        <div style={{ marginLeft: 'auto' }}>
+          <Text style={{ color: COLOR_TEXT_SECONDARY, paddingBottom: 8 }}>
+            Proposé par
+          </Text>
+          <a
+            href="https://www.actionlogement.fr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <LogoImagePartner src={LOGO_AL} alt="Action logement" />
+          </a>
+          <a
+            href="https://www.pole-emploi.fr/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <LogoImagePartner src={LOGO_PE} alt="Pôle Emploi" />
+          </a>
+        </div>
       </div>
     </Header>
   )
