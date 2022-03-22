@@ -15,7 +15,7 @@ const Header = styled.header`
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 1001; //leaflet map est a 1000zindex
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.14), 0px 3px 4px rgba(0, 0, 0, 0.12),
     0px 1px 5px rgba(0, 0, 0, 0.2);
   background: #ffffff;
@@ -86,7 +86,7 @@ const HeaderDesktop = () => {
           <Text>Rechercher une ville</Text>
         </Item>
         <Item to="/aides" selected={helpSelected}>
-          <Text>Rechercher une aide</Text>
+          <Text>Rechercher des aides</Text>
         </Item>
       </IconsContainer>
       <div className="taille-fixe" style={{ display: 'flex' }}>
