@@ -142,6 +142,12 @@ const MobilityGuideBlock = styled(Block)`
   .mobility-container {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    .centered {
+      max-height: 190px;
+      max-width: 265px;
+      align-self: center;
+    }
   }
 `
 
