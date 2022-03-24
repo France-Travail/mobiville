@@ -290,7 +290,10 @@ const Cities = () => {
 
   return (
     <MainLayout
-      style={{ overflow: isMobile ? 'inherit' : 'hidden', minHeight: '100%' }}
+      style={{
+        overflow: isMobile ? 'inherit' : 'hidden',
+        minHeight: isMobile ? undefined : '100%',
+      }}
     >
       {isMobile ? (
         <MobileCriterionsPanel
