@@ -65,9 +65,9 @@ const Item = styled.div`
   &:last-child {
     margin-bottom: 0px;
   }
-  font-weight: 700;
+  font-weight: 400;
   font-size: 16px;
-  line-height: 19px;
+  line-height: 24px;
   @media (max-width: ${MOBILE_WIDTH}px) {
     margin: 0px 0px 24px 0px;
   }
@@ -90,6 +90,7 @@ const WrapperLogos = styled(Wrapper)`
   }
   @media (max-width: ${MOBILE_WIDTH}px) {
     margin-left: 20px;
+    margin-top: 32px;
     margin-bottom: 20px;
   }
 

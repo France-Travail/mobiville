@@ -137,11 +137,17 @@ const MobilityGuideBlock = styled(Block)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   text-align: start;
   .mobility-container {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    .centered {
+      max-height: 190px;
+      max-width: 265px;
+      align-self: center;
+    }
   }
 `
 
@@ -151,7 +157,7 @@ const SurveyBlock = styled(Block)`
   color: white;
   background: ${COLOR_PRIMARY};
   border-radius: 16px;
-  margin-bottom: ${({ isMobile }) => (isMobile ? '0px' : '89px')};
+  margin-bottom: ${({ isMobile }) => (isMobile ? '0px' : '60px')};
 `
 
 const MobilityGuideBlockH2 = styled.h2`
