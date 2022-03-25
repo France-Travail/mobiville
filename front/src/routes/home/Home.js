@@ -6,18 +6,19 @@ import { Helmet } from 'react-helmet'
 import MainLayout from '../../components/MainLayout'
 import { COLOR_PRIMARY, COLOR_BACKGROUND } from '../../constants/colors'
 import { useWindowSize } from '../../common/hooks/window-size'
-import { isMobileView } from '../../constants/mobile'
+import { isMobileView, MOBILE_WIDTH } from '../../constants/mobile'
 
+import heroHomepagePic from '../../assets/images/00-Hero-Homepage.png'
 import mobilityHomepagePic from '../../assets/images/02-Mobility-Homepage.png'
-import { ReactComponent as MagnifyingGlassIcon } from '../../assets/images/magnifying-glass.svg'
-import { ReactComponent as SuperheroIcon } from '../../assets/images/superhero.svg'
 import { ReactComponent as MapPointerIcon } from '../../assets/images/map-pointer.svg'
 import { ReactComponent as PrizeIcon } from '../../assets/images/prize.svg'
 import { ReactComponent as MoneyClockIcon } from '../../assets/images/money-clock.svg'
+import ArrowForward from '@mui/icons-material/ArrowForward'
 
 const H1 = styled.h1`
-  font-size: ${({ isMobile }) => (isMobile ? '24px' : '36px')};
+  font-size: 36px;
   margin: 0;
+  font-weight: 900;
 `
 
 const Block = styled.div`
@@ -30,18 +31,38 @@ const Block = styled.div`
 const TopBlockContainer = styled.div`
   background: linear-gradient(180deg, #ddddea 0%, #c3e9e9 100%);
   margin-top: ${({ isMobile }) => (isMobile ? '102px' : '0')};
+  padding-bottom: 60px;
 `
 
 const TopBlock = styled(Block)`
   text-align: center;
-  padding: ${({ isMobile }) => (isMobile ? '64px 16px' : '64px')};
+  /* padding: ${({ isMobile }) => (isMobile ? '64px 16px' : '64px')}; */
+  padding-top: 0px;
+  .promesse-container {
+    display: flex;
+    flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
+    .promesse {
+      justify-content: center;
+      display: flex;
+      text-align: start;
+      flex-direction: column;
+    }
+    .hero {
+      margin: auto;
+      max-width: 262px;
+      max-height: 262px;
+      @media (max-width: ${MOBILE_WIDTH}px) {
+        width: 192px;
+        height: 192px;
+      }
+    }
+  }
 `
 
 const MainNavButtonsContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: ${({ isMobile }) => (isMobile ? '32px 0' : '32px')};
   flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
 `
 
@@ -50,16 +71,23 @@ const MainNavButton = styled(Link)`
   flex-direction: column;
   align-items: center;
   background: #fff;
-  border: 1px solid ${COLOR_PRIMARY};
-  box-shadow: 6px 6px 0px #37b4b4;
   border-radius: 16px;
   color: ${COLOR_PRIMARY};
-  font-weight: 500;
-  font-size: 18px;
+  font-weight: 700;
+  font-size: 24px;
   padding: 16px;
-  max-width: ${({ isMobile }) => (isMobile ? 'inherit' : '424px')};
+  max-height: 88px;
   width: 100%;
 
+  .icon-forward {
+    vertical-align: middle;
+    background-color: #c3e9e9;
+    border-radius: 20px;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    margin-left: 8px;
+  }
   &:first-of-type {
     ${({ isMobile }) =>
       isMobile
@@ -73,19 +101,24 @@ const MainNavButton = styled(Link)`
 `
 
 const TaglineP = styled.p`
-  font-weight: 500;
-  font-size: ${({ isMobile }) => (isMobile ? '14px' : '18px')};
+  font-weight: 400;
+  line-height: 27px;
+  font-size: ${({ isMobile }) => (isMobile ? '18px' : '22px')};
   margin: 0;
+  em {
+    color: #191970;
+    font-weight: 700;
+    font-style: normal;
+  }
 `
 
 const BlocksContainer = styled.div`
-  padding-top: 64px;
-  padding: ${({ isMobile }) => (isMobile ? '16px' : '64 0 0')};
+  padding: ${({ isMobile }) => (isMobile ? '25px 10px 0px' : '25px 0px 0px')};
 `
 
 const AdvantageBlocksContainer = styled.div`
   display: flex;
-  margin: 0 auto 32px;
+  margin: 0 auto 22px;
   flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
 `
 
@@ -93,6 +126,9 @@ const AdvantageBlock = styled.div`
   background: ${COLOR_BACKGROUND};
   border-radius: 8px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   max-width: ${({ isMobile }) => (isMobile ? 'initial' : '336px')};
   width: 100%;
   overflow: hidden;
@@ -111,21 +147,32 @@ const AdvantageBlock = styled.div`
 `
 
 const AdvantageIconContainer = styled.div`
-  flex-shrink: 0;
-  margin-right: 16px;
+  padding-bottom: 5px;
 `
 
 const AdvantageH2 = styled.h2`
-  margin: 0 auto 32px;
+  margin: 0 auto 20px;
   text-align: center;
+  font-weight: 900;
+  font-size: 24px;
 `
 
 const AdvantageH3 = styled.h3`
   margin-top: 0;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 33px;
+  margin-block-end: unset;
+  margin-bottom: 5px;
 `
 
 const AdvantageTextP = styled.p`
   margin: 0;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+
+  text-align: justify;
 `
 
 const MobilityGuideBlock = styled(Block)`
@@ -244,24 +291,41 @@ const HomePage = () => {
 
       <TopBlockContainer isMobile={isMobile}>
         <TopBlock isMobile={isMobile}>
-          <H1 isMobile={isMobile}>
-            Trouver l’emploi et la ville qui va avec !
-          </H1>
+          <div className="promesse-container">
+            <div className="promesse">
+              <H1 isMobile={isMobile}>
+                Trouver l’emploi et la ville qui va avec !
+              </H1>
+              <TaglineP isMobile={isMobile}>
+                Mobiville vous aide à identifier{' '}
+                <em>
+                  les territoires dans lesquels il y a de l’emploi et peu de
+                  concurrence
+                </em>{' '}
+                <br />
+                afin d’accélérer votre retour à l’emploi
+              </TaglineP>
+            </div>
+            <img className="hero" src={heroHomepagePic} alt="" />
+          </div>
           <MainNavButtonsContainer isMobile={isMobile}>
             <MainNavButton to="/rechercher" isMobile={isMobile}>
-              <MagnifyingGlassIcon />
-              <span>Rechercher ou découvrir une ville</span>
+              <span>
+                {isMobile
+                  ? 'Rechercher une ville'
+                  : 'Rechercher ou découvrir une ville'}
+                <ArrowForward className="icon-forward" />
+              </span>
             </MainNavButton>
             <MainNavButton to="/aides" isMobile={isMobile}>
-              <SuperheroIcon />
-              <span>Les aides pour mon projet</span>
+              <span>
+                {isMobile
+                  ? 'Rechercher des aides'
+                  : 'Rechercher des aides pour mon projet'}
+                <ArrowForward className="icon-forward" />
+              </span>
             </MainNavButton>
           </MainNavButtonsContainer>
-          <TaglineP isMobile={isMobile}>
-            Mobiville vous aide à identifier les territoires dans lesquels il y
-            a de l’emploi et peu de concurrence afin d’accélérer votre retour à
-            l’emploi
-          </TaglineP>
         </TopBlock>
       </TopBlockContainer>
 
@@ -275,17 +339,15 @@ const HomePage = () => {
               <AdvantageIconContainer>
                 <MapPointerIcon />
               </AdvantageIconContainer>
-              <div>
-                <AdvantageH3>
-                  Identifiez
-                  <br /> la meilleure destination
-                </AdvantageH3>
-                <AdvantageTextP>
-                  Mobiville vous donne une visibilité sur le marché de l’emploi,
-                  de l’immobilier et le cadre de vie afin de choisir une ville
-                  qui correspond à votre profil.
-                </AdvantageTextP>
-              </div>
+              <AdvantageH3>
+                Identifiez
+                <br /> la meilleure destination
+              </AdvantageH3>
+              <AdvantageTextP>
+                Mobiville vous donne une visibilité sur le marché de l’emploi,
+                de l’immobilier et le cadre de vie afin de choisir une ville qui
+                correspond à votre profil.
+              </AdvantageTextP>
             </AdvantageBlock>
             <AdvantageBlock isMobile={isMobile}>
               <AdvantageIconContainer>
