@@ -42,6 +42,7 @@ const TopBlock = styled(Block)`
     display: flex;
     flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
     .promesse {
+      margin-top: ${({ isMobile }) => (isMobile ? '34px' : 'unset')};
       justify-content: center;
       display: flex;
       text-align: start;
