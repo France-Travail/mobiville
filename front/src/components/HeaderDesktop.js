@@ -69,7 +69,12 @@ const HeaderDesktop = () => {
 
   return (
     <Header>
-      <Link to="/" className="taille-fixe" title="Retour à l’accueil">
+      <Link
+        to="/"
+        className="taille-fixe"
+        title="Retour à l’accueil"
+        style={{ display: 'flex', alignItems: 'center' }}
+      >
         <img
           src={LOGO_FR}
           alt="Retour à la page d’accueil"
