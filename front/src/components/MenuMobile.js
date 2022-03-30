@@ -3,9 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { Typography } from '@mui/material'
 import { COLOR_PRIMARY, COLOR_TEXT_SECONDARY } from '../constants/colors'
-import { ReactComponent as HomeIcon } from '../assets/images/home.svg'
-import { ReactComponent as SuperHeroIcon } from '../assets/images/superhero-outlined.svg'
-import { ReactComponent as MagnifyingGlassIcon } from '../assets/images/magnifying-glass-outlined.svg'
+import { ReactComponent as HomeIcon } from '../assets/images/home-menu.svg'
+import { ReactComponent as HelpIcon } from '../assets/images/help-menu.svg'
+import { ReactComponent as CitiesIcon } from '../assets/images/cities-menu.svg'
 
 const Nav = styled.nav`
   position: fixed;
@@ -39,7 +39,10 @@ const Item = styled(Link)`
     justify-content: center;
     color: ${(props) =>
       props.selected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY};
-
+    & svg path {
+      fill: ${(props) =>
+        props.selected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY};
+    }
     &:before {
       content: ' ';
       background-color: ${COLOR_PRIMARY};
@@ -59,10 +62,11 @@ const Item = styled(Link)`
 
 const Text = styled(Typography)`
   && {
-    font-weight: bold;
+    font-weight: ${(props) => (props.selected ? 700 : 500)};
     font-size: 10px;
     text-align: center;
     color: inherit;
+    margin-top: 5px;
   }
 `
 
@@ -74,14 +78,14 @@ const MENU_LINK = [
   },
   {
     path: '/rechercher',
-    icon: MagnifyingGlassIcon,
-    label: 'Recherche',
+    icon: CitiesIcon,
+    label: 'Villes',
     activePaths: ['rechercher', 'cities'],
   },
   {
     path: '/aides',
-    icon: SuperHeroIcon,
-    label: 'Les aides',
+    icon: HelpIcon,
+    label: 'Aides',
     activePaths: ['/aides'],
   },
 ]
@@ -112,7 +116,7 @@ const MenuMobile = () => {
                 fill: m.selected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY,
               }}
             />
-            <Text>{m.label}</Text>
+            <Text selected={m.selected}>{m.label}</Text>
           </Item>
         ))}
       </MainWrapper>

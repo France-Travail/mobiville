@@ -17,7 +17,7 @@ const Legal = () => {
   }
 
   return (
-    <MainLayout footer topMobileMenu>
+    <MainLayout topMobileMenu>
       <Container>
         <div className="wrapper">
           <h2>Conditions générales d’utilisation</h2>
