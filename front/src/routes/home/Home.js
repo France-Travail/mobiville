@@ -79,7 +79,16 @@ const MainNavButton = styled(Link)`
   padding: 16px;
   max-height: 88px;
   width: 100%;
-
+  transition: all 0.3s ease-in-out;
+  :hover,
+  :focus {
+    background: ${COLOR_PRIMARY};
+    color: #fff;
+    .icon-forward {
+      color: ${COLOR_PRIMARY};
+      background: #fff;
+    }
+  }
   .icon-forward {
     vertical-align: middle;
     background-color: #c3e9e9;
@@ -205,7 +214,7 @@ const SurveyBlock = styled(Block)`
   color: white;
   background: ${COLOR_PRIMARY};
   border-radius: 16px;
-  margin-bottom: ${({ isMobile }) => (isMobile ? '0px' : '60px')};
+  margin-bottom: 0px;
 `
 
 const MobilityGuideBlockH2 = styled.h2`
@@ -254,10 +263,23 @@ const actionButtonStyle = `
 `
 
 const ActionButton = styled(Link)`
-  &,&: hover {
+  color: #fff;
+  :active {
+    background: #4e4ec9;
     color: #fff;
   }
-
+  :focus {
+    background: #191970;
+    color: #fff;
+  }
+  :hover {
+    color: #fff;
+    background: #191970;
+    opacity: 0.9;
+  }
+  :disabled {
+    background: #e4e9ed;
+  }
   ${actionButtonStyle}
 `
 
@@ -270,6 +292,16 @@ const ActionButtonSecondary = styled.a`
   filter: drop-shadow(0px 8px 10px rgba(0, 0, 0, 0.14))
     drop-shadow(0px 3px 14px rgba(0, 0, 0, 0.12))
     drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.2));
+
+  :active {
+    background: #e4e9ed;
+  }
+  :hover {
+    background: #f6f7fb;
+  }
+  :focus {
+    background: #ffffff;
+  }
 `
 
 const HomePage = () => {
@@ -298,13 +330,8 @@ const HomePage = () => {
                 Trouver l’emploi et la ville qui va avec !
               </H1>
               <TaglineP isMobile={isMobile}>
-                Mobiville vous aide à identifier{' '}
-                <em>
-                  les territoires dans lesquels il y a de l’emploi et peu de
-                  concurrence
-                </em>{' '}
-                <br />
-                afin d’accélérer votre retour à l’emploi
+                Décrocher un emploi et les aides à la mobilité pour déménager
+                dans la ville qui vous correspond
               </TaglineP>
             </div>
             <img className="hero" src={heroHomepagePic} alt="" />
@@ -333,7 +360,7 @@ const HomePage = () => {
       <BlocksContainer isMobile={isMobile}>
         <Block style={{ padding: 0 }}>
           <AdvantageH2 isMobile={isMobile}>
-            Les avantages de votre service Mobiville
+            Les avantages du service Mobiville
           </AdvantageH2>
           <AdvantageBlocksContainer isMobile={isMobile}>
             <AdvantageBlock isMobile={isMobile}>
@@ -419,7 +446,7 @@ const HomePage = () => {
             rel="noreferrer noopener"
             style={{ fontWeight: 700, lineHeight: 21 }}
           >
-            Répondre à l’enquête
+            {isMobile ? 'Faire ma demande' : 'Répondre à l’enquête'}
           </ActionButtonSecondary>
         </SurveyBlock>
       </BlocksContainer>
