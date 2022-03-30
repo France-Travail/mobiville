@@ -327,7 +327,7 @@ const HomePage = () => {
           <div className="promesse-container">
             <div className="promesse">
               <H1 isMobile={isMobile}>
-                Trouver l’emploi et la ville qui va avec !
+                Trouvez l’emploi et la ville qui va avec !
               </H1>
               <TaglineP isMobile={isMobile}>
                 Décrochez l’emploi dans la ville {isMobile && <br />} qui vous
