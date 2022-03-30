@@ -327,11 +327,11 @@ const HomePage = () => {
           <div className="promesse-container">
             <div className="promesse">
               <H1 isMobile={isMobile}>
-                Trouver l’emploi et la ville qui va avec !
+                Trouvez l’emploi et la ville qui va avec !
               </H1>
               <TaglineP isMobile={isMobile}>
-                Décrocher un emploi et les aides à la mobilité pour déménager
-                dans la ville qui vous correspond
+                Décrochez l’emploi dans la ville qui vous correspond et
+                identifiez les aides pour votre projet de mobilité
               </TaglineP>
             </div>
             <img className="hero" src={heroHomepagePic} alt="" />
