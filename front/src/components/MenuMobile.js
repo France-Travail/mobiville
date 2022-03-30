@@ -39,7 +39,10 @@ const Item = styled(Link)`
     justify-content: center;
     color: ${(props) =>
       props.selected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY};
-
+    & svg path {
+      fill: ${(props) =>
+        props.selected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY};
+    }
     &:before {
       content: ' ';
       background-color: ${COLOR_PRIMARY};

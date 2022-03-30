@@ -330,8 +330,10 @@ const HomePage = () => {
                 Trouver l’emploi et la ville qui va avec !
               </H1>
               <TaglineP isMobile={isMobile}>
-                Décrocher un emploi et les aides à la mobilité pour déménager
-                dans la ville qui vous correspond
+                Décrochez l’emploi dans la ville {isMobile && <br />} qui vous
+                correspond {isMobile || <br />}
+                et {isMobile && <br />}identifiez les aides pour votre{' '}
+                {isMobile && <br />} projet de mobilité
               </TaglineP>
             </div>
             <img className="hero" src={heroHomepagePic} alt="" />
@@ -426,7 +428,7 @@ const HomePage = () => {
             )}
             <ActionButtonContainer isMobile={isMobile}>
               <ActionButton to="/mobility-guide">
-                Consultez notre guide {isMobile && <br />}sur la mobilité
+                Consulter notre guide {isMobile && <br />}sur la mobilité
               </ActionButton>
             </ActionButtonContainer>
           </div>
