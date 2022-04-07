@@ -40,17 +40,28 @@ const SubTitle = styled.p`
 `
 
 const Header = styled.div`
-  height: 246px;
   margin: 0 auto;
   font-weight: bold;
   display: flex;
   align-items: center;
-  max-width: 800px;
+`
+
+const HeaderTitle = styled.h1`
+  font-weight: 900;
+  font-size: 36px;
+  margin: 45px 0px 0px 10px;
+`
+
+const HeaderSubtitle = styled.h2`
+  font-size: 24px;
+  line-height: 33px;
+  margin: 8px 0px 53px 10px;
 `
 
 const HeaderImg = styled.img`
-  height: 216px;
-  margin-right: 64px;
+  height: 136px;
+  width: 136px;
+  margin-top: 45px;
 `
 
 const Container = styled.div`
@@ -130,8 +141,9 @@ const SituationTag = styled(Link)`
 const TitleHelps = styled.h3`
   margin-top: 0;
   margin-bottom: 16px;
-  color: #657078;
-  font-weight: 500;
+  color: black;
+  font-weight: 700;
+  font-size: 24px;
 `
 
 const HelpItem = styled(Link)`
@@ -291,14 +303,14 @@ const HelpsPage = ({ location: { search } }) => {
 
       {!isMobile && (
         <Header>
-          <HeaderImg src={helpsPic} alt="" />
           <div>
-            <h1>
+            <HeaderTitle>
               Vous avez besoin d{"'"}
               aide pour votre projet de mobilité ?
-            </h1>
-            <h2>Découvrez les solutions pour accélérer votre projet</h2>
+            </HeaderTitle>
+            <HeaderSubtitle>Découvrez les solutions pour accélérer votre projet</HeaderSubtitle>
           </div>
+          <HeaderImg src={helpsPic} alt="" />
         </Header>
       )}
       <Container isMobile={isMobile}>
