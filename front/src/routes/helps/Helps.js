@@ -93,7 +93,7 @@ const HelpsPanel = styled.div`
 `
 
 const CategoryTag = styled(Link)`
-  background: ${COLOR_GRAY};
+  background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
   border-radius: 8px;
   max-width: 118px;
   width: 100%;
@@ -103,13 +103,15 @@ const CategoryTag = styled(Link)`
   cursor: pointer;
   text-align: center;
   font-weight: 500;
-  border: ${({ selected }) =>
-    selected ? `2px solid ${COLOR_PRIMARY}` : `2px solid ${COLOR_GRAY}`};
-  color: ${({ selected }) => (selected ? COLOR_PRIMARY : COLOR_TEXT_PRIMARY)};
+  border: 2px solid ${COLOR_PRIMARY};
+  &,
+  &:hover {
+    color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
+  }
 `
 
 const SituationTag = styled(Link)`
-  background: ${({ selected }) => (selected ? COLOR_PRIMARY : COLOR_GRAY)};
+  background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
   border-radius: 44px;
   padding: 8px;
   margin-right: 8px;
@@ -118,6 +120,7 @@ const SituationTag = styled(Link)`
   cursor: pointer;
   font-weight: 500;
   font-size: 12px;
+  border: 2px solid ${COLOR_PRIMARY};
   &,
   &:hover {
     color: ${({ selected }) => (selected ? '#fff' : COLOR_TEXT_PRIMARY)};
