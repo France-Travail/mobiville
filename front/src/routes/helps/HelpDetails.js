@@ -1,19 +1,30 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { useParams } from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
 import { useHelps } from '../../common/contexts/helpsContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import MainLayout from '../../components/MainLayout'
 import {
-  COLOR_GRAY,
-  COLOR_PRIMARY,
-  COLOR_TEXT_SECONDARY,
+  COLOR_GRAY, COLOR_OTHER_GREEN,
+  COLOR_PRIMARY, COLOR_TEXT_SECONDARY,
 } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { ucFirst } from '../../utils/utils'
 import SubHeader from '../../components/SubHeader'
+import CloseIcon from '@mui/icons-material/Close'
+
+const HeaderCrossLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: ${COLOR_OTHER_GREEN};
+  margin: 10px 10px 0px auto;
+`
 
 const Container = styled.div`
   display: ${({ isMobile }) => (isMobile ? 'block' : 'flex')};
@@ -29,10 +40,10 @@ const TitleContainer = styled.div`
   overflow: hidden;
   background: #fff;
   border: ${({ isMobile }) => (isMobile ? 'none' : `1px solid ${COLOR_GRAY}`)};
+  margin-bottom: 8px;
 `
 
 const TitleImgContainer = styled.div`
-  background-color: ${COLOR_GRAY};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,7 +51,13 @@ const TitleImgContainer = styled.div`
 `
 
 const TitleTextContainer = styled.div`
-  padding: 16px;
+  text-align: center;
+`
+
+const HeaderTitle = styled.h1`
+  font-weight: 700;
+  font-size: 24px;
+  margin: 0px;
 `
 
 const Panel = styled.div`
@@ -72,8 +89,17 @@ const PanelsContainer = styled.div`
 `
 
 const Description = styled.p`
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 8px;
 `
+
+const DescriptionAideProposee = styled.p`
+  font-size: 16px;
+  color: ${COLOR_TEXT_SECONDARY};
+  margin: 8px;
+`
+
 const HelpLink = styled.a`
   display: flex;
   height: 48px;
@@ -120,9 +146,16 @@ const HelpDetailsPage = () => {
           content="Cette aide va vous permettre d'aborder votre projet de mobilité plus sereinement"
         />
       </Helmet>
-      <SubHeader backLink="/aides" title={help.title} isMobile={isMobile} />
+      {!isMobile && (
+          <SubHeader backLink="/aides" title={help.title} isMobile={isMobile} />
+      )}
       <Container isMobile={isMobile}>
         <TitleContainer isMobile={isMobile}>
+          {isMobile && (
+              <HeaderCrossLink to="/aides" title="Fermer" isMobile={isMobile}>
+                <CloseIcon color="primary" fontSize="large" />
+              </HeaderCrossLink>
+          )}
           <TitleImgContainer>
             <img
               src={`/help-logos/${help.logo}`}
@@ -134,15 +167,14 @@ const HelpDetailsPage = () => {
             />
           </TitleImgContainer>
           <TitleTextContainer>
-            <Description style={{ textAlign: 'center' }}>
+            <HeaderTitle>{help.title}</HeaderTitle>
+            <Description>
               {help.goal}
             </Description>
 
-            <Description
-              style={{ textAlign: 'center', color: COLOR_TEXT_SECONDARY }}
-            >
+            <DescriptionAideProposee>
               Aide proposée par {help.partner}
-            </Description>
+            </DescriptionAideProposee>
 
             {!isMobile && (
               <div style={{ margin: 'auto' }}>
