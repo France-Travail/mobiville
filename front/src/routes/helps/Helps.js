@@ -27,16 +27,17 @@ import helpsPic from '../../assets/images/Generique_Aides.png'
 
 const Title = styled.h1`
   color: ${COLOR_TEXT_PRIMARY};
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 700;
-  margin-bottom: 32px;
+  margin-bottom: ${({ isMobile }) => (isMobile ? '4px' : '8px')};
 `
 
 const SubTitle = styled.p`
   color: ${COLOR_TEXT_PRIMARY};
-  font-size: 14px;
-  font-weight: 500;
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '18px')};
+  font-weight: 700;
   margin-bottom: 16px;
+  margin-top: 0;
 `
 
 const Header = styled.div`
@@ -76,7 +77,7 @@ const Container = styled.div`
     props.isMobile &&
     `
     display: block;
-    margin: 0 0 64px 0;
+    margin: 102px 0 64px 0;
     padding: 0;
   `}
 `
@@ -96,33 +97,38 @@ const CategoryTagsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  margin-bottom: ${({ isMobile }) => (isMobile ? '16px' : '8px')};
 `
 
 const HelpsPanel = styled.div`
   flex: 1;
-  padding: ${({ isMobile }) => (isMobile ? '0 16px' : '0 16px 32px 16px')};
+  padding: ${({ isMobile }) => (isMobile ? '16px' : '0 16px 32px 16px')};
 `
 
 const CategoryTag = styled(Link)`
   background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
+  color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
   border-radius: 8px;
   max-width: 118px;
   width: 100%;
   padding: 4px;
-  margin: 0 2px;
+  margin: ${({ isMobile }) => (isMobile ? '0 8px' : '0 2px')};
   display: block;
   cursor: pointer;
   text-align: center;
-  font-weight: 500;
+  font-weight: 400;
+  font-size: ${({ isMobile }) => (isMobile ? '12px' : '14px')};
   border: 2px solid ${COLOR_PRIMARY};
-  &,
-  &:hover {
-    color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
+  :hover {
+    background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
+    color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
+    opacity: 0.9;
   }
 `
 
 const SituationTag = styled(Link)`
   background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
+  color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
   border-radius: 44px;
   padding: 8px;
   margin-right: 8px;
@@ -130,11 +136,12 @@ const SituationTag = styled(Link)`
   display: inline-block;
   cursor: pointer;
   font-weight: 500;
-  font-size: 12px;
+  font-size: ${({ isMobile }) => (isMobile ? '12px' : '14px')};
   border: 2px solid ${COLOR_PRIMARY};
-  &,
-  &:hover {
-    color: ${({ selected }) => (selected ? '#fff' : COLOR_TEXT_PRIMARY)};
+  :hover {
+    background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
+    color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
+    opacity: 0.9;
   }
 `
 
@@ -143,7 +150,7 @@ const TitleHelps = styled.h3`
   margin-bottom: 16px;
   color: black;
   font-weight: 700;
-  font-size: 24px;
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '24px')};
 `
 
 const HelpItem = styled(Link)`
@@ -292,7 +299,7 @@ const HelpsPage = ({ location: { search } }) => {
   const isMobile = isMobileView(size)
 
   return (
-    <MainLayout>
+    <MainLayout topMobileMenu>
       <Helmet>
         <title>Liste des aides à la mobilité - Mobiville</title>
         <meta
@@ -315,13 +322,13 @@ const HelpsPage = ({ location: { search } }) => {
       )}
       <Container isMobile={isMobile}>
         <TagsSelectionPanel isMobile={isMobile}>
-          <Title>Découvrez les aides pour vous</Title>
-          <SubTitle>Quel est votre projet ?</SubTitle>
-          <CategoryTagsContainer>
+          <Title isMobile={isMobile}>Découvrez les aides pour vous</Title>
+          <SubTitle isMobile={isMobile}>Quel est votre projet ?</SubTitle>
+          <CategoryTagsContainer isMobile={isMobile}>
             {CATEGORIES.map((c) => {
               const selected = project && c.key === project.key
               return (
-                <CategoryTag
+                <CategoryTag isMobile={isMobile}
                   key={c.text}
                   selected={project && c.key === project.key}
                   to={`/aides?${queryString.stringify({
@@ -342,7 +349,7 @@ const HelpsPage = ({ location: { search } }) => {
               ? situations.filter(({ key }) => key !== c.key)
               : situations.concat({ key: c.key })
             return (
-              <SituationTag
+              <SituationTag isMobile={isMobile}
                 key={c.text}
                 selected={selected}
                 to={`/aides?${queryString.stringify({
@@ -356,13 +363,11 @@ const HelpsPage = ({ location: { search } }) => {
           })}
         </TagsSelectionPanel>
         <HelpsPanel isMobile={isMobile}>
-          {!isMobile && (
-            <TitleHelps>
-              {project || situations.length
+          <TitleHelps isMobile={isMobile}>
+            {project || situations.length
                 ? 'Mes aides disponibles'
                 : 'Les aides les plus consultées'}
-            </TitleHelps>
-          )}
+          </TitleHelps>
           {list.map((item) => {
             // kinda clunky, using labels to determine icon.
             const helpIcon = item.type.includes('admin') ? (
