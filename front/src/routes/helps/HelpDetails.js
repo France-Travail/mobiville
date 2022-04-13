@@ -71,14 +71,15 @@ const Panel = styled.div`
 `
 
 const PanelTitle = styled.h2`
-  font-weight: bold;
-  font-size: 16px;
+  font-weight: ${({ isMobile }) => (isMobile ? '700' : '500')};
+  font-size: 18px;
   margin: 0 0 16px;
 `
 
 const DoublePanelsContainer = styled.div`
   display: flex;
   flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
+  color: ${({ isMobile }) => (isMobile ? COLOR_PRIMARY : COLOR_TEXT_PRIMARY)};
 
   & > *:first-child {
     margin-right: 16px;
@@ -89,7 +90,7 @@ const PanelsContainer = styled.div`
   width: 100%;
 `
 
-const Description = styled.p`
+const DescriptionAide = styled.p`
   font-size: 16px;
   font-weight: 700;
   margin: 8px;
@@ -98,6 +99,12 @@ const Description = styled.p`
 const DescriptionAideProposee = styled.p`
   font-size: 16px;
   color: ${COLOR_TEXT_SECONDARY};
+  margin: 8px;
+`
+
+const Description = styled.p`
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '14px')};
+  font-weight: 400;
   margin: 8px;
 `
 
@@ -197,9 +204,9 @@ const HelpDetailsPage = () => {
           </TitleImgContainer>
           <TitleTextContainer>
             <HeaderTitle>{help.title}</HeaderTitle>
-            <Description>
+            <DescriptionAide>
               {help.goal}
-            </Description>
+            </DescriptionAide>
 
             <DescriptionAideProposee>
               Aide proposée par {help.partner}
@@ -240,12 +247,34 @@ const HelpDetailsPage = () => {
         </TitleContainer>
 
         <PanelsContainer isMobile={isMobile}>
+          <DoublePanelsContainer isMobile={isMobile}>
+            <Panel isMobile={isMobile}>
+              <PanelTitle isMobile={isMobile}>Public concerné</PanelTitle>
+              <Description isMobile={isMobile}
+                  dangerouslySetInnerHTML={{
+                    __html: help.who
+                        .split('^')
+                        .map((t) => ucFirst(t))
+                        .join(' · '),
+                  }}
+              />
+            </Panel>
+            <Panel isMobile={isMobile}>
+              <PanelTitle>Est-elle cumulable ?</PanelTitle>
+              <Description isMobile={isMobile}
+                  dangerouslySetInnerHTML={{
+                    __html: help.cumulable,
+                  }}
+              />
+            </Panel>
+          </DoublePanelsContainer>
+
           <Panel isMobile={isMobile}>
             <PanelTitle>
               Descriptif de l{"'"}
               aide
             </PanelTitle>
-            <Description
+            <Description isMobile={isMobile}
               dangerouslySetInnerHTML={{
                 __html: help.description,
               }}
@@ -253,7 +282,7 @@ const HelpDetailsPage = () => {
           </Panel>
           <Panel isMobile={isMobile}>
             <PanelTitle>Quand faire la demande ?</PanelTitle>
-            <Description
+            <Description isMobile={isMobile}
               dangerouslySetInnerHTML={{
                 __html: help.when,
               }}
@@ -261,34 +290,12 @@ const HelpDetailsPage = () => {
           </Panel>
           <Panel isMobile={isMobile}>
             <PanelTitle>Quelles conditions ?</PanelTitle>
-            <Description
+            <Description isMobile={isMobile}
               dangerouslySetInnerHTML={{
                 __html: help.conditions,
               }}
             />
           </Panel>
-
-          <DoublePanelsContainer isMobile={isMobile}>
-            <Panel isMobile={isMobile}>
-              <PanelTitle>Est-elle cumulable ?</PanelTitle>
-              <Description
-                dangerouslySetInnerHTML={{
-                  __html: help.cumulable,
-                }}
-              />
-            </Panel>
-            <Panel isMobile={isMobile}>
-              <PanelTitle>Public concerné</PanelTitle>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: help.who
-                    .split('^')
-                    .map((t) => ucFirst(t))
-                    .join(' · '),
-                }}
-              ></span>
-            </Panel>
-          </DoublePanelsContainer>
         </PanelsContainer>
         <div />
       </Container>
