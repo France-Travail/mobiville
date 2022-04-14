@@ -48,12 +48,14 @@ const Header = styled.div`
 `
 
 const HeaderTitle = styled.h1`
+  color: ${COLOR_TEXT_PRIMARY};
   font-weight: 900;
   font-size: 36px;
   margin: 45px 0px 0px 10px;
 `
 
 const HeaderSubtitle = styled.h2`
+  color: ${COLOR_TEXT_PRIMARY};
   font-size: 24px;
   line-height: 33px;
   margin: 8px 0px 53px 10px;
@@ -112,12 +114,12 @@ const CategoryTag = styled(Link)`
   max-width: 118px;
   width: 100%;
   padding: 4px;
-  margin: ${({ isMobile }) => (isMobile ? '0 8px' : '0 2px')};
+  margin: 0 2px;
   display: block;
   cursor: pointer;
   text-align: center;
   font-weight: 400;
-  font-size: ${({ isMobile }) => (isMobile ? '12px' : '14px')};
+  font-size: 14px;
   border: 2px solid ${COLOR_PRIMARY};
   :hover {
     background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
@@ -135,8 +137,8 @@ const SituationTag = styled(Link)`
   margin-bottom: 8px;
   display: inline-block;
   cursor: pointer;
-  font-weight: 500;
-  font-size: ${({ isMobile }) => (isMobile ? '12px' : '14px')};
+  font-weight: 400;
+  font-size: 14px;
   border: 2px solid ${COLOR_PRIMARY};
   :hover {
     background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
@@ -146,9 +148,9 @@ const SituationTag = styled(Link)`
 `
 
 const TitleHelps = styled.h3`
+  color: ${COLOR_TEXT_PRIMARY};
   margin-top: 0;
   margin-bottom: 16px;
-  color: black;
   font-weight: 700;
   font-size: ${({ isMobile }) => (isMobile ? '16px' : '24px')};
 `
