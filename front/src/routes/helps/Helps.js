@@ -168,11 +168,11 @@ const HelpItem = styled(Link)`
 `
 
 const HelpItemImgContainer = styled.div`
-  background: ${COLOR_GRAY};
-  padding: 8px;
+  background: white;
+  padding: 32px 8px 8px 8px;
   width: 96px;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
 `
 const HelpItemTextContainer = styled.div`
@@ -181,28 +181,38 @@ const HelpItemTextContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  color: ${COLOR_TEXT_PRIMARY};
 `
 
 const HelpItemTextTitle = styled.h4`
   margin-top: 0;
   margin-bottom: 8px;
-  font-size: 14px;
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '18px')};
+  color: ${COLOR_TEXT_PRIMARY};
 `
 
 const HelpItemTags = styled.div`
   margin-top: 8px;
+  font-size: 14px;
+  color: ${COLOR_PRIMARY};
+`
+
+const HelpItemTagsTitle = styled.span`
+  font-weight: 700;
+  font-size: 16px;
 `
 
 const HelpItemType = styled.div`
   display: flex;
-  align-items: center;
+  align-items: start;
   padding-top: 16px;
-  color: #37b4b4;
+  color: ${COLOR_PRIMARY};
+  margin-bottom: 8px;
 `
 const HelpItemText = styled.div`
   margin-left: 8px;
-  font-weight: 500;
-  color: ${COLOR_TEXT_SECONDARY};
+  font-weight: 700;
+  font-size: 16px;
 `
 
 const ViewMore = styled.div`
@@ -210,6 +220,7 @@ const ViewMore = styled.div`
   align-items: center;
   color: ${COLOR_PRIMARY};
   font-weight: bold;
+  font-size: 16px;
   justify-content: flex-end;
   padding-top: 8px;
 `
@@ -398,12 +409,17 @@ const HelpsPage = ({ location: { search } }) => {
                   />
                 </HelpItemImgContainer>
                 <HelpItemTextContainer>
+                  <HelpItemType>
+                    {helpIcon}
+                    <HelpItemText>{item.type}</HelpItemText>
+                  </HelpItemType>
                   <div>
-                    <HelpItemTextTitle>{item.title}</HelpItemTextTitle>
+                    <HelpItemTextTitle isMobile={isMobile}>{item.title}</HelpItemTextTitle>
                     <div>{item.goal}</div>
                   </div>
-                  <HelpItemTags style={{ color: COLOR_TEXT_SECONDARY }}>
-                    Public concerné :{' '}
+                  <HelpItemTags>
+                    <HelpItemTagsTitle>Public concerné</HelpItemTagsTitle>
+                    <br/>
                     <span
                       dangerouslySetInnerHTML={{
                         __html: item.who
@@ -413,12 +429,8 @@ const HelpsPage = ({ location: { search } }) => {
                       }}
                     ></span>
                   </HelpItemTags>
-                  <HelpItemType>
-                    {helpIcon}
-                    <HelpItemText>{item.type}</HelpItemText>
-                  </HelpItemType>
                   <ViewMore>
-                    En savoir plus <ArrowForwardIcon fontSize="small" />
+                    Découvrir l'aide <ArrowForwardIcon fontSize="small" />
                   </ViewMore>
                 </HelpItemTextContainer>
               </HelpItem>
