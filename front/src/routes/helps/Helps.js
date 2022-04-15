@@ -16,10 +16,8 @@ import { useHelps } from '../../common/contexts/helpsContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import MainLayout from '../../components/MainLayout'
 import {
-  COLOR_GRAY,
   COLOR_PRIMARY,
-  COLOR_TEXT_PRIMARY,
-  COLOR_TEXT_SECONDARY,
+  COLOR_TEXT_PRIMARY
 } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { ucFirst } from '../../utils/utils'
