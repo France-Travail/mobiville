@@ -35,10 +35,16 @@ button {
   flex: 1;
 }
 
-a,
-a:hover {
+a {
   text-decoration: none;
   color: #191970;
+}
+
+@media (hover) {
+  a:hover {
+    text-decoration: none;
+    color: #191970;
+  }
 }
 
 select,

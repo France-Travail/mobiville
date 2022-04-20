@@ -119,10 +119,12 @@ const CategoryTag = styled(Link)`
   font-weight: 400;
   font-size: 14px;
   border: 2px solid ${COLOR_PRIMARY};
-  :hover {
-    background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
-    color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
-    opacity: 0.9;
+  @media (hover) {
+      &:hover {
+        background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
+        color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
+        opacity: 0.9;
+      }
   }
 `
 
@@ -138,10 +140,12 @@ const SituationTag = styled(Link)`
   font-weight: 400;
   font-size: 14px;
   border: 2px solid ${COLOR_PRIMARY};
-  :hover {
-    background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
-    color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
-    opacity: 0.9;
+  @media (hover) {
+      &:hover {
+        background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
+        color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
+        opacity: 0.9;
+      }
   }
 `
 
