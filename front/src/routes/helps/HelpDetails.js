@@ -11,7 +11,7 @@ import {
   COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_SECONDARY,
 } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
-import { ucFirst } from '../../utils/utils'
+import {ucFirst, useElementOnScreen} from '../../utils/utils'
 import SubHeader from '../../components/SubHeader'
 import CloseIcon from '@mui/icons-material/Close'
 
@@ -141,33 +141,20 @@ const HelpDetailsPage = () => {
   const { slug } = useParams()
   const { help, onLoadPreview } = useHelps()
   const size = useWindowSize()
-  const containerRef = useRef(null)
-  const [ isVisibleHelpButton, setIsVisibleHelpButton ] = useState(false)
-
-  const callbackFunction = (entries) => {
-    const [entry] = entries
-    setIsVisibleHelpButton(entry.isIntersecting)
-  }
-  const options = {
+  const [containerRef, isVisibleHelpButton] = useElementOnScreen({
     root: null,
     rootMargin: "0px",
     threshold: 0
-  }
+  })
+
+  const isMobile = isMobileView(size)
 
   useEffect(() => {
     if (slug) {
       onLoadPreview(slug)
     }
 
-    const observer = new IntersectionObserver(callbackFunction, options)
-    if (containerRef.current) observer.observe(containerRef.current)
-
-    return () => {
-      if(containerRef.current) observer.unobserve(containerRef.current)
-    }
-  }, [slug, containerRef, options])
-
-  const isMobile = isMobileView(size)
+  }, [slug])
 
   if (!help) {
     return <MainLayout>Chargement…</MainLayout>
