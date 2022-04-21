@@ -228,11 +228,15 @@ Sur son poste ensuite :
 - `scp $USER@$IP_DU_SERVEUR_DISTANT:/tmp/mobivillerecette_dimanche.sql.bz2 ./`
 
 ##### Procedure de restore
-Pour un backup dont le nom serait `mobivillerecette_dimanche` :
+Pour un environnement de production (sinon le prefixe du fichier sera mobivillerecette_*):
+On récupere le backup de la veille: `export BACKUP_FILE_NAME=mobivilleproduction_$(date -d 'yesterday' +'%d')`
 ```bash
-docker cp ./mobivillerecette_dimanche.sql mobiville_db_1:/
+cp /home/docker/mobiville/backups/$BACKUP_FILE_NAME.sql.bz2 ~/
+bzip2 -d $BACKUP_FILE_NAME.sql.bz2
+docker cp ./BACKUP_FILE_NAME.sql mobiville_db_1:/
+
 docker exec -it mobiville_db_1 mariadb -u $MOBIVILLE_USER -p$MOBIVILLE_PASS mobiville -e "DROP DATABASE mobiville"
 docker exec -it mobiville_db_1 mariadb -u $MOBIVILLE_USER -p$MOBIVILLE_PASS -e "CREATE DATABASE mobiville"
-docker exec -it mobiville_db_1 bash -c "mysql -u $MOBIVILLE_USER -p$MOBIVILLE_PASS mobiville < mobivillerecette_dimanche.sql"
+docker exec -it mobiville_db_1 bash -c "mysql -u $MOBIVILLE_USER -p$MOBIVILLE_PASS mobiville < "$BACKUP_FILE_NAME".sql"
 ```
 TADA !
