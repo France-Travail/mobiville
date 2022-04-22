@@ -1,19 +1,30 @@
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
-import { useParams } from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 
 import { useHelps } from '../../common/contexts/helpsContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import MainLayout from '../../components/MainLayout'
 import {
-  COLOR_GRAY,
-  COLOR_PRIMARY,
-  COLOR_TEXT_SECONDARY,
+  COLOR_GRAY, COLOR_OTHER_GREEN,
+  COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_TEXT_SECONDARY,
 } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
-import { ucFirst } from '../../utils/utils'
+import {ucFirst, useElementOnScreen} from '../../utils/utils'
 import SubHeader from '../../components/SubHeader'
+import CloseIcon from '@mui/icons-material/Close'
+
+const HeaderCrossLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: ${COLOR_OTHER_GREEN};
+  margin: 10px 10px 0px auto;
+`
 
 const Container = styled.div`
   display: ${({ isMobile }) => (isMobile ? 'block' : 'flex')};
@@ -29,10 +40,10 @@ const TitleContainer = styled.div`
   overflow: hidden;
   background: #fff;
   border: ${({ isMobile }) => (isMobile ? 'none' : `1px solid ${COLOR_GRAY}`)};
+  margin-bottom: 8px;
 `
 
 const TitleImgContainer = styled.div`
-  background-color: ${COLOR_GRAY};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,7 +51,14 @@ const TitleImgContainer = styled.div`
 `
 
 const TitleTextContainer = styled.div`
-  padding: 16px;
+  text-align: center;
+  margin-bottom: 17px;
+`
+
+const HeaderTitle = styled.h1`
+  font-weight: 700;
+  font-size: 24px;
+  margin: 0px;
 `
 
 const Panel = styled.div`
@@ -53,14 +71,15 @@ const Panel = styled.div`
 `
 
 const PanelTitle = styled.h2`
-  font-weight: bold;
-  font-size: 16px;
+  font-weight: ${({ isMobile }) => (isMobile ? '700' : '500')};
+  font-size: 18px;
   margin: 0 0 16px;
 `
 
 const DoublePanelsContainer = styled.div`
   display: flex;
   flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
+  color: ${({ isMobile }) => (isMobile ? COLOR_PRIMARY : COLOR_TEXT_PRIMARY)};
 
   & > *:first-child {
     margin-right: 16px;
@@ -71,48 +90,78 @@ const PanelsContainer = styled.div`
   width: 100%;
 `
 
-const Description = styled.p`
-  font-size: 14px;
+const DescriptionAide = styled.p`
+  font-size: 16px;
+  font-weight: 700;
+  margin: 8px;
 `
+
+const DescriptionAideProposee = styled.p`
+  font-size: 16px;
+  color: ${COLOR_TEXT_SECONDARY};
+  margin: 8px;
+`
+
+const Description = styled.p`
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '14px')};
+  font-weight: 400;
+  margin: 8px;
+`
+
 const HelpLink = styled.a`
   display: flex;
   height: 48px;
   align-items: center;
   justify-content: center;
-  font-weight: 500;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 18px;
   cursor: pointer;
   background: ${COLOR_PRIMARY};
-  border-radius: 37px;
-  padding: 8 32px;
+  border-radius: 48px;
+  padding: 12px 0px;
   width: 214px;
   margin: auto;
-
+  box-shadow: 0px 8px 10px rgb(0 0 0 / 14%), 0px 3px 14px rgb(0 0 0 / 12%), 0px 4px 5px rgb(0 0 0 / 20%);
   &,
   &:hover {
     color: #fff;
   }
 `
 
+const StickyHelp = styled.div`
+  position: fixed;
+  height: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0px;
+  z-index: 1;
+`
+
 const HelpDetailsPage = () => {
   const { slug } = useParams()
   const { help, onLoadPreview } = useHelps()
   const size = useWindowSize()
+  const [containerRef, isVisibleHelpButton] = useElementOnScreen({
+    root: null,
+    rootMargin: "0px",
+    threshold: 0
+  })
+
+  const isMobile = isMobileView(size)
 
   useEffect(() => {
     if (slug) {
       onLoadPreview(slug)
     }
-  }, [slug])
 
-  const isMobile = isMobileView(size)
+  }, [slug])
 
   if (!help) {
     return <MainLayout>Chargement…</MainLayout>
   }
 
   return (
-    <MainLayout>
+    <MainLayout menu={{ visible: !isMobile }}>
       <Helmet>
         <title>{help.title} - Mobiville</title>
         <meta
@@ -120,9 +169,16 @@ const HelpDetailsPage = () => {
           content="Cette aide va vous permettre d'aborder votre projet de mobilité plus sereinement"
         />
       </Helmet>
-      <SubHeader backLink="/aides" title={help.title} isMobile={isMobile} />
+      {!isMobile && (
+          <SubHeader backLink="/aides" title={help.title} isMobile={isMobile} />
+      )}
       <Container isMobile={isMobile}>
         <TitleContainer isMobile={isMobile}>
+          {isMobile && (
+              <HeaderCrossLink to="/aides" title="Fermer" isMobile={isMobile}>
+                <CloseIcon color="primary" fontSize="large" />
+              </HeaderCrossLink>
+          )}
           <TitleImgContainer>
             <img
               src={`/help-logos/${help.logo}`}
@@ -134,15 +190,14 @@ const HelpDetailsPage = () => {
             />
           </TitleImgContainer>
           <TitleTextContainer>
-            <Description style={{ textAlign: 'center' }}>
+            <HeaderTitle>{help.title}</HeaderTitle>
+            <DescriptionAide>
               {help.goal}
-            </Description>
+            </DescriptionAide>
 
-            <Description
-              style={{ textAlign: 'center', color: COLOR_TEXT_SECONDARY }}
-            >
+            <DescriptionAideProposee>
               Aide proposée par {help.partner}
-            </Description>
+            </DescriptionAideProposee>
 
             {!isMobile && (
               <div style={{ margin: 'auto' }}>
@@ -156,16 +211,57 @@ const HelpDetailsPage = () => {
                 </HelpLink>
               </div>
             )}
+
+            {isMobile && (
+                <a
+                    target="_blank"
+                    href={help.link}
+                    style={{ cursor: 'pointer' }}
+                    tag-exit={`faire-ma-demande/${help.title}`}
+                >
+                  <HelpLink
+                      target="_blank"
+                      href={help.link}
+                      tag-exit={`faire-ma-demande/${help.title}`}
+                      isMobile={isMobile}
+                      ref={containerRef}
+                  >
+                    Demander l'aide
+                  </HelpLink>
+                </a>
+            )}
           </TitleTextContainer>
         </TitleContainer>
 
         <PanelsContainer isMobile={isMobile}>
+          <DoublePanelsContainer isMobile={isMobile}>
+            <Panel isMobile={isMobile}>
+              <PanelTitle isMobile={isMobile}>Public concerné</PanelTitle>
+              <Description isMobile={isMobile}
+                  dangerouslySetInnerHTML={{
+                    __html: help.who
+                        .split('^')
+                        .map((t) => ucFirst(t))
+                        .join(' · '),
+                  }}
+              />
+            </Panel>
+            <Panel isMobile={isMobile}>
+              <PanelTitle>Est-elle cumulable ?</PanelTitle>
+              <Description isMobile={isMobile}
+                  dangerouslySetInnerHTML={{
+                    __html: help.cumulable,
+                  }}
+              />
+            </Panel>
+          </DoublePanelsContainer>
+
           <Panel isMobile={isMobile}>
             <PanelTitle>
               Descriptif de l{"'"}
               aide
             </PanelTitle>
-            <Description
+            <Description isMobile={isMobile}
               dangerouslySetInnerHTML={{
                 __html: help.description,
               }}
@@ -173,7 +269,7 @@ const HelpDetailsPage = () => {
           </Panel>
           <Panel isMobile={isMobile}>
             <PanelTitle>Quand faire la demande ?</PanelTitle>
-            <Description
+            <Description isMobile={isMobile}
               dangerouslySetInnerHTML={{
                 __html: help.when,
               }}
@@ -181,55 +277,34 @@ const HelpDetailsPage = () => {
           </Panel>
           <Panel isMobile={isMobile}>
             <PanelTitle>Quelles conditions ?</PanelTitle>
-            <Description
+            <Description isMobile={isMobile}
               dangerouslySetInnerHTML={{
                 __html: help.conditions,
               }}
             />
           </Panel>
-
-          <DoublePanelsContainer isMobile={isMobile}>
-            <Panel isMobile={isMobile}>
-              <PanelTitle>Est-elle cumulable ?</PanelTitle>
-              <Description
-                dangerouslySetInnerHTML={{
-                  __html: help.cumulable,
-                }}
-              />
-            </Panel>
-            <Panel isMobile={isMobile}>
-              <PanelTitle>Public concerné</PanelTitle>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: help.who
-                    .split('^')
-                    .map((t) => ucFirst(t))
-                    .join(' · '),
-                }}
-              ></span>
-            </Panel>
-          </DoublePanelsContainer>
         </PanelsContainer>
-
-        {isMobile && (
-          <a
-            target="_blank"
-            href={help.link}
-            style={{ cursor: 'pointer' }}
-            tag-exit={`faire-ma-demande/${help.title}`}
-          >
-            <HelpLink
-              target="_blank"
-              href={help.link}
-              tag-exit={`faire-ma-demande/${help.title}`}
-              isMobile={isMobile}
-            >
-              Faire ma demande
-            </HelpLink>
-          </a>
-        )}
         <div />
       </Container>
+      {isMobile && !isVisibleHelpButton && (
+          <StickyHelp>
+            <a
+                target="_blank"
+                href={help.link}
+                style={{ cursor: 'pointer' }}
+                tag-exit={`faire-ma-demande/${help.title}`}
+            >
+              <HelpLink
+                  target="_blank"
+                  href={help.link}
+                  tag-exit={`faire-ma-demande/${help.title}`}
+                  isMobile={isMobile}
+              >
+                Demander l'aide
+              </HelpLink>
+            </a>
+          </StickyHelp>
+      )}
     </MainLayout>
   )
 }

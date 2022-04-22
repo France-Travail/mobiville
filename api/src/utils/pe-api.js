@@ -99,6 +99,7 @@ export async function getOgrFromRome(codeRome) {
     .then((result) => result.data)
 }
 
+// Inutilisé
 export async function getSkillFromLabel(label) {
   const token = await getAccessToken()
   return axios
@@ -113,6 +114,7 @@ export async function getSkillFromLabel(label) {
     .then((result) => result.data)
 }
 
+// Stocké en base mais non utilisé
 export async function getSkillFromRome(codeRome) {
   const token = await getAccessToken()
   return axios

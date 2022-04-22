@@ -7,6 +7,7 @@ const citiesCron = async (models) => {
   const loadAndSync = async () =>
     getCitiesJobsCount()
       .then((data) => {
+        data.forEach((row) => row.splice(1, 1)) // on rm la colonne libéllé de la ville
         console.log('Now starting sync - citiesJobs')
         models.citiesJobs.sync(data)
         console.log('sync finished - citiesJobs')

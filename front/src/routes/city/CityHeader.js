@@ -27,9 +27,9 @@ const HeaderArrowLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+  width: 95px;
+  height: 32px;
+  border-radius: 100px;
   background: ${COLOR_GRAY};
   margin-right: 40px;
 
@@ -88,6 +88,16 @@ const Stats = styled.div`
   }
 `
 
+const H1 = styled.h1`
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #191970;
+  padding: 4px 12px 4px 4px;
+`
+
 const CityHeader = ({ backLink, isMobile, titlesNode }) => {
   const { city } = useCities()
 
@@ -95,7 +105,8 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
     <Container isMobile={isMobile}>
       {isMobile && (
         <HeaderArrowLink to={backLink} title="Retour">
-          <ArrowBackIcon color="primary" fontSize="large" />
+          <ArrowBackIcon color="primary" />
+          <H1>Retour</H1>
         </HeaderArrowLink>
       )}
       <PicAndMapContainer>

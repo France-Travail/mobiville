@@ -35,7 +35,7 @@ import medalSilver from '../../assets/images/icons/medal_silver.svg'
 import redEllipse from '../../assets/images/icons/red_ellipse.svg'
 import greenEllipse from '../../assets/images/icons/green_ellipse.svg'
 import restaurantsIcon from '../../assets/images/icons/restaurants.svg'
-import SubHeader from '../../components/SubHeader'
+import CitySubHeader from './CitySubHeader'
 
 const BlockContainer = styled.div`
   display: flex;
@@ -302,7 +302,7 @@ const CityPage = ({ location: { pathname, search } }) => {
 
       {!isMobile && (
         // A custom header is used for the mobile version in the CityHeader component
-        <SubHeader backLink={backLink} node={titlesNode} isMobile={isMobile} />
+        <CitySubHeader backLink={backLink} node={titlesNode} isMobile={isMobile} />
       )}
 
       <CityHeader isMobile={isMobile} titlesNode={titlesNode} />

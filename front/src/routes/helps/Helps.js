@@ -16,10 +16,8 @@ import { useHelps } from '../../common/contexts/helpsContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import MainLayout from '../../components/MainLayout'
 import {
-  COLOR_GRAY,
   COLOR_PRIMARY,
-  COLOR_TEXT_PRIMARY,
-  COLOR_TEXT_SECONDARY,
+  COLOR_TEXT_PRIMARY
 } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { ucFirst } from '../../utils/utils'
@@ -27,30 +25,44 @@ import helpsPic from '../../assets/images/Generique_Aides.png'
 
 const Title = styled.h1`
   color: ${COLOR_TEXT_PRIMARY};
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 700;
-  margin-bottom: 32px;
+  margin-bottom: ${({ isMobile }) => (isMobile ? '4px' : '8px')};
 `
 
 const SubTitle = styled.p`
   color: ${COLOR_TEXT_PRIMARY};
-  font-size: 14px;
-  font-weight: 500;
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '18px')};
+  font-weight: 700;
   margin-bottom: 16px;
+  margin-top: 0;
 `
 
 const Header = styled.div`
-  height: 246px;
   margin: 0 auto;
   font-weight: bold;
   display: flex;
   align-items: center;
-  max-width: 800px;
+`
+
+const HeaderTitle = styled.h1`
+  color: ${COLOR_TEXT_PRIMARY};
+  font-weight: 900;
+  font-size: 36px;
+  margin: 45px 0px 0px 10px;
+`
+
+const HeaderSubtitle = styled.h2`
+  color: ${COLOR_TEXT_PRIMARY};
+  font-size: 24px;
+  line-height: 33px;
+  margin: 8px 0px 53px 10px;
 `
 
 const HeaderImg = styled.img`
-  height: 216px;
-  margin-right: 64px;
+  height: 136px;
+  width: 136px;
+  margin-top: 45px;
 `
 
 const Container = styled.div`
@@ -65,7 +77,7 @@ const Container = styled.div`
     props.isMobile &&
     `
     display: block;
-    margin: 0 0 64px 0;
+    margin: 102px 0 64px 0;
     padding: 0;
   `}
 `
@@ -85,15 +97,17 @@ const CategoryTagsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  margin-bottom: ${({ isMobile }) => (isMobile ? '16px' : '8px')};
 `
 
 const HelpsPanel = styled.div`
   flex: 1;
-  padding: ${({ isMobile }) => (isMobile ? '0 16px' : '0 16px 32px 16px')};
+  padding: ${({ isMobile }) => (isMobile ? '16px' : '0 16px 32px 16px')};
 `
 
 const CategoryTag = styled(Link)`
-  background: ${COLOR_GRAY};
+  background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
+  color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
   border-radius: 8px;
   max-width: 118px;
   width: 100%;
@@ -102,33 +116,45 @@ const CategoryTag = styled(Link)`
   display: block;
   cursor: pointer;
   text-align: center;
-  font-weight: 500;
-  border: ${({ selected }) =>
-    selected ? `2px solid ${COLOR_PRIMARY}` : `2px solid ${COLOR_GRAY}`};
-  color: ${({ selected }) => (selected ? COLOR_PRIMARY : COLOR_TEXT_PRIMARY)};
+  font-weight: 400;
+  font-size: 14px;
+  border: 2px solid ${COLOR_PRIMARY};
+  @media (hover) {
+      &:hover {
+        background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
+        color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
+        opacity: 0.9;
+      }
+  }
 `
 
 const SituationTag = styled(Link)`
-  background: ${({ selected }) => (selected ? COLOR_PRIMARY : COLOR_GRAY)};
+  background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
+  color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
   border-radius: 44px;
   padding: 8px;
   margin-right: 8px;
   margin-bottom: 8px;
   display: inline-block;
   cursor: pointer;
-  font-weight: 500;
-  font-size: 12px;
-  &,
-  &:hover {
-    color: ${({ selected }) => (selected ? '#fff' : COLOR_TEXT_PRIMARY)};
+  font-weight: 400;
+  font-size: 14px;
+  border: 2px solid ${COLOR_PRIMARY};
+  @media (hover) {
+      &:hover {
+        background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
+        color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
+        opacity: 0.9;
+      }
   }
 `
 
 const TitleHelps = styled.h3`
+  color: ${COLOR_TEXT_PRIMARY};
   margin-top: 0;
   margin-bottom: 16px;
-  color: #657078;
-  font-weight: 500;
+  font-weight: 700;
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '24px')};
 `
 
 const HelpItem = styled(Link)`
@@ -144,11 +170,11 @@ const HelpItem = styled(Link)`
 `
 
 const HelpItemImgContainer = styled.div`
-  background: ${COLOR_GRAY};
-  padding: 8px;
+  background: white;
+  padding: 32px 8px 8px 8px;
   width: 96px;
   display: flex;
-  align-items: center;
+  align-items: start;
   justify-content: center;
 `
 const HelpItemTextContainer = styled.div`
@@ -157,28 +183,38 @@ const HelpItemTextContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  color: ${COLOR_TEXT_PRIMARY};
 `
 
 const HelpItemTextTitle = styled.h4`
   margin-top: 0;
   margin-bottom: 8px;
-  font-size: 14px;
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '18px')};
+  color: ${COLOR_TEXT_PRIMARY};
 `
 
 const HelpItemTags = styled.div`
   margin-top: 8px;
+  font-size: 14px;
+  color: ${COLOR_PRIMARY};
+`
+
+const HelpItemTagsTitle = styled.span`
+  font-weight: 700;
+  font-size: 16px;
 `
 
 const HelpItemType = styled.div`
   display: flex;
-  align-items: center;
+  align-items: start;
   padding-top: 16px;
-  color: #37b4b4;
+  color: ${COLOR_PRIMARY};
+  margin-bottom: 8px;
 `
 const HelpItemText = styled.div`
   margin-left: 8px;
-  font-weight: 500;
-  color: ${COLOR_TEXT_SECONDARY};
+  font-weight: 700;
+  font-size: 16px;
 `
 
 const ViewMore = styled.div`
@@ -186,6 +222,7 @@ const ViewMore = styled.div`
   align-items: center;
   color: ${COLOR_PRIMARY};
   font-weight: bold;
+  font-size: 16px;
   justify-content: flex-end;
   padding-top: 8px;
 `
@@ -277,7 +314,7 @@ const HelpsPage = ({ location: { search } }) => {
   const isMobile = isMobileView(size)
 
   return (
-    <MainLayout>
+    <MainLayout topMobileMenu>
       <Helmet>
         <title>Liste des aides à la mobilité - Mobiville</title>
         <meta
@@ -288,25 +325,25 @@ const HelpsPage = ({ location: { search } }) => {
 
       {!isMobile && (
         <Header>
-          <HeaderImg src={helpsPic} alt="" />
           <div>
-            <h1>
+            <HeaderTitle>
               Vous avez besoin d{"'"}
               aide pour votre projet de mobilité ?
-            </h1>
-            <h2>Découvrez les solutions pour accélérer votre projet</h2>
+            </HeaderTitle>
+            <HeaderSubtitle>Découvrez les solutions pour accélérer votre projet</HeaderSubtitle>
           </div>
+          <HeaderImg src={helpsPic} alt="" />
         </Header>
       )}
       <Container isMobile={isMobile}>
         <TagsSelectionPanel isMobile={isMobile}>
-          <Title>Découvrez les aides pour vous</Title>
-          <SubTitle>Quel est votre projet ?</SubTitle>
-          <CategoryTagsContainer>
+          <Title isMobile={isMobile}>Découvrez les aides pour vous</Title>
+          <SubTitle isMobile={isMobile}>Quel est votre projet ?</SubTitle>
+          <CategoryTagsContainer isMobile={isMobile}>
             {CATEGORIES.map((c) => {
               const selected = project && c.key === project.key
               return (
-                <CategoryTag
+                <CategoryTag isMobile={isMobile}
                   key={c.text}
                   selected={project && c.key === project.key}
                   to={`/aides?${queryString.stringify({
@@ -327,7 +364,7 @@ const HelpsPage = ({ location: { search } }) => {
               ? situations.filter(({ key }) => key !== c.key)
               : situations.concat({ key: c.key })
             return (
-              <SituationTag
+              <SituationTag isMobile={isMobile}
                 key={c.text}
                 selected={selected}
                 to={`/aides?${queryString.stringify({
@@ -341,13 +378,11 @@ const HelpsPage = ({ location: { search } }) => {
           })}
         </TagsSelectionPanel>
         <HelpsPanel isMobile={isMobile}>
-          {!isMobile && (
-            <TitleHelps>
-              {project || situations.length
+          <TitleHelps isMobile={isMobile}>
+            {project || situations.length
                 ? 'Mes aides disponibles'
                 : 'Les aides les plus consultées'}
-            </TitleHelps>
-          )}
+          </TitleHelps>
           {list.map((item) => {
             // kinda clunky, using labels to determine icon.
             const helpIcon = item.type.includes('admin') ? (
@@ -376,12 +411,17 @@ const HelpsPage = ({ location: { search } }) => {
                   />
                 </HelpItemImgContainer>
                 <HelpItemTextContainer>
+                  <HelpItemType>
+                    {helpIcon}
+                    <HelpItemText>{item.type}</HelpItemText>
+                  </HelpItemType>
                   <div>
-                    <HelpItemTextTitle>{item.title}</HelpItemTextTitle>
+                    <HelpItemTextTitle isMobile={isMobile}>{item.title}</HelpItemTextTitle>
                     <div>{item.goal}</div>
                   </div>
-                  <HelpItemTags style={{ color: COLOR_TEXT_SECONDARY }}>
-                    Public concerné :{' '}
+                  <HelpItemTags>
+                    <HelpItemTagsTitle>Public concerné</HelpItemTagsTitle>
+                    <br/>
                     <span
                       dangerouslySetInnerHTML={{
                         __html: item.who
@@ -391,12 +431,8 @@ const HelpsPage = ({ location: { search } }) => {
                       }}
                     ></span>
                   </HelpItemTags>
-                  <HelpItemType>
-                    {helpIcon}
-                    <HelpItemText>{item.type}</HelpItemText>
-                  </HelpItemType>
                   <ViewMore>
-                    En savoir plus <ArrowForwardIcon fontSize="small" />
+                    Découvrir l'aide <ArrowForwardIcon fontSize="small" />
                   </ViewMore>
                 </HelpItemTextContainer>
               </HelpItem>
