@@ -251,7 +251,7 @@ const HelpDetailsPage = () => {
                   tag-exit={`faire-ma-demande/${help.title}`}
                   isMobile={isMobile}
               >
-                Faire ma demande
+                Demander l'aide
               </HelpLink>
             </div>
           </TitleDemande>
