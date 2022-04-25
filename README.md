@@ -54,7 +54,7 @@ Les tables suivantes sont présentes dans la base :
 - **bassins** contenant les informations sur les différents bassins d’emploi
 - **cities** contenant les informations sur les différetes villes
 - **cities_jobs** contient les informations sur le nombre d’emploi par ville et par code rome.
-- **equipments** contient les informations sur le nombre de chaque type d’équipements présents dans chaque ville (page « cadre de vie »)
+- **equipments** contient les informations sur le nombre de chaque type d’équipements présents dans chaque ville (page « cadre de vie ») [source de 2020](https://www.insee.fr/fr/statistiques/3568638?sommaire=3568656)
 - **helps** contient les informations sur les différentes aides proposées par pôle-emploi
 - **migrations** contient les informations de migration de base de données
 - **new_regions** contient les informations de régions selon le nouveau format (réforme de 2015)
@@ -70,6 +70,17 @@ Les tables suivantes sont présentes dans la base :
 
 Dans le répertoire `~/api/src/db`, exécuter `npx sequelize-cli migration:generate --name migration-skeleton`
 
+## Notes sur la génération des equiments
+Les données sont issu de [l'insee](https://www.insee.fr/fr/statistiques/3568638?sommaire=3568656), celle géolocalisé sont utilisé c'est à dire une ligne une entrée sequelize fait la somme pour nous
+En utilisant les outils [csvkit](https://csvkit.readthedocs.io/), on peut fusionner les 3 fichiers :
+```bash
+# unzip bpe20_ensemble_xy_csv.zip bpe20_enseignement_xy_csv.zip bpe20_sport_Loisir_xy_csv.zip
+csvstack -d ";" bpe20_ensemble_xy_csv.csv bpe20_enseignement_xy_csv.csv bpe20_sport_Loisir_xy_csv.csv | csvformat -D ";" > bpe2020.csv
+```
+bpe2020.csv est a placé dans le répertoire `api/src/assets/datas`
+En lancant le script `api/src/scripts/equipments-file-builder.js` (avec node) on converti le csv en json 
+
+il faut ensuite le comprésser `gzip BPE2020-tweaked.json` et renommé en bpe-2020-light.json.gz
 ## Construire les images
 
 Créer et sauver les images docker à pousser sur le serveur

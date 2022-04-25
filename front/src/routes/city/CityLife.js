@@ -164,74 +164,31 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
 
   const [showFullDescription, setShowFullDescription] = useState(false)
 
-  let transports = []
-  let culture = []
-  let health = []
-  let services = []
-  let education = []
-  let environment = []
+  const equipementsFormater = {
+    transports: { data: [], reference: TRANSPORT_CRITERION },
+    culture: { data: [], reference: CULTURE_CRITERION },
+    health: { data: [], reference: HEALTH_CRITERION },
+    services: { data: [], reference: SERVICES_CRITERION },
+    education: { data: [], reference: SERVICES_EDUCATION },
+    environment: { data: [], reference: SERVICES_ENVIRONMENT },
+  }
 
   if (cityEquipments) {
-    transports = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = TRANSPORT_CRITERION.find(
-        ({ code }) => code === equipmentData.typequ
-      )
-      if (!criterionData) return prev
-      return prev.concat({
-        ...criterionData,
-        total: equipmentData.total,
-      })
-    }, [])
-    culture = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = CULTURE_CRITERION.find(
-        ({ code }) => code === equipmentData.typequ
-      )
-      if (!criterionData) return prev
-      return prev.concat({
-        ...criterionData,
-        total: equipmentData.total,
-      })
-    }, [])
-    health = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = HEALTH_CRITERION.find(
-        ({ code }) => code === equipmentData.typequ
-      )
-      if (!criterionData) return prev
-      return prev.concat({
-        ...criterionData,
-        total: equipmentData.total,
-      })
-    }, [])
-    services = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = SERVICES_CRITERION.find(
-        ({ code }) => code === equipmentData.typequ
-      )
-      if (!criterionData) return prev
-      return prev.concat({
-        ...criterionData,
-        total: equipmentData.total,
-      })
-    }, [])
-    education = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = SERVICES_EDUCATION.find(
-        ({ code }) => code === equipmentData.typequ
-      )
-      if (!criterionData) return prev
-      return prev.concat({
-        ...criterionData,
-        total: equipmentData.total,
-      })
-    }, [])
-    environment = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = SERVICES_ENVIRONMENT.find(
-        ({ code }) => code === equipmentData.typequ
-      )
-      if (!criterionData) return prev
-      return prev.concat({
-        ...criterionData,
-        total: equipmentData.total,
-      })
-    }, [])
+    Object.entries(equipementsFormater).forEach(([key, value]) => {
+      value.data = cityEquipments.reduce((prev, equipmentData) => {
+        const criterionData = value.reference.find(({ code }) =>
+          Array.isArray(code)
+            ? code.includes(equipmentData.typequ)
+            : code === equipmentData.typequ
+        )
+        if (!criterionData) return prev
+        if (prev.map((o) => o.label).includes(criterionData.label)) return prev // on évite de doublonné
+        return prev.concat({
+          ...criterionData,
+          total: equipmentData.total,
+        })
+      }, [])
+    })
   }
 
   const description = (city.description || '').replace('Écouter', '')
@@ -280,11 +237,11 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
     </>
   )
 
-  const cultureElement = culture.length > 0 && (
+  const cultureElement = equipementsFormater.culture.data.length > 0 && (
     <ItemLayout isMobile={isMobile}>
       <ItemTitleLayout>Culture & Loisirs</ItemTitleLayout>
       <ItemContentLayout>
-        {culture.map((t) => (
+        {equipementsFormater.culture.data.map((t) => (
           <ElementObject key={t.label}>
             <IconImg src={`/icons/${t.icon} `} alt="" />
             <p className="title">{t.label}</p>
@@ -295,7 +252,9 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
     </ItemLayout>
   )
 
-  const remarkableGardens = environment.find(({ code }) => code === 'F310')
+  const remarkableGardens = equipementsFormater.environment.data.find(
+    ({ code }) => code === 'F310'
+  )
 
   const environmentElement = (
     <ItemLayout isMobile={isMobile}>
@@ -324,11 +283,11 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
     </ItemLayout>
   )
 
-  const transportElement = transports.length > 0 && (
+  const transportElement = equipementsFormater.transports.data.length > 0 && (
     <ItemLayout isMobile={isMobile}>
       <ItemTitleLayout>Transports à proximité</ItemTitleLayout>
       <ItemContentLayout>
-        {transports.map((t) => (
+        {equipementsFormater.transports.data.map((t) => (
           <ElementLine key={t.label}>
             <IconImg src={`/icons/${t.icon}`} alt="" />
             <p className="title">
@@ -341,11 +300,11 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
     </ItemLayout>
   )
 
-  const servicesElement = services.length > 0 && (
+  const servicesElement = equipementsFormater.services.data.length > 0 && (
     <ItemLayout isMobile={isMobile}>
       <ItemTitleLayout>Services</ItemTitleLayout>
       <ItemContentLayout>
-        {services.map((t) => (
+        {equipementsFormater.services.data.map((t) => (
           <ElementObject key={t.label}>
             <IconImg src={`/icons/${t.icon}`} alt="" />
             <p className="title">{t.label}</p>
@@ -356,11 +315,11 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
     </ItemLayout>
   )
 
-  const healthElement = health.length > 0 && (
+  const healthElement = equipementsFormater.health.data.length > 0 && (
     <ItemLayout isMobile={isMobile}>
       <ItemTitleLayout>Santé</ItemTitleLayout>
       <ItemContentLayout>
-        {health.map((t) => (
+        {equipementsFormater.health.data.map((t) => (
           <ElementObject key={t.label}>
             <IconImg src={`/icons/${t.icon}`} alt="" />
             <p className="title">{t.label}</p>
@@ -375,14 +334,14 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
     <ItemLayout isMobile={isMobile}>
       <ItemTitleLayout>Education</ItemTitleLayout>
       <ItemContentLayout>
-        {education.map((t) => (
+        {equipementsFormater.education.data.map((t) => (
           <ElementObject key={t.label}>
             <IconImg src={`/icons/${t.icon}`} alt="" />
             <p className="title">{t.label}</p>
             <p className="details">{t.total}</p>
           </ElementObject>
         ))}
-        {education.length === 0 && <b>À venir</b>}
+        {equipementsFormater.education.data.length === 0 && <b>À venir</b>}
       </ItemContentLayout>
     </ItemLayout>
   )
