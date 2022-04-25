@@ -173,60 +173,78 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
 
   if (cityEquipments) {
     transports = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = TRANSPORT_CRITERION.find(
-        ({ code }) => code === equipmentData.typequ
+      const criterionData = TRANSPORT_CRITERION.find(({ code }) =>
+        Array.isArray(code)
+          ? code.includes(equipmentData.typequ)
+          : code === equipmentData.typequ
       )
       if (!criterionData) return prev
+      if (prev.map((o) => o.label).includes(criterionData.label)) return prev // on évite de doublonné
       return prev.concat({
         ...criterionData,
         total: equipmentData.total,
       })
     }, [])
     culture = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = CULTURE_CRITERION.find(
-        ({ code }) => code === equipmentData.typequ
+      const criterionData = CULTURE_CRITERION.find(({ code }) =>
+        Array.isArray(code)
+          ? code.includes(equipmentData.typequ)
+          : code === equipmentData.typequ
       )
       if (!criterionData) return prev
+      if (prev.map((o) => o.label).includes(criterionData.label)) return prev // on évite de doublonné
       return prev.concat({
         ...criterionData,
         total: equipmentData.total,
       })
     }, [])
     health = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = HEALTH_CRITERION.find(
-        ({ code }) => code === equipmentData.typequ
+      const criterionData = HEALTH_CRITERION.find(({ code }) =>
+        Array.isArray(code)
+          ? code.includes(equipmentData.typequ)
+          : code === equipmentData.typequ
       )
       if (!criterionData) return prev
+      if (prev.map((o) => o.label).includes(criterionData.label)) return prev // on évite de doublonné
       return prev.concat({
         ...criterionData,
         total: equipmentData.total,
       })
     }, [])
     services = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = SERVICES_CRITERION.find(
-        ({ code }) => code === equipmentData.typequ
+      const criterionData = SERVICES_CRITERION.find(({ code }) =>
+        Array.isArray(code)
+          ? code.includes(equipmentData.typequ)
+          : code === equipmentData.typequ
       )
       if (!criterionData) return prev
+      if (prev.map((o) => o.label).includes(criterionData.label)) return prev // on évite de doublonné
       return prev.concat({
         ...criterionData,
         total: equipmentData.total,
       })
     }, [])
     education = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = SERVICES_EDUCATION.find(
-        ({ code }) => code === equipmentData.typequ
+      const criterionData = SERVICES_EDUCATION.find(({ code }) =>
+        Array.isArray(code)
+          ? code.includes(equipmentData.typequ)
+          : code === equipmentData.typequ
       )
       if (!criterionData) return prev
+      if (prev.map((o) => o.label).includes(criterionData.label)) return prev // on évite de doublonné
       return prev.concat({
         ...criterionData,
         total: equipmentData.total,
       })
     }, [])
     environment = cityEquipments.reduce((prev, equipmentData) => {
-      const criterionData = SERVICES_ENVIRONMENT.find(
-        ({ code }) => code === equipmentData.typequ
+      const criterionData = SERVICES_ENVIRONMENT.find(({ code }) =>
+        Array.isArray(code)
+          ? code.includes(equipmentData.typequ)
+          : code === equipmentData.typequ
       )
       if (!criterionData) return prev
+      if (prev.map((o) => o.label).includes(criterionData.label)) return prev // on évite de doublonné
       return prev.concat({
         ...criterionData,
         total: equipmentData.total,

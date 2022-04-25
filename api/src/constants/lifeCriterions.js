@@ -10,11 +10,6 @@ export const CULTURE_CRITERION = [
     icon: 'theatre.svg',
   },
   {
-    label: 'Musées',
-    code: 'F304',
-    icon: 'musee.svg',
-  },
-  {
     label: 'Restaurants',
     code: 'A504',
     icon: 'restaurant.svg',
@@ -67,7 +62,7 @@ export const HEALTH_CRITERION = [
   },
   {
     label: 'Pharmacies',
-    code: 'D301',
+    code: 'D307',
     icon: 'pharmacie.svg',
   },
   {
@@ -148,7 +143,7 @@ export const SERVICES_EDUCATION = [
   },
   {
     label: 'Universités',
-    code: 'C501',
+    code: 'C502',
     icon: 'education.svg',
   },
 ]

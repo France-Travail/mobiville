@@ -122,8 +122,8 @@ const RegionName = styled.h2`
 `
 
 const BAKERY_CODE = 'B203'
-const DOCTORS_CODE = 'A504'
-const RESTAURANTS_CODE = 'D201'
+const DOCTORS_CODE = 'D201'
+const RESTAURANTS_CODE = 'A504'
 
 const JOB = 'job'
 const LIFE = 'life'
@@ -302,7 +302,11 @@ const CityPage = ({ location: { pathname, search } }) => {
 
       {!isMobile && (
         // A custom header is used for the mobile version in the CityHeader component
-        <CitySubHeader backLink={backLink} node={titlesNode} isMobile={isMobile} />
+        <CitySubHeader
+          backLink={backLink}
+          node={titlesNode}
+          isMobile={isMobile}
+        />
       )}
 
       <CityHeader isMobile={isMobile} titlesNode={titlesNode} />
