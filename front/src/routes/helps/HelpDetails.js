@@ -160,7 +160,7 @@ const HelpLink = styled.a`
 `
 
 const StickyHelp = styled.div`
-  position: fixed;
+  position: sticky;
   height: 60px;
   left: 0;
   right: 0;
@@ -250,6 +250,7 @@ const HelpDetailsPage = () => {
                   href={help.link}
                   tag-exit={`faire-ma-demande/${help.title}`}
                   isMobile={isMobile}
+                  ref={containerRef}
               >
                 Demander l'aide
               </HelpLink>
@@ -355,7 +356,7 @@ const HelpDetailsPage = () => {
         </PanelsContainer>
         <div />
       </Container>
-      {isMobile && !isVisibleHelpButton && (
+      {!isVisibleHelpButton && (
         <StickyHelp>
           <a
             target="_blank"
