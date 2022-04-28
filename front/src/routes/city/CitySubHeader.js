@@ -13,7 +13,6 @@ const HeaderContainer = styled.div`
   left: 0;
   right: 0;
   background-color: white;
-  //top: 76;
   width: 100%;
   display: flex;
   align-items: center;
