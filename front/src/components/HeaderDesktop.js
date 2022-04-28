@@ -10,6 +10,7 @@ import LOGO_AL from '../assets/images/logo-action-logement.png'
 import LOGO_PE from '../assets/images/logo-pole-emploi.png'
 
 const Header = styled.header`
+  position: fixed;
   height: 102px;
   top: 0;
   left: 0;

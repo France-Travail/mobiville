@@ -5,15 +5,15 @@ import { Link } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { COLOR_GRAY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
 
-const HEIGHT = 112
+const HEIGHT = 125
 const PADDING = 16
 
 const HeaderContainer = styled.div`
-  position: ${({ isMobile }) => (isMobile ? 'static' : 'fixed')};
+  //position: static;
   left: 0;
   right: 0;
   background-color: white;
-  top: 76;
+  //top: 76;
   width: 100%;
   display: flex;
   align-items: center;
@@ -36,7 +36,7 @@ const HeaderSubContainer = styled.div`
 `
 
 const HeaderArrowLink = styled(Link)`
-  margin-top: 50px;
+  margin-top: 90px;
   margin-left: ${PADDING}px;
   display: flex;
   align-items: center;
@@ -81,7 +81,6 @@ const CitySubHeader = ({ backLink, desktopTitleWidth, isMobile}) => (
         </HeaderArrowLink>
       </HeaderSubContainer>
     </HeaderContainer>
-    {!isMobile && <div style={{ height: HEIGHT}} />}
   </>
 )
 
@@ -89,8 +88,6 @@ CitySubHeader.props = {
   backLink: PropTypes.string,
   desktopTitleWidth: PropTypes.number,
   isMobile: PropTypes.bool,
-  node: PropTypes.node,
-  title: PropTypes.string,
 }
 
 export default CitySubHeader
