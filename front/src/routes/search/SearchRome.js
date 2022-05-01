@@ -9,6 +9,7 @@ import { throttle } from 'lodash'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
+import {COLOR_TEXT_PRIMARY} from "../../constants/colors";
 
 const Wrapper = styled.div`
   flex: 1;
@@ -18,10 +19,17 @@ const Wrapper = styled.div`
 
 const Title = styled.h1`
   && {
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 24px;
+    font-weight: 900;
     margin: 0 0 32px 0;
+    color: ${COLOR_TEXT_PRIMARY};
   }
+`
+
+const Subtitle = styled.p`
+  font-size: 16px;
+  font-weight: 700;
+  color: ${COLOR_TEXT_PRIMARY};
 `
 
 const JobTextField = styled(TextField)`
@@ -62,16 +70,20 @@ const SearchRome = ({ onNext }) => {
   return (
     <Wrapper>
       <Title isMobile={isMobile}>
-        Quel métier ou compétences recherchez-vous ?
+        1.Quel métier recherchez-vous ?
       </Title>
-      <p>
-        Pour le moment, le service est disponible uniquement pour{' '}
-        <Link to="/rome-list" title="Accéder à la liste des métiers">
-          certains métiers.
-        </Link>
-      </p>
+      <Subtitle>
+        Mobiville est disponible uniquement pour les métiers dans lesquels le retour à l'emploi est le plus favorable.
+      </Subtitle>
 
       <div>
+        <Autocomplete
+            disablePortal
+            id="combo-box-demo"
+            options={jobsMatchingCriterions}
+            sx={{ backgroundColor: 'white' }}
+            renderInput={(params) => <TextField {...params} label="Rechercher un métier" />}
+        />
         <Autocomplete
           onInputChange={(event, newValue) => {
             if (!event) return
@@ -108,12 +120,16 @@ const SearchRome = ({ onNext }) => {
             left: 0,
             width: '100%',
             zIndex: 10,
-            backgroundColor: '#f9f9f9',
+            backgroundColor: 'white',
           }}
           onFocus={() => setIsAutocompleteFocused(true)}
           onBlur={() => setIsAutocompleteFocused(false)}
         />
       </div>
+
+      <Link to="/rome-list" title="Accéder à la liste des métiers">
+        Voir la liste des métiers disponibles sur Mobiville
+      </Link>
     </Wrapper>
   )
 }

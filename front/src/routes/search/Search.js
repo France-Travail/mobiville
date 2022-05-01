@@ -5,24 +5,27 @@ import { isEmpty } from 'lodash'
 import queryString from 'query-string'
 
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import {Link, useHistory, useLocation, useParams} from 'react-router-dom'
 import { useCities } from '../../common/contexts/citiesContext'
 import MainLayout from '../../components/MainLayout'
-import { COLOR_PRIMARY } from '../../constants/colors'
+import {COLOR_OTHER_GREEN, COLOR_PRIMARY} from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { useWindowSize } from '../../common/hooks/window-size'
 import ErrorPage from '../error/ErrorPage'
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 
 const StepBlock = styled(Typography)`
   && {
     margin: 28px 0 48px 0;
-    font-size: 12px;
-    font-weight: bold;
+    font-size: 36px;
+    font-weight: 900;
+    color: ${COLOR_PRIMARY};
+    text-align: center;
   }
 `
 
 const LimitedWrapper = styled.div`
-  max-width: ${(props) => (props.isMobile ? 'auto' : '336px')};
+  max-width: ${(props) => (props.isMobile ? 'auto' : '1040px')};
   width: ${(props) => (props.isMobile ? 'auto' : '100%')};
   margin-left: ${(props) => (props.isMobile ? '16px' : 'auto')};
   margin-right: ${(props) => (props.isMobile ? '16px' : 'auto')};
@@ -37,6 +40,18 @@ const ProgressBar = styled.div`
 
 const BackWrapper = styled.div`
   margin-top: ${(props) => (props.isMobile ? '24px' : '68px')};
+`
+
+const HeaderLink = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: ${COLOR_OTHER_GREEN};
+  margin: ${({ isMobile }) => (isMobile ? '10px 10px 0px auto' : '210px 0px -170px -60px')};
+  cursor: pointer;
 `
 
 const ALL_STEPS = [
@@ -118,14 +133,17 @@ const Search = () => {
         style={{ width: `${((index + 1) * 100) / ALL_STEPS.length}%` }}
       />
       <LimitedWrapper isMobile={isMobile}>
-        <BackWrapper isMobile={isMobile}>
+        {/*<BackWrapper isMobile={isMobile}>
           <ArrowBackOutlinedIcon
             style={{ cursor: 'pointer' }}
             onClick={() => onNextStep({}, -1)}
           />
-        </BackWrapper>
+        </BackWrapper>*/}
+        <HeaderLink onClick={() => onNextStep({}, -1)} isMobile={isMobile}>
+          <ArrowBackIcon color="primary" fontSize="large" />
+        </HeaderLink>
         <StepBlock>
-          Etape {index + 1}/{ALL_STEPS.length}
+          Etape {index + 1} sur {ALL_STEPS.length}
         </StepBlock>
         <Component onNext={onNextStep} values={values} />
       </LimitedWrapper>
