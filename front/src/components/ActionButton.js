@@ -2,9 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
-import {ACTION_BUTTON_STYLE} from "../constants/styleConstants";
-import {COLOR_GRAY, COLOR_PRIMARY} from "../constants/colors";
+import {COLOR_PRIMARY} from "../constants/colors";
 
+
+const ACTION_BUTTON_STYLE = `
+  text-decoration: none;
+  background-color: ${COLOR_PRIMARY};
+  height: 50px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 205px;
+`
 
 const ActionButtonContainer = styled.div`
   display: flex;
