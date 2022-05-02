@@ -9,11 +9,9 @@ const HEIGHT = 125
 const PADDING = 16
 
 const HeaderContainer = styled.div`
-  //position: static;
   left: 0;
   right: 0;
   background-color: white;
-  //top: 76;
   width: 100%;
   display: flex;
   align-items: center;
