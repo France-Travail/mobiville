@@ -14,6 +14,7 @@ import { ReactComponent as MapPointerIcon } from '../../assets/images/map-pointe
 import { ReactComponent as PrizeIcon } from '../../assets/images/prize.svg'
 import { ReactComponent as MoneyClockIcon } from '../../assets/images/money-clock.svg'
 import ArrowForward from '@mui/icons-material/ArrowForward'
+import ActionButton from '../../components/ActionButton'
 
 const H1 = styled.h1`
   font-size: 36px;
@@ -234,73 +235,11 @@ const MobilityGuideBlockH3 = styled.h3`
 `
 const SurveyBlockH3 = MobilityGuideBlockH3
 
-const ActionButtonContainer = styled.div`
-  display: flex;
-  margin-top: ${({ isMobile }) => (isMobile ? '0px' : '16px')};
-  margin-bottom: ${({ isMobile }) => (isMobile ? '12px' : '0px')};
-  justify-content: ${({ isMobile }) => (isMobile ? 'center' : 'flex-start')};
+const ButtonContainer = styled.div`
+  margin: 10px auto;
+  
   a {
-    text-align: center;
-    max-width: ${({ isMobile }) => (isMobile ? '225px' : '327px')};
-    font-weight: 700;
-    box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.14),
-      0px 3px 14px rgba(0, 0, 0, 0.12), 0px 4px 5px rgba(0, 0, 0, 0.2);
-  }
-`
-
-const actionButtonStyle = `
-  text-decoration: none;
-  background-color: ${COLOR_PRIMARY};
-  height: 50px;
-  font-size: 18px;
-  cursor: pointer;
-  border-radius: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 205px;
-`
-
-const ActionButton = styled(Link)`
-  color: #fff;
-  :active {
-    background: #4e4ec9;
-    color: #fff;
-  }
-  :focus {
-    background: #191970;
-    color: #fff;
-  }
-  :hover {
-    color: #fff;
-    background: #191970;
-    opacity: 0.9;
-  }
-  :disabled {
-    background: #e4e9ed;
-  }
-  ${actionButtonStyle}
-`
-
-const ActionButtonSecondary = styled.a`
-  ${actionButtonStyle}
-  background-color: #fff;
-  color: ${COLOR_PRIMARY};
-  margin: auto;
-  margin-top: 15px;
-  filter: drop-shadow(0px 8px 10px rgba(0, 0, 0, 0.14))
-    drop-shadow(0px 3px 14px rgba(0, 0, 0, 0.12))
-    drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.2));
-
-  :active {
-    background: #e4e9ed;
-  }
-  :hover {
-    background: #f6f7fb;
-  }
-  :focus {
-    background: #ffffff;
+    margin: auto;
   }
 `
 
@@ -426,11 +365,7 @@ const HomePage = () => {
             {isMobile && (
               <img className="centered" src={mobilityHomepagePic} alt="" />
             )}
-            <ActionButtonContainer isMobile={isMobile}>
-              <ActionButton to="/mobility-guide">
-                Consulter notre guide {isMobile && <br />}sur la mobilité
-              </ActionButton>
-            </ActionButtonContainer>
+            <ActionButton path={"/mobility-guide"} libelle={"Accéder au guide"} isMobile={isMobile} isBlue={true} />
           </div>
           {!isMobile && <img src={mobilityHomepagePic} alt="" />}
         </MobilityGuideBlock>
@@ -442,14 +377,9 @@ const HomePage = () => {
           <SurveyBlockH3 isMobile={isMobile}>
             Aidez nous en répondant à notre enquête de satisfaction
           </SurveyBlockH3>
-          <ActionButtonSecondary
-            href="https://startupsbeta.typeform.com/to/kPDt1Rfk"
-            target="_blank"
-            rel="noreferrer noopener"
-            style={{ fontWeight: 700, lineHeight: 21 }}
-          >
-            {isMobile ? 'Faire ma demande' : 'Répondre à l’enquête'}
-          </ActionButtonSecondary>
+          <ButtonContainer>
+            <ActionButton path={"https://startupsbeta.typeform.com/to/kPDt1Rfk"} libelle={isMobile ? 'Faire ma demande' : 'Répondre à l’enquête'} isMobile={isMobile} isWhite={true} />
+          </ButtonContainer>
         </SurveyBlock>
       </BlocksContainer>
     </MainLayout>

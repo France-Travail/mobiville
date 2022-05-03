@@ -23,6 +23,17 @@ const Container = styled.div`
   align-items: center;
 `
 
+const ContainerInfoStats = styled.div`
+  display: flex;
+  max-width: 1040px;
+  width: 100%;
+`
+
+const ContainerInfo = styled.div`
+  max-width: ${({ isMobile }) => (isMobile ? 'auto' : '336px')};
+  border-radius: ${({ isMobile }) => (isMobile ? '0' : '8')}px;
+`
+
 const HeaderArrowLink = styled(Link)`
   display: flex;
   align-items: center;
@@ -68,7 +79,7 @@ const StyledMapContainer = styled(MapContainer)`
 const StatsContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: ${({ isMobile }) => (isMobile ? 'center' : 'right')};
   padding-top: 8px;
   padding-bottom: ${({ isMobile }) => (isMobile ? '8px' : 0)};
   max-width: 1040px;
@@ -97,6 +108,7 @@ const H1 = styled.h1`
   color: #191970;
   padding: 4px 12px 4px 4px;
 `
+
 
 const CityHeader = ({ backLink, isMobile, titlesNode }) => {
   const { city } = useCities()
@@ -132,32 +144,27 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
 
       {isMobile && titlesNode}
 
-      <StatsContainer isMobile={isMobile}>
-        <Stats>
-          <img src={crowd} alt="" />
-          Habitants <br />
-          <b>{formatNumber(city.population * 1000)}</b>
-        </Stats>
+      <ContainerInfoStats>
+        <ContainerInfo>
+          {!isMobile && titlesNode}
+        </ContainerInfo>
+        <StatsContainer isMobile={isMobile}>
+          <Stats>
+            <img src={crowd} alt="" />
+            Habitants <br />
+            <b>{formatNumber(city.population * 1000)}</b>
+          </Stats>
 
-        <Stats>
-          <img src={weather} alt="" />
-          Température
-          <br />
-          <b>{Math.floor(city.average_temperature)}°</b>
-        </Stats>
+          <Stats>
+            <img src={weather} alt="" />
+            Température
+            <br />
+            <b>{Math.floor(city.average_temperature)}°</b>
+          </Stats>
 
-        <Stats>
-          <img src={compass} alt="" />
-          Démarrer mon projet
-          <br />
-          <Link
-            to="/mobility-guide"
-            style={{ fontWeight: 500, textDecoration: 'underline' }}
-          >
-            Accéder au guide
-          </Link>
-        </Stats>
-      </StatsContainer>
+        </StatsContainer>
+      </ContainerInfoStats>
+
     </Container>
   )
 }
@@ -165,7 +172,9 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
 export default CityHeader
 
 CityHeader.propTypes = {
+  backLink: PropTypes.string,
   isMobile: PropTypes.bool.isRequired,
+  titlesNodes: PropTypes.string
 }
 
 CityHeader.defaultProps = {}
