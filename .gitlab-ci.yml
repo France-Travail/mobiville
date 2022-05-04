@@ -63,7 +63,7 @@ test:lint:
     - cd ./front
     # recupération des dépendances npm
     - yarn install
-    - yarn lint-staged
+    - yarn lint
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $FORCE_DEPLOY == ""'
 

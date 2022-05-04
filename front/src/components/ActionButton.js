@@ -21,13 +21,13 @@ const ACTION_BUTTON_STYLE = `
 
 const ActionButtonContainer = styled.div`
   display: flex;
-  margin-top: ${({isMobile}) => (isMobile ? '0px' : '16px')};
-  margin-bottom: ${({isMobile}) => (isMobile ? '12px' : '0px')};
-  justify-content: ${({isMobile}) => (isMobile ? 'center' : 'flex-start')};
-  ${({isMobile}) => (isMobile ? 'max-width: 365px;' : '')}
+  margin-top: ${({ isMobile }) => (isMobile ? '0px' : '16px')};
+  margin-bottom: ${({ isMobile }) => (isMobile ? '12px' : '0px')};
+  justify-content: ${({ isMobile }) => (isMobile ? 'center' : 'flex-start')};
+  ${({ isMobile }) => (isMobile ? 'max-width: 365px;' : '')}
   a {
     text-align: center;
-    max-width: ${({isMobile}) => (isMobile ? '231px' : '327px')};
+    max-width: ${({ isMobile }) => (isMobile ? '231px' : '327px')};
     font-weight: 700;
   }
 `
@@ -41,16 +41,16 @@ const ActionButtonElement = styled(Link)`
   ${({buttonWidth}) => (buttonWidth ? 'width: ' + buttonWidth + 'px !important;max-width: ' + buttonWidth + 'px !important;' : '')}
   padding:12px;
   :active {
-    background:  ${({isBlue}) => (isBlue ? COLOR_PRIMARY : 'inherit')};
-    color: ${({isBlue}) => (isBlue ? '#fff' : COLOR_PRIMARY)};
+    background: ${({ isBlue }) => (isBlue ? COLOR_PRIMARY : 'inherit')};
+    color: ${({ isBlue }) => (isBlue ? '#fff' : COLOR_PRIMARY)};
   }
   :focus {
-    background: ${({isBlue}) => (isBlue ? COLOR_PRIMARY : '#E4E9ED')};
-    color: ${({isBlue}) => (isBlue ? '#fff' : COLOR_PRIMARY)};
+    background: ${({ isBlue }) => (isBlue ? COLOR_PRIMARY : '#E4E9ED')};
+    color: ${({ isBlue }) => (isBlue ? '#fff' : COLOR_PRIMARY)};
   }
   :hover {
-    color: ${({isBlue}) => (isBlue ? '#fff' : COLOR_PRIMARY)};
-    background: ${({isBlue}) => (isBlue ? COLOR_PRIMARY : '#E4E9ED')};
+    color: ${({ isBlue }) => (isBlue ? '#fff' : COLOR_PRIMARY)};
+    background: ${({ isBlue }) => (isBlue ? COLOR_PRIMARY : '#E4E9ED')};
     opacity: 0.9;
   }
   :disabled {
@@ -69,13 +69,13 @@ const ActionButton = ({path, libelle, libelleSecondaire, isMobile, isBlue, isWhi
 )
 
 ActionButton.props = {
-    path: PropTypes.string,
-    libelle: PropTypes.string,
-    libelleSecondaire: PropTypes.string,
-    isMobile: PropTypes.bool,
-    isBlue: PropTypes.bool,
-    isWhite: PropTypes.bool,
-    buttonWidth: PropTypes.number,
+  path: PropTypes.string,
+  libelle: PropTypes.string,
+  libelleSecondaire: PropTypes.string,
+  isMobile: PropTypes.bool,
+  isBlue: PropTypes.bool,
+  isWhite: PropTypes.bool,
+  buttonWidth: PropTypes.number,
 }
 
 export default ActionButton
