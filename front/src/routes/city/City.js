@@ -36,8 +36,7 @@ import redEllipse from '../../assets/images/icons/red_ellipse.svg'
 import greenEllipse from '../../assets/images/icons/green_ellipse.svg'
 import restaurantsIcon from '../../assets/images/icons/restaurants.svg'
 import CitySubHeader from './CitySubHeader'
-import ActionButton from "../../components/ActionButton";
-
+import ActionButton from '../../components/ActionButton'
 
 const ElementContainer = styled.div`
   display: flex;
@@ -67,7 +66,7 @@ const Block = styled.div`
   flex-direction: column;
   justify-content: space-between;
   margin-top: ${({ isMobile }) => (isMobile ? 0 : '32px')};
-  color : ${COLOR_TEXT_PRIMARY};
+  color: ${COLOR_TEXT_PRIMARY};
 
   &:not(:first-of-type) {
     margin-left: ${({ isMobile }) => (isMobile ? 0 : '16px')};
@@ -76,7 +75,7 @@ const Block = styled.div`
 
 const BlockHeader = styled.div``
 const BlockHeaderText = styled.div`
-${({ isMobile }) => (isMobile ? 'width: 310px;margin: auto;' : '')}
+  ${({ isMobile }) => (isMobile ? 'width: 310px;margin: auto;' : '')}
 `
 const BlockHeaderRating = styled.div``
 const BlockHeaderH2 = styled.h2`
@@ -108,7 +107,7 @@ const BlockContentCity = styled.div`
   height: 153px;
   margin: ${({ isCenter }) => (isCenter ? 'auto' : 0)};
   ${({ isMobile }) => (isMobile ? 'margin-bottom: 8px;' : '')}
-  
+
   li, li img {
     margin: auto;
     text-align: center;
@@ -379,25 +378,29 @@ const CityPage = ({ location: { pathname, search } }) => {
         />
       )}
 
-      <CityHeader backLink={backLink} isMobile={isMobile} titlesNode={titlesNode} />
+      <CityHeader
+        backLink={backLink}
+        isMobile={isMobile}
+        titlesNode={titlesNode}
+      />
 
       <BlockContainer isMobile={isMobile}>
         <Block isMobile={isMobile}>
           <BlockHeader>
             <BlockHeaderText>
-              <BlockHeaderH2>
-                Emploi
-              </BlockHeaderH2>
+              <BlockHeaderH2>Emploi</BlockHeaderH2>
             </BlockHeaderText>
             <BlockHeaderRating></BlockHeaderRating>
           </BlockHeader>
           <BlockContent isMobile={isMobile}>
             <BlockContentUl>
-
               <BlockContentLi>
                 <BlockContentLiImg src={balance} />
                 <BlockContentLiDesc>
-                  <BlockContentLiValue> {bassinTension || deptTension || 'À venir'} </BlockContentLiValue>
+                  <BlockContentLiValue>
+                    {' '}
+                    {bassinTension || deptTension || 'À venir'}{' '}
+                  </BlockContentLiValue>
                   Offres pour
                   <BlockContentLiValue> 10 </BlockContentLiValue>
                   demandeurs
@@ -406,11 +409,12 @@ const CityPage = ({ location: { pathname, search } }) => {
 
               <BlockContentLi>
                 <BlockContentLiImg src={euro} />
-                <BlockContentLiDesc><BlockContentLiValue>
-                  {infosTravail?.min > 0
+                <BlockContentLiDesc>
+                  <BlockContentLiValue>
+                    {infosTravail?.min > 0
                       ? `${infosTravail.min}€ à ${infosTravail.max}€ `
                       : `A venir `}
-                </BlockContentLiValue>
+                  </BlockContentLiValue>
                   Salaire brut
                 </BlockContentLiDesc>
               </BlockContentLi>
@@ -418,14 +422,21 @@ const CityPage = ({ location: { pathname, search } }) => {
               <BlockContentLi>
                 <BlockContentLiImg src={briefcase} />
                 <BlockContentLiDesc>
-                  <BlockContentLiValue>{professions?.length} </BlockContentLiValue>
-                  Offres d’emploi</BlockContentLiDesc>
+                  <BlockContentLiValue>
+                    {professions?.length}{' '}
+                  </BlockContentLiValue>
+                  Offres d’emploi
+                </BlockContentLiDesc>
               </BlockContentLi>
 
               <BlockLinkLi>
-                <ActionButton path={`/city/${insee}/job?codeRome=${codeRome}`} libelle={`Voir les offres d’emploi`} isMobile={isMobile} isBlue={true} />
+                <ActionButton
+                  path={`/city/${insee}/job?codeRome=${codeRome}`}
+                  libelle={`Voir les offres d’emploi`}
+                  isMobile={isMobile}
+                  isBlue={true}
+                />
               </BlockLinkLi>
-
             </BlockContentUl>
           </BlockContent>
         </Block>
@@ -442,12 +453,12 @@ const CityPage = ({ location: { pathname, search } }) => {
               <BlockContentLi>
                 <BlockContentLiImg src={house} />
                 <BlockContentLiDesc>
-                    <BlockContentLiValue>
+                  <BlockContentLiValue>
                     {city && city.average_houseselled
-                        ? `${city.average_houseselled}€ `
-                        : 'A venir '}
+                      ? `${city.average_houseselled}€ `
+                      : 'A venir '}
                   </BlockContentLiValue>
-                   Achat (prix m² moyen)
+                  Achat (prix m² moyen)
                 </BlockContentLiDesc>
               </BlockContentLi>
 
@@ -456,10 +467,10 @@ const CityPage = ({ location: { pathname, search } }) => {
                 <BlockContentLiDesc>
                   <BlockContentLiValue>
                     {city && city.average_houserent
-                        ? `${city.average_houserent.toFixed(2)}€ `
-                        : 'A venir '}
+                      ? `${city.average_houserent.toFixed(2)}€ `
+                      : 'A venir '}
                   </BlockContentLiValue>
-                   Location (prix m² moyen)
+                  Location (prix m² moyen)
                 </BlockContentLiDesc>
               </BlockContentLi>
 
@@ -474,9 +485,13 @@ const CityPage = ({ location: { pathname, search } }) => {
               </BlockContentLi>
 
               <BlockLinkLi>
-                <ActionButton path={`/city/${insee}/housing?codeRome=${codeRome}`} libelle={`En savoir plus`} isMobile={isMobile} isBlue={false}/>
+                <ActionButton
+                  path={`/city/${insee}/housing?codeRome=${codeRome}`}
+                  libelle={`En savoir plus`}
+                  isMobile={isMobile}
+                  isBlue={false}
+                />
               </BlockLinkLi>
-
             </BlockContentUl>
           </BlockContent>
         </Block>
@@ -494,38 +509,40 @@ const CityPage = ({ location: { pathname, search } }) => {
                 <BlockContentLiImg src={bread} />
                 <BlockContentLiDesc>
                   <BlockContentLiValue>
-                    {bakeriesNumber+` ` || 'À venir'}
+                    {bakeriesNumber + ` ` || 'À venir'}
                   </BlockContentLiValue>
-                   Boulangeries
+                  Boulangeries
                 </BlockContentLiDesc>
-
               </BlockContentLi>
 
               <BlockContentLi>
                 <BlockContentLiImg src={doctors} />
                 <BlockContentLiDesc>
                   <BlockContentLiValue>
-                    {doctorsNumber+` ` || 'À venir'}
+                    {doctorsNumber + ` ` || 'À venir'}
                   </BlockContentLiValue>
-                   Médecins
+                  Médecins
                 </BlockContentLiDesc>
-
               </BlockContentLi>
 
               <BlockContentLi>
                 <BlockContentLiImg src={restaurantsIcon} />
                 <BlockContentLiDesc>
                   <BlockContentLiValue>
-                    {restaurantsNumber+` ` || 'À venir'}
+                    {restaurantsNumber + ` ` || 'À venir'}
                   </BlockContentLiValue>
-                   Restaurants
+                  Restaurants
                 </BlockContentLiDesc>
               </BlockContentLi>
 
               <BlockLinkLi>
-                <ActionButton path={`/city/${insee}/life?codeRome=${codeRome}`} libelle={`Découvrir le cadre de vie`} isMobile={isMobile} isBlue={false}/>
+                <ActionButton
+                  path={`/city/${insee}/life?codeRome=${codeRome}`}
+                  libelle={`Découvrir le cadre de vie`}
+                  isMobile={isMobile}
+                  isBlue={false}
+                />
               </BlockLinkLi>
-
             </BlockContentUl>
           </BlockContent>
         </Block>
@@ -533,114 +550,133 @@ const CityPage = ({ location: { pathname, search } }) => {
 
       {!!similarCities.length && (
         <BlockContainer isMobile={isMobile}>
-            <Block isMobile={isMobile}>
-              <BlockHeader>
-                <BlockHeaderText isMobile={isMobile}>
-                  <BlockHeaderH2>
-                    Villes similaires
-                  </BlockHeaderH2>
-                  <BlockHeaderP>
-                    Avec de fortes probabilités d'emploi et de logement
-                  </BlockHeaderP>
-                </BlockHeaderText>
-                <BlockHeaderRating></BlockHeaderRating>
-              </BlockHeader>
-              <BlockContainer isMobile={isMobile}>
-                  {similarCities.map((similarCity, index) => (
-                      <BlockContentCity isCenter={index === 1 || isMobile } isMobile={isMobile} key={similarCity.insee_com}>
-                        <Link
-                            to={`/city/${similarCity.insee_com}-${similarCity.nom_comm}?codeRome=${codeRome}`}
-                            style={{ color: 'inherit' }}
-                        >
-                        <BlockContentUl>
-                          <BlockContentLi>
-                            <BlockContentLiImg
-                              src={
-                                index === 0
-                                  ? medalGold
-                                  : index === 1
-                                  ? medalSilver
-                                  : medalBronze
-                              }
-                            />
-                          </BlockContentLi>
-                          {/* TODO : <BlockContentLi>
+          <Block isMobile={isMobile}>
+            <BlockHeader>
+              <BlockHeaderText isMobile={isMobile}>
+                <BlockHeaderH2>Villes similaires</BlockHeaderH2>
+                <BlockHeaderP>
+                  Avec de fortes probabilités d'emploi et de logement
+                </BlockHeaderP>
+              </BlockHeaderText>
+              <BlockHeaderRating></BlockHeaderRating>
+            </BlockHeader>
+            <BlockContainer isMobile={isMobile}>
+              {similarCities.map((similarCity, index) => (
+                <BlockContentCity
+                  isCenter={index === 1 || isMobile}
+                  isMobile={isMobile}
+                  key={similarCity.insee_com}
+                >
+                  <Link
+                    to={`/city/${similarCity.insee_com}-${similarCity.nom_comm}?codeRome=${codeRome}`}
+                    style={{ color: 'inherit' }}
+                  >
+                    <BlockContentUl>
+                      <BlockContentLi>
+                        <BlockContentLiImg
+                          src={
+                            index === 0
+                              ? medalGold
+                              : index === 1
+                              ? medalSilver
+                              : medalBronze
+                          }
+                        />
+                      </BlockContentLi>
+                      {/* TODO : <BlockContentLi>
                             <b>XXX offres</b>
                           </BlockContentLi>*/}
-                          <BlockContentLi>
-                            <b>{ucFirstOnly(similarCity.nom_comm)}</b><br/> (
-                                {similarCity['newRegion.name']})
-                          </BlockContentLi>
-                        </BlockContentUl>
-                        </Link>
-                      </BlockContentCity>
-                  ))}
-              </BlockContainer>
+                      <BlockContentLi>
+                        <b>{ucFirstOnly(similarCity.nom_comm)}</b>
+                        <br /> ({similarCity['newRegion.name']})
+                      </BlockContentLi>
+                    </BlockContentUl>
+                  </Link>
+                </BlockContentCity>
+              ))}
+            </BlockContainer>
 
-              <BlockLinkDiv>
-                <ActionButton path={`/cities?${similarCitiesCriterionsQueryString}`} libelle={`Voir toutes les villes`} isMobile={isMobile} isBlue={false}/>
-              </BlockLinkDiv>
-
-            </Block>
+            <BlockLinkDiv>
+              <ActionButton
+                path={`/cities?${similarCitiesCriterionsQueryString}`}
+                libelle={`Voir toutes les villes`}
+                isMobile={isMobile}
+                isBlue={false}
+              />
+            </BlockLinkDiv>
+          </Block>
         </BlockContainer>
       )}
 
       {!!closeCities.length && (
         <BlockContainer isMobile={isMobile}>
-            <Block isMobile={isMobile}>
-              <BlockHeader>
-                <BlockHeaderText isMobile={isMobile}>
-                  <BlockHeaderH2>Villes à proximité</BlockHeaderH2>
-                </BlockHeaderText>
-                <BlockHeaderP>
-                  Avec des logements plus accessibles
-                </BlockHeaderP>
-                <BlockHeaderRating></BlockHeaderRating>
-              </BlockHeader>
-              <BlockContainer isMobile={isMobile}>
-                  {closeCities.map((closeCity, index) => (
-                      <BlockContentCity isCenter={(index === 1 || isMobile )} isMobile={isMobile} key={closeCity.insee_com} >
-                        <Link
-                            to={`/city/${closeCity.insee_com}-${closeCity.nom_comm}?codeRome=${codeRome}`}
-                            style={{ color: 'inherit' }}
-                        >
-                        <BlockContentUl>
-                          <BlockContentLi >
-                            <BlockContentLiImg
-                              src={
-                                index === 0
-                                  ? medalGold
-                                  : index === 1
-                                  ? medalSilver
-                                  : medalBronze
-                              }
-                            />
-                          </BlockContentLi>
-                          {/* TODO : <BlockContentLi>
+          <Block isMobile={isMobile}>
+            <BlockHeader>
+              <BlockHeaderText isMobile={isMobile}>
+                <BlockHeaderH2>Villes à proximité</BlockHeaderH2>
+              </BlockHeaderText>
+              <BlockHeaderP>Avec des logements plus accessibles</BlockHeaderP>
+              <BlockHeaderRating></BlockHeaderRating>
+            </BlockHeader>
+            <BlockContainer isMobile={isMobile}>
+              {closeCities.map((closeCity, index) => (
+                <BlockContentCity
+                  isCenter={index === 1 || isMobile}
+                  isMobile={isMobile}
+                  key={closeCity.insee_com}
+                >
+                  <Link
+                    to={`/city/${closeCity.insee_com}-${closeCity.nom_comm}?codeRome=${codeRome}`}
+                    style={{ color: 'inherit' }}
+                  >
+                    <BlockContentUl>
+                      <BlockContentLi>
+                        <BlockContentLiImg
+                          src={
+                            index === 0
+                              ? medalGold
+                              : index === 1
+                              ? medalSilver
+                              : medalBronze
+                          }
+                        />
+                      </BlockContentLi>
+                      {/* TODO : <BlockContentLi>
                             <b>XXX Km</b>
                           </BlockContentLi>*/}
-                          <BlockContentLi>
-                            <b>{ucFirstOnly(closeCity.nom_comm)}</b><br/> (
-                            {closeCity['newRegion.name']})
-                          </BlockContentLi>
-                        </BlockContentUl>
-                        </Link>
-                      </BlockContentCity>
-                  ))}
-              </BlockContainer>
+                      <BlockContentLi>
+                        <b>{ucFirstOnly(closeCity.nom_comm)}</b>
+                        <br /> ({closeCity['newRegion.name']})
+                      </BlockContentLi>
+                    </BlockContentUl>
+                  </Link>
+                </BlockContentCity>
+              ))}
+            </BlockContainer>
 
-              <BlockLinkDiv>
-                <ActionButton path={`/cities?codeRegion=${city['oldRegion.new_code']}&codeRome=${codeRome}`} libelle={`Voir toutes les villes`} isMobile={isMobile} isBlue={false}/>
-              </BlockLinkDiv>
-
-            </Block>
+            <BlockLinkDiv>
+              <ActionButton
+                path={`/cities?codeRegion=${city['oldRegion.new_code']}&codeRome=${codeRome}`}
+                libelle={`Voir toutes les villes`}
+                isMobile={isMobile}
+                isBlue={false}
+              />
+            </BlockLinkDiv>
+          </Block>
         </BlockContainer>
       )}
 
       <ElementContainer isMobile={isMobile}>
-          <ActionButton path={"/mobility-guide"} libelle={`Consultez nos conseils`} libelleSecondaire={'pour votre projet'} isMobile={isMobile} isBlue={false} isWhite={true} buttonWidth={306} />
+        <ActionButton
+          path={'/mobility-guide'}
+          libelle={`Consultez nos conseils`}
+          libelleSecondaire={'pour votre projet'}
+          isMobile={isMobile}
+          isBlue={false}
+          isWhite={true}
+          buttonWidth={306}
+        />
       </ElementContainer>
-
     </MainLayout>
   )
 }

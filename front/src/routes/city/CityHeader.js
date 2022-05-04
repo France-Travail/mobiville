@@ -9,7 +9,6 @@ import { useCities } from '../../common/contexts/citiesContext'
 import { COLOR_GRAY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
 import { formatNumber } from '../../utils/utils'
 
-import compass from '../../assets/images/icons/compass.svg'
 import crowd from '../../assets/images/icons/crowd.svg'
 import weather from '../../assets/images/icons/weather.svg'
 
@@ -109,7 +108,6 @@ const H1 = styled.h1`
   padding: 4px 12px 4px 4px;
 `
 
-
 const CityHeader = ({ backLink, isMobile, titlesNode }) => {
   const { city } = useCities()
 
@@ -145,9 +143,7 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
       {isMobile && titlesNode}
 
       <ContainerInfoStats>
-        <ContainerInfo>
-          {!isMobile && titlesNode}
-        </ContainerInfo>
+        <ContainerInfo>{!isMobile && titlesNode}</ContainerInfo>
         <StatsContainer isMobile={isMobile}>
           <Stats>
             <img src={crowd} alt="" />
@@ -161,10 +157,8 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
             <br />
             <b>{Math.floor(city.average_temperature)}°</b>
           </Stats>
-
         </StatsContainer>
       </ContainerInfoStats>
-
     </Container>
   )
 }
@@ -174,7 +168,7 @@ export default CityHeader
 CityHeader.propTypes = {
   backLink: PropTypes.string,
   isMobile: PropTypes.bool.isRequired,
-  titlesNodes: PropTypes.string
+  titlesNodes: PropTypes.string,
 }
 
 CityHeader.defaultProps = {}
