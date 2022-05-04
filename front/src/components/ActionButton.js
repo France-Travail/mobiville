@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
-import {COLOR_PRIMARY} from "../constants/colors";
+import {COLOR_PRIMARY} from "../constants/colors"
 
 
 const ACTION_BUTTON_STYLE = `
@@ -34,11 +34,11 @@ const ActionButtonContainer = styled.div`
 
 const ActionButtonElement = styled(Link)`
   ${ACTION_BUTTON_STYLE}
-  ${({isBlue}) => (isBlue ? '' : 'border : solid 2px '+COLOR_PRIMARY+' !important;')}
+  ${({isBlue}) => (isBlue ? '' : 'border : solid 2px ' + COLOR_PRIMARY + ' !important;')}
   color: ${({isBlue}) => (isBlue ? '#fff' : COLOR_PRIMARY)};
   background-color: ${({isBlue}) => (isBlue ? COLOR_PRIMARY : 'inherit')};
   ${({isWhite}) => (isWhite ? 'background-color: #fff;' : '')}
-  ${({buttonWidth}) => (buttonWidth ? 'width: '+buttonWidth+'px !important;max-width: '+buttonWidth+'px !important;' : '')}
+  ${({buttonWidth}) => (buttonWidth ? 'width: ' + buttonWidth + 'px !important;max-width: ' + buttonWidth + 'px !important;' : '')}
   padding:12px;
   :active {
     background:  ${({isBlue}) => (isBlue ? COLOR_PRIMARY : 'inherit')};
@@ -60,7 +60,7 @@ const ActionButtonElement = styled(Link)`
 
 const ActionButton = ({path, libelle, libelleSecondaire, isMobile, isBlue, isWhite, buttonWidth}) => (
     <>
-        <ActionButtonContainer isMobile={isMobile} >
+        <ActionButtonContainer isMobile={isMobile}>
             <ActionButtonElement to={path} isBlue={isBlue} isWhite={isWhite} buttonWidth={buttonWidth}>
                 {libelle} {isMobile && <br/>}{libelleSecondaire}
             </ActionButtonElement>
