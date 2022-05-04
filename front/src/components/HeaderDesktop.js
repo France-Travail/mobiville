@@ -1,16 +1,15 @@
 import React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 import styled from 'styled-components'
-import { Typography } from '@mui/material'
+import {Typography} from '@mui/material'
 
-import { COLOR_PRIMARY, COLOR_TEXT_SECONDARY } from '../constants/colors'
+import {COLOR_BACKGROUND, COLOR_PRIMARY, COLOR_TEXT_SECONDARY} from '../constants/colors'
 import LOGO from '../assets/images/LogoMobiville_gros.svg'
 import LOGO_FR from '../assets/images/marianne-logo.png'
 import LOGO_AL from '../assets/images/logo-action-logement.png'
 import LOGO_PE from '../assets/images/logo-pole-emploi.png'
 
 const Header = styled.header`
-  position: fixed;
   height: 102px;
   top: 0;
   left: 0;
@@ -21,6 +20,7 @@ const Header = styled.header`
   align-items: center;
   justify-content: space-around;
   padding: 16px 70px;
+  border-bottom: solid 2px ${COLOR_BACKGROUND};
 
   .taille-fixe {
     flex-shrink: 0;
@@ -36,7 +36,7 @@ const Item = styled(Link)`
     display: flex;
     align-items: center;
     color: ${(props) =>
-      props.selected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY};
+    props.selected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY};
   }
 `
 
@@ -44,6 +44,10 @@ const IconsContainer = styled.div`
   display: flex;
   justify-content: center;
   flex-grow: 1;
+  
+  a:hover {
+    color: ${COLOR_PRIMARY};
+  }
 `
 
 const Text = styled(Typography)`
@@ -60,61 +64,61 @@ const LogoImagePartner = styled.img`
 `
 
 const HeaderDesktop = () => {
-  const location = useLocation()
+    const location = useLocation()
 
-  const searchSelected = location.pathname.includes('rechercher')
-  const helpSelected = location.pathname.includes('aides')
+    const searchSelected = location.pathname.includes('rechercher')
+    const helpSelected = location.pathname.includes('aides')
 
-  return (
-    <Header>
-      <Link
-        to="/"
-        className="taille-fixe"
-        title="Retour à l’accueil"
-        style={{ display: 'flex', alignItems: 'center' }}
-      >
-        <img
-          src={LOGO_FR}
-          alt="Retour à la page d’accueil"
-          style={{ height: 70, marginRight: 16 }}
-        />
-        <img
-          src={LOGO}
-          alt="Retour à la page d’accueil"
-          style={{ height: 48 }}
-        />
-      </Link>
-      <IconsContainer>
-        <Item to="/rechercher" selected={searchSelected}>
-          <Text>Rechercher une ville</Text>
-        </Item>
-        <Item to="/aides" selected={helpSelected}>
-          <Text>Rechercher des aides</Text>
-        </Item>
-      </IconsContainer>
-      <div className="taille-fixe" style={{ display: 'flex' }}>
-        <div style={{ marginLeft: 'auto' }}>
-          <Text style={{ color: COLOR_TEXT_SECONDARY, paddingBottom: 8 }}>
-            Proposé par
-          </Text>
-          <a
-            href="https://www.actionlogement.fr/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <LogoImagePartner src={LOGO_AL} alt="Action logement" />
-          </a>
-          <a
-            href="https://www.pole-emploi.fr/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <LogoImagePartner src={LOGO_PE} alt="Pôle Emploi" />
-          </a>
-        </div>
-      </div>
-    </Header>
-  )
+    return (
+        <Header>
+            <Link
+                to="/"
+                className="taille-fixe"
+                title="Retour à l’accueil"
+                style={{display: 'flex', alignItems: 'center'}}
+            >
+                <img
+                    src={LOGO_FR}
+                    alt="Retour à la page d’accueil"
+                    style={{height: 70, marginRight: 16}}
+                />
+                <img
+                    src={LOGO}
+                    alt="Retour à la page d’accueil"
+                    style={{height: 48}}
+                />
+            </Link>
+            <IconsContainer>
+                <Item to="/rechercher" selected={searchSelected}>
+                    <Text>Rechercher une ville</Text>
+                </Item>
+                <Item to="/aides" selected={helpSelected}>
+                    <Text>Rechercher des aides</Text>
+                </Item>
+            </IconsContainer>
+            <div className="taille-fixe" style={{display: 'flex'}}>
+                <div style={{marginLeft: 'auto'}}>
+                    <Text style={{color: COLOR_TEXT_SECONDARY, paddingBottom: 8}}>
+                        Proposé par
+                    </Text>
+                    <a
+                        href="https://www.actionlogement.fr/"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <LogoImagePartner src={LOGO_AL} alt="Action logement"/>
+                    </a>
+                    <a
+                        href="https://www.pole-emploi.fr/"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <LogoImagePartner src={LOGO_PE} alt="Pôle Emploi"/>
+                    </a>
+                </div>
+            </div>
+        </Header>
+    )
 }
 
 HeaderDesktop.propTypes = {}
