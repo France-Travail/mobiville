@@ -1,26 +1,25 @@
-import React, { lazy, memo } from 'react'
+import React, { lazy, memo, useState } from 'react'
 import styled from 'styled-components'
 import { Typography } from '@mui/material'
 import { isEmpty } from 'lodash'
 import queryString from 'query-string'
 
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
-import {Link, useHistory, useLocation, useParams} from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { useCities } from '../../common/contexts/citiesContext'
 import MainLayout from '../../components/MainLayout'
-import {COLOR_OTHER_GREEN, COLOR_PRIMARY} from '../../constants/colors'
+import { COLOR_OTHER_GREEN, COLOR_PRIMARY } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { useWindowSize } from '../../common/hooks/window-size'
 import ErrorPage from '../error/ErrorPage'
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 const StepBlock = styled(Typography)`
   && {
-    margin: 28px 0 48px 0;
-    font-size: 36px;
+    margin: ${({ isMobile }) => (isMobile ? '0px' : '28px 0 48px 0')};
+    font-size: ${({ isMobile }) => (isMobile ? '24px' : '36px')};
     font-weight: 900;
     color: ${COLOR_PRIMARY};
-    text-align: center;
+    text-align: ${({ isMobile }) => (isMobile ? 'start' : 'center')};
   }
 `
 
@@ -38,19 +37,19 @@ const ProgressBar = styled.div`
   left: 0;
 `
 
-const BackWrapper = styled.div`
-  margin-top: ${(props) => (props.isMobile ? '24px' : '68px')};
-`
-
 const HeaderLink = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: ${({ isMobile }) => (isMobile ? '30px' : '48px')};
+  height: 48px;
   border-radius: 50%;
-  background: ${COLOR_OTHER_GREEN};
-  margin: ${({ isMobile }) => (isMobile ? '10px 10px 0px auto' : '210px 0px -170px -60px')};
+  & > svg {
+    color: ${({ isMobile }) => (isMobile ? '#23333C' : null)};
+  }
+  background: ${({ isMobile }) => (isMobile ? 'unset' : COLOR_OTHER_GREEN)};
+  margin: ${({ isMobile }) =>
+    isMobile ? '10px 10px 0px 0px' : '210px 0px -170px -60px'};
   cursor: pointer;
 `
 
@@ -61,7 +60,7 @@ const ALL_STEPS = [
   },
   {
     key: 'region',
-    components: lazy(() => import('./SearchRegionOrCity')),
+    components: lazy(() => import('./SearchCity')),
   },
 ]
 
@@ -74,6 +73,7 @@ const Search = () => {
   const location = useLocation()
   const values = queryString.parse(location.search)
   const isMobile = isMobileView(size)
+  const [isSearchFocused, setIsSearchFocused] = useState(false)
 
   if (criterionsError) {
     return <ErrorPage />
@@ -133,19 +133,20 @@ const Search = () => {
         style={{ width: `${((index + 1) * 100) / ALL_STEPS.length}%` }}
       />
       <LimitedWrapper isMobile={isMobile}>
-        {/*<BackWrapper isMobile={isMobile}>
-          <ArrowBackOutlinedIcon
-            style={{ cursor: 'pointer' }}
-            onClick={() => onNextStep({}, -1)}
-          />
-        </BackWrapper>*/}
         <HeaderLink onClick={() => onNextStep({}, -1)} isMobile={isMobile}>
           <ArrowBackIcon color="primary" fontSize="large" />
         </HeaderLink>
-        <StepBlock>
-          Etape {index + 1} sur {ALL_STEPS.length}
-        </StepBlock>
-        <Component onNext={onNextStep} values={values} />
+        {!isSearchFocused && (
+          <StepBlock isMobile={isMobile}>
+            Etape {index + 1} sur {ALL_STEPS.length}
+          </StepBlock>
+        )}
+
+        <Component
+          onNext={onNextStep}
+          values={values}
+          isSearchFocused={(b) => setIsSearchFocused(b)}
+        />
       </LimitedWrapper>
     </MainLayout>
   )

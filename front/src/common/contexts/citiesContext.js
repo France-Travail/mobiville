@@ -123,12 +123,12 @@ export function CitiesProvider(props) {
         // augment rome labels with job title matches
         setJobsMatchingCriterions(
           results.reduce((prev, result) => {
-            const { key: romeKey, label: romeLabel } =
-              criterions.codeRomes.find(({ key }) => result.codeRome === key)
-
+            const romeFound = criterions.codeRomes
+              .filter((obj) => Object.keys(obj).includes('key'))
+              .find(({ key }) => result.codeRome === key)
             return prev.concat({
-              key: romeKey,
-              label: romeLabel.concat(` (${result.label}, …)`),
+              key: romeFound?.key,
+              label: romeFound?.label.concat(` (${result.label}, …)`),
             })
           }, [])
         )

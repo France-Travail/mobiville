@@ -9,6 +9,10 @@ import { useCities } from '../../common/contexts/citiesContext'
 import { ucFirstOnly } from '../../utils/utils'
 import { useHistory } from 'react-router'
 
+const ALL_REGIONS_LABEL = 'Toutes les régions'
+const REGION_TYPE = 'Régions'
+const CITY_TYPE = 'Villes'
+
 const Container = styled.div`
   flex: 1;
   display: flex;
@@ -24,10 +28,6 @@ const H1 = styled.h1`
 const InfoText = styled(Typography)`
   padding: 8px 0 16px 0;
 `
-
-const ALL_REGIONS_LABEL = 'Toutes les régions'
-const REGION_TYPE = 'Régions'
-const CITY_TYPE = 'Villes'
 
 const SearchRegionOrCity = ({ onNext, values }) => {
   const {
