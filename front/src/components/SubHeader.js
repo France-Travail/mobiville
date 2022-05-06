@@ -9,7 +9,7 @@ const HEIGHT = 112
 const PADDING = 16
 
 const HeaderContainer = styled.div`
-  position: ${({ isMobile }) => (isMobile ? 'static' : 'static')};
+  position: static;
   left: 0;
   right: 0;
   background-color: white;
