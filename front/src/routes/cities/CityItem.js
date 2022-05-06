@@ -128,7 +128,8 @@ const CityItem = ({
   let { photo } = city
   if (photo) {
     if (photo.indexOf('.svg') === -1) {
-      photo = photo.replace('/commons/', '/commons/thumb/')
+      const subFolderName = ['/commons/', '/fr/'].find((p) => photo.includes(p))
+      photo = photo.replace(subFolderName, `${subFolderName}thumb/`)
       const split = photo.split('/')
       photo += `/250px-${split[split.length - 1]}`
     }

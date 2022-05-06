@@ -9,7 +9,6 @@ import _ArrowForward from '@mui/icons-material/ArrowForward'
 import MainLayout from '../../components/MainLayout'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
-import { useScroll } from '../../common/hooks/use-scroll'
 
 const PAGE_HEADER_SIZE = 92
 const MAIN_HEADER_SIZE = 76
@@ -74,15 +73,10 @@ const ArrowForward = styled(_ArrowForward)`
 const MobilityGuide = () => {
   const size = useWindowSize()
   const isMobile = isMobileView(size)
-  const { scrollY } = useScroll()
-
-  const shouldUseFixedHeader = isMobile
-    ? scrollY > 0
-    : scrollY > MAIN_HEADER_SIZE
 
   return (
     <MainLayout menu={{ visible: !isMobile }}>
-      <H1 isMobile={isMobile} shouldUseFixedHeader={shouldUseFixedHeader}>
+      <H1 isMobile={isMobile} shouldUseFixedHeader={false}>
         Conseils et astuces pour votre projet de mobilité
       </H1>
 
