@@ -9,7 +9,7 @@ const HEIGHT = 112
 const PADDING = 16
 
 const HeaderContainer = styled.div`
-  position: ${({ isMobile }) => (isMobile ? 'static' : 'fixed')};
+  position: ${({ isMobile }) => (isMobile ? 'static' : 'static')};
   left: 0;
   right: 0;
   background-color: white;
@@ -72,7 +72,7 @@ const SubHeader = ({ backLink, desktopTitleWidth, isMobile, node, title }) => (
         {node ? node : <H1>{title}</H1>}
       </HeaderSubContainer>
     </HeaderContainer>
-    {!isMobile && <div style={{ height: HEIGHT, marginBottom: PADDING }} />}
+    {!isMobile && <div style={{ marginBottom: PADDING }} />}
   </>
 )
 
@@ -80,6 +80,7 @@ SubHeader.props = {
   backLink: PropTypes.string,
   desktopTitleWidth: PropTypes.number,
   isMobile: PropTypes.bool,
+  notFixed: PropTypes.bool,
   node: PropTypes.node,
   title: PropTypes.string,
 }

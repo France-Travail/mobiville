@@ -32,7 +32,8 @@ const Block = styled.div`
 const TopBlockContainer = styled.div`
   background: linear-gradient(180deg, #ddddea 0%, #c3e9e9 100%);
   margin-top: ${({ isMobile }) => (isMobile ? '102px' : '0')};
-  padding-bottom: 60px;
+  /* padding-bottom: 60px; */
+  padding-bottom: 6vh;
 `
 
 const TopBlock = styled(Block)`
@@ -237,7 +238,7 @@ const SurveyBlockH3 = MobilityGuideBlockH3
 
 const ButtonContainer = styled.div`
   margin: 10px auto;
-  
+
   a {
     margin: auto;
   }
@@ -365,7 +366,12 @@ const HomePage = () => {
             {isMobile && (
               <img className="centered" src={mobilityHomepagePic} alt="" />
             )}
-            <ActionButton path={"/mobility-guide"} libelle={"Accéder au guide"} isMobile={isMobile} isBlue={true} />
+            <ActionButton
+              path={'/mobility-guide'}
+              libelle={'Accéder au guide'}
+              isMobile={isMobile}
+              isBlue={true}
+            />
           </div>
           {!isMobile && <img src={mobilityHomepagePic} alt="" />}
         </MobilityGuideBlock>
@@ -378,7 +384,12 @@ const HomePage = () => {
             Aidez nous en répondant à notre enquête de satisfaction
           </SurveyBlockH3>
           <ButtonContainer>
-            <ActionButton path={"https://startupsbeta.typeform.com/to/kPDt1Rfk"} libelle={isMobile ? 'Faire ma demande' : 'Répondre à l’enquête'} isMobile={isMobile} isWhite={true} />
+            <ActionButton
+              path={'https://startupsbeta.typeform.com/to/kPDt1Rfk'}
+              libelle={isMobile ? 'Faire ma demande' : 'Répondre à l’enquête'}
+              isMobile={isMobile}
+              isWhite={true}
+            />
           </ButtonContainer>
         </SurveyBlock>
       </BlocksContainer>

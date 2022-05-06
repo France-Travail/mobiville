@@ -391,7 +391,8 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
       <SubHeader
         backLink={backLink}
         isMobile={isMobile}
-        title={`Information sur le logement à ${ucFirstOnly(city.nom_comm)}`}
+        notFixed={!isMobile}
+        title={` Information sur le logement à ${ucFirstOnly(city.nom_comm)}`}
       />
       {isMobile ? mobileElements : desktopElement}
       <ElectedOfficialsBlock>
