@@ -105,7 +105,7 @@ export default (sequelizeInstance, Model) => {
             row.dataValues.dep === PARIS_BEGINNING
               ? PARIS_CODE
               : row.dataValues.dep === MARSEILLE_BEGINNING
-              ? MARSEILLE_BEGINNING
+              ? MARSEILLE_CODE
               : LYON_CODE,
           typequ: row.dataValues.typequ,
           total: row.dataValues.total,
