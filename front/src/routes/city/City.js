@@ -72,6 +72,7 @@ const Block = styled.div`
 const BlockHeader = styled.div``
 const BlockHeaderText = styled.div`
   ${({ isMobile }) => (isMobile ? 'width: 310px;margin: auto;' : '')}
+  margin-bottom: ${({ isMobile }) => (isMobile ? '5px' : '')}
 `
 const BlockHeaderRating = styled.div``
 const BlockHeaderH2 = styled.h2`
@@ -148,15 +149,13 @@ const BlockContentLi = styled.li`
   border-radius: 4px;
   font-size: 16px;
   line-height: 24px;
-  ${({ isPaddingReduced }) =>
-    isPaddingReduced ? 'margin-top: -20px !important;' : ''}
-  isPaddingReduced={true}
-  
   b {
     font-size: 20px;
   }
-  
+  ${({ isPaddingReduced }) =>
+    isPaddingReduced ? 'margin-top: -20px !important;' : ''}
 `
+
 const BlockContentLiImg = styled.img.attrs({ alt: '' })`
   height: 30px;
 `
@@ -492,7 +491,7 @@ const CityPage = ({ location: { pathname, search } }) => {
                       ? `${city.average_houseselled}€ `
                       : 'A venir '}
                   </BlockContentLiValue>
-                  Achat (prix m² moyen)
+                  Achat {isMobile && <br />}(prix m² moyen)
                 </BlockContentLiDesc>
               </BlockContentLi>
 
@@ -504,13 +503,14 @@ const CityPage = ({ location: { pathname, search } }) => {
                       ? `${city.average_houserent.toFixed(2)}€ `
                       : 'A venir '}
                   </BlockContentLiValue>
-                  Location (prix m² moyen)
+                  Location {isMobile && <br />}(prix m² moyen)
                 </BlockContentLiDesc>
               </BlockContentLi>
 
               <BlockContentLi>
                 <BlockContentLiImg
                   src={city?.city_house_tension ? redEllipse : greenEllipse}
+                  style={{ height: 15 }}
                 />
                 <BlockContentLiDesc>
                   <b>
