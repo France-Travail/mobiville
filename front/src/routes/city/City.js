@@ -391,7 +391,7 @@ const CityPage = ({ location: { pathname, search } }) => {
   )
 
   return (
-    <MainLayout isMobile={isMobile}>
+    <MainLayout isMobile={isMobile} menu={{ visible: !isMobile }}>
       <Helmet>
         <title>Pourquoi vivre à {ucFirstOnly(city.nom_comm)} - Mobiville</title>
         <meta
@@ -491,7 +491,8 @@ const CityPage = ({ location: { pathname, search } }) => {
                       ? `${city.average_houseselled}€ `
                       : 'A venir '}
                   </BlockContentLiValue>
-                  Achat {isMobile && <br />}(prix m² moyen)
+                  Achat {isMobile && <br />}
+                  <span style={{ whiteSpace: 'nowrap' }}>(prix m² moyen)</span>
                 </BlockContentLiDesc>
               </BlockContentLi>
 
@@ -503,7 +504,8 @@ const CityPage = ({ location: { pathname, search } }) => {
                       ? `${city.average_houserent.toFixed(2)}€ `
                       : 'A venir '}
                   </BlockContentLiValue>
-                  Location {isMobile && <br />}(prix m² moyen)
+                  Location {isMobile && <br />}
+                  <span style={{ whiteSpace: 'nowrap' }}>(prix m² moyen)</span>
                 </BlockContentLiDesc>
               </BlockContentLi>
 
@@ -600,7 +602,9 @@ const CityPage = ({ location: { pathname, search } }) => {
             <BlockContainer isMobile={isMobile}>
               {similarCities.map((similarCity, index) => (
                 <BlockContentCity
-                  isCenter={index === 1 || isMobile}
+                  isCenter={
+                    (index === 1 && similarCities.length === 3) || isMobile
+                  }
                   isMobile={isMobile}
                   key={similarCity.insee_com}
                 >
