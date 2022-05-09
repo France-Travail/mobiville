@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import {orderBy} from 'lodash'
-import {Link} from 'react-router-dom'
+import { orderBy } from 'lodash'
+import { Link } from 'react-router-dom'
 import queryString from 'query-string'
-import {Helmet} from 'react-helmet'
+import { Helmet } from 'react-helmet'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import EuroIcon from '@mui/icons-material/Euro'
 import HomeWorkIcon from '@mui/icons-material/HomeWork'
@@ -12,24 +12,24 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
 import PeopleIcon from '@mui/icons-material/People'
 
-import {useHelps} from '../../common/contexts/helpsContext'
-import {useWindowSize} from '../../common/hooks/window-size'
+import { useHelps } from '../../common/contexts/helpsContext'
+import { useWindowSize } from '../../common/hooks/window-size'
 import MainLayout from '../../components/MainLayout'
-import {COLOR_PRIMARY, COLOR_TEXT_PRIMARY} from '../../constants/colors'
-import {isMobileView} from '../../constants/mobile'
-import {ucFirst} from '../../utils/utils'
+import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
+import { isMobileView } from '../../constants/mobile'
+import { ucFirst } from '../../utils/utils'
 import helpsPic from '../../assets/images/Generique_Aides.png'
 
 const Title = styled.h1`
   color: ${COLOR_TEXT_PRIMARY};
   font-size: 24px;
   font-weight: 700;
-  margin-bottom: ${({isMobile}) => (isMobile ? '4px' : '8px')};
+  margin-bottom: ${({ isMobile }) => (isMobile ? '4px' : '8px')};
 `
 
 const SubTitle = styled.p`
   color: ${COLOR_TEXT_PRIMARY};
-  font-size: ${({isMobile}) => (isMobile ? '16px' : '18px')};
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '18px')};
   font-weight: 700;
   margin-bottom: 16px;
   margin-top: 0;
@@ -80,7 +80,7 @@ const Container = styled.div`
 `
 
 const TagsSelectionPanel = styled.div`
-  width: ${({isMobile}) => (isMobile ? '100%' : '424px')};
+  width: ${({ isMobile }) => (isMobile ? '100%' : '424px')};
   background: #ffffff;
   border-radius: 8px;
   padding: 16px;
@@ -90,17 +90,17 @@ const CategoryTagsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  margin-bottom: ${({isMobile}) => (isMobile ? '16px' : '8px')};
+  margin-bottom: ${({ isMobile }) => (isMobile ? '16px' : '8px')};
 `
 
 const HelpsPanel = styled.div`
   flex: 1;
-  padding: ${({isMobile}) => (isMobile ? '16px' : '0 16px 32px 16px')};
+  padding: ${({ isMobile }) => (isMobile ? '16px' : '0 16px 32px 16px')};
 `
 
 const CategoryTag = styled(Link)`
-  background: ${({selected}) => (selected ? COLOR_PRIMARY : 'white')};
-  color: ${({selected}) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
+  background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
+  color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
   border-radius: 8px;
   max-width: 118px;
   width: 100%;
@@ -113,17 +113,17 @@ const CategoryTag = styled(Link)`
   font-size: 14px;
   border: 2px solid ${COLOR_PRIMARY};
   @media (hover) {
-      &:hover {
-        background: ${({selected}) => (selected ? 'white' : COLOR_PRIMARY)};
-        color: ${({selected}) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
-        opacity: 0.9;
-      }
+    &:hover {
+      background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
+      color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
+      opacity: 0.9;
+    }
   }
 `
 
 const SituationTag = styled(Link)`
-  background: ${({selected}) => (selected ? COLOR_PRIMARY : 'white')};
-  color: ${({selected}) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
+  background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
+  color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
   border-radius: 44px;
   padding: 8px;
   margin-right: 8px;
@@ -134,11 +134,11 @@ const SituationTag = styled(Link)`
   font-size: 14px;
   border: 2px solid ${COLOR_PRIMARY};
   @media (hover) {
-      &:hover {
-        background: ${({selected}) => (selected ? 'white' : COLOR_PRIMARY)};
-        color: ${({selected}) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
-        opacity: 0.9;
-      }
+    &:hover {
+      background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
+      color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
+      opacity: 0.9;
+    }
   }
 `
 
@@ -147,7 +147,7 @@ const TitleHelps = styled.h3`
   margin-top: 0;
   margin-bottom: 16px;
   font-weight: 700;
-  font-size: ${({isMobile}) => (isMobile ? '16px' : '24px')};
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '24px')};
 `
 
 const HelpItem = styled(Link)`
@@ -182,7 +182,7 @@ const HelpItemTextContainer = styled.div`
 const HelpItemTextTitle = styled.h4`
   margin-top: 0;
   margin-bottom: 8px;
-  font-size: ${({isMobile}) => (isMobile ? '16px' : '18px')};
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '18px')};
   color: ${COLOR_TEXT_PRIMARY};
 `
 
@@ -221,231 +221,237 @@ const ViewMore = styled.div`
 `
 
 const CATEGORIES = [
-    {
-        key: 'emploi',
-        icon: '/icons/emploi.svg',
-        text: 'Je recherche un emploi',
-    },
-    {
-        key: 'logement',
-        icon: '/icons/logement.svg',
-        text: 'Je recherche un logement',
-    },
-    {
-        key: 'déménage',
-        icon: '/icons/demenagement.svg',
-        text: 'Je déménage prochainement',
-    },
+  {
+    key: 'emploi',
+    icon: '/icons/emploi.svg',
+    text: 'Je recherche un emploi',
+  },
+  {
+    key: 'logement',
+    icon: '/icons/logement.svg',
+    text: 'Je recherche un logement',
+  },
+  {
+    key: 'déménage',
+    icon: '/icons/demenagement.svg',
+    text: 'Je déménage prochainement',
+  },
 ]
 
 const SITUATIONS = [
-    {
-        key: 'emploi',
-        text: "Demandeur d'emploi",
-    },
-    {
-        key: 'salarie',
-        text: 'Salarié',
-    },
-    {
-        key: '- 26 ans',
-        text: '- 26 ans',
-    },
-    {
-        key: '+ 26 ans',
-        text: '+ 26 ans',
-    },
+  {
+    key: "demandeur d'emploi",
+    text: "Demandeur d'emploi",
+  },
+  {
+    key: 'salarié',
+    text: 'Salarié',
+  },
+  {
+    key: 'moins de 26 ans',
+    text: '- 26 ans',
+  },
+  {
+    key: 'plus de 26 ans',
+    text: '+ 26 ans',
+  },
 ]
 
-const HelpsPage = ({location: {search}}) => {
-    const {previews, onLoadPreviews} = useHelps()
-    const size = useWindowSize()
+const HelpsPage = ({ location: { search } }) => {
+  const { previews, onLoadPreviews } = useHelps()
+  const size = useWindowSize()
 
-    useEffect(() => {
-        onLoadPreviews()
-    }, [])
+  useEffect(() => {
+    onLoadPreviews()
+  }, [])
 
-    const parsedQueryString = queryString.parse(search)
-    const parsedSituations = parsedQueryString.situation
-        ? typeof parsedQueryString.situation === 'string'
-            ? [parsedQueryString.situation]
-            : parsedQueryString.situation
-        : []
+  const parsedQueryString = queryString.parse(search)
+  const parsedSituations = parsedQueryString.situation
+    ? typeof parsedQueryString.situation === 'string'
+      ? [parsedQueryString.situation]
+      : parsedQueryString.situation
+    : []
 
-    const project =
-        CATEGORIES.find(({key}) => parsedQueryString.project === key) || null
-    const situations = SITUATIONS.filter(({key}) =>
-        parsedSituations.includes(key)
-    )
+  const project =
+    CATEGORIES.find(({ key }) => parsedQueryString.project === key) || null
+  const situations = SITUATIONS.filter(({ key }) =>
+    parsedSituations.includes(key)
+  )
 
-    let list = previews.filter((preview) => {
-        if (situations.length) {
-            if (
-                !situations.every(({text}) =>
-                    preview.who.toLowerCase().includes(text.toLowerCase())
-                )
-            ) {
-                return false
-            }
-        }
-
-        if (project) {
-            if (
-                !preview.situation.toLowerCase().includes(project.key.toLowerCase())
-            ) {
-                return false
-            }
-        }
-
-        return true
-    })
-
-    if (!situations.length && !project) {
-        list = orderBy(previews, ['count_vue'], ['desc']).slice(0, 4)
+  let list = previews.filter((preview) => {
+    if (situations.length) {
+      if (
+        !situations.every(({ key }) =>
+          preview.who.toLowerCase().includes(key.toLowerCase())
+        )
+      ) {
+        return false
+      }
     }
 
-    const isMobile = isMobileView(size)
+    if (project) {
+      if (
+        !preview.situation.toLowerCase().includes(project.key.toLowerCase())
+      ) {
+        return false
+      }
+    }
 
-    return (
-        <MainLayout topMobileMenu>
-            <Helmet>
-                <title>Liste des aides à la mobilité - Mobiville</title>
-                <meta
-                    name="description"
-                    content="Trouvez facilement les aides dont vous pouvez bénéficier pour votre projet de mobilité en France"
-                />
-            </Helmet>
+    return true
+  })
 
-            {!isMobile && (
-                <Header>
-                    <div>
-                        <HeaderTitle>
-                            Vous avez besoin d{"'"}
-                            aide pour votre projet de mobilité ?
-                        </HeaderTitle>
-                        <HeaderSubtitle>Découvrez les solutions pour accélérer votre projet</HeaderSubtitle>
-                    </div>
-                    <HeaderImg src={helpsPic} alt=""/>
-                </Header>
-            )}
-            <Container isMobile={isMobile}>
-                <TagsSelectionPanel isMobile={isMobile}>
-                    <Title isMobile={isMobile}>Découvrez les aides pour vous</Title>
-                    <SubTitle isMobile={isMobile}>Quel est votre projet ?</SubTitle>
-                    <CategoryTagsContainer isMobile={isMobile}>
-                        {CATEGORIES.map((c) => {
-                            const selected = project && c.key === project.key
-                            return (
-                                <CategoryTag isMobile={isMobile}
-                                             key={c.text}
-                                             selected={project && c.key === project.key}
-                                             to={`/aides?${queryString.stringify({
-                                                 project: selected ? '' : c.key,
-                                                 situation: situations.map(({key}) => key),
-                                             })}`}
-                                >
-                                    <img src={c.icon} alt={c.text}/>
-                                    <div>{c.text}</div>
-                                </CategoryTag>
-                            )
-                        })}
-                    </CategoryTagsContainer>
-                    <SubTitle>Ma situation</SubTitle>
-                    {SITUATIONS.map((c) => {
-                        const selected = situations.some(({key}) => key === c.key)
-                        const situationsForLink = selected
-                            ? situations.filter(({key}) => key !== c.key)
-                            : situations.concat({key: c.key})
-                        return (
-                            <SituationTag isMobile={isMobile}
-                                          key={c.text}
-                                          selected={selected}
-                                          to={`/aides?${queryString.stringify({
-                                              project: project?.key,
-                                              situation: situationsForLink.map(({key}) => key),
-                                          })}`}
-                            >
-                                {c.text}
-                            </SituationTag>
-                        )
-                    })}
-                </TagsSelectionPanel>
-                <HelpsPanel isMobile={isMobile}>
-                    <TitleHelps isMobile={isMobile}>
-                        {project || situations.length
-                            ? 'Mes aides disponibles'
-                            : 'Les aides les plus consultées'}
-                    </TitleHelps>
-                    {list.map((item) => {
-                        // kinda clunky, using labels to determine icon.
-                        const helpIcon = item.type.includes('admin') ? (
-                            <ReceiptLongIcon/>
-                        ) : item.type.includes('logement') ? (
-                            <HomeWorkIcon/>
-                        ) : item.type.includes('financière') ? (
-                            <EuroIcon/>
-                        ) : item.type.includes('transport') ? (
-                            <DirectionsCarIcon/>
-                        ) : (
-                            <PeopleIcon/>
-                        )
+  if (!situations.length && !project) {
+    list = orderBy(previews, ['count_vue'], ['desc']).slice(0, 4)
+  }
 
-                        return (
-                            <HelpItem
-                                key={item.id}
-                                to={`/aides/${item.slug}`}
-                                ismobile={isMobile ? 'true' : 'false'}
-                            >
-                                <HelpItemImgContainer>
-                                    <img
-                                        src={`/help-logos/${item.logo}`}
-                                        alt=""
-                                        style={{width: '100%', height: 'auto'}}
-                                    />
-                                </HelpItemImgContainer>
-                                <HelpItemTextContainer>
-                                    <HelpItemType>
-                                        {helpIcon}
-                                        <HelpItemText>{item.type}</HelpItemText>
-                                    </HelpItemType>
-                                    <div>
-                                        <HelpItemTextTitle isMobile={isMobile}>{item.title}</HelpItemTextTitle>
-                                        <div>{item.goal}</div>
-                                    </div>
-                                    <HelpItemTags>
-                                        <HelpItemTagsTitle>Public concerné</HelpItemTagsTitle>
-                                        <br/>
-                                        <span
-                                            dangerouslySetInnerHTML={{
-                                                __html: item.who
-                                                    .split('^')
-                                                    .map((t) => ucFirst(t))
-                                                    .join(' · '),
-                                            }}
-                                        ></span>
-                                    </HelpItemTags>
-                                    <ViewMore>
-                                        Découvrir l'aide <ArrowForwardIcon fontSize="small"/>
-                                    </ViewMore>
-                                </HelpItemTextContainer>
-                            </HelpItem>
-                        )
-                    })}
-                </HelpsPanel>
-            </Container>
-        </MainLayout>
-    )
+  const isMobile = isMobileView(size)
+
+  return (
+    <MainLayout topMobileMenu>
+      <Helmet>
+        <title>Liste des aides à la mobilité - Mobiville</title>
+        <meta
+          name="description"
+          content="Trouvez facilement les aides dont vous pouvez bénéficier pour votre projet de mobilité en France"
+        />
+      </Helmet>
+
+      {!isMobile && (
+        <Header>
+          <div>
+            <HeaderTitle>
+              Vous avez besoin d{"'"}
+              aide pour votre projet de mobilité ?
+            </HeaderTitle>
+            <HeaderSubtitle>
+              Découvrez les solutions pour accélérer votre projet
+            </HeaderSubtitle>
+          </div>
+          <HeaderImg src={helpsPic} alt="" />
+        </Header>
+      )}
+      <Container isMobile={isMobile}>
+        <TagsSelectionPanel isMobile={isMobile}>
+          <Title isMobile={isMobile}>Découvrez les aides pour vous</Title>
+          <SubTitle isMobile={isMobile}>Quel est votre projet ?</SubTitle>
+          <CategoryTagsContainer isMobile={isMobile}>
+            {CATEGORIES.map((c) => {
+              const selected = project && c.key === project.key
+              return (
+                <CategoryTag
+                  isMobile={isMobile}
+                  key={c.text}
+                  selected={project && c.key === project.key}
+                  to={`/aides?${queryString.stringify({
+                    project: selected ? '' : c.key,
+                    situation: situations.map(({ key }) => key),
+                  })}`}
+                >
+                  <img src={c.icon} alt={c.text} />
+                  <div>{c.text}</div>
+                </CategoryTag>
+              )
+            })}
+          </CategoryTagsContainer>
+          <SubTitle>Ma situation</SubTitle>
+          {SITUATIONS.map((c) => {
+            const selected = situations.some(({ key }) => key === c.key)
+            const situationsForLink = selected
+              ? situations.filter(({ key }) => key !== c.key)
+              : situations.concat({ key: c.key })
+            return (
+              <SituationTag
+                isMobile={isMobile}
+                key={c.text}
+                selected={selected}
+                to={`/aides?${queryString.stringify({
+                  project: project?.key,
+                  situation: situationsForLink.map(({ key }) => key),
+                })}`}
+              >
+                {c.text}
+              </SituationTag>
+            )
+          })}
+        </TagsSelectionPanel>
+        <HelpsPanel isMobile={isMobile}>
+          <TitleHelps isMobile={isMobile}>
+            {project || situations.length
+              ? 'Mes aides disponibles'
+              : 'Les aides les plus consultées'}
+          </TitleHelps>
+          {list.map((item) => {
+            // kinda clunky, using labels to determine icon.
+            const helpIcon = item.type.includes('admin') ? (
+              <ReceiptLongIcon />
+            ) : item.type.includes('logement') ? (
+              <HomeWorkIcon />
+            ) : item.type.includes('financière') ? (
+              <EuroIcon />
+            ) : item.type.includes('transport') ? (
+              <DirectionsCarIcon />
+            ) : (
+              <PeopleIcon />
+            )
+
+            return (
+              <HelpItem
+                key={item.id}
+                to={`/aides/${item.slug}`}
+                ismobile={isMobile ? 'true' : 'false'}
+              >
+                <HelpItemImgContainer>
+                  <img
+                    src={`/help-logos/${item.logo}`}
+                    alt=""
+                    style={{ width: '100%', height: 'auto' }}
+                  />
+                </HelpItemImgContainer>
+                <HelpItemTextContainer>
+                  <HelpItemType>
+                    {helpIcon}
+                    <HelpItemText>{item.type}</HelpItemText>
+                  </HelpItemType>
+                  <div>
+                    <HelpItemTextTitle isMobile={isMobile}>
+                      {item.title}
+                    </HelpItemTextTitle>
+                    <div>{item.goal}</div>
+                  </div>
+                  <HelpItemTags>
+                    <HelpItemTagsTitle>Public concerné</HelpItemTagsTitle>
+                    <br />
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: item.who
+                          .split('^')
+                          .map((t) => ucFirst(t))
+                          .join(' · '),
+                      }}
+                    ></span>
+                  </HelpItemTags>
+                  <ViewMore>
+                    Découvrir l'aide <ArrowForwardIcon fontSize="small" />
+                  </ViewMore>
+                </HelpItemTextContainer>
+              </HelpItem>
+            )
+          })}
+        </HelpsPanel>
+      </Container>
+    </MainLayout>
+  )
 }
 
 HelpsPage.propTypes = {
-    location: PropTypes.shape({
-        search: PropTypes.string.isRequired,
-    }),
+  location: PropTypes.shape({
+    search: PropTypes.string.isRequired,
+  }),
 }
 
 HelpsPage.defaultProps = {
-    location: {
-        search: '',
-    },
+  location: {
+    search: '',
+  },
 }
 export default HelpsPage
