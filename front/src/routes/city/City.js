@@ -103,8 +103,13 @@ const BlockContentCity = styled.div`
   height: 153px;
   margin: ${({ isCenter }) => (isCenter ? 'auto' : 0)};
   ${({ isMobile }) => (isMobile ? 'margin-bottom: 8px;' : '')}
+  transition: border 0.2s cubic-bezier(0.4, 0, 1, 1);
 
-  li, li img {
+  :hover {
+    border: 2px solid #191970;
+  }
+  li,
+  li img {
     margin: auto;
     text-align: center;
     display: block;
