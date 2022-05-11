@@ -251,6 +251,7 @@ const CityHousing = ({ backLink, city, nbSocialHousing }) => {
         />
       </Helmet>
       <SubHeader
+        notFixed={!isMobile}
         backLink={backLink}
         isMobile={isMobile}
         title={`Information sur le logement à ${ucFirstOnly(city.nom_comm)}`}
