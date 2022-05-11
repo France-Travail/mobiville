@@ -41,7 +41,7 @@ const BASE_ACCORDION_DATA = [
       'La région qui m’intéresse n’est pas dans la liste proposée, c’est normal ?',
     answer: (
       <>
-        Le service valorise des villes où les difficultées de recrutement sont
+        Le service valorise des villes où les difficultés de recrutement sont
         fortes. Si une région ne comporte aucune ville en difficulté de
         recrutement, elle n’apparaîtra pas.
       </>

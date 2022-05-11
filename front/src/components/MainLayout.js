@@ -70,7 +70,6 @@ const MainLayout = ({ children, menu, topMobileMenu, style = {} }) => {
         tabIndex="-1"
         style={{
           paddingBottom: isMobileView(size) ? 30 : 60,
-          paddingTop: isMobileView(size) ? 0 : 102,
           ...style,
         }}
       >

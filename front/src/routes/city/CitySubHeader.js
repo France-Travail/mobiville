@@ -1,19 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import { COLOR_GRAY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
+import {COLOR_GRAY, COLOR_TEXT_PRIMARY} from '../../constants/colors'
 
-const HEIGHT = 112
+const HEIGHT = 60
 const PADDING = 16
 
 const HeaderContainer = styled.div`
-  position: ${({ isMobile }) => (isMobile ? 'static' : 'fixed')};
   left: 0;
   right: 0;
   background-color: white;
-  top: 76;
   width: 100%;
   display: flex;
   align-items: center;
@@ -23,8 +21,8 @@ const HeaderContainer = styled.div`
 
 const HeaderSubContainer = styled.div`
   display: flex;
-  flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
-  align-items: ${({ isMobile }) => (isMobile ? 'flex-start' : 'center')};
+  flex-direction: ${({isMobile}) => (isMobile ? 'column' : 'row')};
+  align-items: ${({isMobile}) => (isMobile ? 'flex-start' : 'center')};
   justify-content: flex-start;
   font-weight: bold;
   font-size: 18px;
@@ -32,11 +30,11 @@ const HeaderSubContainer = styled.div`
   width: 100%;
   margin: auto;
   padding: ${PADDING}px;
-  padding-bottom: ${PADDING -10 }px;
+  padding-bottom: ${PADDING - 10}px;
 `
 
 const HeaderArrowLink = styled(Link)`
-  margin-top: 50px;
+  margin-top: 5px;
   margin-left: ${PADDING}px;
   display: flex;
   align-items: center;
@@ -64,33 +62,30 @@ const H1 = styled.h1`
   padding: 4px 12px 4px 4px;
 `
 
-const CitySubHeader = ({ backLink, desktopTitleWidth, isMobile}) => (
-  <>
-    <HeaderContainer isMobile={isMobile} style={{ height: HEIGHT }}>
-      <HeaderSubContainer
-        isMobile={isMobile}
-        style={{
-          maxWidth: desktopTitleWidth
-            ? `calc(${desktopTitleWidth}px + ${PADDING}px * 2)`
-            : null,
-        }}
-      >
-        <HeaderArrowLink to={backLink} title="Retour">
-          <ArrowBackIcon color="primary" fontSize="large" />
-           <H1>Retour aux résultats</H1>
-        </HeaderArrowLink>
-      </HeaderSubContainer>
-    </HeaderContainer>
-    {!isMobile && <div style={{ height: HEIGHT}} />}
-  </>
+const CitySubHeader = ({backLink, desktopTitleWidth, isMobile}) => (
+    <>
+        <HeaderContainer isMobile={isMobile} style={{height: HEIGHT}}>
+            <HeaderSubContainer
+                isMobile={isMobile}
+                style={{
+                    maxWidth: desktopTitleWidth
+                        ? `calc(${desktopTitleWidth}px + ${PADDING}px * 2)`
+                        : null,
+                }}
+            >
+                <HeaderArrowLink to={backLink} title="Retour">
+                    <ArrowBackIcon color="primary" fontSize="large"/>
+                    <H1>Retour aux résultats</H1>
+                </HeaderArrowLink>
+            </HeaderSubContainer>
+        </HeaderContainer>
+    </>
 )
 
 CitySubHeader.props = {
-  backLink: PropTypes.string,
-  desktopTitleWidth: PropTypes.number,
-  isMobile: PropTypes.bool,
-  node: PropTypes.node,
-  title: PropTypes.string,
+    backLink: PropTypes.string,
+    desktopTitleWidth: PropTypes.number,
+    isMobile: PropTypes.bool,
 }
 
 export default CitySubHeader

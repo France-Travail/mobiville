@@ -15,10 +15,7 @@ import PeopleIcon from '@mui/icons-material/People'
 import { useHelps } from '../../common/contexts/helpsContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import MainLayout from '../../components/MainLayout'
-import {
-  COLOR_PRIMARY,
-  COLOR_TEXT_PRIMARY
-} from '../../constants/colors'
+import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { ucFirst } from '../../utils/utils'
 import helpsPic from '../../assets/images/Generique_Aides.png'
@@ -85,10 +82,6 @@ const Container = styled.div`
 const TagsSelectionPanel = styled.div`
   width: ${({ isMobile }) => (isMobile ? '100%' : '424px')};
   background: #ffffff;
-  box-shadow: ${({ isMobile }) =>
-    !isMobile
-      ? `0px 0px 2px rgba(0, 0, 0, 0.14), 0px 2px 2px rgba(0, 0, 0, 0.12), 0px 1px 3px rgba(0, 0, 0, 0.2)`
-      : ''};
   border-radius: 8px;
   padding: 16px;
 `
@@ -120,11 +113,11 @@ const CategoryTag = styled(Link)`
   font-size: 14px;
   border: 2px solid ${COLOR_PRIMARY};
   @media (hover) {
-      &:hover {
-        background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
-        color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
-        opacity: 0.9;
-      }
+    &:hover {
+      background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
+      color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
+      opacity: 0.9;
+    }
   }
 `
 
@@ -141,11 +134,11 @@ const SituationTag = styled(Link)`
   font-size: 14px;
   border: 2px solid ${COLOR_PRIMARY};
   @media (hover) {
-      &:hover {
-        background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
-        color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
-        opacity: 0.9;
-      }
+    &:hover {
+      background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
+      color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
+      opacity: 0.9;
+    }
   }
 `
 
@@ -247,20 +240,20 @@ const CATEGORIES = [
 
 const SITUATIONS = [
   {
-    key: 'emploi',
+    key: "demandeur d'emploi",
     text: "Demandeur d'emploi",
   },
   {
-    key: 'salarie',
+    key: 'salarié',
     text: 'Salarié',
   },
   {
-    key: 'Moins de 26 ans',
-    text: 'Moins de 26 ans',
+    key: 'moins de 26 ans',
+    text: '- 26 ans',
   },
   {
-    key: 'Plus de 26 ans',
-    text: 'Plus de 26 ans',
+    key: 'plus de 26 ans',
+    text: '+ 26 ans',
   },
 ]
 
@@ -288,8 +281,8 @@ const HelpsPage = ({ location: { search } }) => {
   let list = previews.filter((preview) => {
     if (situations.length) {
       if (
-        !situations.every(({ text }) =>
-          preview.who.toLowerCase().includes(text.toLowerCase())
+        !situations.every(({ key }) =>
+          preview.who.toLowerCase().includes(key.toLowerCase())
         )
       ) {
         return false
@@ -330,7 +323,9 @@ const HelpsPage = ({ location: { search } }) => {
               Vous avez besoin d{"'"}
               aide pour votre projet de mobilité ?
             </HeaderTitle>
-            <HeaderSubtitle>Découvrez les solutions pour accélérer votre projet</HeaderSubtitle>
+            <HeaderSubtitle>
+              Découvrez les solutions pour accélérer votre projet
+            </HeaderSubtitle>
           </div>
           <HeaderImg src={helpsPic} alt="" />
         </Header>
@@ -343,7 +338,8 @@ const HelpsPage = ({ location: { search } }) => {
             {CATEGORIES.map((c) => {
               const selected = project && c.key === project.key
               return (
-                <CategoryTag isMobile={isMobile}
+                <CategoryTag
+                  isMobile={isMobile}
                   key={c.text}
                   selected={project && c.key === project.key}
                   to={`/aides?${queryString.stringify({
@@ -364,7 +360,8 @@ const HelpsPage = ({ location: { search } }) => {
               ? situations.filter(({ key }) => key !== c.key)
               : situations.concat({ key: c.key })
             return (
-              <SituationTag isMobile={isMobile}
+              <SituationTag
+                isMobile={isMobile}
                 key={c.text}
                 selected={selected}
                 to={`/aides?${queryString.stringify({
@@ -380,8 +377,8 @@ const HelpsPage = ({ location: { search } }) => {
         <HelpsPanel isMobile={isMobile}>
           <TitleHelps isMobile={isMobile}>
             {project || situations.length
-                ? 'Mes aides disponibles'
-                : 'Les aides les plus consultées'}
+              ? 'Mes aides disponibles'
+              : 'Les aides les plus consultées'}
           </TitleHelps>
           {list.map((item) => {
             // kinda clunky, using labels to determine icon.
@@ -416,12 +413,14 @@ const HelpsPage = ({ location: { search } }) => {
                     <HelpItemText>{item.type}</HelpItemText>
                   </HelpItemType>
                   <div>
-                    <HelpItemTextTitle isMobile={isMobile}>{item.title}</HelpItemTextTitle>
+                    <HelpItemTextTitle isMobile={isMobile}>
+                      {item.title}
+                    </HelpItemTextTitle>
                     <div>{item.goal}</div>
                   </div>
                   <HelpItemTags>
                     <HelpItemTagsTitle>Public concerné</HelpItemTagsTitle>
-                    <br/>
+                    <br />
                     <span
                       dangerouslySetInnerHTML={{
                         __html: item.who
