@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { throttle } from 'lodash'
 
-import { RomeSearchInput, RomeSearchOptions } from '../../components/RomeSearch'
+import { SearchInput, SearchOptions } from '../../components/SearchComponents'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
@@ -14,6 +14,8 @@ const Wrapper = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  max-width: 540px;
+  justify-self: end;
 `
 
 const Title = styled.h1`
@@ -22,6 +24,7 @@ const Title = styled.h1`
     font-weight: 900;
     margin: ${(isMobile) => (isMobile ? '0px' : '0 0 32px 0')};
     color: ${COLOR_TEXT_PRIMARY};
+    display: ${(props) => props.display || 'initial'};
   }
 `
 
@@ -30,6 +33,7 @@ const Subtitle = styled.p`
   font-weight: 700;
   margin: 0px;
   color: ${COLOR_TEXT_PRIMARY};
+  display: ${(props) => props.display || 'initial'};
 `
 
 const AllJobListLink = styled(Link)`
@@ -40,6 +44,7 @@ const AllJobListLink = styled(Link)`
 
 const SearchRome = ({ onNext, isSearchFocused }) => {
   const size = useWindowSize()
+  const isMobile = isMobileView(size)
   const {
     initializeJobsAutocomplete,
     jobsMatchingCriterions,
@@ -62,35 +67,35 @@ const SearchRome = ({ onNext, isSearchFocused }) => {
     throttledOnSearchJobLabels(searchedLabel)
   }, [searchedLabel])
 
-  const isMobile = isMobileView(size)
-
   return (
     <Wrapper>
-      {!searchFocused && (
-        <Title isMobile={isMobile}>1.Quel métier recherchez-vous ?</Title>
-      )}
-      {!searchFocused && (
-        <Subtitle>
-          Mobiville est disponible uniquement pour les métiers <br />
-          dans lesquels le retour à l'emploi est le plus favorable.
-        </Subtitle>
-      )}
+      <Title
+        display={searchFocused && isMobile ? 'none' : undefined}
+        isMobile={isMobile}
+      >
+        1.Quel métier recherchez-vous ?
+      </Title>
+      <Subtitle display={searchFocused && isMobile ? 'none' : undefined}>
+        Mobiville est disponible uniquement pour les métiers <br />
+        dans lesquels le retour à l'emploi est le plus favorable.
+      </Subtitle>
+
       {!isMobile && (
         <AllJobListLink to="/rome-list" title="Accéder à la liste des métiers">
           Voir la liste des métiers disponibles sur Mobiville
         </AllJobListLink>
       )}
       <br />
-      <RomeSearchInput
-        sx={{ backgroundColor: 'white' }}
+      <SearchInput
+        label="Rechercher un type de métier"
         searchKeyword={(k) => setSearchedLabel(k)}
         isAutocompleteFocused={(isFocused) => {
           setSearchFocused(isFocused)
           isSearchFocused(isFocused)
         }}
       />
-      <RomeSearchOptions
-        romeListe={jobsMatchingCriterions}
+      <SearchOptions
+        optionsList={jobsMatchingCriterions}
         onSelect={(rome) => onNext({ rome: rome.key })}
       />
     </Wrapper>
