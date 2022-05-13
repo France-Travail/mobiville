@@ -24,7 +24,7 @@ import yellowMarker from '../../assets/images/marker-yellow.png'
 import redMarker from '../../assets/images/marker-red.png'
 import {formatNumber} from '../../utils/utils'
 
-import Pagination from '@mui/material/Pagination';
+import Pagination from '@mui/material/Pagination'
 
 const NotFoundContainer = styled.div`
   display: flex;
@@ -139,8 +139,6 @@ const Cities = () => {
     const location = useLocation()
     const history = useHistory()
     const [params, setParams] = useState(queryString.parse(location.search))
-    const [windowScroll, setWindowScroll] = useState(0) // mobile version
-    const [citiesListScroll, setCitiesListScroll] = useState(0) // desktop version
     const [showMobilePanel, setShowMobileCriterionsSelection] = useState(false)
     const [hoveredCityId, setHoveredCityId] = useState(null)
     const [selectedCityId, setSelectedCityId] = useState(null)
@@ -203,8 +201,8 @@ const Cities = () => {
     const isUsingSeaFilter = params.codeEnvironment === 'side-sea'
     const isUsingMountainFilter = params.codeEnvironment === 'mountain'
 
-    const itemsPerPage = 10;
-    const [page, setPage] = React.useState(1);
+    const itemsPerPage = 10
+    const [page, setPage] = React.useState(1)
 
     useEffect(() => {
         onSearch(
@@ -212,15 +210,15 @@ const Cities = () => {
             page * 10,
             cities
         )
-    }, [windowScroll, citiesListScroll, useAllCities, page])
+    }, [useAllCities, page])
 
     const [noOfPages] = React.useState(
         Math.ceil(totalCities / itemsPerPage)
-    );
+    )
 
     const handlePageChange = (event, value) => {
-        setPage(value);
-    };
+        setPage(value)
+    }
 
     if (showMobilePanel) {
         return (
