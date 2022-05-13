@@ -40,7 +40,7 @@ export function CitiesProvider(props) {
   const [autocompletedCities, setAutocompletedCities] = useState([])
   const [isLoadingAutocomplete, setIsLoadingAutocomplete] = useState(false)
 
-  const onSearch = (params, index = 0, oldCities = []) => {
+  const onSearch = (params, index = 0, oldCities = [], concateResults = true) => {
     if (isLoading && isEqual(lastSearchParams, params)) return
 
     _setIsLoading(true)
@@ -57,11 +57,12 @@ export function CitiesProvider(props) {
       .then((c) => {
         if (!isEqual(params, lastSearchParams)) return
 
-        if (index === 0) {
+        if (index === 0 || !concateResults) {
           _setCities(c.list)
         } else {
           _setCities(oldCities.concat(c.list))
         }
+          _setCities(c.list)
         _setTotalCities(c.total)
       })
       .then(() => {
