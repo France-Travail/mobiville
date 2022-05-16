@@ -397,7 +397,7 @@ const HelpsPage = ({ location: { search } }) => {
             return (
               <HelpItem
                 key={item.id}
-                to={`/aides/${item.slug}`}
+                to={`/aides/${item.slug}`+window.location.search}
                 ismobile={isMobile ? 'true' : 'false'}
               >
                 <HelpItemImgContainer>

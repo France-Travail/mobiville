@@ -205,7 +205,7 @@ const HelpDetailsPage = () => {
 
       {!isMobile && (
         <div>
-        <HeaderLink to="/aides" title="Fermer" isMobile={isMobile}>
+        <HeaderLink to={`/aides`+window.location.search} title="Fermer" isMobile={isMobile}>
           <ArrowBackIcon color="primary" fontSize="large" />
         </HeaderLink>
         <TitleContainer isMobile={isMobile}>
