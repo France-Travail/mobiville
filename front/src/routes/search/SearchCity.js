@@ -59,12 +59,13 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
   const autocompleteList = [{ label: ALL_REGIONS_LABEL, type: REGION_TYPE }]
     .concat(regionsList.map((region) => ({ ...region, type: REGION_TYPE })))
     .concat(
-      autocompletedCities.map((city) => ({
-        id: city.insee_com,
-        label: `${ucFirstOnly(city.nom_comm)} (${city.postal_code})`,
-        cityName: city.nom_comm,
-        type: CITY_TYPE,
-      }))
+      !!searchedValue &&
+        autocompletedCities.map((city) => ({
+          id: city.insee_com,
+          label: `${ucFirstOnly(city.nom_comm)} (${city.postal_code})`,
+          cityName: city.nom_comm,
+          type: CITY_TYPE,
+        }))
     )
 
   return (
@@ -83,7 +84,7 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
 
       <br />
       <SearchInput
-        label="Rechercher une région ou une ville"
+        label="Saisir ou sélectionner une ville, région"
         searchKeyword={(k) => setSearchedValue(k)}
         isAutocompleteFocused={(isFocused) => {
           setSearchFocused(isFocused)
@@ -91,10 +92,12 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
         }}
       />
       <SearchOptions
+        isMobile={isMobile}
+        isSearchFocused={searchFocused}
         optionsList={autocompleteList}
         onSelect={(where) =>
           onNext(
-            where.id.length > 3
+            where.id?.length > 3
               ? { city: where.id, cityName: where.cityName }
               : { regions: where.id }
           )
