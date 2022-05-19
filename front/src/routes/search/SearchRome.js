@@ -50,7 +50,6 @@ const SearchRome = ({ onNext, isSearchFocused }) => {
     jobsMatchingCriterions,
     onSearchJobLabels,
   } = useCities()
-
   const [searchFocused, setSearchFocused] = useState(false)
   const [searchedLabel, setSearchedLabel] = useState('')
 
@@ -76,8 +75,8 @@ const SearchRome = ({ onNext, isSearchFocused }) => {
         1.Quel métier recherchez-vous ?
       </Title>
       <Subtitle display={searchFocused && isMobile ? 'none' : undefined}>
-        Mobiville est disponible uniquement pour les métiers <br />
-        dans lesquels le retour à l'emploi est le plus favorable.
+        Mobiville est disponible uniquement pour les métiers dans lesquels le
+        retour à l'emploi est le plus favorable.
       </Subtitle>
 
       {!isMobile && (
@@ -87,7 +86,7 @@ const SearchRome = ({ onNext, isSearchFocused }) => {
       )}
       <br />
       <SearchInput
-        label="Rechercher un type de métier"
+        label="Saisir ou sélectionner un métier dans la liste déroulante"
         searchKeyword={(k) => setSearchedLabel(k)}
         isAutocompleteFocused={(isFocused) => {
           setSearchFocused(isFocused)
@@ -95,8 +94,10 @@ const SearchRome = ({ onNext, isSearchFocused }) => {
         }}
       />
       <SearchOptions
+        isSearchFocused={searchFocused}
         optionsList={jobsMatchingCriterions}
         onSelect={(rome) => onNext({ rome: rome.key })}
+        isMobile={isMobile}
       />
     </Wrapper>
   )
