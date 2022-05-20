@@ -6,8 +6,10 @@ import { csvToArrayJson } from './csv'
 import { readFile, readFileSync, statSync, readdirSync } from 'fs'
 import parser from 'xml2json'
 import parse from 'csv-parse'
+import HttpsProxyAgent from "https-proxy-agent";
 
 let romeLabelFile = null
+const cheerio = require("cheerio");
 
 export function getAllCities() {
   return new Promise((resolve, reject) => {
@@ -97,10 +99,60 @@ export function loadWeatherFile(stationId) {
     .then((data) => data.data.split('\r\n'))
 }
 
+function customizeImageCity(strImage) {
+    if(strImage.includes("/undefined")) {
+        return null;
+    }
+    let urlImage = "https:"+strImage;
+    const myArray = urlImage.split("/");
+    let strFull = "";
+    for(let i = 0; i < 9; i++) {
+        strFull += myArray[i] + "/";
+    }
+    let strNew = "2000px-"+myArray[8];
+    return strFull + strNew;
+}
+
+const fetchHtml = async pageid => {
+    const pageUrl = `https://fr.wikipedia.org/w/index.php?action=render&curid=${pageid}`;
+    try {
+        console.log("fetchHTML : "+pageUrl)
+        const { data } = await axios .get(
+            pageUrl,
+            // proxy PE + bug d'axios voir: https://github.com/axios/axios/issues/2072#issuecomment-609650888
+            {
+                ...(config.PE_ENV && {proxy: false}),
+                ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')})
+            }
+        )
+        return data;
+    } catch (err) {
+        console.error("ERROR fetchHtml: An error occurred while trying to fetch the URL: "+pageUrl+" ERROR : "+err );
+    }
+};
+
+// obligé de faire un async / wait : ne fonctionne pas en get / then (why !?)
+export const getCrawledImageCity = async (pageid) => {
+    const html = await fetchHtml(pageid);
+    if(html) {
+        const $ = cheerio.load(html);
+        return customizeImageCity($("body").find(
+            "table.infobox.infobox_v2 tbody tr:nth-child(2) td > a > img"
+        ).attr("src"));
+    } else {
+        return null;
+    }
+}
+
 export const wikipediaDetails = (pageName) =>
   axios
     .get(
-      `https://fr.wikipedia.org/w/api.php?format=json&action=query&prop=extracts%7Cpageimages&piprop=original&exintro&explaintext&generator=search&gsrsearch=%22${pageName}%22%20+deepcat:%22Article%20avec%20mod%C3%A8le%20Infobox%20Commune%20de%20France%22&gsrlimit=1&redirects=1`
+      `https://fr.wikipedia.org/w/api.php?format=json&action=query&prop=extracts%7Cpageimages&piprop=original&exintro&explaintext&generator=search&gsrsearch=%22${pageName}%22%20+deepcat:%22Article%20avec%20mod%C3%A8le%20Infobox%20Commune%20de%20France%22&gsrlimit=1&redirects=1`,
+        // proxy PE + bug d'axios voir: https://github.com/axios/axios/issues/2072#issuecomment-609650888
+        {
+            ...(config.PE_ENV && {proxy: false}),
+            ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')})
+        }
     )
     .then((response) => {
       if (response.data && response.data.query && response.data.query.pages) {
@@ -109,6 +161,9 @@ export const wikipediaDetails = (pageName) =>
 
       return null
     })
+      .catch((err) => console.error('ERROR', err))
+
+
 
 export const getAllRegions = () => {
   let rawdata = readFileSync(
