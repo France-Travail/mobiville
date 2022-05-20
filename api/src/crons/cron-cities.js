@@ -3,8 +3,8 @@ import { CronJob } from 'cron'
 const citiesCron = async (models) => {
   console.log('START CRONS : CITIES')
 
-  // check day at midnight
-  const syncOneCity = new CronJob('0 0 * * * *', async function () {
+  // tous lundi à 0h (nuit de dimanche à lundi)
+  const syncOneCity = new CronJob('0 0 0 * * 1', async function () {
     await models.cities.checkAndStartSyncCity()
   })
 

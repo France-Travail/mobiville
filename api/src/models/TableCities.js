@@ -24,7 +24,7 @@ import {
   loadWeatherFile,
   wikipediaDetails,
   getTensionsCities,
-  getAverageHouseRent,
+  getAverageHouseRent, getCrawledImageCity,
 } from '../utils/api'
 import { distanceBetweenToCoordinates, sleep } from '../utils/utils'
 import { NO_DESCRIPTION_MSG } from '../constants/messages'
@@ -333,77 +333,61 @@ export default (sequelizeInstance, Model) => {
   Model.syncOneCity = async () => {
     Model.cityOnSync = true
 
-    const city = await Model.findOne({
-      where: {
-        [Op.or]: [
-          { distance_from_sea: null },
-          { average_temperature: null },
-          { description: null },
-          { average_houseselled: null },
-          { city_house_tension: null },
-          { average_houserent: null },
-        ],
-      },
+    const cities = await Model.findAll({
       order: [['population', 'DESC']],
       logging: false,
     })
 
-    if (city) {
-      const options = {}
-      let isHttpLoad = false
-      console.log(
-        `[START] Sync city ${city.dataValues.id} - ${city.dataValues.nom_comm}`
-      )
-      if (city.dataValues.distance_from_sea === null) {
-        options.distance_from_sea = Model.distanceFromSea(
-          city.dataValues.geo_point_2d_x,
-          city.dataValues.geo_point_2d_y
+    for(let i = 0 ; i < cities.length ; i++ ) {
+        let city = cities[i];
+        const options = {}
+        console.log(
+            `[START] Sync city ${city.dataValues.id} - ${city.dataValues.nom_comm}`
         )
-      }
+        if (city.dataValues.distance_from_sea === null) {
+          options.distance_from_sea = Model.distanceFromSea(
+              city.dataValues.geo_point_2d_x,
+              city.dataValues.geo_point_2d_y
+          )
+        }
 
-      if (city.dataValues.average_temperature === null) {
-        isHttpLoad = true
-        options.average_temperature = await Model.averageTemperature(
-          city.dataValues.geo_point_2d_x,
-          city.dataValues.geo_point_2d_y
-        )
-      }
+        if (city.dataValues.average_temperature === null) {
+          options.average_temperature = await Model.averageTemperature(
+              city.dataValues.geo_point_2d_x,
+              city.dataValues.geo_point_2d_y
+          )
+        }
 
-      if (city.dataValues.description === null) {
-        isHttpLoad = true
+        // mise à jour systématique
         const { photo, description } = await Model.getDescription(city.nom_comm)
         options.photo = photo
         options.description = description
-      }
 
-      if (city.dataValues.average_houseselled === null) {
-        options.average_houseselled = await Model.getAveragePricing(
-          city.insee_com
-        )
-      }
+        if (city.dataValues.average_houseselled === null) {
+          options.average_houseselled = await Model.getAveragePricing(
+              city.insee_com
+          )
+        }
 
-      if (city.dataValues.city_house_tension === null) {
-        options.city_house_tension = await Model.getCityHouseTension(
-          city.insee_com
-        )
-      }
+        if (city.dataValues.city_house_tension === null) {
+          options.city_house_tension = await Model.getCityHouseTension(
+              city.insee_com
+          )
+        }
 
-      if (city.dataValues.average_houserent === null) {
-        options.average_houserent = await Model.getAverageHouseRent(
-          city.insee_com
-        )
-      }
+        if (city.dataValues.average_houserent === null) {
+          options.average_houserent = await Model.getAverageHouseRent(
+              city.insee_com
+          )
+        }
 
-      await city.update(options)
-      console.log(`[DONE] Sync city ${city.id}`)
+        await city.update(options)
+        console.log(`[DONE] Sync city ${city.id}`)
 
-      if (isHttpLoad) {
+        // pour l'instant on conserve le sleep au cas où
         await sleep(700) // wait and restart command
-      }
-      Model.syncOneCity()
-    } else {
-      Model.cityOnSync = false
     }
+      Model.cityOnSync = false
   }
 
   Model.distanceFromSea = (lat, long) => {
@@ -501,7 +485,10 @@ export default (sequelizeInstance, Model) => {
   Model.getDescription = async (cityName) => {
     const cityDetails = await wikipediaDetails(cityName)
     let description = NO_DESCRIPTION_MSG
-    let photo = null
+    let photoPage = null;
+    if(cityDetails && cityDetails.pageid) {
+      photoPage = await getCrawledImageCity(cityDetails.pageid);
+    }
 
     if (cityDetails && cityDetails.extract) {
       description = (cityDetails.extract || '')
@@ -509,9 +496,12 @@ export default (sequelizeInstance, Model) => {
         .replace(/\[(.*?)\]/gim, '')
     }
 
-    if (cityDetails && cityDetails.original && cityDetails.original.source) {
-      photo = cityDetails.original.source
+    let photo = photoPage
+    if ( photo == null && cityDetails && cityDetails.original && cityDetails.original.source) {
+       photo = cityDetails.original.source
     }
+
+    console.log("Model.getDescription photo : "+photo)
 
     return {
       description,
