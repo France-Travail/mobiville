@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   nginx:
-    image: nginx:1.17.10
+    image: nginx:1.21.6
     restart: unless-stopped
     depends_on:
       - 'api'
