@@ -100,7 +100,7 @@ export function loadWeatherFile(stationId) {
 }
 
 function customizeImageCity(strImage) {
-    if(strImage.includes("/undefined")) {
+    if(strImage && strImage.includes("/undefined")) {
         return null;
     }
     let urlImage = "https:"+strImage;
