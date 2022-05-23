@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  ClickAwayListener,
 } from '@mui/material'
 import { isMobileView } from '../constants/mobile'
 import { useWindowSize } from '../common/hooks/window-size'
@@ -64,7 +65,7 @@ const SearchInput = (props) => {
       handleValueChange('')
     }
     setIsAutocompleteFocused(!isAutocompleteFocused)
-    props.isAutocompleteFocused(!isAutocompleteFocused) // pour masquer les titres
+    props.isAutocompleteFocused(!isAutocompleteFocused)
   }
 
   return (
@@ -79,6 +80,7 @@ const SearchInput = (props) => {
           inputProps: {
             ref: inputRef,
             onFocus: () => onFocusChange(true),
+            onClick: () => onFocusChange(true),
             onBlur: () => onFocusChange(false),
           },
           endAdornment: (
@@ -165,39 +167,59 @@ const DropdownOptions = (props) => {
     : '100px'
 
   useEffect(() => {
-    setIsOpen(Boolean(props.isSearchFocused))
+    if (props.isSearchFocused) {
+      setIsOpen(true)
+    }
   }, [props.isSearchFocused])
 
+  const handleClickAway = (evt) => {
+    // les inputs adornement (svg/path) semblent sortir du dom avant le if
+    const isAdornement = ['svg', 'path'].includes(evt.target.nodeName)
+    if (
+      (!document.querySelector('#SearchInputWrapper').contains(evt.target) &&
+        !isAdornement) ||
+      (isAdornement && !props.isSearchFocused)
+    ) {
+      setIsOpen(false)
+    }
+  }
+
   return (
-    <Popper
-      open={isOpen}
-      anchorEl={anchorEl}
-      placement={'bottom-start'}
-      sx={{ maxHeight: '300px', width: textFieldWidth }}
-    >
-      <Paper
-        sx={{ maxHeight: '300px', width: textFieldWidth, overflowY: 'scroll' }}
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <Popper
+        open={isOpen}
+        anchorEl={anchorEl}
+        placement={'bottom-start'}
+        sx={{ maxHeight: '300px', width: textFieldWidth }}
       >
-        <List>
-          {props.optionsList.length === 0 ? (
-            <p style={{ margin: 'unset', textAlign: 'center' }}>
-              Aucun Résultat
-            </p>
-          ) : (
-            props.optionsList.map((option, i) => (
-              <ListItem key={option.label}>
-                <ListItemButton
-                  onClick={() => props.onSelect(option)}
-                  // disableGutters
-                >
-                  <ListItemText primary={option.label} />
-                </ListItemButton>
-              </ListItem>
-            ))
-          )}
-        </List>
-      </Paper>
-    </Popper>
+        <Paper
+          sx={{
+            maxHeight: '300px',
+            width: textFieldWidth,
+            overflowY: 'scroll',
+          }}
+        >
+          <List>
+            {props.optionsList.length === 0 ? (
+              <p style={{ margin: 'unset', textAlign: 'center' }}>
+                Aucun Résultat
+              </p>
+            ) : (
+              props.optionsList.map((option, i) => (
+                <ListItem key={option.label}>
+                  <ListItemButton
+                    onClick={() => props.onSelect(option)}
+                    // disableGutters
+                  >
+                    <ListItemText primary={option.label} />
+                  </ListItemButton>
+                </ListItem>
+              ))
+            )}
+          </List>
+        </Paper>
+      </Popper>
+    </ClickAwayListener>
   )
 }
 DropdownOptions.defaultProps = { optionsList: [], onSelect: () => {} }
