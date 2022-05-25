@@ -127,7 +127,7 @@ const CityItem = ({
 
   let { photo } = city
   if (photo) {
-    photo = photo.replace("/2000px", "/500px");
+    photo = photo.replace("/2000px", "/500px")
   } else {
     photo = `/regions/region-${city['region.new_code']}.jpg`
   }
