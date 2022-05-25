@@ -127,12 +127,7 @@ const CityItem = ({
 
   let { photo } = city
   if (photo) {
-    if (photo.indexOf('.svg') === -1) {
-      const subFolderName = ['/commons/', '/fr/'].find((p) => photo.includes(p))
-      photo = photo.replace(subFolderName, `${subFolderName}thumb/`)
-      const split = photo.split('/')
-      photo += `/250px-${split[split.length - 1]}`
-    }
+    photo = photo.replace("/2000px", "/500px");
   } else {
     photo = `/regions/region-${city['region.new_code']}.jpg`
   }
