@@ -385,7 +385,9 @@ const HomePage = () => {
           </SurveyBlockH3>
           <ButtonContainer>
             <ActionButton
-              path={'https://startupsbeta.typeform.com/to/kPDt1Rfk'}
+              path={{
+                pathname: 'https://startupsbeta.typeform.com/to/kPDt1Rfk',
+              }}
               libelle={isMobile ? 'Faire ma demande' : 'Répondre à l’enquête'}
               isMobile={isMobile}
               isWhite={true}

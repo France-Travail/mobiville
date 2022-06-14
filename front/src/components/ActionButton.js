@@ -58,15 +58,20 @@ const ActionButtonElement = styled(Link)`
   }
 `
 
-const ActionButton = ({path, libelle, libelleSecondaire, isMobile, isBlue, isWhite, buttonWidth}) => (
+const ActionButton = ({path, libelle, libelleSecondaire, isMobile, isBlue, isWhite, buttonWidth}) => { 
+  const isHttpMatched = (str) => !!str?.match(new RegExp("^(http|https)://"))?.length
+  const isExternalLink = !!path && typeof path == 'object'  && path.hasOwnProperty("pathname") && isHttpMatched(path.pathname)
+
+  return (
     <>
         <ActionButtonContainer isMobile={isMobile}>
-            <ActionButtonElement to={path} isBlue={isBlue} isWhite={isWhite} buttonWidth={buttonWidth}>
+            <ActionButtonElement to={path} isBlue={isBlue} isWhite={isWhite} buttonWidth={buttonWidth} target={isExternalLink ? '_blank': undefined }>
                 {libelle} {isMobile && <br/>}{libelleSecondaire}
             </ActionButtonElement>
         </ActionButtonContainer>
     </>
-)
+  )
+}
 
 ActionButton.props = {
   path: PropTypes.string,
