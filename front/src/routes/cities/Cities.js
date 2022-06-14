@@ -201,20 +201,21 @@ const Cities = () => {
     const isUsingSeaFilter = params.codeEnvironment === 'side-sea'
     const isUsingMountainFilter = params.codeEnvironment === 'mountain'
 
-    const itemsPerPage = 10
     const [page, setPage] = React.useState(1)
-
+    
     useEffect(() => {
         onSearch(
             {...params, sortBy: sortCriterions, onlySearchInTension: !useAllCities},
             page * 10,
             cities
-        )
+            )
     }, [useAllCities, page])
-
-    const [noOfPages] = React.useState(
-        Math.ceil(totalCities / itemsPerPage)
-    )
+    
+    const itemsPerPage = 10
+    const [noOfPages, setNoOfPages] = React.useState(0)
+    useEffect(()=>{
+        setNoOfPages(Math.ceil(totalCities / itemsPerPage))
+    } ,[totalCities])
 
     const handlePageChange = (event, value) => {
         setPage(value)
