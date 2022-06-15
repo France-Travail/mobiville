@@ -66,3 +66,22 @@ input[type='color'] {
   /* avoids safari mobile zooming in on input, which because of autocompletes is not necessarily zoomed out */
   font-size: 16px;
 }
+
+// ce selector risque de ne pas fonctionner lorsqu'il y aura plusieurs "select checkbox" /!\
+#menu->div:nth-child(3){
+  background: #FFFFFF;
+  border: 1px solid #F6F7FB;
+  border-radius: 8px;
+  margin-top: 15px;
+
+  ul {
+    padding: 0px;
+
+    li:first-child {
+      margin-top: 10px !important;
+    }
+    li:last-child {
+      margin-bottom: 10px !important;
+    }
+  }
+}

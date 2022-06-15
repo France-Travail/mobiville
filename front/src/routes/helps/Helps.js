@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
+import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { orderBy } from 'lodash'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import queryString from 'query-string'
-import { Helmet } from 'react-helmet'
+import {Helmet} from 'react-helmet'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import EuroIcon from '@mui/icons-material/Euro'
 import HomeWorkIcon from '@mui/icons-material/HomeWork'
@@ -12,55 +11,76 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
 import PeopleIcon from '@mui/icons-material/People'
 
-import { useHelps } from '../../common/contexts/helpsContext'
-import { useWindowSize } from '../../common/hooks/window-size'
+import {useHelps} from '../../common/contexts/helpsContext'
+import {useWindowSize} from '../../common/hooks/window-size'
 import MainLayout from '../../components/MainLayout'
-import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
-import { isMobileView } from '../../constants/mobile'
-import { ucFirst } from '../../utils/utils'
-import helpsPic from '../../assets/images/Generique_Aides.png'
+import {COLOR_OTHER_GREEN, COLOR_PRIMARY, COLOR_TEXT_PRIMARY} from '../../constants/colors'
+import {isMobileView} from '../../constants/mobile'
+import {ucFirst} from '../../utils/utils'
+import CheckmarksSelect from './components/CheckmarksSelect'
+import CheckmarksSelectSituation from './components/CheckmarksSelectSituation'
+import CheckmarksSelectMobile from "./components/CheckmarksSelectMobile";
+import CheckmarksSelectSituationMobile from "./components/CheckmarksSelectSituationMobile";
+
+{/*EN ATTENTE MODICATIONS UX*/}
+//import TypeHelpFilter from "./components/TypeHelpFilter";
 
 const Title = styled.h1`
-  color: ${COLOR_TEXT_PRIMARY};
   font-size: 24px;
   font-weight: 700;
-  margin-bottom: ${({ isMobile }) => (isMobile ? '4px' : '8px')};
-`
-
-const SubTitle = styled.p`
-  color: ${COLOR_TEXT_PRIMARY};
-  font-size: ${({ isMobile }) => (isMobile ? '16px' : '18px')};
-  font-weight: 700;
-  margin-bottom: 16px;
-  margin-top: 0;
+  //margin-bottom: ${({ isMobile }) => (isMobile ? '4px' : '8px')};
+  margin: 20px auto;
+  
+  width: 1036px;
+  height: 42px;
+  
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 42px;
+  display:  ${({ isMobile }) => (isMobile ? 'contents' : 'flex')};
+  align-items: center;
+  
+  color: ${COLOR_PRIMARY};
+  
 `
 
 const Header = styled.div`
-  margin: 0 auto;
   font-weight: bold;
   display: flex;
   align-items: center;
+  height:118px;
+  background-color:${COLOR_OTHER_GREEN};
+  
+   div, a {
+    margin: 0 auto;
+   }
+   
+   ${(props) =>
+    props.isMobile &&
+    `
+    display: block;
+    margin: 102px 0 64px 0;
+    padding: 0;
+    height:377px;
+    padding: 20px 0.5%;
+  `}
 `
 
-const HeaderTitle = styled.h1`
-  color: ${COLOR_TEXT_PRIMARY};
-  font-weight: 900;
-  font-size: 36px;
-  margin: 45px 0px 0px 10px;
+const HeaderSearchBloc = styled.div`
+ display: inline-grid;
+ align-items: center;
+ margin: 0px 10px !important;
+ vertical-align: bottom;
+ 
+ ${(props) =>
+    props.isMobile &&
+    `
+    padding: 5px 0px;
+  `}
 `
 
-const HeaderSubtitle = styled.h2`
-  color: ${COLOR_TEXT_PRIMARY};
-  font-size: 24px;
-  line-height: 33px;
-  margin: 8px 0px 53px 10px;
-`
-
-const HeaderImg = styled.img`
-  height: 136px;
-  width: 136px;
-  margin-top: 45px;
-`
 
 const Container = styled.div`
   display: flex;
@@ -79,75 +99,9 @@ const Container = styled.div`
   `}
 `
 
-const TagsSelectionPanel = styled.div`
-  width: ${({ isMobile }) => (isMobile ? '100%' : '424px')};
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 16px;
-`
-
-const CategoryTagsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin-bottom: ${({ isMobile }) => (isMobile ? '16px' : '8px')};
-`
-
 const HelpsPanel = styled.div`
   flex: 1;
   padding: ${({ isMobile }) => (isMobile ? '16px' : '0 16px 32px 16px')};
-`
-
-const CategoryTag = styled(Link)`
-  background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
-  color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
-  border-radius: 8px;
-  max-width: 118px;
-  width: 100%;
-  padding: 4px;
-  margin: 0 2px;
-  display: block;
-  cursor: pointer;
-  text-align: center;
-  font-weight: 400;
-  font-size: 14px;
-  border: 2px solid ${COLOR_PRIMARY};
-  @media (hover) {
-    &:hover {
-      background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
-      color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
-      opacity: 0.9;
-    }
-  }
-`
-
-const SituationTag = styled(Link)`
-  background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
-  color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
-  border-radius: 44px;
-  padding: 8px;
-  margin-right: 8px;
-  margin-bottom: 8px;
-  display: inline-block;
-  cursor: pointer;
-  font-weight: 400;
-  font-size: 14px;
-  border: 2px solid ${COLOR_PRIMARY};
-  @media (hover) {
-    &:hover {
-      background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
-      color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
-      opacity: 0.9;
-    }
-  }
-`
-
-const TitleHelps = styled.h3`
-  color: ${COLOR_TEXT_PRIMARY};
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-weight: 700;
-  font-size: ${({ isMobile }) => (isMobile ? '16px' : '24px')};
 `
 
 const HelpItem = styled(Link)`
@@ -220,21 +174,44 @@ const ViewMore = styled.div`
   padding-top: 8px;
 `
 
+const SearchButton = styled(Link)`
+  width: ${({ isMobile }) => (isMobile ? '350px' : '184px')};
+  height: 73px;
+  display: flex;
+  border-radius: 20px;
+  display: inline-grid;
+  padding: 17px 16px;
+  gap: 10px;
+  background: #191970;
+  color: #eee;
+  align-items: center;
+  text-align: center;
+  vertical-align: middle;
+  &,
+  &:hover {
+    color: #eee;
+  }
+  
+`
+
 const CATEGORIES = [
   {
     key: 'emploi',
     icon: '/icons/emploi.svg',
     text: 'Je recherche un emploi',
+    name: "d'emploi"
   },
   {
     key: 'logement',
     icon: '/icons/logement.svg',
     text: 'Je recherche un logement',
+    name: "logement"
   },
   {
     key: 'déménage',
     icon: '/icons/demenagement.svg',
     text: 'Je déménage prochainement',
+    name: "déménagement"
   },
 ]
 
@@ -242,18 +219,27 @@ const SITUATIONS = [
   {
     key: "demandeur d'emploi",
     text: "Demandeur d'emploi",
+    name: "Demandeur d'emploi"
   },
   {
     key: 'salarié',
     text: 'Salarié',
+    name: "Salarié"
+  },
+  {
+    key: 'alternance',
+    text: 'Alternant',
+    name: "Alternant"
   },
   {
     key: 'moins de 26 ans',
     text: '- 26 ans',
+    name: "moins de 26 ans"
   },
   {
     key: 'plus de 26 ans',
     text: '+ 26 ans',
+    name: "plus de 26 ans"
   },
 ]
 
@@ -266,19 +252,25 @@ const HelpsPage = ({ location: { search } }) => {
   }, [])
 
   const parsedQueryString = queryString.parse(search)
+  const parsedProjects = parsedQueryString.project
+      ? typeof parsedQueryString.project === 'string'
+          ? [parsedQueryString.project]
+          : parsedQueryString.project
+      : []
   const parsedSituations = parsedQueryString.situation
     ? typeof parsedQueryString.situation === 'string'
       ? [parsedQueryString.situation]
       : parsedQueryString.situation
     : []
 
-  const project =
-    CATEGORIES.find(({ key }) => parsedQueryString.project === key) || null
+  const projects = CATEGORIES.filter(({ key }) =>
+    parsedProjects.includes(key)
+  )
   const situations = SITUATIONS.filter(({ key }) =>
     parsedSituations.includes(key)
   )
 
-  let list = previews.filter((preview) => {
+  let listHelpItem = previews.filter((preview) => {
     if (situations.length) {
       if (
         !situations.every(({ key }) =>
@@ -289,9 +281,11 @@ const HelpsPage = ({ location: { search } }) => {
       }
     }
 
-    if (project) {
+    if (projects.length) {
       if (
-        !preview.situation.toLowerCase().includes(project.key.toLowerCase())
+        !projects.some(({ key }) =>
+            preview.situation.toLowerCase().includes(key.toLowerCase())
+        )
       ) {
         return false
       }
@@ -300,11 +294,48 @@ const HelpsPage = ({ location: { search } }) => {
     return true
   })
 
-  if (!situations.length && !project) {
-    list = orderBy(previews, ['count_vue'], ['desc']).slice(0, 4)
-  }
 
   const isMobile = isMobileView(size)
+  const [wholeUrlParameters, setWholeUrlParameters] = React.useState('');
+  const [searchParametersCategories, setSearchParametersCategories] = React.useState('');
+  const [searchParametersSituations, setSearchParametersSituations] = React.useState('');
+  const [searchParametersSituationsAge, setSearchParametersSituationsAge] = React.useState('');
+
+  const onSearchParametersCategories = function(parameter) {
+    let listParameter = parameter.toString().replaceAll(",","&project=")
+    CATEGORIES.forEach((categorie) =>  listParameter = listParameter.replaceAll(categorie.name, categorie.key))
+    setSearchParametersCategories("project="+listParameter)
+  }
+  const onSearchParametersSituations = function(parameter) {
+    if(parameter == "empty") {
+      setSearchParametersSituations("")
+      return
+    }
+    let listParameter = parameter.toString().replaceAll(",","&situation=")
+    SITUATIONS.forEach((situation) =>  listParameter = listParameter.replaceAll(situation.name, situation.key))
+    setSearchParametersSituations("situation="+listParameter)
+  }
+  const onSearchParametersSituationsAge = function(parameter) {
+    if(parameter == "empty") {
+      setSearchParametersSituationsAge("")
+      return
+    }
+    let listParameter = parameter.toString().replaceAll(",","&situation=")
+    SITUATIONS.forEach((situation) =>  listParameter = listParameter.replaceAll(situation.name, situation.key))
+    setSearchParametersSituationsAge("situation="+listParameter)
+  }
+
+  const updateQueryParameter = function() {
+    if (searchParametersCategories.length > 0 || searchParametersSituations.length > 0 || searchParametersSituationsAge.length > 0) {
+       setWholeUrlParameters("?"+searchParametersCategories+"&"+searchParametersSituations+"&"+searchParametersSituationsAge)
+       return
+    }
+    setWholeUrlParameters("")
+  }
+
+  const params = decodeURIComponent(window.location.search)
+
+  useEffect(() => {updateQueryParameter() }, [searchParametersCategories, searchParametersSituations, searchParametersSituationsAge])
 
   return (
     <MainLayout topMobileMenu>
@@ -316,71 +347,46 @@ const HelpsPage = ({ location: { search } }) => {
         />
       </Helmet>
 
-      {!isMobile && (
-        <Header>
+        <Header isMobile={isMobile}>
           <div>
-            <HeaderTitle>
-              Vous avez besoin d{"'"}
-              aide pour votre projet de mobilité ?
-            </HeaderTitle>
-            <HeaderSubtitle>
-              Découvrez les solutions pour accélérer votre projet
-            </HeaderSubtitle>
+            <HeaderSearchBloc isMobile={isMobile} >
+              {!isMobile && (
+              <CheckmarksSelect searchCriteria={CATEGORIES} title={"Quel est votre projet ?"} onSearchParameters={onSearchParametersCategories} params={params} />
+              )}
+              {isMobile && (
+                <CheckmarksSelectMobile searchCriteria={CATEGORIES} title={"Quel est votre projet ?"} onSearchParameters={onSearchParametersCategories} params={params} />
+              )}
+            </HeaderSearchBloc>
+            <HeaderSearchBloc isMobile={isMobile}>
+              {!isMobile && (
+                  <CheckmarksSelectSituation searchCriteria={SITUATIONS.slice(0,3)} title={"Votre situation"} onSearchParameters={onSearchParametersSituations} params={params} />
+              )}
+              {isMobile && (
+                  <CheckmarksSelectSituationMobile searchCriteria={SITUATIONS.slice(0,3)} title={"Votre situation"} onSearchParameters={onSearchParametersSituations} params={params} />
+              )}
+            </HeaderSearchBloc>
+            <HeaderSearchBloc isMobile={isMobile}>
+              {!isMobile && (
+                  <CheckmarksSelectSituation searchCriteria={SITUATIONS.slice(-2)} title={"Votre âge"} onSearchParameters={onSearchParametersSituationsAge} params={params}  />
+              )}
+              {isMobile && (
+                  <CheckmarksSelectSituationMobile searchCriteria={SITUATIONS.slice(-2)} title={"Votre âge"} onSearchParameters={onSearchParametersSituationsAge} params={params}  />
+              )}
+            </HeaderSearchBloc>
+            <HeaderSearchBloc isMobile={isMobile}>
+              <SearchButton to={`/aides${wholeUrlParameters}`} isMobile={isMobile} >Rechercher</SearchButton>
+            </HeaderSearchBloc>
           </div>
-          <HeaderImg src={helpsPic} alt="" />
         </Header>
-      )}
+
+      <Title isMobile={isMobile}> Toutes les aides à la mobilité résidentielle </Title>
+
+      {/*EN ATTENTE MODICATIONS UX*/}
+      {/*<TypeHelpFilter />*/}
+
       <Container isMobile={isMobile}>
-        <TagsSelectionPanel isMobile={isMobile}>
-          <Title isMobile={isMobile}>Découvrez les aides pour vous</Title>
-          <SubTitle isMobile={isMobile}>Quel est votre projet ?</SubTitle>
-          <CategoryTagsContainer isMobile={isMobile}>
-            {CATEGORIES.map((c) => {
-              const selected = project && c.key === project.key
-              return (
-                <CategoryTag
-                  isMobile={isMobile}
-                  key={c.text}
-                  selected={project && c.key === project.key}
-                  to={`/aides?${queryString.stringify({
-                    project: selected ? '' : c.key,
-                    situation: situations.map(({ key }) => key),
-                  })}`}
-                >
-                  <img src={c.icon} alt={c.text} />
-                  <div>{c.text}</div>
-                </CategoryTag>
-              )
-            })}
-          </CategoryTagsContainer>
-          <SubTitle>Ma situation</SubTitle>
-          {SITUATIONS.map((c) => {
-            const selected = situations.some(({ key }) => key === c.key)
-            const situationsForLink = selected
-              ? situations.filter(({ key }) => key !== c.key)
-              : situations.concat({ key: c.key })
-            return (
-              <SituationTag
-                isMobile={isMobile}
-                key={c.text}
-                selected={selected}
-                to={`/aides?${queryString.stringify({
-                  project: project?.key,
-                  situation: situationsForLink.map(({ key }) => key),
-                })}`}
-              >
-                {c.text}
-              </SituationTag>
-            )
-          })}
-        </TagsSelectionPanel>
         <HelpsPanel isMobile={isMobile}>
-          <TitleHelps isMobile={isMobile}>
-            {project || situations.length
-              ? 'Mes aides disponibles'
-              : 'Les aides les plus consultées'}
-          </TitleHelps>
-          {list.map((item) => {
+          {listHelpItem.map((item) => {
             // kinda clunky, using labels to determine icon.
             const helpIcon = item.type.includes('admin') ? (
               <ReceiptLongIcon />
