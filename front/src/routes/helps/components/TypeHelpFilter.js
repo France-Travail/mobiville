@@ -40,7 +40,7 @@ const DivContainer = styled.div`
 
 const TypeHelpFilter = ({searchCriteria, onSearchParameters, params}) => {
 
-    const [itemName, setItemName] = React.useState([])
+    //const [itemName, setItemName] = React.useState([])
     const [query, setQuery] = useState("")
     const history = useHistory()
 
@@ -50,12 +50,12 @@ const TypeHelpFilter = ({searchCriteria, onSearchParameters, params}) => {
             const parameters = params.split(regex)
             let validParamsStr = ""
             parameters.forEach((parameter) => {
-                const param = searchCriteria.find((item) => item.key == parameter)
+                const param = searchCriteria.find((item) => item.key === parameter)
                 if (param) validParamsStr += param.name + ","
             })
             if (validParamsStr.length > 0) {
                 validParamsStr = validParamsStr.substring(0, validParamsStr.length - 1)
-                setItemName(typeof validParamsStr === 'string' ? validParamsStr.split(',') : validParamsStr)
+                //setItemName(typeof validParamsStr === 'string' ? validParamsStr.split(',') : validParamsStr)
                 setQuery(validParamsStr)
             }
         }
@@ -66,14 +66,6 @@ const TypeHelpFilter = ({searchCriteria, onSearchParameters, params}) => {
             onSearchParameters(query)
         }
     }, [query, history])
-
-    const handleChange = (event) => {
-        const {
-            target: {value},
-        } = event
-        setItemName(typeof value === 'string' ? value.split(',') : value)
-        setQuery(value)
-    }
 
 
     return (

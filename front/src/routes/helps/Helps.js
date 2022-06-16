@@ -22,7 +22,6 @@ import CheckmarksSelectSituation from './components/CheckmarksSelectSituation'
 import CheckmarksSelectMobile from "./components/CheckmarksSelectMobile"
 import CheckmarksSelectSituationMobile from "./components/CheckmarksSelectSituationMobile"
 
-{/*EN ATTENTE MODICATIONS UX*/}
 //import TypeHelpFilter from "./components/TypeHelpFilter";
 
 const Title = styled.h1`

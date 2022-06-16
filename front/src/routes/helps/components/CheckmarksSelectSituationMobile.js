@@ -148,10 +148,13 @@ const CheckmarksSelectSituationMobile = ({searchCriteria, title, globalWidth, on
         const {
             target: { value },
         } = event
-        setItemName(
-            typeof value === 'string' ? value.split(',') : value,
-        )
-        setQuery(value)
+        if(value === itemName) {
+            setItemName([])
+            setQuery("empty")
+        } else {
+            setItemName(typeof value === 'string' ? value.split(',') : value)
+            setQuery(value)
+        }
     }
 
     const classes = useStyle()

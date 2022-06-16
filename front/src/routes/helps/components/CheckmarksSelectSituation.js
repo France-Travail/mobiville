@@ -128,7 +128,7 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
             const parameters = params.split(regex)
             let validParamsStr = ""
             parameters.forEach((parameter) => {
-                const param = searchCriteria.find((item) => item.key == parameter)
+                const param = searchCriteria.find((item) => item.key === parameter)
                 if (param) validParamsStr += param.name + ","
             })
             if(validParamsStr.length > 0) {
@@ -146,19 +146,14 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
     }, [query, history])
 
     const handleChange = (event) => {
-
         const {
             target: { value },
         } = event
-        if(value == itemName) {
-            setItemName(
-                []
-            )
+        if(value === itemName) {
+            setItemName([])
             setQuery("empty")
         } else {
-            setItemName(
-                typeof value === 'string' ? value.split(',') : value,
-            )
+            setItemName(typeof value === 'string' ? value.split(',') : value)
             setQuery(value)
         }
     }

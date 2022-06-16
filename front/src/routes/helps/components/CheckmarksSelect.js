@@ -127,7 +127,7 @@ const CheckmarksSelect = ({searchCriteria, title, globalWidth, onSearchParameter
             const parameters = params.split(regex)
             let validParamsStr = ""
             parameters.forEach((parameter) => {
-                const param = searchCriteria.find((item) => item.key == parameter)
+                const param = searchCriteria.find((item) => item.key === parameter)
                 if (param) validParamsStr += param.name + ","
             })
             if(validParamsStr.length > 0) {
