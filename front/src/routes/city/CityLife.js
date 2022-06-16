@@ -205,7 +205,7 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
   const mainCityElement = (
     <>
       <CityPic
-        src={city.photo || `/regions/region-${city['region.new_code']}.jpg`}
+        src={city.photo || `/regions/region-${city.newRegion.code}.jpg`}
         alt=""
       />
       <ItemLayout isMobile={isMobile} style={{ maxWidth: '100%' }}>

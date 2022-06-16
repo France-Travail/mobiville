@@ -1,0 +1,107 @@
+[
+  {
+    "comment": "ce fichier a été généré manuellement depuis un XLS, ce qui sera également nécessaire pour le mettre à jour",
+    "socialHousingDelay": 14,
+    "name": "alsace"
+  },
+  {
+    "socialHousingDelay": 17,
+    "name": "aquitaine"
+  },
+  {
+    "socialHousingDelay": 18,
+    "name": "auvergne"
+  },
+  {
+    "socialHousingDelay": 17,
+    "name": "basse normandie"
+  },
+  {
+    "socialHousingDelay": 13,
+    "name": "bourgogne"
+  },
+  {
+    "socialHousingDelay": 16,
+    "name": "bretagne"
+  },
+  {
+    "socialHousingDelay": 7,
+    "name": "centre"
+  },
+  {
+    "socialHousingDelay": 5,
+    "name": "champagne ardenne"
+  },
+  {
+    "socialHousingDelay": 16,
+    "name": "corse"
+  },
+  {
+    "socialHousingDelay": 5,
+    "name": "franche comte"
+  },
+  {
+    "socialHousingDelay": 7,
+    "name": "guadeloupe"
+  },
+  {
+    "socialHousingDelay": 12,
+    "name": "guyane"
+  },
+  {
+    "socialHousingDelay": 8,
+    "name": "haute normandie"
+  },
+  {
+    "socialHousingDelay": 32,
+    "name": "ile de france"
+  },
+  {
+    "socialHousingDelay": 14,
+    "name": "languedoc roussillon"
+  },
+  {
+    "socialHousingDelay": 5,
+    "name": "limousin"
+  },
+  {
+    "socialHousingDelay": 7,
+    "name": "lorraine"
+  },
+  {
+    "socialHousingDelay": 13,
+    "name": "martinique"
+  },
+  {
+    "socialHousingDelay": 9,
+    "name": "midi pyrenees"
+  },
+  {
+    "socialHousingDelay": 11,
+    "name": "nord pas de calais"
+  },
+  {
+    "socialHousingDelay": 12,
+    "name": "pays de la loire"
+  },
+  {
+    "socialHousingDelay": 9,
+    "name": "picardie"
+  },
+  {
+    "socialHousingDelay": 10,
+    "name": "poitou charentes"
+  },
+  {
+    "socialHousingDelay": 19,
+    "name": "provence alpes cote d'azur"
+  },
+  {
+    "socialHousingDelay": 11,
+    "name": "reunion"
+  },
+  {
+    "socialHousingDelay": 11,
+    "name": "rhone alpes"
+  }
+]

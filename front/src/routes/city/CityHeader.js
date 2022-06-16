@@ -121,7 +121,7 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
       <PicAndMapContainer isMobile={isMobile}>
         <CityPic
           isMobile={isMobile}
-          src={city.photo || `/regions/region-${city['region.new_code']}.jpg`}
+          src={city.photo || `/regions/region-${city.newRegion.code}.jpg`}
         />
         {!isMobile && city && (
           <StyledMapContainer
