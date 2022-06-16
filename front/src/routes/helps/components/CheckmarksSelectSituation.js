@@ -1,19 +1,19 @@
-import * as React from 'react';
-import {useEffect, useState} from 'react';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
+import * as React from 'react'
+import {useEffect, useState} from 'react'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import MenuItem from '@mui/material/MenuItem'
+import FormControl from '@mui/material/FormControl'
+import ListItemText from '@mui/material/ListItemText'
+import Select from '@mui/material/Select'
+import Checkbox from '@mui/material/Checkbox'
 import styled from 'styled-components'
-import {makeStyles} from "@mui/styles";
-import {COLOR_VERT_MOBIVILLE} from "../../../constants/colors";
-import PropTypes from "prop-types";
+import {makeStyles} from "@mui/styles"
+import {COLOR_VERT_MOBIVILLE} from "../../../constants/colors"
+import PropTypes from "prop-types"
 import {useHistory} from "react-router-dom"
-import CheckmarksSelect from "./CheckmarksSelect";
+import CheckmarksSelect from "./CheckmarksSelect"
 
-const globalWidth = 232;
+const globalWidth = 232
 
 
 const DivFormControl = styled.div`
@@ -118,7 +118,7 @@ const styleLineBoxUnSelected = {
 
 const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearchParameters, params}) => {
 
-    const [itemName, setItemName] = React.useState([]);
+    const [itemName, setItemName] = React.useState([])
     const [query, setQuery] = useState("")
     const history = useHistory()
 
@@ -126,14 +126,14 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
         if (params && params.length > 0) {
             const regex = RegExp("project=|situation=|&")
             const parameters = params.split(regex)
-            let validParamsStr = "";
+            let validParamsStr = ""
             parameters.forEach((parameter) => {
-                const param = searchCriteria.find((item) => item.key == parameter);
+                const param = searchCriteria.find((item) => item.key == parameter)
                 if (param) validParamsStr += param.name + ","
             })
             if(validParamsStr.length > 0) {
                 validParamsStr = validParamsStr.substring(0, validParamsStr.length - 1)
-                setItemName(typeof validParamsStr === 'string' ? validParamsStr.split(',') : validParamsStr);
+                setItemName(typeof validParamsStr === 'string' ? validParamsStr.split(',') : validParamsStr)
                 setQuery(validParamsStr)
             }
         }
@@ -149,22 +149,22 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
 
         const {
             target: { value },
-        } = event;
+        } = event
         if(value == itemName) {
             setItemName(
                 []
-            );
+            )
             setQuery("empty")
         } else {
             setItemName(
                 typeof value === 'string' ? value.split(',') : value,
-            );
+            )
             setQuery(value)
         }
-    };
+    }
 
-    const classes = useStyle();
-    const classeCheckBox = styleCheckBox();
+    const classes = useStyle()
+    const classeCheckBox = styleCheckBox()
 
     return (
         <DivFormControl>

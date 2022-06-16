@@ -1,11 +1,11 @@
-import * as React from 'react';
-import {useEffect, useState} from 'react';
+import * as React from 'react'
+import {useEffect, useState} from 'react'
 import styled from 'styled-components'
-import PropTypes from "prop-types";
+import PropTypes from "prop-types"
 import {useHistory} from "react-router-dom"
 
-import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from '@mui/material/Button'
+import ButtonGroup from '@mui/material/ButtonGroup'
 
 
 const DivContainer = styled.div`
@@ -40,7 +40,7 @@ const DivContainer = styled.div`
 
 const TypeHelpFilter = ({searchCriteria, onSearchParameters, params}) => {
 
-    const [itemName, setItemName] = React.useState([]);
+    const [itemName, setItemName] = React.useState([])
     const [query, setQuery] = useState("")
     const history = useHistory()
 
@@ -48,14 +48,14 @@ const TypeHelpFilter = ({searchCriteria, onSearchParameters, params}) => {
         if (params && params.length > 0) {
             const regex = RegExp("project=|situation=|&")
             const parameters = params.split(regex)
-            let validParamsStr = "";
+            let validParamsStr = ""
             parameters.forEach((parameter) => {
-                const param = searchCriteria.find((item) => item.key == parameter);
+                const param = searchCriteria.find((item) => item.key == parameter)
                 if (param) validParamsStr += param.name + ","
             })
             if (validParamsStr.length > 0) {
                 validParamsStr = validParamsStr.substring(0, validParamsStr.length - 1)
-                setItemName(typeof validParamsStr === 'string' ? validParamsStr.split(',') : validParamsStr);
+                setItemName(typeof validParamsStr === 'string' ? validParamsStr.split(',') : validParamsStr)
                 setQuery(validParamsStr)
             }
         }
@@ -70,11 +70,11 @@ const TypeHelpFilter = ({searchCriteria, onSearchParameters, params}) => {
     const handleChange = (event) => {
         const {
             target: {value},
-        } = event;
+        } = event
         console.log("handleChange : " + value)
-        setItemName(typeof value === 'string' ? value.split(',') : value);
+        setItemName(typeof value === 'string' ? value.split(',') : value)
         setQuery(value)
-    };
+    }
 
 
     return (

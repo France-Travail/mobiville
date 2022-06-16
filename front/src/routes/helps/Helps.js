@@ -19,8 +19,8 @@ import {isMobileView} from '../../constants/mobile'
 import {ucFirst} from '../../utils/utils'
 import CheckmarksSelect from './components/CheckmarksSelect'
 import CheckmarksSelectSituation from './components/CheckmarksSelectSituation'
-import CheckmarksSelectMobile from "./components/CheckmarksSelectMobile";
-import CheckmarksSelectSituationMobile from "./components/CheckmarksSelectSituationMobile";
+import CheckmarksSelectMobile from "./components/CheckmarksSelectMobile"
+import CheckmarksSelectSituationMobile from "./components/CheckmarksSelectSituationMobile"
 
 {/*EN ATTENTE MODICATIONS UX*/}
 //import TypeHelpFilter from "./components/TypeHelpFilter";
@@ -296,10 +296,10 @@ const HelpsPage = ({ location: { search } }) => {
 
 
   const isMobile = isMobileView(size)
-  const [wholeUrlParameters, setWholeUrlParameters] = React.useState('');
-  const [searchParametersCategories, setSearchParametersCategories] = React.useState('');
-  const [searchParametersSituations, setSearchParametersSituations] = React.useState('');
-  const [searchParametersSituationsAge, setSearchParametersSituationsAge] = React.useState('');
+  const [wholeUrlParameters, setWholeUrlParameters] = React.useState('')
+  const [searchParametersCategories, setSearchParametersCategories] = React.useState('')
+  const [searchParametersSituations, setSearchParametersSituations] = React.useState('')
+  const [searchParametersSituationsAge, setSearchParametersSituationsAge] = React.useState('')
 
   const onSearchParametersCategories = function(parameter) {
     let listParameter = parameter.toString().replaceAll(",","&project=")
@@ -307,7 +307,7 @@ const HelpsPage = ({ location: { search } }) => {
     setSearchParametersCategories("project="+listParameter)
   }
   const onSearchParametersSituations = function(parameter) {
-    if(parameter == "empty") {
+    if(parameter === "empty") {
       setSearchParametersSituations("")
       return
     }
@@ -316,7 +316,7 @@ const HelpsPage = ({ location: { search } }) => {
     setSearchParametersSituations("situation="+listParameter)
   }
   const onSearchParametersSituationsAge = function(parameter) {
-    if(parameter == "empty") {
+    if(parameter === "empty") {
       setSearchParametersSituationsAge("")
       return
     }
