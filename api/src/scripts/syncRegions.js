@@ -8,10 +8,9 @@ const models = db.initModels()
 
 const doSync = async () => {
   try {
-    const regions = await getAllRegions()
-
+    const oldRegions = await getAllRegions()
     const newRegions = uniqBy(
-      regions.map((region) => ({
+      oldRegions.map((region) => ({
         code: region.new_code,
         name: region.new_name,
         name_normalized: region.new_name_normalized,
@@ -20,12 +19,7 @@ const doSync = async () => {
     )
 
     const socialHousingData = getRegionsSocialHousing()
-    await models.oldRegions.syncRegions({
-      regions,
-      socialHousingData,
-    })
-
-    await models.newRegions.syncRegions(newRegions)
+    await models.newRegions.syncRegions({ newRegions, socialHousingData })
 
     console.log('Success!')
     process.exit(0)

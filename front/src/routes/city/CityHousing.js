@@ -143,9 +143,9 @@ const CityHousing = ({ backLink, city, nbSocialHousing }) => {
           <img src={houses} alt="" />
           <div>
             <b>
-              Nombre de logements dans la région
+              Nombre de logements dans la commune
               <br />
-              {formatNumber(nbSocialHousing) || 'A venir'}
+              {formatNumber(nbSocialHousing) || 'Information non disponible'}
             </b>
           </div>
         </ElementObject>
@@ -156,9 +156,9 @@ const CityHousing = ({ backLink, city, nbSocialHousing }) => {
               Délais d{"'"}
               obtention moyen dans la région
               <br />
-              {city['region.average_delay_obtain_social_housing']
-                ? `${city['region.average_delay_obtain_social_housing']} mois`
-                : 'A venir'}
+              {city?.newRegion.average_delay_obtain_social_housing
+                ? `${city.newRegion.average_delay_obtain_social_housing} mois`
+                : 'Information non disponible'}
             </b>
           </div>
         </ElementObject>

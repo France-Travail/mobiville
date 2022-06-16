@@ -358,7 +358,7 @@ const CityPage = ({ location: { pathname, search } }) => {
   if (section === HOUSING)
     return (
       <CityHousing
-        nbSocialHousing={city.oldRegion?.socialhousing?.nb_2019}
+        nbSocialHousing={city.total_social_housing}
         city={city}
         backLink={childrenComponentsBacklink}
       />
@@ -702,7 +702,7 @@ const CityPage = ({ location: { pathname, search } }) => {
 
             <BlockLinkDiv>
               <ActionButton
-                path={`/cities?codeRegion=${city['oldRegion.new_code']}&codeRome=${codeRome}`}
+                path={`/cities?codeRegion=${city.newRegion.code}&codeRome=${codeRome}`}
                 libelle={`Voir toutes les villes`}
                 isMobile={isMobile}
                 isBlue={false}

@@ -179,11 +179,11 @@ const Search = () => {
         )}
         {!isMobile && (
           <Fil>
-            <a href="/" class="accueil">
+            <a href="/" className="accueil">
               Accueil
               <ChevronRightIcon />
             </a>
-            <span class="current-page">
+            <span className="current-page">
               {index === 0
                 ? 'Rechercher un métier'
                 : 'Rechercher une ville ou une région'}
