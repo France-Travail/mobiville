@@ -71,7 +71,6 @@ const TypeHelpFilter = ({searchCriteria, onSearchParameters, params}) => {
         const {
             target: {value},
         } = event
-        console.log("handleChange : " + value)
         setItemName(typeof value === 'string' ? value.split(',') : value)
         setQuery(value)
     }
