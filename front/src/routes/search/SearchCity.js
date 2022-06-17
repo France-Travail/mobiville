@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { SearchInput, SearchOptions } from '../../components/SearchComponents'
-import { COLOR_TEXT_PRIMARY } from '../../constants/colors'
+import {COLOR_GREY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY} from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { ucFirstOnly } from '../../utils/utils'
 
@@ -33,6 +33,32 @@ const Subtitle = styled.p`
   display: ${(props) => props.display || 'initial'};
 `
 
+const ButtonContainer = styled.div`
+  margin: 32px auto;
+
+  a {
+    padding: 8px 32px;
+  }
+`
+
+const SearchButton = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
+  background: ${({ disabled }) => (disabled ? COLOR_GREY : COLOR_PRIMARY)};
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
+  border-radius: 48px;
+  padding: 12px 0px;
+  margin: auto;
+  &,
+  &:hover {
+    color: #fff;
+  }
+`
+
 const SearchCity = ({ onNext, isSearchFocused }) => {
   const ALL_REGIONS_LABEL = 'Toutes les régions'
   const REGION_TYPE = 'Régions'
@@ -43,12 +69,19 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
 
   const [searchFocused, setSearchFocused] = useState(false)
   const [searchedValue, setSearchedValue] = useState('')
+  const [selectedItem, setSelectedItem] = useState('')
 
   const location = useLocation()
   const [codeRome] = useState(queryString.parse(location.search)?.codeRome)
   useEffect(() => onAutocomplete(searchedValue.trim()), [searchedValue])
 
   const { criterions, autocompletedCities, onAutocomplete } = useCities()
+
+  const onSelection = (selectedItem) => {
+      console.log(selectedItem)
+      setSelectedItem(selectedItem)
+      setSearchedValue(selectedItem.label)
+  }
 
   const regionsList = criterions.regions.filter(
     (region) =>
@@ -86,6 +119,7 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
       <SearchInput
         label="Saisir ou sélectionner une ville, région"
         searchKeyword={(k) => setSearchedValue(k)}
+        selectedValue={searchedValue}
         isAutocompleteFocused={(isFocused) => {
           setSearchFocused(isFocused)
           isSearchFocused(isFocused)
@@ -95,14 +129,18 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
         isMobile={isMobile}
         isSearchFocused={searchFocused}
         optionsList={autocompleteList}
-        onSelect={(where) =>
-          onNext(
-            where.id?.length > 3
-              ? { city: where.id, cityName: where.cityName }
-              : { regions: where.id }
-          )
-        }
+        onSelect={onSelection}
       />
+      <ButtonContainer>
+          <SearchButton
+              disabled={!selectedItem}
+              onClick={() => onNext(
+                  selectedItem.id?.length > 3
+                      ? { city: selectedItem.id, cityName: selectedItem.cityName }
+                      : { regions: selectedItem.id }
+              )}
+          >Lancer la recherche</SearchButton>
+      </ButtonContainer>
     </Wrapper>
   )
 }

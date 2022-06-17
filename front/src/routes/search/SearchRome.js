@@ -8,7 +8,7 @@ import { SearchInput, SearchOptions } from '../../components/SearchComponents'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
-import { COLOR_TEXT_PRIMARY } from '../../constants/colors'
+import {COLOR_GREY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY} from '../../constants/colors'
 
 const Wrapper = styled.div`
   flex: 1;
@@ -42,6 +42,32 @@ const AllJobListLink = styled(Link)`
   text-decoration: underline;
 `
 
+const ButtonContainer = styled.div`
+  margin: 32px auto;
+
+  a {
+    padding: 8px 32px;
+  }
+`
+
+const NextButton = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
+  background: ${({ disabled }) => (disabled ? COLOR_GREY : COLOR_PRIMARY)};
+  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
+  border-radius: 48px;
+  padding: 12px 0px;
+  margin: auto;
+  &,
+  &:hover {
+    color: #fff;
+  }
+`
+
 const SearchRome = ({ onNext, isSearchFocused }) => {
   const size = useWindowSize()
   const isMobile = isMobileView(size)
@@ -52,11 +78,17 @@ const SearchRome = ({ onNext, isSearchFocused }) => {
   } = useCities()
   const [searchFocused, setSearchFocused] = useState(false)
   const [searchedLabel, setSearchedLabel] = useState('')
+  const [selectedKey, setSelectedKey] = useState('')
 
   const throttledOnSearchJobLabels = useMemo(
     () => throttle((search) => onSearchJobLabels(search), 200),
     []
   )
+
+  const onSelection = (selectedItem) => {
+      setSelectedKey(selectedItem.key)
+      setSearchedLabel(selectedItem.label)
+  }
 
   useEffect(() => {
     initializeJobsAutocomplete()
@@ -88,6 +120,7 @@ const SearchRome = ({ onNext, isSearchFocused }) => {
       <SearchInput
         label="Saisir ou sélectionner un métier dans la liste déroulante"
         searchKeyword={(k) => setSearchedLabel(k)}
+        selectedValue={searchedLabel}
         isAutocompleteFocused={(isFocused) => {
           setSearchFocused(isFocused)
           isSearchFocused(isFocused)
@@ -96,9 +129,15 @@ const SearchRome = ({ onNext, isSearchFocused }) => {
       <SearchOptions
         isSearchFocused={searchFocused}
         optionsList={jobsMatchingCriterions}
-        onSelect={(rome) => onNext({ rome: rome.key })}
+        onSelect={onSelection}
         isMobile={isMobile}
       />
+      <ButtonContainer>
+          <NextButton
+              onClick={() => onNext({ rome: selectedKey })}
+              disabled={!selectedKey}
+          >Valider</NextButton>
+      </ButtonContainer>
     </Wrapper>
   )
 }
