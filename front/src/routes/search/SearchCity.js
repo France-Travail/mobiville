@@ -78,7 +78,6 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
   const { criterions, autocompletedCities, onAutocomplete } = useCities()
 
   const onSelection = (selectedItem) => {
-      console.log(selectedItem)
       setSelectedItem(selectedItem)
       setSearchedValue(selectedItem.label)
   }
