@@ -117,7 +117,7 @@ const styleLineBoxUnSelected = {
 
 const CheckmarksSelectSituationMobile = ({searchCriteria, title, globalWidth, onSearchParameters, params}) => {
 
-    const [itemName, setItemName] = React.useState([])
+    const [itemName, setItemName] = React.useState("")
     const [query, setQuery] = useState("")
     const history = useHistory()
 
@@ -148,8 +148,8 @@ const CheckmarksSelectSituationMobile = ({searchCriteria, title, globalWidth, on
         const {
             target: { value },
         } = event
-        if(value === itemName) {
-            setItemName([])
+        if(typeof itemName === "string" ? value === itemName : value === itemName.toString() ) {
+            setItemName("")
             setQuery("empty")
         } else {
             setItemName(typeof value === 'string' ? value.split(',') : value)
