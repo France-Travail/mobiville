@@ -31,6 +31,12 @@ import {
 import { distanceBetweenToCoordinates, sleep } from '../utils/utils'
 import { NO_DESCRIPTION_MSG } from '../constants/messages'
 
+function padLeadingZeros(num, size) {
+  let s = num + ''
+  while (s.length < size) s = '0' + s
+  return String(s)
+}
+
 export default (sequelizeInstance, Model) => {
   Model.franceShape = null
   Model.weatherStationList = null
@@ -45,16 +51,17 @@ export default (sequelizeInstance, Model) => {
     const oldRegionsToNewRegionsMap = oldRegions.reduce(
       (prev, oldRegion) => ({
         ...prev,
-        [oldRegion.former_code]: oldRegion.new_code,
+        [padLeadingZeros(oldRegion.former_code, 2)]: padLeadingZeros(
+          oldRegion.new_code,
+          2
+        ),
       }),
       {}
     )
-
     const data = []
 
     for (let i = 0; i < cities.length; i++) {
       const city = cities[i]
-
       data.push({
         code_comm: city.code_commune,
         nom_dept: city.departement,
@@ -62,7 +69,7 @@ export default (sequelizeInstance, Model) => {
         z_moyen: city.altitude_moyenne,
         nom_region: city.region,
         new_code_region:
-          oldRegionsToNewRegionsMap[parseInt(city.code_region, 10)],
+          oldRegionsToNewRegionsMap[padLeadingZeros(city.code_region, 2)],
         insee_com: city.code_insee,
         code_dept: city.code_departement,
         geo_point_2d_x: city.geo_point_2d
@@ -83,7 +90,7 @@ export default (sequelizeInstance, Model) => {
           : parseInt(city.lgt_sociaux, 10),
       })
     }
-    console.log(data)
+
     await Model.bulkCreate(data, {
       updateOnDuplicate: ['total_social_housing'],
     }) // updateOnDuplicate == les champs a MaJ si id déja existant
