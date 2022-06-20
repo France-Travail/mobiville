@@ -43,12 +43,10 @@ const TextFieldMobiville = styled(TextField)`
 `
 const SearchInput = (props) => {
   const isMobile = isMobileView(useWindowSize())
-  const [searchKeyword, setSearchKeyword] = useState('') // inutile ?
   const [isAutocompleteFocused, setIsAutocompleteFocused] = useState(false)
   const inputRef = useRef(null)
 
   const handleValueChange = (value) => {
-    setSearchKeyword(value)
     props.searchKeyword(value)
   }
   const onFocusChange = (isFocus) => {
