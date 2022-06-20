@@ -43,12 +43,10 @@ const TextFieldMobiville = styled(TextField)`
 `
 const SearchInput = (props) => {
   const isMobile = isMobileView(useWindowSize())
-  const [searchKeyword, setSearchKeyword] = useState('') // inutile ?
   const [isAutocompleteFocused, setIsAutocompleteFocused] = useState(false)
   const inputRef = useRef(null)
 
   const handleValueChange = (value) => {
-    setSearchKeyword(value)
     props.searchKeyword(value)
   }
   const onFocusChange = (isFocus) => {
@@ -73,7 +71,7 @@ const SearchInput = (props) => {
       <TextFieldMobiville
         label={props.label}
         variant="outlined"
-        value={searchKeyword}
+        value={props.selectedValue}
         onChange={(event) => handleValueChange(event.target.value)}
         isMobile={isMobile}
         InputProps={{
@@ -184,6 +182,11 @@ const DropdownOptions = (props) => {
     }
   }
 
+  const onSelect = (option) => {
+    props.onSelect(option)
+    setIsOpen(false)
+  }
+
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <Popper
@@ -208,7 +211,7 @@ const DropdownOptions = (props) => {
               props.optionsList.map((option, i) => (
                 <ListItem key={option.label}>
                   <ListItemButton
-                    onClick={() => props.onSelect(option)}
+                    onClick={() => onSelect(option)}
                     // disableGutters
                   >
                     <ListItemText primary={option.label} />
