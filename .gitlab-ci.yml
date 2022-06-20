@@ -315,6 +315,7 @@ deploy conf production:
                 VERSION=${FORCE_VERSION:-latest} &&
                 PUB_BRANCH=${CI_COMMIT_BRANCH//\//_} &&
                 echo \"API_VERSION=\${PUB_BRANCH}-\${VERSION}\" > .api_env &&
+                API_VERSION=\"\${PUB_BRANCH}-\${VERSION}\" docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml pull &&
                 API_VERSION=\"\${PUB_BRANCH}-\${VERSION}\" docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml up -d &&
                 API_VERSION=\"\${PUB_BRANCH}-\${VERSION}\" docker-compose -f docker-compose.yml -f docker-compose.$ENV_TARGET.yml exec -T nginx bash -c 'nginx -t && nginx -s reload' &&
                 docker logout $CI_REGISTRY"
