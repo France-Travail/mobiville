@@ -42,12 +42,15 @@ const AllJobListLink = styled(Link)`
   text-decoration: underline;
 `
 
-const ButtonContainer = styled.div`
-  margin: 32px auto;
+const SearchResult = styled.div`
+  display: ${({ isVisible }) => (isVisible ? 'block' : 'none')};
+`
 
-  a {
-    padding: 8px 32px;
-  }
+const ButtonContainer = styled.div`
+  display: ${({ isVisible }) => (isVisible ? 'block' : 'none')};
+  margin: 32px auto;
+  width: 270px;
+  height: 50px;
 `
 
 const NextButton = styled.a`
@@ -55,11 +58,12 @@ const NextButton = styled.a`
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 24px;
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
   background: ${({ disabled }) => (disabled ? COLOR_GREY : COLOR_PRIMARY)};
   pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
-  border-radius: 48px;
+  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.14), 0px 3px 14px rgba(0, 0, 0, 0.12), 0px 4px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
   padding: 12px 0px;
   margin: auto;
   &,
@@ -121,21 +125,23 @@ const SearchRome = ({ onNext, isSearchFocused }) => {
         label="Saisir ou sélectionner un métier dans la liste déroulante"
         searchKeyword={(k) => setSearchedLabel(k)}
         selectedValue={searchedLabel}
+        removeValue={() => setSelectedKey('')}
         isAutocompleteFocused={(isFocused) => {
           setSearchFocused(isFocused)
           isSearchFocused(isFocused)
         }}
       />
-      <SearchOptions
-        isSearchFocused={searchFocused}
-        optionsList={jobsMatchingCriterions}
-        onSelect={onSelection}
-        isMobile={isMobile}
-      />
-      <ButtonContainer>
+      <SearchResult isVisible={!selectedKey}>
+          <SearchOptions
+            isSearchFocused={searchFocused}
+            optionsList={jobsMatchingCriterions}
+            onSelect={onSelection}
+            isMobile={isMobile}
+          />
+      </SearchResult>
+      <ButtonContainer isVisible={selectedKey}>
           <NextButton
               onClick={() => onNext({ rome: selectedKey })}
-              disabled={!selectedKey}
           >Valider</NextButton>
       </ButtonContainer>
     </Wrapper>

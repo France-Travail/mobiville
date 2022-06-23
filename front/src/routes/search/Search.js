@@ -163,7 +163,7 @@ const Search = () => {
   const Component = ALL_STEPS[index].components
 
   return (
-    <MainLayout style={{ marginBottom: isMobile ? 120 : 250 }}>
+    <MainLayout style={{ marginBottom: isMobile ? 120 : 250 }} menu={{ visible: !isMobile }}>
       <ProgressBar
         style={{ width: `${((index + 1) * 100) / ALL_STEPS.length}%` }}
       />

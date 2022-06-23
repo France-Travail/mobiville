@@ -61,6 +61,7 @@ const SearchInput = (props) => {
       inputRef.current.focus()
     } else {
       handleValueChange('')
+      props.removeValue()
     }
     setIsAutocompleteFocused(!isAutocompleteFocused)
     props.isAutocompleteFocused(!isAutocompleteFocused)
