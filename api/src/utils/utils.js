@@ -113,23 +113,6 @@ export function round(number) {
   return Math.round(+number * 100) / 100
 }
 
-export function randomWithPercentage(data) {
-  let percent = 0
-  const elements = []
-  for (const d of data) {
-    elements.push({ data: d, percent })
-    percent += parseFloat(d.percent)
-  }
-  const rand = Math.random() * 100
-  let elem = null
-  for (const e of elements) {
-    if (rand > e.percent) {
-      elem = e.data
-    }
-  }
-  return elem
-}
-
 /**
  * Take a csv string and return a json object
  *
