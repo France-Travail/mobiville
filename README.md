@@ -175,6 +175,13 @@ Si besoin de déployer depuis une autre branche que celle de recette ou de produ
 `api-{branch}-latest`
 `api-{branch}-{hash commit taccourci}`
 
+### Renouvellement certificat
+
+1. Suivre la procédure indiquée dans le [wiki](https://wiki.beta.pole-emploi.fr/memento-dev/securite/certificat-ssl-tls/)
+2. Puis copié/coller le nouveau certificat dans la variable CI/CD `SSL_mobiville_pole_emploi_fr_crt`
+3. Dans CI/CD > Pipeline > bouton 'Run pipeline' se mettre sur la branche master, puis `FORCE_DEPLOY = install` et `RENEW_TLS = YES`
+4. bouton 'Run pipeline' pour lancer le deploiement
+
 ### Installation from scratch
 
 Il est possible de réinstaller from scratch avec la pipeline.
