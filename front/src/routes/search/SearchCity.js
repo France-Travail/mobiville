@@ -50,16 +50,18 @@ const SearchButton = styled.a`
   justify-content: center;
   font-weight: 700;
   font-size: 24px;
-  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-  background: ${({ disabled }) => (disabled ? COLOR_GREY : COLOR_PRIMARY)};
-  pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
-  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.14), 0px 3px 14px rgba(0, 0, 0, 0.12), 0px 4px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  background: ${COLOR_PRIMARY};
+  color: white;
   border-radius: 20px;
   padding: 12px 0px;
   margin: auto;
-  &,
-  &:hover {
-    color: #fff;
+  @media (hover) {
+    &:hover {
+      background: white;
+      color: ${COLOR_PRIMARY};
+      border: 2px solid ${COLOR_PRIMARY};
+    }
   }
 `
 
@@ -84,6 +86,7 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
   const onSelection = (selectedItem) => {
       setSelectedItem(selectedItem)
       setSearchedValue(selectedItem.label)
+      window.scrollTo(0, 0)
   }
 
   const regionsList = criterions.regions.filter(
