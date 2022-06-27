@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { SearchInput, SearchOptions } from '../../components/SearchComponents'
-import {COLOR_GREY, COLOR_PRIMARY, COLOR_TEXT_PRIMARY} from '../../constants/colors'
+import {COLOR_PRIMARY, COLOR_TEXT_PRIMARY} from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { ucFirstOnly } from '../../utils/utils'
 
