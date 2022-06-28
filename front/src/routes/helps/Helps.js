@@ -556,22 +556,22 @@ const HelpsPage = ({ location: { search } }) => {
     if(isFiltreRecherche) return
     return <>
       <HelpTypeTitleContainer isMobile={isMobile} >
-        <img src={pictoHelpFinanciere}/>  <h2>Les aides financières</h2>
+        <img alt={""} src={pictoHelpFinanciere}/>  <h2>Les aides financières</h2>
       </HelpTypeTitleContainer>
       {getHelpsPanel(listHelpItemFinance)}
 
       <HelpTypeTitleContainer isMobile={isMobile} >
-        <img src={pictoHelpAccompagnement}/>  <HelpTypeTitle isMobile={isMobile} >Les aides {isMobile ? <br/> : "" } d'accompagnement</HelpTypeTitle>
+        <img alt={""} src={pictoHelpAccompagnement}/>  <HelpTypeTitle isMobile={isMobile} >Les aides {isMobile ? <br/> : "" } d'accompagnement</HelpTypeTitle>
       </HelpTypeTitleContainer>
       {getHelpsPanel(listHelpItemAccompagnement)}
 
       <HelpTypeTitleContainer isMobile={isMobile} >
-        <img src={pictoHelpLogement}/>  <h2>Les aides au logement</h2>
+        <img alt={""} src={pictoHelpLogement}/>  <h2>Les aides au logement</h2>
       </HelpTypeTitleContainer>
       {getHelpsPanel(listHelpItemLogement)}
 
       <HelpTypeTitleContainer isMobile={isMobile} >
-        <img src={pictoHelpTransport}/>  <h2>Les aides Transport</h2>
+        <img alt={""} src={pictoHelpTransport}/>  <h2>Les aides Transport</h2>
       </HelpTypeTitleContainer>
       {getHelpsPanel(listHelpItemTransport)}
     </>
