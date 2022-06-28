@@ -136,6 +136,7 @@ const CheckmarksSelectMobile = ({searchCriteria, title, globalWidth, onSearchPar
                 setQuery(validParamsStr)
             }
         }
+        setItemName([""])
     }, [])
 
     useEffect(() => {
@@ -166,7 +167,16 @@ const CheckmarksSelectMobile = ({searchCriteria, title, globalWidth, onSearchPar
                     value={itemName}
                     onChange={handleChange}
                     input={<OutlinedInput label="Tag"/>}
-                    renderValue={(selected) => selected.join(', ')}
+                    renderValue={(selected) => {
+                        if (itemName.length === 1 && itemName[0] === "") {
+                            return <em>Recherche d'emploi, logement, déménagement</em>
+                        }
+
+                        return "Recherche "+ selected.filter((item) =>
+                            item != null && item !== ""
+                        ).join(', ')
+
+                    }}
                 >
                     {Object.keys(searchCriteria).map((key) => (
                         <MenuItem key={key} value={searchCriteria[key].name}

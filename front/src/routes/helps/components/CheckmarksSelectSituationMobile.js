@@ -115,7 +115,7 @@ const styleLineBoxUnSelected = {
 }
 
 
-const CheckmarksSelectSituationMobile = ({searchCriteria, title, globalWidth, onSearchParameters, params}) => {
+const CheckmarksSelectSituationMobile = ({searchCriteria, title, globalWidth, onSearchParameters, params, placeholder}) => {
 
     const [itemName, setItemName] = React.useState("")
     const [query, setQuery] = useState("")
@@ -136,6 +136,7 @@ const CheckmarksSelectSituationMobile = ({searchCriteria, title, globalWidth, on
                 setQuery(validParamsStr)
             }
         }
+        setItemName("empty")
     }, [])
 
     useEffect(() => {
@@ -149,7 +150,7 @@ const CheckmarksSelectSituationMobile = ({searchCriteria, title, globalWidth, on
             target: { value },
         } = event
         if(typeof itemName === "string" ? value === itemName : value === itemName.toString() ) {
-            setItemName("")
+            setItemName("empty")
             setQuery("empty")
         } else {
             setItemName(typeof value === 'string' ? value.split(',') : value)
@@ -170,7 +171,13 @@ const CheckmarksSelectSituationMobile = ({searchCriteria, title, globalWidth, on
                     value={itemName}
                     onChange={handleChange}
                     input={<OutlinedInput label="Tag"/>}
-                    renderValue={(selected) => selected.join(', ')}
+                    renderValue={(selected) => {
+                        if (itemName === "" || itemName === "empty") {
+                            return <em>{placeholder}</em>
+                        }
+
+                        return selected.join(', ')
+                    }}
                 >
                     {Object.keys(searchCriteria).map((key) => (
                         <MenuItem key={key} value={searchCriteria[key].name}
@@ -192,6 +199,7 @@ CheckmarksSelectSituationMobile.props = {
     globalWidth: PropTypes.number,
     onSearchParameters: PropTypes.any,
     params: PropTypes.string,
+    placeholder: PropTypes.string
 }
 
 export default CheckmarksSelectSituationMobile
