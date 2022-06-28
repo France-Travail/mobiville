@@ -58,9 +58,8 @@ const SearchButton = styled.a`
   margin: auto;
   @media (hover) {
     &:hover {
-      background: white;
-      color: ${COLOR_PRIMARY};
-      border: 2px solid ${COLOR_PRIMARY};
+      color: white;
+      opacity: 0.8;
     }
   }
 `
