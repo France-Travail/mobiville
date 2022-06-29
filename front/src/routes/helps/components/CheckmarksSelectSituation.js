@@ -54,6 +54,14 @@ const SelectLabel = styled.label`
   bottom: 40px;
   z-index: 1;
   margin-left: ${Math.floor(globalWidth / 100)}px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  color: #23333E;
+  top: -3px;
+  left: -1px;
 `
 
 const styleCheckBox = makeStyles({
