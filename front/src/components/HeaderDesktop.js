@@ -85,7 +85,7 @@ const HeaderDesktop = () => {
                 <img
                     src={LOGO}
                     alt="Retour à la page d’accueil"
-                    style={{height: 70}}
+                    style={{height: 85}}
                 />
             </Link>
             <IconsContainer>
