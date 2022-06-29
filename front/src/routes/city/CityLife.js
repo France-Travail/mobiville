@@ -392,7 +392,7 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
         backLink={backLink}
         isMobile={isMobile}
         notFixed={!isMobile}
-        title={` Information sur le logement à ${ucFirstOnly(city.nom_comm)}`}
+        title={` Information sur le cadre de vie à ${ucFirstOnly(city.nom_comm)}`}
       />
       {isMobile ? mobileElements : desktopElement}
       <ElectedOfficialsBlock>
