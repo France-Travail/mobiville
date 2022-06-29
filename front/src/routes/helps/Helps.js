@@ -286,7 +286,7 @@ const HelpsPage = ({ location: { search } }) => {
     flex-grow: 0;
     
     H2 {
-      width: 410px;
+      width: ${({ isMobile }) => (isMobile ? '248px' : '410px')};
       height: 28px;
       font-family: 'Roboto';
       font-style: normal;
@@ -476,10 +476,12 @@ const HelpsPage = ({ location: { search } }) => {
   useEffect(() => {setFiltreRecherche(params && params.length > 0 ? true : false )}, [params])
   useEffect(() => {updateQueryParameter() }, [searchParametersCategories, searchParametersSituations, searchParametersSituationsAge])
 
+  const gridStyle = isMobile ? {width: "350px", minWidth: "350px"} : {width: "1050px", minWidth: "1050px"}
+
   function getHelpsPanel(listHelpItems) {
     return <>
 
-      <Grid container spacing={2} style={{width: "1050px", minWidth: "1050px"}} >
+      <Grid container spacing={2} style={gridStyle} >
       {listHelpItems.map((item) => {
         // kinda clunky, using labels to determine icon.
         const helpIcon = item.type.includes('admin') ? (
@@ -495,7 +497,7 @@ const HelpsPage = ({ location: { search } }) => {
         )
 
         return (
-            <Grid item xs={6} md={6} >
+            <Grid item xs={isMobile ? 12 : 6} md={6} >
               <HelpItem
                   isMobile={isMobile}
                   key={item.id}
