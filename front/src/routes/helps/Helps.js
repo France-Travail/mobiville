@@ -216,19 +216,19 @@ const CATEGORIES = [
     key: 'emploi',
     icon: '/icons/emploi.svg',
     text: 'Je recherche un emploi',
-    name: "d'emploi"
+    name: "Je recherche un emploi"
   },
   {
     key: 'logement',
     icon: '/icons/logement.svg',
     text: 'Je recherche un logement',
-    name: "logement"
+    name: "Je recherche un logement"
   },
   {
     key: 'déménage',
     icon: '/icons/demenagement.svg',
     text: 'Je déménage prochainement',
-    name: "déménagement"
+    name: "Je déménage prochainement"
   },
 ]
 
@@ -236,27 +236,27 @@ const SITUATIONS = [
   {
     key: "demandeur d'emploi",
     text: "Demandeur d'emploi",
-    name: "Demandeur d'emploi"
+    name: "Je suis demandeur d'emploi"
   },
   {
     key: 'salarié',
     text: 'Salarié',
-    name: "Salarié"
+    name: "Je suis salarié"
   },
   {
     key: 'alternance',
     text: 'Alternant',
-    name: "Alternant"
+    name: "Je suis alternant"
   },
   {
     key: 'moins de 26 ans',
     text: '- 26 ans',
-    name: "moins de 26 ans"
+    name: "J'ai moins de 26 ans"
   },
   {
     key: 'plus de 26 ans',
     text: '+ 26 ans',
-    name: "plus de 26 ans"
+    name: "J'ai plus de 26 ans"
   },
 ]
 
@@ -613,24 +613,24 @@ const HelpsPage = ({ location: { search } }) => {
             {!isMobile && (
                 <CheckmarksSelectSituation searchCriteria={SITUATIONS.slice(0, 3)} title={"Votre situation"}
                                            onSearchParameters={onSearchParametersSituations} params={params}
-                                           placeholder={"Demandeur d'emploi, salarié"}/>
+                                           placeholder={"Demandeur d'emploi, salarié"} selectId={"situation-simple-checkbox"} />
             )}
             {isMobile && (
                 <CheckmarksSelectSituationMobile searchCriteria={SITUATIONS.slice(0, 3)} title={"Votre situation"}
                                                  onSearchParameters={onSearchParametersSituations} params={params}
-                                                 placeholder={"Demandeur d'emploi, salarié"}/>
+                                                 placeholder={"Demandeur d'emploi, salarié"} selectId={"situation-simple-checkbox"} />
             )}
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>
             {!isMobile && (
                 <CheckmarksSelectSituation searchCriteria={SITUATIONS.slice(-2)} title={"Votre âge"}
                                            onSearchParameters={onSearchParametersSituationsAge} params={params}
-                                           placeholder={"Moins de 26 ans, plus de 26 ans"}/>
+                                           placeholder={"Moins de 26 ans, plus de 26 ans"} selectId={"age-simple-checkbox"} />
             )}
             {isMobile && (
                 <CheckmarksSelectSituationMobile searchCriteria={SITUATIONS.slice(-2)} title={"Votre âge"}
                                                  onSearchParameters={onSearchParametersSituationsAge} params={params}
-                                                 placeholder={"Moins de 26 ans, plus de 26 ans"}/>
+                                                 placeholder={"Moins de 26 ans, plus de 26 ans"} selectId={"age-simple-checkbox"} />
             )}
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>

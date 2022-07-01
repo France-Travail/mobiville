@@ -67,7 +67,7 @@ input[type='color'] {
   font-size: 16px;
 }
 
-// ce selector risque de ne pas fonctionner lorsqu'il y aura plusieurs "select checkbox" /!\
+
 #menu->div:nth-child(3){
   background: #FFFFFF;
   border: 1px solid #F6F7FB;
@@ -86,11 +86,23 @@ input[type='color'] {
   }
 }
 
-div>div>em {
+
+#project-multiple-checkbox>em, #situation-simple-checkbox>em, #age-simple-checkbox>em {
   font-family: 'Roboto';
   font-style: normal;
   color:#657078;
   font-weight: 400;
   font-size: 14px;
   line-height: 16px;
+}
+
+#project-multiple-checkbox, #situation-simple-checkbox, #age-simple-checkbox {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  color:#191970;
+  margin-top: 3px;
+  margin-left: 1px;
 }
