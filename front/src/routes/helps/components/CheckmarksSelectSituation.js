@@ -8,10 +8,8 @@ import Select from '@mui/material/Select'
 import Checkbox from '@mui/material/Checkbox'
 import styled from 'styled-components'
 import {makeStyles} from "@mui/styles"
-import {COLOR_VERT_MOBIVILLE} from "../../../constants/colors"
 import PropTypes from "prop-types"
 import {useHistory} from "react-router-dom"
-import CheckmarksSelect from "./CheckmarksSelect"
 
 const globalWidth = 232
 
@@ -64,17 +62,6 @@ const SelectLabel = styled.label`
   left: -1px;
 `
 
-const styleCheckBox = makeStyles({
-    root: {
-        "margin-left": "0px",
-        "&$checked": {
-            color: COLOR_VERT_MOBIVILLE
-        }
-    },
-    checked: {}
-})
-
-
 const useStyle = makeStyles({
     text: {
         fontFamily: 'Roboto',
@@ -100,11 +87,11 @@ const useStyle = makeStyles({
 
 
 const styleLineBoxSelected = {
-    "display": "flex",
+    "display": "grid",
     "flexDirection": "row",
     "justifyContent": "center",
     "alignItems": "center",
-    "padding": "8px",
+    "padding": "16px",
     "gap": "10px",
     "margin": "20px 10px",
     "borderRadius": "8px",
@@ -112,19 +99,20 @@ const styleLineBoxSelected = {
 }
 
 const styleLineBoxUnSelected = {
-    "display": "flex",
+    "display": "grid",
     "flexDirection": "row",
     "justifyContent": "center",
     "alignItems": "center",
-    "padding": "8px",
+    "padding": "16px",
     "gap": "10px",
     "margin": "20px 10px",
     "borderRadius": "8px",
+    "border": "1px solid #e7ebef",
     "background": "#fff",
 }
 
 
-const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearchParameters, params, placeholder}) => {
+const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearchParameters, params, placeholder, selectId}) => {
 
     const [itemName, setItemName] = React.useState("")
     const [query, setQuery] = useState("")
@@ -168,15 +156,14 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
     }
 
     const classes = useStyle()
-    const classeCheckBox = styleCheckBox()
 
     return (
         <DivFormControl>
             <FormControl sx={{m: 1, width: globalWidth}}>
                 <SelectLabel>{title}</SelectLabel>
                 <Select
-                    labelId="demo-multiple-checkbox-label"
-                    id="demo-multiple-checkbox"
+                    labelId="simple-checkbox-label"
+                    id={selectId}
                     value={itemName}
                     onChange={handleChange}
                     input={<OutlinedInput label="Tag"/>}
@@ -192,7 +179,7 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
                         <MenuItem key={key} value={searchCriteria[key].name}
                                   style={itemName.indexOf(searchCriteria[key].name) > -1 ? styleLineBoxSelected : styleLineBoxUnSelected}>
                             <Checkbox checked={itemName.indexOf(searchCriteria[key].name) > -1}
-                                      classes={{root: classeCheckBox.root, checked: classeCheckBox.checked}}/>
+                                      style={{display: "none"}}/>
                             <ListItemText className={classes.text} primary={searchCriteria[key].name}/>
                         </MenuItem>
                     ))}
@@ -202,13 +189,14 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
     )
 }
 
-CheckmarksSelect.props = {
+CheckmarksSelectSituation.props = {
     searchCriteria: PropTypes.array,
     title: PropTypes.string,
     globalWidth: PropTypes.number,
     onSearchParameters: PropTypes.any,
     params: PropTypes.string,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    selectId: PropTypes.string,
 }
 
 export default CheckmarksSelectSituation

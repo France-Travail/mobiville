@@ -161,6 +161,18 @@ const CheckmarksSelectMobile = ({searchCriteria, title, globalWidth, onSearchPar
         setQuery(value)
     }
 
+    const replaceLast = (str, pattern, replacement) => {
+        const match =
+            typeof pattern === 'string'
+                ? pattern
+                : (str.match(new RegExp(pattern.source, 'g')) || []).slice(-1)[0]
+        if (!match) return str
+        const last = str.lastIndexOf(match)
+        return last !== -1
+            ? `${str.slice(0, last)}${replacement}${str.slice(last + match.length)}`
+            : str
+    }
+
     const classes = useStyle()
     const classeCheckBox = styleCheckBox()
 
@@ -169,8 +181,8 @@ const CheckmarksSelectMobile = ({searchCriteria, title, globalWidth, onSearchPar
             <FormControl sx={{m: 1, width: globalWidth}}>
                 <SelectLabel>{title}</SelectLabel>
                 <Select
-                    labelId="demo-multiple-checkbox-label"
-                    id="demo-multiple-checkbox"
+                    labelId="project-multiple-checkbox-label"
+                    id="project-multiple-checkbox"
                     multiple
                     value={itemName}
                     onChange={handleChange}
@@ -180,10 +192,19 @@ const CheckmarksSelectMobile = ({searchCriteria, title, globalWidth, onSearchPar
                             return <em>Recherche d'emploi, logement, déménagement</em>
                         }
 
-                        return "Recherche "+ selected.filter((item) =>
+                        let text = ""+ selected.filter((item) =>
                             item != null && item !== ""
                         ).join(', ')
 
+                        function countOccurences(string, word) {
+                            return string.split(word).length - 1
+                        }
+                        const count = countOccurences(text,"Je recherche")
+                        if(count > 1) {
+                            text = replaceLast(text, "Je recherche", "" )
+                        }
+
+                        return "J"+text.toLowerCase().substring(1)
                     }}
                 >
                     {Object.keys(searchCriteria).map((key) => (
