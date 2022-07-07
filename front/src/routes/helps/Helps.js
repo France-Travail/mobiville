@@ -487,7 +487,7 @@ const HelpsPage = ({ location: { search } }) => {
     return <>
 
       <Grid container spacing={2} style={gridStyle} >
-      {listHelpItems.map((item, index) => {
+      {listHelpItems.map((item) => {
         // kinda clunky, using labels to determine icon.
         const helpIcon = item.type.includes('admin') ? (
             <ReceiptLongIcon/>
