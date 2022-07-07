@@ -106,3 +106,10 @@ input[type='color'] {
   margin-top: 3px;
   margin-left: 1px;
 }
+
+.stickyHeader {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
