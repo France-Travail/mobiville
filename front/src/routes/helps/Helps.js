@@ -503,9 +503,9 @@ const HelpsPage = ({ location: { search } }) => {
 
         // moche : on dimmensionne les images selon le nom du fichier (fonctionnait en s'appuyant sur les dimmensions du fichier mais ralenti trop la page (+ code assez lourd) :/ )
         let styleImage
-        if(item.logo == "mobili-pass.jpg" || item.logo == "visale.jpg" || item.logo == "action-logement-2.png" ) {
+        if(item.logo === "mobili-pass.jpg" || item.logo === "visale.jpg" || item.logo === "action-logement-2.png" ) {
           styleImage = {width: '80px',  height: 'auto'}
-        } else if (item.logo == "renault-group.png") {
+        } else if (item.logo === "renault-group.png") {
           styleImage = {width: '110px',  height: 'auto'}
         } else {
           styleImage = {width: 'auto',  height: '60px'}
