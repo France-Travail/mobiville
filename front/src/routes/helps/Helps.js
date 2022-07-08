@@ -116,7 +116,7 @@ const HelpItemImgContainer = styled.div`
   display: inline-grid;
   vertical-align: bottom;
 
-  margin-left: 5px;
+  margin-left: ${(isMobile) => (isMobile ? '0px' : '5px')};
 
   background: white;
   width: 96px;
