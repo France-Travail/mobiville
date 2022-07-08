@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import queryString from 'query-string'
-import {Helmet} from 'react-helmet'
+import { Helmet } from 'react-helmet'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import EuroIcon from '@mui/icons-material/Euro'
 import HomeWorkIcon from '@mui/icons-material/HomeWork'
@@ -11,23 +11,27 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
 import PeopleIcon from '@mui/icons-material/People'
 
-import {useHelps} from '../../common/contexts/helpsContext'
-import {useWindowSize} from '../../common/hooks/window-size'
+import { useHelps } from '../../common/contexts/helpsContext'
+import { useWindowSize } from '../../common/hooks/window-size'
 import MainLayout from '../../components/MainLayout'
-import {COLOR_OTHER_GREEN, COLOR_PRIMARY, COLOR_TEXT_PRIMARY} from '../../constants/colors'
-import {isMobileView} from '../../constants/mobile'
-import {ucFirst} from '../../utils/utils'
+import {
+  COLOR_OTHER_GREEN,
+  COLOR_PRIMARY,
+  COLOR_TEXT_PRIMARY,
+} from '../../constants/colors'
+import { isMobileView } from '../../constants/mobile'
+import { ucFirst } from '../../utils/utils'
 import CheckmarksSelect from './components/CheckmarksSelect'
 import CheckmarksSelectSituation from './components/CheckmarksSelectSituation'
-import CheckmarksSelectMobile from "./components/CheckmarksSelectMobile"
-import CheckmarksSelectSituationMobile from "./components/CheckmarksSelectSituationMobile"
-import UseScrollingUp from "./components/UseScrollingUp"
+import CheckmarksSelectMobile from './components/CheckmarksSelectMobile'
+import CheckmarksSelectSituationMobile from './components/CheckmarksSelectSituationMobile'
+import UseScrollingUp from './components/UseScrollingUp'
 
 import pictoHelpAccompagnement from '../../assets/images/icons/help-accompagnement.svg'
 import pictoHelpFinanciere from '../../assets/images/icons/help-financiere.svg'
 import pictoHelpLogement from '../../assets/images/icons/help-logement.svg'
 import pictoHelpTransport from '../../assets/images/icons/help-transport.svg'
-import {Grid} from "@mui/material"
+import { Grid } from '@mui/material'
 
 //import TypeHelpFilter from "./components/TypeHelpFilter";
 
@@ -36,18 +40,18 @@ const Title = styled.h1`
   font-weight: 700;
   margin: 20px auto;
   margin-bottom: 16px;
-  
+
   width: 1036px;
   height: 42px;
-  
+
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 900;
   font-size: 36px;
   line-height: 42px;
-  display:  ${({ isMobile }) => (isMobile ? 'contents' : 'flex')};
+  display: ${({ isMobile }) => (isMobile ? 'contents' : 'flex')};
   align-items: center;
-  
+
   color: ${COLOR_PRIMARY};
 `
 
@@ -55,14 +59,15 @@ const Header = styled.div`
   font-weight: bold;
   display: flex;
   align-items: center;
-  height:118px;
-  background-color:${COLOR_OTHER_GREEN};
-  
-   div, a {
+  height: 118px;
+  background-color: ${COLOR_OTHER_GREEN};
+
+  div,
+  a {
     margin: 0 auto;
-   }
-   
-   ${(props) =>
+  }
+
+  ${(props) =>
     props.isMobile &&
     `
     display: block;
@@ -74,18 +79,17 @@ const Header = styled.div`
 `
 
 const HeaderSearchBloc = styled.div`
- display: inline-grid;
- align-items: center;
- margin: 0px 5px !important;
- vertical-align: bottom;
- 
- ${(props) =>
+  display: inline-grid;
+  align-items: center;
+  margin: 0px 5px !important;
+  vertical-align: bottom;
+
+  ${(props) =>
     props.isMobile &&
     `
     padding: 5px 0px;
   `}
 `
-
 
 const Container = styled.div`
   display: flex;
@@ -111,9 +115,9 @@ const HelpsPanel = styled.div`
 const HelpItemImgContainer = styled.div`
   display: inline-grid;
   vertical-align: bottom;
-  
-  margin-left: 5px;
-  
+
+  margin-left: ${(isMobile) => (isMobile ? '0px' : '5px')};
+
   background: white;
   width: 96px;
   align-items: start;
@@ -129,7 +133,7 @@ const HelpItemTextContainer = styled.div`
 const HelpItemTextSubContainer = styled.div`
   display: inline-grid;
   vertical-align: top;
-  width:${({ isMobile }) => (isMobile ? '200px' : '350px')};
+  width: ${({ isMobile }) => (isMobile ? '200px' : '350px')};
 `
 
 const HelpItemTextTitle = styled.h4`
@@ -140,10 +144,10 @@ const HelpItemTextTitle = styled.h4`
   font-weight: 700;
   font-size: 18px;
   line-height: ${({ isMobile }) => (isMobile ? '21px' : '33px')};
-  
+
   vertical-align: bottom;
   display: contents;
-  
+
   color: ${COLOR_TEXT_PRIMARY};
 `
 
@@ -179,10 +183,10 @@ const HelpItemText = styled.div`
 `
 
 const HelpItemContainer = styled.div`
-  background: #C3E9E9;
+  background: #c3e9e9;
   color: ${COLOR_PRIMARY};
-  display : flex;
-  align-items : center;
+  display: flex;
+  align-items: center;
   border-radius: 4px;
   padding: 1px 3px;
 `
@@ -216,25 +220,24 @@ const SearchButton = styled(Link)`
   }
 `
 
-
 const CATEGORIES = [
   {
     key: 'emploi',
     icon: '/icons/emploi.svg',
     text: 'Je recherche un emploi',
-    name: "Je recherche un emploi"
+    name: 'Je recherche un emploi',
   },
   {
     key: 'logement',
     icon: '/icons/logement.svg',
     text: 'Je recherche un logement',
-    name: "Je recherche un logement"
+    name: 'Je recherche un logement',
   },
   {
     key: 'déménage',
     icon: '/icons/demenagement.svg',
     text: 'Je déménage prochainement',
-    name: "Je déménage prochainement"
+    name: 'Je déménage prochainement',
   },
 ]
 
@@ -242,27 +245,27 @@ const SITUATIONS = [
   {
     key: "demandeur d'emploi",
     text: "Demandeur d'emploi",
-    name: "Je suis demandeur d'emploi"
+    name: "Je suis demandeur d'emploi",
   },
   {
     key: 'salarié',
     text: 'Salarié',
-    name: "Je suis salarié"
+    name: 'Je suis salarié',
   },
   {
     key: 'alternance',
     text: 'Alternant',
-    name: "Je suis alternant"
+    name: 'Je suis alternant',
   },
   {
     key: 'moins de 26 ans',
     text: '- 26 ans',
-    name: "J'ai moins de 26 ans"
+    name: "J'ai moins de 26 ans",
   },
   {
     key: 'plus de 26 ans',
     text: '+ 26 ans',
-    name: "J'ai plus de 26 ans"
+    name: "J'ai plus de 26 ans",
   },
 ]
 
@@ -277,20 +280,20 @@ const HelpsPage = ({ location: { search } }) => {
     flex-direction: row;
     align-items: center;
     gap: 8px;
-    
-    margin-top: ${({ isFirst }) => (isFirst ? '' : '40px')}; 
+
+    margin-top: ${({ isFirst }) => (isFirst ? '' : '40px')};
     margin-bottom: 20px;
-    
+
     width: ${({ isMobile }) => (isMobile ? '342px' : '1033px')};
     height: 71px;
-    
-    background: #C7C7F3;
+
+    background: #c7c7f3;
     border-radius: 4px;
-    
+
     flex: none;
     order: 0;
     flex-grow: 0;
-    
+
     H2 {
       width: ${({ isMobile }) => (isMobile ? '248px' : '410px')};
       height: 28px;
@@ -304,38 +307,38 @@ const HelpsPage = ({ location: { search } }) => {
       order: 1;
       flex-grow: 0;
     }
-    
+
     img {
-      margin-left:8px;
+      margin-left: 8px;
     }
   `
-  
+
   const HelpTypeTitle = styled.h2`
     ${({ isMobile }) => (isMobile ? 'margin-bottom: 50px;' : '')}
   `
-  
+
   const HelpItem = styled(Link)`
-  border-radius: 8px;
-  overflow: hidden;
-  
-  justify-content: flex-end;
-  align-items: flex-end;
-  
-  padding: 18px;
-  gap: 33px;
-  
-  width: ${({ isMobile }) => (isMobile ? '340px' : '511px')};
-  height: ${({ isMobile }) => (isMobile ? '' : '231px')};
-  
-  display: block;
-  
-  background: #FFFFFF;
-  color: ${COLOR_TEXT_PRIMARY};
-  
-  &:hover {
-    border: 2px solid #191970;
-  }
-`
+    border-radius: 8px;
+    overflow: hidden;
+
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    padding: 18px;
+    gap: 33px;
+
+    width: ${({ isMobile }) => (isMobile ? '340px' : '511px')};
+    height: ${({ isMobile }) => (isMobile ? '' : '231px')};
+
+    display: block;
+
+    background: #ffffff;
+    color: ${COLOR_TEXT_PRIMARY};
+
+    &:hover {
+      border: 2px solid #191970;
+    }
+  `
 
   useEffect(() => {
     onLoadPreviews()
@@ -343,19 +346,17 @@ const HelpsPage = ({ location: { search } }) => {
 
   const parsedQueryString = queryString.parse(search)
   const parsedProjects = parsedQueryString.project
-      ? typeof parsedQueryString.project === 'string'
-          ? [parsedQueryString.project]
-          : parsedQueryString.project
-      : []
+    ? typeof parsedQueryString.project === 'string'
+      ? [parsedQueryString.project]
+      : parsedQueryString.project
+    : []
   const parsedSituations = parsedQueryString.situation
     ? typeof parsedQueryString.situation === 'string'
       ? [parsedQueryString.situation]
       : parsedQueryString.situation
     : []
 
-  const projects = CATEGORIES.filter(({ key }) =>
-    parsedProjects.includes(key)
-  )
+  const projects = CATEGORIES.filter(({ key }) => parsedProjects.includes(key))
   const situations = SITUATIONS.filter(({ key }) =>
     parsedSituations.includes(key)
   )
@@ -363,18 +364,18 @@ const HelpsPage = ({ location: { search } }) => {
   function filterListHelpBySituationAndProject(preview) {
     if (situations.length) {
       if (
-          !situations.every(({key}) =>
-              preview.who.toLowerCase().includes(key.toLowerCase())
-          )
+        !situations.every(({ key }) =>
+          preview.who.toLowerCase().includes(key.toLowerCase())
+        )
       ) {
         return false
       }
     }
     if (projects.length) {
       if (
-          !projects.some(({key}) =>
-              preview.situation.toLowerCase().includes(key.toLowerCase())
-          )
+        !projects.some(({ key }) =>
+          preview.situation.toLowerCase().includes(key.toLowerCase())
+        )
       ) {
         return false
       }
@@ -383,92 +384,133 @@ const HelpsPage = ({ location: { search } }) => {
   }
 
   previews.forEach((preview) => {
-    if(preview.type.includes(",")) {
-        preview.type = preview.type.substring(0, preview.type.indexOf(","))
+    if (preview.type.includes(',')) {
+      preview.type = preview.type.substring(0, preview.type.indexOf(','))
     }
-    if(preview.goal.includes(".")) {
-      preview.goal = preview.goal.substring(0, preview.goal.indexOf(".") + 1 )
+    if (preview.goal.includes('.')) {
+      preview.goal = preview.goal.substring(0, preview.goal.indexOf('.') + 1)
     }
-    if(preview.type.toLowerCase().includes("aide administrative") || preview.type.toLowerCase().includes("accompagnement du projet")) {
-      preview.type = "Accompagnement"
+    if (
+      preview.type.toLowerCase().includes('aide administrative') ||
+      preview.type.toLowerCase().includes('accompagnement du projet')
+    ) {
+      preview.type = 'Accompagnement'
     }
   })
   const listHelpItem = previews.filter((preview) => {
     return filterListHelpBySituationAndProject(preview)
   })
   const listHelpItemFinance = listHelpItem.filter((preview) => {
-    return preview.type.toLowerCase().includes("aide financière")
+    return preview.type.toLowerCase().includes('aide financière')
   })
   const listHelpItemLogement = listHelpItem.filter((preview) => {
-    return preview.type.toLowerCase().includes("accès au logement")
+    return preview.type.toLowerCase().includes('accès au logement')
   })
   const listHelpItemAccompagnement = listHelpItem.filter((preview) => {
-    return preview.type.includes("Accompagnement")
+    return preview.type.includes('Accompagnement')
   })
   const listHelpItemTransport = listHelpItem.filter((preview) => {
-    return preview.type.toLowerCase().includes("aide transport")
+    return preview.type.toLowerCase().includes('aide transport')
   })
-  const listEveryHelpItems = [...listHelpItemFinance, ...listHelpItemLogement, ...listHelpItemAccompagnement, ...listHelpItemTransport]
+  const listEveryHelpItems = [
+    ...listHelpItemFinance,
+    ...listHelpItemLogement,
+    ...listHelpItemAccompagnement,
+    ...listHelpItemTransport,
+  ]
 
-  const filterHelpItemWho = function(who) {
-    let whoItems = ""
+  const filterHelpItemWho = function (who) {
+    let whoItems = ''
     const lowerCaseWho = who.toLowerCase()
-    if (lowerCaseWho.includes("salarié")) whoItems += "salarié^"
-    if (lowerCaseWho.includes("*tout public")) whoItems += "*tout public^"
-    if (lowerCaseWho.includes("alternance")) whoItems += "alternance^"
+    if (lowerCaseWho.includes('salarié')) whoItems += 'salarié^'
+    if (lowerCaseWho.includes('*tout public')) whoItems += '*tout public^'
+    if (lowerCaseWho.includes('alternance')) whoItems += 'alternance^'
 
-    if(lowerCaseWho.includes("demandeur d'emploi avec promesse d'embauche^")) {
+    if (lowerCaseWho.includes("demandeur d'emploi avec promesse d'embauche^")) {
       whoItems += "demandeur d'emploi avec promesse d'embauche^"
     } else {
-      if (lowerCaseWho.includes("demandeur d'emploi")) whoItems += "demandeur d'emploi^"
+      if (lowerCaseWho.includes("demandeur d'emploi"))
+        whoItems += "demandeur d'emploi^"
     }
 
-    if (lowerCaseWho.includes("DE -26 ans")) whoItems += "DE -26 ans^"
-    if (lowerCaseWho.includes("moins de 26 ans")) whoItems += "-26 ans^"
-    if (lowerCaseWho.includes("plus de 26 ans")) whoItems += "+26 ans^"
-    if (lowerCaseWho.includes("moins de 30 ans")) whoItems += "-30 ans^"
-    if (lowerCaseWho.includes("plus de 30 ans")) whoItems += "+30 ans^"
-    if (lowerCaseWho.includes("jeune de 18 à 30 ans")) whoItems += "jeune de 18 à 30 ans^"
+    if (lowerCaseWho.includes('DE -26 ans')) whoItems += 'DE -26 ans^'
+    if (lowerCaseWho.includes('moins de 26 ans')) whoItems += '-26 ans^'
+    if (lowerCaseWho.includes('plus de 26 ans')) whoItems += '+26 ans^'
+    if (lowerCaseWho.includes('moins de 30 ans')) whoItems += '-30 ans^'
+    if (lowerCaseWho.includes('plus de 30 ans')) whoItems += '+30 ans^'
+    if (lowerCaseWho.includes('jeune de 18 à 30 ans'))
+      whoItems += 'jeune de 18 à 30 ans^'
 
-    if(whoItems.length > 0) whoItems = whoItems.substring(0, whoItems.length - 1)
+    if (whoItems.length > 0)
+      whoItems = whoItems.substring(0, whoItems.length - 1)
 
     return whoItems
   }
 
   const [wholeUrlParameters, setWholeUrlParameters] = React.useState('')
-  const [searchParametersCategories, setSearchParametersCategories] = React.useState('')
-  const [searchParametersSituations, setSearchParametersSituations] = React.useState('')
-  const [searchParametersSituationsAge, setSearchParametersSituationsAge] = React.useState('')
+  const [searchParametersCategories, setSearchParametersCategories] =
+    React.useState('')
+  const [searchParametersSituations, setSearchParametersSituations] =
+    React.useState('')
+  const [searchParametersSituationsAge, setSearchParametersSituationsAge] =
+    React.useState('')
 
-  const onSearchParametersCategories = function(parameter) {
-    let listParameter = parameter.toString().replaceAll(",","&project=")
-    CATEGORIES.forEach((categorie) =>  listParameter = listParameter.replaceAll(categorie.name, categorie.key))
-    if(listParameter.length === 0) setSearchParametersCategories("")
-    else setSearchParametersCategories("project="+listParameter)
+  const onSearchParametersCategories = function (parameter) {
+    let listParameter = parameter.toString().replaceAll(',', '&project=')
+    CATEGORIES.forEach(
+      (categorie) =>
+        (listParameter = listParameter.replaceAll(
+          categorie.name,
+          categorie.key
+        ))
+    )
+    if (listParameter.length === 0) setSearchParametersCategories('')
+    else setSearchParametersCategories('project=' + listParameter)
   }
-  const onSearchParametersSituations = function(parameter) {
-    if(parameter === "empty") {
-      setSearchParametersSituations("")
+  const onSearchParametersSituations = function (parameter) {
+    if (parameter === 'empty') {
+      setSearchParametersSituations('')
       return
     }
-    let listParameter = parameter.toString().replaceAll(",","&situation=")
-    SITUATIONS.forEach((situation) =>  listParameter = listParameter.replaceAll(situation.name, situation.key))
-    setSearchParametersSituations("situation="+listParameter)
+    let listParameter = parameter.toString().replaceAll(',', '&situation=')
+    SITUATIONS.forEach(
+      (situation) =>
+        (listParameter = listParameter.replaceAll(
+          situation.name,
+          situation.key
+        ))
+    )
+    setSearchParametersSituations('situation=' + listParameter)
   }
-  const onSearchParametersSituationsAge = function(parameter) {
-    if(parameter === "empty") {
-      setSearchParametersSituationsAge("")
+  const onSearchParametersSituationsAge = function (parameter) {
+    if (parameter === 'empty') {
+      setSearchParametersSituationsAge('')
       return
     }
-    let listParameter = parameter.toString().replaceAll(",","&situation=")
-    SITUATIONS.forEach((situation) =>  listParameter = listParameter.replaceAll(situation.name, situation.key))
-    setSearchParametersSituationsAge("situation="+listParameter)
+    let listParameter = parameter.toString().replaceAll(',', '&situation=')
+    SITUATIONS.forEach(
+      (situation) =>
+        (listParameter = listParameter.replaceAll(
+          situation.name,
+          situation.key
+        ))
+    )
+    setSearchParametersSituationsAge('situation=' + listParameter)
   }
 
-  const updateQueryParameter = function() {
-    const urlParameters = "?"+searchParametersCategories+"&"+searchParametersSituations+"&"+searchParametersSituationsAge
-    if(!urlParameters.includes("situation") && !urlParameters.includes("project")) {
-        setWholeUrlParameters("")
+  const updateQueryParameter = function () {
+    const urlParameters =
+      '?' +
+      searchParametersCategories +
+      '&' +
+      searchParametersSituations +
+      '&' +
+      searchParametersSituationsAge
+    if (
+      !urlParameters.includes('situation') &&
+      !urlParameters.includes('project')
+    ) {
+      setWholeUrlParameters('')
     } else {
       setWholeUrlParameters(urlParameters)
     }
@@ -477,129 +519,159 @@ const HelpsPage = ({ location: { search } }) => {
   const params = decodeURIComponent(window.location.search)
   const [isFiltreRecherche, setFiltreRecherche] = useState(false)
 
-  useEffect(() => {setFiltreRecherche(params && params.length > 0 ? true : false )}, [params])
-  useEffect(() => {updateQueryParameter() }, [searchParametersCategories, searchParametersSituations, searchParametersSituationsAge])
+  useEffect(() => {
+    setFiltreRecherche(params && params.length > 0 ? true : false)
+  }, [params])
+  useEffect(() => {
+    updateQueryParameter()
+  }, [
+    searchParametersCategories,
+    searchParametersSituations,
+    searchParametersSituationsAge,
+  ])
 
-  const gridStyle = isMobile ? {width: "350px", minWidth: "350px"} : {width: "1050px", minWidth: "1050px"}
+  const gridStyle = isMobile
+    ? { width: '350px', minWidth: '350px' }
+    : { width: '1050px', minWidth: '1050px' }
+  const logoStyle = {
+    'mobili-pass.jpg': { width: '80px', height: 'auto' },
+    'visale.jpg': { width: '80px', height: 'auto' },
+    'action-logement-2.png': { width: '80px', height: 'auto' },
+    'renault-group.png': { width: '110px', height: 'auto' },
+    defaultStyle: { width: 'auto', height: '60px' },
+  }
 
   function getHelpsPanel(listHelpItems) {
+    return (
+      <>
+        <Grid container spacing={2} style={gridStyle}>
+          {listHelpItems.map((item) => {
+            // kinda clunky, using labels to determine icon.
+            const helpIcon = item.type.includes('admin') ? (
+              <ReceiptLongIcon />
+            ) : item.type.includes('logement') ? (
+              <HomeWorkIcon />
+            ) : item.type.includes('financière') ? (
+              <EuroIcon />
+            ) : item.type.includes('transport') ? (
+              <DirectionsCarIcon />
+            ) : (
+              <PeopleIcon />
+            )
 
-    return <>
-
-      <Grid container spacing={2} style={gridStyle} >
-      {listHelpItems.map((item) => {
-        // kinda clunky, using labels to determine icon.
-        const helpIcon = item.type.includes('admin') ? (
-            <ReceiptLongIcon/>
-        ) : item.type.includes('logement') ? (
-            <HomeWorkIcon/>
-        ) : item.type.includes('financière') ? (
-            <EuroIcon/>
-        ) : item.type.includes('transport') ? (
-            <DirectionsCarIcon/>
-        ) : (
-            <PeopleIcon/>
-        )
-
-        // moche : on dimmensionne les images selon le nom du fichier (fonctionnait en s'appuyant sur les dimmensions du fichier mais ralenti trop la page (+ code assez lourd) :/ )
-        let styleImage
-        if(item.logo === "mobili-pass.jpg" || item.logo === "visale.jpg" || item.logo === "action-logement-2.png" ) {
-          styleImage = {width: '80px',  height: 'auto'}
-        } else if (item.logo === "renault-group.png") {
-          styleImage = {width: '110px',  height: 'auto'}
-        } else {
-          styleImage = {width: 'auto',  height: '60px'}
-        }
-
-        return (
-            <Grid item xs={isMobile ? 12 : 6} md={6} >
-              <HelpItem
+            return (
+              <Grid item xs={isMobile ? 12 : 6} md={6}>
+                <HelpItem
                   isMobile={isMobile}
                   key={item.id}
                   to={`/aides/${item.slug}` + window.location.search}
-              >
-                <div>
-                <HelpItemTextContainer>
-                  <HelpItemTextSubContainer isMobile={isMobile} >
-                    <HelpItemTextTitle isMobile={isMobile}>
-                      {item.title}
-                    </HelpItemTextTitle>
-                    <HelpItemType>
-                      <HelpItemContainer>
-                        {helpIcon}
-                        <HelpItemText>{item.type}</HelpItemText>
-                      </HelpItemContainer>
-                    </HelpItemType>
-                  </HelpItemTextSubContainer>
-                  <HelpItemImgContainer>
-                    <img
-                        src={`/help-logos/${item.logo}`}
-                        alt=""
-                        style={styleImage}
-                    />
-                  </HelpItemImgContainer>
-                </HelpItemTextContainer>
-                <HelpItemTags>
-                  <SpanWho
-                      dangerouslySetInnerHTML={{
-                        __html: filterHelpItemWho(item.who)
+                >
+                  <div>
+                    <HelpItemTextContainer>
+                      <HelpItemTextSubContainer isMobile={isMobile}>
+                        <HelpItemTextTitle isMobile={isMobile}>
+                          {item.title}
+                        </HelpItemTextTitle>
+                        <HelpItemType>
+                          <HelpItemContainer>
+                            {helpIcon}
+                            <HelpItemText>{item.type}</HelpItemText>
+                          </HelpItemContainer>
+                        </HelpItemType>
+                      </HelpItemTextSubContainer>
+                      <HelpItemImgContainer>
+                        <img
+                          src={`/help-logos/${item.logo}`}
+                          alt=""
+                          style={
+                            logoStyle[
+                              item.logo in logoStyle
+                                ? item.logo
+                                : 'defaultStyle'
+                            ]
+                          }
+                        />
+                      </HelpItemImgContainer>
+                    </HelpItemTextContainer>
+                    <HelpItemTags>
+                      <SpanWho
+                        dangerouslySetInnerHTML={{
+                          __html: filterHelpItemWho(item.who)
                             .split('^')
                             .map((t) => ucFirst(t))
                             .join(' • '),
-                      }}
-                  ></SpanWho>
-                </HelpItemTags>
-                  <div>{item.goal}</div>
-                  <ViewMore>
-                    Découvrir l'aide <ArrowForwardIcon fontSize="small"/>
-                  </ViewMore>
-                </div>
-              </HelpItem>
-            </Grid>
-        )
-      })}
-      </Grid>
-    </>
+                        }}
+                      ></SpanWho>
+                    </HelpItemTags>
+                    <div>{item.goal}</div>
+                    <ViewMore>
+                      Découvrir l'aide <ArrowForwardIcon fontSize="small" />
+                    </ViewMore>
+                  </div>
+                </HelpItem>
+              </Grid>
+            )
+          })}
+        </Grid>
+      </>
+    )
   }
 
   function getFilteredHelpsPanel(listHelpItem, isFiltreRecherche) {
-    if(!isFiltreRecherche) return
-    return <>
-      {getHelpsPanel(listEveryHelpItems)}
-    </>
+    if (!isFiltreRecherche) return
+    return <>{getHelpsPanel(listEveryHelpItems)}</>
   }
 
   function getAllHelpsPanel(isFiltreRecherche) {
-    if(isFiltreRecherche) return
-    return <>
-      <HelpTypeTitleContainer isFirst={true} isMobile={isMobile} >
-        <img alt={""} src={pictoHelpFinanciere}/>  <h2>Les aides financières</h2>
-      </HelpTypeTitleContainer>
-      {getHelpsPanel(listHelpItemFinance)}
+    if (isFiltreRecherche) return
+    return (
+      <>
+        <HelpTypeTitleContainer isFirst={true} isMobile={isMobile}>
+          <img alt={''} src={pictoHelpFinanciere} />{' '}
+          <h2>Les aides financières</h2>
+        </HelpTypeTitleContainer>
+        {getHelpsPanel(listHelpItemFinance)}
 
-      <HelpTypeTitleContainer isMobile={isMobile} >
-        <img alt={""} src={pictoHelpAccompagnement}/>  <HelpTypeTitle isMobile={isMobile} >Les aides {isMobile ? <br/> : "" } d'accompagnement</HelpTypeTitle>
-      </HelpTypeTitleContainer>
-      {getHelpsPanel(listHelpItemAccompagnement)}
+        <HelpTypeTitleContainer isMobile={isMobile}>
+          <img alt={''} src={pictoHelpAccompagnement} />{' '}
+          <HelpTypeTitle isMobile={isMobile}>
+            Les aides {isMobile ? <br /> : ''} d'accompagnement
+          </HelpTypeTitle>
+        </HelpTypeTitleContainer>
+        {getHelpsPanel(listHelpItemAccompagnement)}
 
-      <HelpTypeTitleContainer isMobile={isMobile} >
-        <img alt={""} src={pictoHelpLogement}/>  <h2>Les aides au logement</h2>
-      </HelpTypeTitleContainer>
-      {getHelpsPanel(listHelpItemLogement)}
+        <HelpTypeTitleContainer isMobile={isMobile}>
+          <img alt={''} src={pictoHelpLogement} />{' '}
+          <h2>Les aides au logement</h2>
+        </HelpTypeTitleContainer>
+        {getHelpsPanel(listHelpItemLogement)}
 
-      <HelpTypeTitleContainer isMobile={isMobile} >
-        <img alt={""} src={pictoHelpTransport}/>  <h2>Les aides Transport</h2>
-      </HelpTypeTitleContainer>
-      {getHelpsPanel(listHelpItemTransport)}
-    </>
+        <HelpTypeTitleContainer isMobile={isMobile}>
+          <img alt={''} src={pictoHelpTransport} /> <h2>Les aides Transport</h2>
+        </HelpTypeTitleContainer>
+        {getHelpsPanel(listHelpItemTransport)}
+      </>
+    )
   }
 
   function getTitle() {
-    if(isFiltreRecherche) {
-      return <Title isMobile={isMobile}> {listEveryHelpItems.length} aide{listEveryHelpItems.length > 1 ? "s" : ""} disponible{listEveryHelpItems.length > 1 ? "s" : ""} pour votre situation </Title>
+    if (isFiltreRecherche) {
+      return (
+        <Title isMobile={isMobile}>
+          {' '}
+          {listEveryHelpItems.length} aide
+          {listEveryHelpItems.length > 1 ? 's' : ''} disponible
+          {listEveryHelpItems.length > 1 ? 's' : ''} pour votre situation{' '}
+        </Title>
+      )
     }
 
-    return <Title isMobile={isMobile}> Toutes les aides à la mobilité professionelle et résidentielle </Title>
+    return (
+      <Title isMobile={isMobile}>
+        {' '}
+        Toutes les aides à la mobilité professionelle et résidentielle{' '}
+      </Title>
+    )
   }
 
   const isScrollingUp = UseScrollingUp()
@@ -609,49 +681,85 @@ const HelpsPage = ({ location: { search } }) => {
       <Helmet>
         <title>Liste des aides à la mobilité - Mobiville</title>
         <meta
-            name="description"
-            content="Trouvez facilement les aides dont vous pouvez bénéficier pour votre projet de mobilité en France"
+          name="description"
+          content="Trouvez facilement les aides dont vous pouvez bénéficier pour votre projet de mobilité en France"
         />
       </Helmet>
 
-      <Header isMobile={isMobile} className={`${ !isMobile && isScrollingUp ? 'stickyHeader' : ''}`}>
+      <Header
+        isMobile={isMobile}
+        className={`${!isMobile && isScrollingUp ? 'stickyHeader' : ''}`}
+      >
         <div>
           <HeaderSearchBloc isMobile={isMobile}>
             {!isMobile && (
-                <CheckmarksSelect searchCriteria={CATEGORIES} title={"Quel est votre projet ?"}
-                                  onSearchParameters={onSearchParametersCategories} params={params}/>
+              <CheckmarksSelect
+                searchCriteria={CATEGORIES}
+                title={'Quel est votre projet ?'}
+                onSearchParameters={onSearchParametersCategories}
+                params={params}
+              />
             )}
             {isMobile && (
-                <CheckmarksSelectMobile searchCriteria={CATEGORIES} title={"Quel est votre projet ?"}
-                                        onSearchParameters={onSearchParametersCategories} params={params}/>
+              <CheckmarksSelectMobile
+                searchCriteria={CATEGORIES}
+                title={'Quel est votre projet ?'}
+                onSearchParameters={onSearchParametersCategories}
+                params={params}
+              />
             )}
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>
             {!isMobile && (
-                <CheckmarksSelectSituation searchCriteria={SITUATIONS.slice(0, 3)} title={"Votre situation"}
-                                           onSearchParameters={onSearchParametersSituations} params={params}
-                                           placeholder={"Demandeur d'emploi, salarié"} selectId={"situation-simple-checkbox"} />
+              <CheckmarksSelectSituation
+                searchCriteria={SITUATIONS.slice(0, 3)}
+                title={'Votre situation'}
+                onSearchParameters={onSearchParametersSituations}
+                params={params}
+                placeholder={"Demandeur d'emploi, salarié"}
+                selectId={'situation-simple-checkbox'}
+              />
             )}
             {isMobile && (
-                <CheckmarksSelectSituationMobile searchCriteria={SITUATIONS.slice(0, 3)} title={"Votre situation"}
-                                                 onSearchParameters={onSearchParametersSituations} params={params}
-                                                 placeholder={"Demandeur d'emploi, salarié"} selectId={"situation-simple-checkbox"} />
+              <CheckmarksSelectSituationMobile
+                searchCriteria={SITUATIONS.slice(0, 3)}
+                title={'Votre situation'}
+                onSearchParameters={onSearchParametersSituations}
+                params={params}
+                placeholder={"Demandeur d'emploi, salarié"}
+                selectId={'situation-simple-checkbox'}
+              />
             )}
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>
             {!isMobile && (
-                <CheckmarksSelectSituation searchCriteria={SITUATIONS.slice(-2)} title={"Votre âge"}
-                                           onSearchParameters={onSearchParametersSituationsAge} params={params}
-                                           placeholder={"Moins de 26 ans, plus de 26 ans"} selectId={"age-simple-checkbox"} />
+              <CheckmarksSelectSituation
+                searchCriteria={SITUATIONS.slice(-2)}
+                title={'Votre âge'}
+                onSearchParameters={onSearchParametersSituationsAge}
+                params={params}
+                placeholder={'Moins de 26 ans, plus de 26 ans'}
+                selectId={'age-simple-checkbox'}
+              />
             )}
             {isMobile && (
-                <CheckmarksSelectSituationMobile searchCriteria={SITUATIONS.slice(-2)} title={"Votre âge"}
-                                                 onSearchParameters={onSearchParametersSituationsAge} params={params}
-                                                 placeholder={"Moins de 26 ans, plus de 26 ans"} selectId={"age-simple-checkbox"} />
+              <CheckmarksSelectSituationMobile
+                searchCriteria={SITUATIONS.slice(-2)}
+                title={'Votre âge'}
+                onSearchParameters={onSearchParametersSituationsAge}
+                params={params}
+                placeholder={'Moins de 26 ans, plus de 26 ans'}
+                selectId={'age-simple-checkbox'}
+              />
             )}
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>
-            <SearchButton to={`/aides${wholeUrlParameters}`} isMobile={isMobile}>Rechercher</SearchButton>
+            <SearchButton
+              to={`/aides${wholeUrlParameters}`}
+              isMobile={isMobile}
+            >
+              Rechercher
+            </SearchButton>
           </HeaderSearchBloc>
         </div>
       </Header>
@@ -663,11 +771,9 @@ const HelpsPage = ({ location: { search } }) => {
 
       <Container isMobile={isMobile}>
         <HelpsPanel isMobile={isMobile}>
-
           {getAllHelpsPanel(isFiltreRecherche)}
 
           {getFilteredHelpsPanel(listHelpItem, isFiltreRecherche)}
-
         </HelpsPanel>
       </Container>
     </MainLayout>
