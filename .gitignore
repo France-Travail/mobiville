@@ -8,5 +8,3 @@ tests/cypress/screenshots/
 tests/cypress/videos/
 /api/src/datas-mnt
 front/dist
-package-lock.json
-yarn.lock
