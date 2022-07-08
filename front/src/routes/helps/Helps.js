@@ -21,6 +21,7 @@ import CheckmarksSelect from './components/CheckmarksSelect'
 import CheckmarksSelectSituation from './components/CheckmarksSelectSituation'
 import CheckmarksSelectMobile from "./components/CheckmarksSelectMobile"
 import CheckmarksSelectSituationMobile from "./components/CheckmarksSelectSituationMobile"
+import UseScrollingUp from "./components/UseScrollingUp"
 
 import pictoHelpAccompagnement from '../../assets/images/icons/help-accompagnement.svg'
 import pictoHelpFinanciere from '../../assets/images/icons/help-financiere.svg'
@@ -34,6 +35,7 @@ const Title = styled.h1`
   font-size: 24px;
   font-weight: 700;
   margin: 20px auto;
+  margin-bottom: 16px;
   
   width: 1036px;
   height: 42px;
@@ -74,7 +76,7 @@ const Header = styled.div`
 const HeaderSearchBloc = styled.div`
  display: inline-grid;
  align-items: center;
- margin: 0px 10px !important;
+ margin: 0px 5px !important;
  vertical-align: bottom;
  
  ${(props) =>
@@ -90,12 +92,12 @@ const Container = styled.div`
   width: 100%;
   max-width: 1040px;
   margin: 0 auto 64px auto;
-  padding: 0 16px;
   align-items: flex-start;
 
   ${(props) =>
     props.isMobile &&
     `
+    padding: 0 16px;
     display: block;
     padding: 0;
   `}
@@ -103,7 +105,7 @@ const Container = styled.div`
 
 const HelpsPanel = styled.div`
   flex: 1;
-  padding: ${({ isMobile }) => (isMobile ? '16px' : '0 16px 32px 16px')};
+  padding: ${({ isMobile }) => (isMobile ? '16px' : '')};
 `
 
 const HelpItemImgContainer = styled.div`
@@ -137,7 +139,10 @@ const HelpItemTextTitle = styled.h4`
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
-  line-height: 21px;
+  line-height: ${({ isMobile }) => (isMobile ? '21px' : '33px')};
+  
+  vertical-align: bottom;
+  display: contents;
   
   color: ${COLOR_TEXT_PRIMARY};
 `
@@ -145,14 +150,14 @@ const HelpItemTextTitle = styled.h4`
 const SpanWho = styled.span`
   font-family: 'Roboto';
   font-style: normal;
-  font-weight: 500;
+  font-weight: 700;
   font-size: 14px;
   line-height: 21px;
   color: #191970;
 `
 
 const HelpItemTags = styled.div`
-  margin-top: 10px;
+  margin-top: 5px;
   margin-bottom: 5px;
   font-size: 14px;
   color: ${COLOR_PRIMARY};
@@ -168,8 +173,9 @@ const HelpItemType = styled.div`
 const HelpItemText = styled.div`
   margin-left: 8px;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 12px;
   display: inline;
+  line-height: 14px;
 `
 
 const HelpItemContainer = styled.div`
@@ -272,7 +278,7 @@ const HelpsPage = ({ location: { search } }) => {
     align-items: center;
     gap: 8px;
     
-    margin-top: 40px;
+    margin-top: ${({ isFirst }) => (isFirst ? '' : '40px')}; 
     margin-bottom: 20px;
     
     width: ${({ isMobile }) => (isMobile ? '342px' : '1033px')};
@@ -324,13 +330,11 @@ const HelpsPage = ({ location: { search } }) => {
   display: block;
   
   background: #FFFFFF;
-  border-radius: 8px;
+  color: ${COLOR_TEXT_PRIMARY};
   
-  &,
   &:hover {
-    color: ${COLOR_TEXT_PRIMARY};
+    border: 2px solid #191970;
   }
-  
 `
 
   useEffect(() => {
@@ -479,6 +483,7 @@ const HelpsPage = ({ location: { search } }) => {
   const gridStyle = isMobile ? {width: "350px", minWidth: "350px"} : {width: "1050px", minWidth: "1050px"}
 
   function getHelpsPanel(listHelpItems) {
+
     return <>
 
       <Grid container spacing={2} style={gridStyle} >
@@ -495,6 +500,16 @@ const HelpsPage = ({ location: { search } }) => {
         ) : (
             <PeopleIcon/>
         )
+
+        // moche : on dimmensionne les images selon le nom du fichier (fonctionnait en s'appuyant sur les dimmensions du fichier mais ralenti trop la page (+ code assez lourd) :/ )
+        let styleImage
+        if(item.logo === "mobili-pass.jpg" || item.logo === "visale.jpg" || item.logo === "action-logement-2.png" ) {
+          styleImage = {width: '80px',  height: 'auto'}
+        } else if (item.logo === "renault-group.png") {
+          styleImage = {width: '110px',  height: 'auto'}
+        } else {
+          styleImage = {width: 'auto',  height: '60px'}
+        }
 
         return (
             <Grid item xs={isMobile ? 12 : 6} md={6} >
@@ -520,7 +535,7 @@ const HelpsPage = ({ location: { search } }) => {
                     <img
                         src={`/help-logos/${item.logo}`}
                         alt=""
-                        style={{width: '100%', height: 'auto'}}
+                        style={styleImage}
                     />
                   </HelpItemImgContainer>
                 </HelpItemTextContainer>
@@ -530,7 +545,7 @@ const HelpsPage = ({ location: { search } }) => {
                         __html: filterHelpItemWho(item.who)
                             .split('^')
                             .map((t) => ucFirst(t))
-                            .join(' · '),
+                            .join(' • '),
                       }}
                   ></SpanWho>
                 </HelpItemTags>
@@ -557,7 +572,7 @@ const HelpsPage = ({ location: { search } }) => {
   function getAllHelpsPanel(isFiltreRecherche) {
     if(isFiltreRecherche) return
     return <>
-      <HelpTypeTitleContainer isMobile={isMobile} >
+      <HelpTypeTitleContainer isFirst={true} isMobile={isMobile} >
         <img alt={""} src={pictoHelpFinanciere}/>  <h2>Les aides financières</h2>
       </HelpTypeTitleContainer>
       {getHelpsPanel(listHelpItemFinance)}
@@ -584,8 +599,10 @@ const HelpsPage = ({ location: { search } }) => {
       return <Title isMobile={isMobile}> {listEveryHelpItems.length} aide{listEveryHelpItems.length > 1 ? "s" : ""} disponible{listEveryHelpItems.length > 1 ? "s" : ""} pour votre situation </Title>
     }
 
-    return <Title isMobile={isMobile}> Toutes les aides à la mobilité résidentielle </Title>
+    return <Title isMobile={isMobile}> Toutes les aides à la mobilité professionelle et résidentielle </Title>
   }
+
+  const isScrollingUp = UseScrollingUp()
 
   return (
     <MainLayout topMobileMenu>
@@ -597,7 +614,7 @@ const HelpsPage = ({ location: { search } }) => {
         />
       </Helmet>
 
-      <Header isMobile={isMobile}>
+      <Header isMobile={isMobile} className={`${ !isMobile && isScrollingUp ? 'stickyHeader' : ''}`}>
         <div>
           <HeaderSearchBloc isMobile={isMobile}>
             {!isMobile && (

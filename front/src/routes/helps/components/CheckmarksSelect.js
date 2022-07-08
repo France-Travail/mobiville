@@ -12,7 +12,7 @@ import {COLOR_VERT_MOBIVILLE} from "../../../constants/colors"
 import PropTypes from "prop-types"
 import {useHistory} from "react-router-dom"
 
-const globalWidth = 397
+const globalWidth = 371
 
 
 const DivFormControl = styled.div`
