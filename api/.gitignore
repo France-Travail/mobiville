@@ -7,5 +7,3 @@ dist
 public/img/generators
 IGNORE/
 config/local*
-package-lock.json
-yarn.lock
