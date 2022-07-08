@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   nginx:
-    image: nginx:1.17.10
+    image: nginx:1.21.6
     restart: unless-stopped
     depends_on:
       - 'api'
@@ -34,7 +34,7 @@ services:
     stdin_open: true
 
   db:
-    image: mariadb:10
+    image: mariadb:10.7.3
     restart: always
     ports:
       - "127.0.0.1:3306:3306"

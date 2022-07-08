@@ -1,28 +1,32 @@
-import React, { lazy, memo } from 'react'
+import React, { lazy, memo, useState } from 'react'
 import styled from 'styled-components'
 import { Typography } from '@mui/material'
 import { isEmpty } from 'lodash'
 import queryString from 'query-string'
 
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
 import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { useCities } from '../../common/contexts/citiesContext'
 import MainLayout from '../../components/MainLayout'
-import { COLOR_PRIMARY } from '../../constants/colors'
+import { COLOR_OTHER_GREEN, COLOR_PRIMARY } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { useWindowSize } from '../../common/hooks/window-size'
 import ErrorPage from '../error/ErrorPage'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 
 const StepBlock = styled(Typography)`
   && {
-    margin: 28px 0 48px 0;
-    font-size: 12px;
-    font-weight: bold;
+    margin: ${({ isMobile }) => (isMobile ? '0px' : '28px 0 48px 0')};
+    font-size: ${({ isMobile }) => (isMobile ? '24px' : '36px')};
+    font-weight: 900;
+    color: ${COLOR_PRIMARY};
+    text-align: ${({ isMobile }) => (isMobile ? 'start' : 'center')};
+    display: ${(display) => display || 'initial'};
   }
 `
 
 const LimitedWrapper = styled.div`
-  max-width: ${(props) => (props.isMobile ? 'auto' : '336px')};
+  max-width: ${(props) => (props.isMobile ? 'auto' : '1040px')};
   width: ${(props) => (props.isMobile ? 'auto' : '100%')};
   margin-left: ${(props) => (props.isMobile ? '16px' : 'auto')};
   margin-right: ${(props) => (props.isMobile ? '16px' : 'auto')};
@@ -35,8 +39,44 @@ const ProgressBar = styled.div`
   left: 0;
 `
 
-const BackWrapper = styled.div`
-  margin-top: ${(props) => (props.isMobile ? '24px' : '68px')};
+const HeaderLink = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: ${({ isMobile }) => (isMobile ? '30px' : '48px')};
+  height: 48px;
+  border-radius: 50%;
+  display: ${(props) => props.display || 'flex'};
+
+  & > svg {
+    color: ${({ isMobile }) => (isMobile ? '#23333C' : null)};
+  }
+  background: ${({ isMobile }) => (isMobile ? 'unset' : COLOR_OTHER_GREEN)};
+  margin: ${({ isMobile }) =>
+    isMobile ? '10px 10px 0px 0px' : '0px 15px 0px 0px'};
+  cursor: pointer;
+`
+const Fil = styled.p`
+  margin: 20px 0px;
+  font-weight: 400;
+  font-size: 16px;
+  .accueil {
+    color: #666666;
+  }
+  .current-page {
+    color: #161616;
+  }
+  svg {
+    /* icon chevron */
+    vertical-align: text-top;
+  }
+`
+const SearchCorpus = styled.div`
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  max-width: 605px;
+  margin: 0px auto;
 `
 
 const ALL_STEPS = [
@@ -46,7 +86,7 @@ const ALL_STEPS = [
   },
   {
     key: 'region',
-    components: lazy(() => import('./SearchRegionOrCity')),
+    components: lazy(() => import('./SearchCity')),
   },
 ]
 
@@ -59,6 +99,7 @@ const Search = () => {
   const location = useLocation()
   const values = queryString.parse(location.search)
   const isMobile = isMobileView(size)
+  const [isSearchFocused, setIsSearchFocused] = useState(false)
 
   if (criterionsError) {
     return <ErrorPage />
@@ -90,7 +131,17 @@ const Search = () => {
     } else if (newValues.from) {
       val = { ...values, from: [newValues.from.id] }
     } else if (newValues.city) {
-      val = { ...values, codeCity: [newValues.city] }
+      // TODO rm tout l'histoire de localstorage, mettre en commun les chemins retour ...
+      localStorage.setItem(
+        'lastSearch',
+        `?codeRegion=${newValues.regions ? newValues.regions : ''}&codeRome=${
+          values.codeRome
+        }`
+      )
+      return history.push(
+        `/city/${newValues.city}-${newValues.cityName}?codeRome=${values.codeRome}`
+      )
+      // val = { ...values, codeCity: [newValues.city] }
     } else if (newValues.environment) {
       val = { ...values, codeEnvironment: [newValues.environment] }
     } else {
@@ -102,7 +153,6 @@ const Search = () => {
       if (isEmpty(value)) return
       params[key] = value
     })
-
     onNavigate(increase, `?${queryString.stringify(params)}`)
   }
 
@@ -113,21 +163,55 @@ const Search = () => {
   const Component = ALL_STEPS[index].components
 
   return (
-    <MainLayout style={{ marginBottom: isMobile ? 120 : 250 }}>
+    <MainLayout style={{ marginBottom: isMobile ? 120 : 250 }} menu={{ visible: !isMobile }}>
       <ProgressBar
         style={{ width: `${((index + 1) * 100) / ALL_STEPS.length}%` }}
       />
       <LimitedWrapper isMobile={isMobile}>
-        <BackWrapper isMobile={isMobile}>
-          <ArrowBackOutlinedIcon
-            style={{ cursor: 'pointer' }}
+        {isMobile && (
+          <HeaderLink
+            display={isMobile && isSearchFocused ? 'none' : undefined}
             onClick={() => onNextStep({}, -1)}
-          />
-        </BackWrapper>
-        <StepBlock>
-          Etape {index + 1}/{ALL_STEPS.length}
+            isMobile={isMobile}
+          >
+            <ArrowBackIcon color="primary" fontSize="large" />
+          </HeaderLink>
+        )}
+        {!isMobile && (
+          <Fil>
+            <a href="/" className="accueil">
+              Accueil
+              <ChevronRightIcon />
+            </a>
+            <span className="current-page">
+              {index === 0
+                ? 'Rechercher un métier'
+                : 'Rechercher une ville ou une région'}
+            </span>
+          </Fil>
+        )}
+        <StepBlock
+          isMobile={isMobile}
+          display={isMobile && isSearchFocused ? 'none' : undefined}
+        >
+          Etape {index + 1} sur {ALL_STEPS.length}
         </StepBlock>
-        <Component onNext={onNextStep} values={values} />
+        <SearchCorpus>
+          {!isMobile && (
+            <HeaderLink
+              display={isMobile && isSearchFocused ? 'none' : undefined}
+              onClick={() => onNextStep({}, -1)}
+              isMobile={isMobile}
+            >
+              <ArrowBackIcon color="primary" fontSize="large" />
+            </HeaderLink>
+          )}
+          <Component
+            onNext={onNextStep}
+            values={values}
+            isSearchFocused={(b) => setIsSearchFocused(b)}
+          />
+        </SearchCorpus>
       </LimitedWrapper>
     </MainLayout>
   )

@@ -7,13 +7,13 @@ body {
   margin: 0;
   background-color: #f6f7fb !important;
   height: 100vh;
-  font-family: 'Roboto';
+  font-family: 'Roboto', sans-serif;
   color: #23333e;
   font-size: 14px;
 }
 
 button {
-  font-family: 'Roboto';
+  font-family: 'Roboto', sans-serif;
 }
 
 #root {
@@ -65,4 +65,51 @@ input[type='tel'],
 input[type='color'] {
   /* avoids safari mobile zooming in on input, which because of autocompletes is not necessarily zoomed out */
   font-size: 16px;
+}
+
+
+#menu->div:nth-child(3){
+  background: #FFFFFF;
+  border: 1px solid #F6F7FB;
+  border-radius: 8px;
+  margin-top: 15px;
+
+  ul {
+    padding: 0px;
+
+    li:first-child {
+      margin-top: 10px !important;
+    }
+    li:last-child {
+      margin-bottom: 10px !important;
+    }
+  }
+}
+
+
+#project-multiple-checkbox>em, #situation-simple-checkbox>em, #age-simple-checkbox>em {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  color:#657078;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+#project-multiple-checkbox, #situation-simple-checkbox, #age-simple-checkbox {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  color:#191970;
+  margin-top: 3px;
+  margin-left: 1px;
+}
+
+.stickyHeader {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
 }

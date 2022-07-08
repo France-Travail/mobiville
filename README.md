@@ -58,12 +58,12 @@ Les tables suivantes sont présentes dans la base :
 - **helps** contient les informations sur les différentes aides proposées par pôle-emploi
 - **migrations** contient les informations de migration de base de données
 - **new_regions** contient les informations de régions selon le nouveau format (réforme de 2015)
-- **old_regions** contient les informations de régions selon l’ancien format, et une correspondance avec le nouveau format. Cette table est nécessaire car de nombreuses données insee font encore référence à l’ancien format et à ses identifiants
+- ~~**old_regions** contient les informations de régions selon l’ancien format, et une correspondance avec le nouveau format. Cette table est nécessaire car de nombreuses données insee font encore référence à l’ancien format et à ses identifiants~~
 - **regions_tensions_criterions** contient un json permettant au front d’afficher les informations de régions en tension par code rome, et les critères associés.
 - **rome_codes** contient tous les codes romes et leurs libellés
 - **romeogrs** contient tous les code OGR et libellés des métiers, et leurs codes romes associés
 - **romeskills** contient la liste des compétences associée à chaque code rome
-- **socialhousings** contient les informations de logement social disponible par région (ces données devraient être mergées à new_regions)
+- ~~**socialhousings** contient les informations de logement social disponible par région (ces données devraient être mergées à new_regions)~~
 - **tensions** contient les informations de tensions par code rome et territoire. C’est notamment à partir de cette table qu’est généré le json présent dans regions_tensions_criterions
 
 ## Génération de migration
@@ -174,6 +174,13 @@ Si besoin de déployer depuis une autre branche que celle de recette ou de produ
 
 `api-{branch}-latest`
 `api-{branch}-{hash commit taccourci}`
+
+### Renouvellement certificat
+
+1. Suivre la procédure indiquée dans le [wiki](https://wiki.beta.pole-emploi.fr/memento-dev/securite/certificat-ssl-tls/)
+2. Puis copié/coller le nouveau certificat dans la variable CI/CD `SSL_mobiville_pole_emploi_fr_crt`
+3. Dans CI/CD > Pipeline > bouton 'Run pipeline' se mettre sur la branche master, puis `FORCE_DEPLOY = install` et `RENEW_TLS = YES`
+4. bouton 'Run pipeline' pour lancer le deploiement
 
 ### Installation from scratch
 

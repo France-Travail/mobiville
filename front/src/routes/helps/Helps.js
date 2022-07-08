@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
+import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { orderBy } from 'lodash'
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import queryString from 'query-string'
-import { Helmet } from 'react-helmet'
+import {Helmet} from 'react-helmet'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import EuroIcon from '@mui/icons-material/Euro'
 import HomeWorkIcon from '@mui/icons-material/HomeWork'
@@ -12,202 +11,180 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
 import PeopleIcon from '@mui/icons-material/People'
 
-import { useHelps } from '../../common/contexts/helpsContext'
-import { useWindowSize } from '../../common/hooks/window-size'
+import {useHelps} from '../../common/contexts/helpsContext'
+import {useWindowSize} from '../../common/hooks/window-size'
 import MainLayout from '../../components/MainLayout'
-import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
-import { isMobileView } from '../../constants/mobile'
-import { ucFirst } from '../../utils/utils'
-import helpsPic from '../../assets/images/Generique_Aides.png'
+import {COLOR_OTHER_GREEN, COLOR_PRIMARY, COLOR_TEXT_PRIMARY} from '../../constants/colors'
+import {isMobileView} from '../../constants/mobile'
+import {ucFirst} from '../../utils/utils'
+import CheckmarksSelect from './components/CheckmarksSelect'
+import CheckmarksSelectSituation from './components/CheckmarksSelectSituation'
+import CheckmarksSelectMobile from "./components/CheckmarksSelectMobile"
+import CheckmarksSelectSituationMobile from "./components/CheckmarksSelectSituationMobile"
+import UseScrollingUp from "./components/UseScrollingUp"
+
+import pictoHelpAccompagnement from '../../assets/images/icons/help-accompagnement.svg'
+import pictoHelpFinanciere from '../../assets/images/icons/help-financiere.svg'
+import pictoHelpLogement from '../../assets/images/icons/help-logement.svg'
+import pictoHelpTransport from '../../assets/images/icons/help-transport.svg'
+import {Grid} from "@mui/material"
+
+//import TypeHelpFilter from "./components/TypeHelpFilter";
 
 const Title = styled.h1`
-  color: ${COLOR_TEXT_PRIMARY};
   font-size: 24px;
   font-weight: 700;
-  margin-bottom: ${({ isMobile }) => (isMobile ? '4px' : '8px')};
-`
-
-const SubTitle = styled.p`
-  color: ${COLOR_TEXT_PRIMARY};
-  font-size: ${({ isMobile }) => (isMobile ? '16px' : '18px')};
-  font-weight: 700;
+  margin: 20px auto;
   margin-bottom: 16px;
-  margin-top: 0;
+  
+  width: 1036px;
+  height: 42px;
+  
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 42px;
+  display:  ${({ isMobile }) => (isMobile ? 'contents' : 'flex')};
+  align-items: center;
+  
+  color: ${COLOR_PRIMARY};
 `
 
 const Header = styled.div`
-  margin: 0 auto;
   font-weight: bold;
   display: flex;
   align-items: center;
+  height:118px;
+  background-color:${COLOR_OTHER_GREEN};
+  
+   div, a {
+    margin: 0 auto;
+   }
+   
+   ${(props) =>
+    props.isMobile &&
+    `
+    display: block;
+    margin: 102px 0 64px 0;
+    padding: 0;
+    height:377px;
+    padding: 20px 0.5%;
+  `}
 `
 
-const HeaderTitle = styled.h1`
-  color: ${COLOR_TEXT_PRIMARY};
-  font-weight: 900;
-  font-size: 36px;
-  margin: 45px 0px 0px 10px;
+const HeaderSearchBloc = styled.div`
+ display: inline-grid;
+ align-items: center;
+ margin: 0px 5px !important;
+ vertical-align: bottom;
+ 
+ ${(props) =>
+    props.isMobile &&
+    `
+    padding: 5px 0px;
+  `}
 `
 
-const HeaderSubtitle = styled.h2`
-  color: ${COLOR_TEXT_PRIMARY};
-  font-size: 24px;
-  line-height: 33px;
-  margin: 8px 0px 53px 10px;
-`
-
-const HeaderImg = styled.img`
-  height: 136px;
-  width: 136px;
-  margin-top: 45px;
-`
 
 const Container = styled.div`
   display: flex;
   width: 100%;
   max-width: 1040px;
   margin: 0 auto 64px auto;
-  padding: 0 16px;
   align-items: flex-start;
 
   ${(props) =>
     props.isMobile &&
     `
+    padding: 0 16px;
     display: block;
-    margin: 102px 0 64px 0;
     padding: 0;
   `}
 `
 
-const TagsSelectionPanel = styled.div`
-  width: ${({ isMobile }) => (isMobile ? '100%' : '424px')};
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 16px;
-`
-
-const CategoryTagsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin-bottom: ${({ isMobile }) => (isMobile ? '16px' : '8px')};
-`
-
 const HelpsPanel = styled.div`
   flex: 1;
-  padding: ${({ isMobile }) => (isMobile ? '16px' : '0 16px 32px 16px')};
-`
-
-const CategoryTag = styled(Link)`
-  background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
-  color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
-  border-radius: 8px;
-  max-width: 118px;
-  width: 100%;
-  padding: 4px;
-  margin: 0 2px;
-  display: block;
-  cursor: pointer;
-  text-align: center;
-  font-weight: 400;
-  font-size: 14px;
-  border: 2px solid ${COLOR_PRIMARY};
-  @media (hover) {
-    &:hover {
-      background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
-      color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
-      opacity: 0.9;
-    }
-  }
-`
-
-const SituationTag = styled(Link)`
-  background: ${({ selected }) => (selected ? COLOR_PRIMARY : 'white')};
-  color: ${({ selected }) => (selected ? 'white' : COLOR_TEXT_PRIMARY)};
-  border-radius: 44px;
-  padding: 8px;
-  margin-right: 8px;
-  margin-bottom: 8px;
-  display: inline-block;
-  cursor: pointer;
-  font-weight: 400;
-  font-size: 14px;
-  border: 2px solid ${COLOR_PRIMARY};
-  @media (hover) {
-    &:hover {
-      background: ${({ selected }) => (selected ? 'white' : COLOR_PRIMARY)};
-      color: ${({ selected }) => (selected ? COLOR_TEXT_PRIMARY : 'white')};
-      opacity: 0.9;
-    }
-  }
-`
-
-const TitleHelps = styled.h3`
-  color: ${COLOR_TEXT_PRIMARY};
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-weight: 700;
-  font-size: ${({ isMobile }) => (isMobile ? '16px' : '24px')};
-`
-
-const HelpItem = styled(Link)`
-  margin: 16px 0;
-  display: flex;
-  border-radius: 8px;
-  overflow: hidden;
-
-  &,
-  &:hover {
-    color: ${COLOR_TEXT_PRIMARY};
-  }
+  padding: ${({ isMobile }) => (isMobile ? '16px' : '')};
 `
 
 const HelpItemImgContainer = styled.div`
+  display: inline-grid;
+  vertical-align: bottom;
+  
+  margin-left: 5px;
+  
   background: white;
-  padding: 32px 8px 8px 8px;
   width: 96px;
-  display: flex;
   align-items: start;
   justify-content: center;
 `
 const HelpItemTextContainer = styled.div`
-  padding: 16px;
   background: #ffffff;
   width: 100%;
-  display: flex;
   flex-direction: column;
   color: ${COLOR_TEXT_PRIMARY};
 `
 
+const HelpItemTextSubContainer = styled.div`
+  display: inline-grid;
+  vertical-align: top;
+  width:${({ isMobile }) => (isMobile ? '200px' : '350px')};
+`
+
 const HelpItemTextTitle = styled.h4`
   margin-top: 0;
-  margin-bottom: 8px;
-  font-size: ${({ isMobile }) => (isMobile ? '16px' : '18px')};
+  margin-bottom: 4px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: ${({ isMobile }) => (isMobile ? '21px' : '33px')};
+  
+  vertical-align: bottom;
+  display: contents;
+  
   color: ${COLOR_TEXT_PRIMARY};
 `
 
+const SpanWho = styled.span`
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 21px;
+  color: #191970;
+`
+
 const HelpItemTags = styled.div`
-  margin-top: 8px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   font-size: 14px;
   color: ${COLOR_PRIMARY};
 `
 
-const HelpItemTagsTitle = styled.span`
-  font-weight: 700;
-  font-size: 16px;
-`
-
 const HelpItemType = styled.div`
   display: flex;
-  align-items: start;
-  padding-top: 16px;
-  color: ${COLOR_PRIMARY};
-  margin-bottom: 8px;
+  flex-direction: row;
+  align-items: center;
+  padding: 2px;
+  gap: 4px;
 `
 const HelpItemText = styled.div`
   margin-left: 8px;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 12px;
+  display: inline;
+  line-height: 14px;
+`
+
+const HelpItemContainer = styled.div`
+  background: #C3E9E9;
+  color: ${COLOR_PRIMARY};
+  display : flex;
+  align-items : center;
+  border-radius: 4px;
+  padding: 1px 3px;
 `
 
 const ViewMore = styled.div`
@@ -220,21 +197,44 @@ const ViewMore = styled.div`
   padding-top: 8px;
 `
 
+const SearchButton = styled(Link)`
+  width: ${({ isMobile }) => (isMobile ? '350px' : '184px')};
+  height: 73px;
+  display: flex;
+  border-radius: 20px;
+  display: inline-grid;
+  padding: 17px 16px;
+  gap: 10px;
+  background: #191970;
+  color: #eee;
+  align-items: center;
+  text-align: center;
+  vertical-align: middle;
+  &,
+  &:hover {
+    color: #eee;
+  }
+`
+
+
 const CATEGORIES = [
   {
     key: 'emploi',
     icon: '/icons/emploi.svg',
     text: 'Je recherche un emploi',
+    name: "Je recherche un emploi"
   },
   {
     key: 'logement',
     icon: '/icons/logement.svg',
     text: 'Je recherche un logement',
+    name: "Je recherche un logement"
   },
   {
     key: 'déménage',
     icon: '/icons/demenagement.svg',
     text: 'Je déménage prochainement',
+    name: "Je déménage prochainement"
   },
 ]
 
@@ -242,201 +242,432 @@ const SITUATIONS = [
   {
     key: "demandeur d'emploi",
     text: "Demandeur d'emploi",
+    name: "Je suis demandeur d'emploi"
   },
   {
     key: 'salarié',
     text: 'Salarié',
+    name: "Je suis salarié"
+  },
+  {
+    key: 'alternance',
+    text: 'Alternant',
+    name: "Je suis alternant"
   },
   {
     key: 'moins de 26 ans',
     text: '- 26 ans',
+    name: "J'ai moins de 26 ans"
   },
   {
     key: 'plus de 26 ans',
     text: '+ 26 ans',
+    name: "J'ai plus de 26 ans"
   },
 ]
 
 const HelpsPage = ({ location: { search } }) => {
   const { previews, onLoadPreviews } = useHelps()
+
   const size = useWindowSize()
+  const isMobile = isMobileView(size)
+
+  const HelpTypeTitleContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    
+    margin-top: ${({ isFirst }) => (isFirst ? '' : '40px')}; 
+    margin-bottom: 20px;
+    
+    width: ${({ isMobile }) => (isMobile ? '342px' : '1033px')};
+    height: 71px;
+    
+    background: #C7C7F3;
+    border-radius: 4px;
+    
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    
+    H2 {
+      width: ${({ isMobile }) => (isMobile ? '248px' : '410px')};
+      height: 28px;
+      font-family: 'Roboto';
+      font-style: normal;
+      font-weight: 900;
+      font-size: 24px;
+      line-height: 28px;
+      color: #191970;
+      flex: none;
+      order: 1;
+      flex-grow: 0;
+    }
+    
+    img {
+      margin-left:8px;
+    }
+  `
+  
+  const HelpTypeTitle = styled.h2`
+    ${({ isMobile }) => (isMobile ? 'margin-bottom: 50px;' : '')}
+  `
+  
+  const HelpItem = styled(Link)`
+  border-radius: 8px;
+  overflow: hidden;
+  
+  justify-content: flex-end;
+  align-items: flex-end;
+  
+  padding: 18px;
+  gap: 33px;
+  
+  width: ${({ isMobile }) => (isMobile ? '340px' : '511px')};
+  height: ${({ isMobile }) => (isMobile ? '' : '231px')};
+  
+  display: block;
+  
+  background: #FFFFFF;
+  color: ${COLOR_TEXT_PRIMARY};
+  
+  &:hover {
+    border: 2px solid #191970;
+  }
+`
 
   useEffect(() => {
     onLoadPreviews()
   }, [])
 
   const parsedQueryString = queryString.parse(search)
+  const parsedProjects = parsedQueryString.project
+      ? typeof parsedQueryString.project === 'string'
+          ? [parsedQueryString.project]
+          : parsedQueryString.project
+      : []
   const parsedSituations = parsedQueryString.situation
     ? typeof parsedQueryString.situation === 'string'
       ? [parsedQueryString.situation]
       : parsedQueryString.situation
     : []
 
-  const project =
-    CATEGORIES.find(({ key }) => parsedQueryString.project === key) || null
+  const projects = CATEGORIES.filter(({ key }) =>
+    parsedProjects.includes(key)
+  )
   const situations = SITUATIONS.filter(({ key }) =>
     parsedSituations.includes(key)
   )
 
-  let list = previews.filter((preview) => {
+  function filterListHelpBySituationAndProject(preview) {
     if (situations.length) {
       if (
-        !situations.every(({ key }) =>
-          preview.who.toLowerCase().includes(key.toLowerCase())
-        )
+          !situations.every(({key}) =>
+              preview.who.toLowerCase().includes(key.toLowerCase())
+          )
       ) {
         return false
       }
     }
-
-    if (project) {
+    if (projects.length) {
       if (
-        !preview.situation.toLowerCase().includes(project.key.toLowerCase())
+          !projects.some(({key}) =>
+              preview.situation.toLowerCase().includes(key.toLowerCase())
+          )
       ) {
         return false
       }
     }
-
     return true
-  })
-
-  if (!situations.length && !project) {
-    list = orderBy(previews, ['count_vue'], ['desc']).slice(0, 4)
   }
 
-  const isMobile = isMobileView(size)
+  previews.forEach((preview) => {
+    if(preview.type.includes(",")) {
+        preview.type = preview.type.substring(0, preview.type.indexOf(","))
+    }
+    if(preview.goal.includes(".")) {
+      preview.goal = preview.goal.substring(0, preview.goal.indexOf(".") + 1 )
+    }
+    if(preview.type.toLowerCase().includes("aide administrative") || preview.type.toLowerCase().includes("accompagnement du projet")) {
+      preview.type = "Accompagnement"
+    }
+  })
+  const listHelpItem = previews.filter((preview) => {
+    return filterListHelpBySituationAndProject(preview)
+  })
+  const listHelpItemFinance = listHelpItem.filter((preview) => {
+    return preview.type.toLowerCase().includes("aide financière")
+  })
+  const listHelpItemLogement = listHelpItem.filter((preview) => {
+    return preview.type.toLowerCase().includes("accès au logement")
+  })
+  const listHelpItemAccompagnement = listHelpItem.filter((preview) => {
+    return preview.type.includes("Accompagnement")
+  })
+  const listHelpItemTransport = listHelpItem.filter((preview) => {
+    return preview.type.toLowerCase().includes("aide transport")
+  })
+  const listEveryHelpItems = [...listHelpItemFinance, ...listHelpItemLogement, ...listHelpItemAccompagnement, ...listHelpItemTransport]
+
+  const filterHelpItemWho = function(who) {
+    let whoItems = ""
+    const lowerCaseWho = who.toLowerCase()
+    if (lowerCaseWho.includes("salarié")) whoItems += "salarié^"
+    if (lowerCaseWho.includes("*tout public")) whoItems += "*tout public^"
+    if (lowerCaseWho.includes("alternance")) whoItems += "alternance^"
+
+    if(lowerCaseWho.includes("demandeur d'emploi avec promesse d'embauche^")) {
+      whoItems += "demandeur d'emploi avec promesse d'embauche^"
+    } else {
+      if (lowerCaseWho.includes("demandeur d'emploi")) whoItems += "demandeur d'emploi^"
+    }
+
+    if (lowerCaseWho.includes("DE -26 ans")) whoItems += "DE -26 ans^"
+    if (lowerCaseWho.includes("moins de 26 ans")) whoItems += "-26 ans^"
+    if (lowerCaseWho.includes("plus de 26 ans")) whoItems += "+26 ans^"
+    if (lowerCaseWho.includes("moins de 30 ans")) whoItems += "-30 ans^"
+    if (lowerCaseWho.includes("plus de 30 ans")) whoItems += "+30 ans^"
+    if (lowerCaseWho.includes("jeune de 18 à 30 ans")) whoItems += "jeune de 18 à 30 ans^"
+
+    if(whoItems.length > 0) whoItems = whoItems.substring(0, whoItems.length - 1)
+
+    return whoItems
+  }
+
+  const [wholeUrlParameters, setWholeUrlParameters] = React.useState('')
+  const [searchParametersCategories, setSearchParametersCategories] = React.useState('')
+  const [searchParametersSituations, setSearchParametersSituations] = React.useState('')
+  const [searchParametersSituationsAge, setSearchParametersSituationsAge] = React.useState('')
+
+  const onSearchParametersCategories = function(parameter) {
+    let listParameter = parameter.toString().replaceAll(",","&project=")
+    CATEGORIES.forEach((categorie) =>  listParameter = listParameter.replaceAll(categorie.name, categorie.key))
+    if(listParameter.length === 0) setSearchParametersCategories("")
+    else setSearchParametersCategories("project="+listParameter)
+  }
+  const onSearchParametersSituations = function(parameter) {
+    if(parameter === "empty") {
+      setSearchParametersSituations("")
+      return
+    }
+    let listParameter = parameter.toString().replaceAll(",","&situation=")
+    SITUATIONS.forEach((situation) =>  listParameter = listParameter.replaceAll(situation.name, situation.key))
+    setSearchParametersSituations("situation="+listParameter)
+  }
+  const onSearchParametersSituationsAge = function(parameter) {
+    if(parameter === "empty") {
+      setSearchParametersSituationsAge("")
+      return
+    }
+    let listParameter = parameter.toString().replaceAll(",","&situation=")
+    SITUATIONS.forEach((situation) =>  listParameter = listParameter.replaceAll(situation.name, situation.key))
+    setSearchParametersSituationsAge("situation="+listParameter)
+  }
+
+  const updateQueryParameter = function() {
+    const urlParameters = "?"+searchParametersCategories+"&"+searchParametersSituations+"&"+searchParametersSituationsAge
+    if(!urlParameters.includes("situation") && !urlParameters.includes("project")) {
+        setWholeUrlParameters("")
+    } else {
+      setWholeUrlParameters(urlParameters)
+    }
+  }
+
+  const params = decodeURIComponent(window.location.search)
+  const [isFiltreRecherche, setFiltreRecherche] = useState(false)
+
+  useEffect(() => {setFiltreRecherche(params && params.length > 0 ? true : false )}, [params])
+  useEffect(() => {updateQueryParameter() }, [searchParametersCategories, searchParametersSituations, searchParametersSituationsAge])
+
+  const gridStyle = isMobile ? {width: "350px", minWidth: "350px"} : {width: "1050px", minWidth: "1050px"}
+
+  function getHelpsPanel(listHelpItems) {
+
+    return <>
+
+      <Grid container spacing={2} style={gridStyle} >
+      {listHelpItems.map((item) => {
+        // kinda clunky, using labels to determine icon.
+        const helpIcon = item.type.includes('admin') ? (
+            <ReceiptLongIcon/>
+        ) : item.type.includes('logement') ? (
+            <HomeWorkIcon/>
+        ) : item.type.includes('financière') ? (
+            <EuroIcon/>
+        ) : item.type.includes('transport') ? (
+            <DirectionsCarIcon/>
+        ) : (
+            <PeopleIcon/>
+        )
+
+        // moche : on dimmensionne les images selon le nom du fichier (fonctionnait en s'appuyant sur les dimmensions du fichier mais ralenti trop la page (+ code assez lourd) :/ )
+        let styleImage
+        if(item.logo === "mobili-pass.jpg" || item.logo === "visale.jpg" || item.logo === "action-logement-2.png" ) {
+          styleImage = {width: '80px',  height: 'auto'}
+        } else if (item.logo === "renault-group.png") {
+          styleImage = {width: '110px',  height: 'auto'}
+        } else {
+          styleImage = {width: 'auto',  height: '60px'}
+        }
+
+        return (
+            <Grid item xs={isMobile ? 12 : 6} md={6} >
+              <HelpItem
+                  isMobile={isMobile}
+                  key={item.id}
+                  to={`/aides/${item.slug}` + window.location.search}
+              >
+                <div>
+                <HelpItemTextContainer>
+                  <HelpItemTextSubContainer isMobile={isMobile} >
+                    <HelpItemTextTitle isMobile={isMobile}>
+                      {item.title}
+                    </HelpItemTextTitle>
+                    <HelpItemType>
+                      <HelpItemContainer>
+                        {helpIcon}
+                        <HelpItemText>{item.type}</HelpItemText>
+                      </HelpItemContainer>
+                    </HelpItemType>
+                  </HelpItemTextSubContainer>
+                  <HelpItemImgContainer>
+                    <img
+                        src={`/help-logos/${item.logo}`}
+                        alt=""
+                        style={styleImage}
+                    />
+                  </HelpItemImgContainer>
+                </HelpItemTextContainer>
+                <HelpItemTags>
+                  <SpanWho
+                      dangerouslySetInnerHTML={{
+                        __html: filterHelpItemWho(item.who)
+                            .split('^')
+                            .map((t) => ucFirst(t))
+                            .join(' • '),
+                      }}
+                  ></SpanWho>
+                </HelpItemTags>
+                  <div>{item.goal}</div>
+                  <ViewMore>
+                    Découvrir l'aide <ArrowForwardIcon fontSize="small"/>
+                  </ViewMore>
+                </div>
+              </HelpItem>
+            </Grid>
+        )
+      })}
+      </Grid>
+    </>
+  }
+
+  function getFilteredHelpsPanel(listHelpItem, isFiltreRecherche) {
+    if(!isFiltreRecherche) return
+    return <>
+      {getHelpsPanel(listEveryHelpItems)}
+    </>
+  }
+
+  function getAllHelpsPanel(isFiltreRecherche) {
+    if(isFiltreRecherche) return
+    return <>
+      <HelpTypeTitleContainer isFirst={true} isMobile={isMobile} >
+        <img alt={""} src={pictoHelpFinanciere}/>  <h2>Les aides financières</h2>
+      </HelpTypeTitleContainer>
+      {getHelpsPanel(listHelpItemFinance)}
+
+      <HelpTypeTitleContainer isMobile={isMobile} >
+        <img alt={""} src={pictoHelpAccompagnement}/>  <HelpTypeTitle isMobile={isMobile} >Les aides {isMobile ? <br/> : "" } d'accompagnement</HelpTypeTitle>
+      </HelpTypeTitleContainer>
+      {getHelpsPanel(listHelpItemAccompagnement)}
+
+      <HelpTypeTitleContainer isMobile={isMobile} >
+        <img alt={""} src={pictoHelpLogement}/>  <h2>Les aides au logement</h2>
+      </HelpTypeTitleContainer>
+      {getHelpsPanel(listHelpItemLogement)}
+
+      <HelpTypeTitleContainer isMobile={isMobile} >
+        <img alt={""} src={pictoHelpTransport}/>  <h2>Les aides Transport</h2>
+      </HelpTypeTitleContainer>
+      {getHelpsPanel(listHelpItemTransport)}
+    </>
+  }
+
+  function getTitle() {
+    if(isFiltreRecherche) {
+      return <Title isMobile={isMobile}> {listEveryHelpItems.length} aide{listEveryHelpItems.length > 1 ? "s" : ""} disponible{listEveryHelpItems.length > 1 ? "s" : ""} pour votre situation </Title>
+    }
+
+    return <Title isMobile={isMobile}> Toutes les aides à la mobilité professionelle et résidentielle </Title>
+  }
+
+  const isScrollingUp = UseScrollingUp()
 
   return (
     <MainLayout topMobileMenu>
       <Helmet>
         <title>Liste des aides à la mobilité - Mobiville</title>
         <meta
-          name="description"
-          content="Trouvez facilement les aides dont vous pouvez bénéficier pour votre projet de mobilité en France"
+            name="description"
+            content="Trouvez facilement les aides dont vous pouvez bénéficier pour votre projet de mobilité en France"
         />
       </Helmet>
 
-      {!isMobile && (
-        <Header>
-          <div>
-            <HeaderTitle>
-              Vous avez besoin d{"'"}
-              aide pour votre projet de mobilité ?
-            </HeaderTitle>
-            <HeaderSubtitle>
-              Découvrez les solutions pour accélérer votre projet
-            </HeaderSubtitle>
-          </div>
-          <HeaderImg src={helpsPic} alt="" />
-        </Header>
-      )}
-      <Container isMobile={isMobile}>
-        <TagsSelectionPanel isMobile={isMobile}>
-          <Title isMobile={isMobile}>Découvrez les aides pour vous</Title>
-          <SubTitle isMobile={isMobile}>Quel est votre projet ?</SubTitle>
-          <CategoryTagsContainer isMobile={isMobile}>
-            {CATEGORIES.map((c) => {
-              const selected = project && c.key === project.key
-              return (
-                <CategoryTag
-                  isMobile={isMobile}
-                  key={c.text}
-                  selected={project && c.key === project.key}
-                  to={`/aides?${queryString.stringify({
-                    project: selected ? '' : c.key,
-                    situation: situations.map(({ key }) => key),
-                  })}`}
-                >
-                  <img src={c.icon} alt={c.text} />
-                  <div>{c.text}</div>
-                </CategoryTag>
-              )
-            })}
-          </CategoryTagsContainer>
-          <SubTitle>Ma situation</SubTitle>
-          {SITUATIONS.map((c) => {
-            const selected = situations.some(({ key }) => key === c.key)
-            const situationsForLink = selected
-              ? situations.filter(({ key }) => key !== c.key)
-              : situations.concat({ key: c.key })
-            return (
-              <SituationTag
-                isMobile={isMobile}
-                key={c.text}
-                selected={selected}
-                to={`/aides?${queryString.stringify({
-                  project: project?.key,
-                  situation: situationsForLink.map(({ key }) => key),
-                })}`}
-              >
-                {c.text}
-              </SituationTag>
-            )
-          })}
-        </TagsSelectionPanel>
-        <HelpsPanel isMobile={isMobile}>
-          <TitleHelps isMobile={isMobile}>
-            {project || situations.length
-              ? 'Mes aides disponibles'
-              : 'Les aides les plus consultées'}
-          </TitleHelps>
-          {list.map((item) => {
-            // kinda clunky, using labels to determine icon.
-            const helpIcon = item.type.includes('admin') ? (
-              <ReceiptLongIcon />
-            ) : item.type.includes('logement') ? (
-              <HomeWorkIcon />
-            ) : item.type.includes('financière') ? (
-              <EuroIcon />
-            ) : item.type.includes('transport') ? (
-              <DirectionsCarIcon />
-            ) : (
-              <PeopleIcon />
-            )
+      <Header isMobile={isMobile} className={`${ !isMobile && isScrollingUp ? 'stickyHeader' : ''}`}>
+        <div>
+          <HeaderSearchBloc isMobile={isMobile}>
+            {!isMobile && (
+                <CheckmarksSelect searchCriteria={CATEGORIES} title={"Quel est votre projet ?"}
+                                  onSearchParameters={onSearchParametersCategories} params={params}/>
+            )}
+            {isMobile && (
+                <CheckmarksSelectMobile searchCriteria={CATEGORIES} title={"Quel est votre projet ?"}
+                                        onSearchParameters={onSearchParametersCategories} params={params}/>
+            )}
+          </HeaderSearchBloc>
+          <HeaderSearchBloc isMobile={isMobile}>
+            {!isMobile && (
+                <CheckmarksSelectSituation searchCriteria={SITUATIONS.slice(0, 3)} title={"Votre situation"}
+                                           onSearchParameters={onSearchParametersSituations} params={params}
+                                           placeholder={"Demandeur d'emploi, salarié"} selectId={"situation-simple-checkbox"} />
+            )}
+            {isMobile && (
+                <CheckmarksSelectSituationMobile searchCriteria={SITUATIONS.slice(0, 3)} title={"Votre situation"}
+                                                 onSearchParameters={onSearchParametersSituations} params={params}
+                                                 placeholder={"Demandeur d'emploi, salarié"} selectId={"situation-simple-checkbox"} />
+            )}
+          </HeaderSearchBloc>
+          <HeaderSearchBloc isMobile={isMobile}>
+            {!isMobile && (
+                <CheckmarksSelectSituation searchCriteria={SITUATIONS.slice(-2)} title={"Votre âge"}
+                                           onSearchParameters={onSearchParametersSituationsAge} params={params}
+                                           placeholder={"Moins de 26 ans, plus de 26 ans"} selectId={"age-simple-checkbox"} />
+            )}
+            {isMobile && (
+                <CheckmarksSelectSituationMobile searchCriteria={SITUATIONS.slice(-2)} title={"Votre âge"}
+                                                 onSearchParameters={onSearchParametersSituationsAge} params={params}
+                                                 placeholder={"Moins de 26 ans, plus de 26 ans"} selectId={"age-simple-checkbox"} />
+            )}
+          </HeaderSearchBloc>
+          <HeaderSearchBloc isMobile={isMobile}>
+            <SearchButton to={`/aides${wholeUrlParameters}`} isMobile={isMobile}>Rechercher</SearchButton>
+          </HeaderSearchBloc>
+        </div>
+      </Header>
 
-            return (
-              <HelpItem
-                key={item.id}
-                to={`/aides/${item.slug}`}
-                ismobile={isMobile ? 'true' : 'false'}
-              >
-                <HelpItemImgContainer>
-                  <img
-                    src={`/help-logos/${item.logo}`}
-                    alt=""
-                    style={{ width: '100%', height: 'auto' }}
-                  />
-                </HelpItemImgContainer>
-                <HelpItemTextContainer>
-                  <HelpItemType>
-                    {helpIcon}
-                    <HelpItemText>{item.type}</HelpItemText>
-                  </HelpItemType>
-                  <div>
-                    <HelpItemTextTitle isMobile={isMobile}>
-                      {item.title}
-                    </HelpItemTextTitle>
-                    <div>{item.goal}</div>
-                  </div>
-                  <HelpItemTags>
-                    <HelpItemTagsTitle>Public concerné</HelpItemTagsTitle>
-                    <br />
-                    <span
-                      dangerouslySetInnerHTML={{
-                        __html: item.who
-                          .split('^')
-                          .map((t) => ucFirst(t))
-                          .join(' · '),
-                      }}
-                    ></span>
-                  </HelpItemTags>
-                  <ViewMore>
-                    Découvrir l'aide <ArrowForwardIcon fontSize="small" />
-                  </ViewMore>
-                </HelpItemTextContainer>
-              </HelpItem>
-            )
-          })}
+      {getTitle()}
+
+      {/*EN ATTENTE MODICATIONS UX*/}
+      {/*<TypeHelpFilter />*/}
+
+      <Container isMobile={isMobile}>
+        <HelpsPanel isMobile={isMobile}>
+
+          {getAllHelpsPanel(isFiltreRecherche)}
+
+          {getFilteredHelpsPanel(listHelpItem, isFiltreRecherche)}
+
         </HelpsPanel>
       </Container>
     </MainLayout>

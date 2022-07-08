@@ -127,14 +127,9 @@ const CityItem = ({
 
   let { photo } = city
   if (photo) {
-    if (photo.indexOf('.svg') === -1) {
-      const subFolderName = ['/commons/', '/fr/'].find((p) => photo.includes(p))
-      photo = photo.replace(subFolderName, `${subFolderName}thumb/`)
-      const split = photo.split('/')
-      photo += `/250px-${split[split.length - 1]}`
-    }
+    photo = photo.replace('/2000px', '/500px')
   } else {
-    photo = `/regions/region-${city['region.new_code']}.jpg`
+    photo = `/regions/region-${city?.newRegion?.code}.jpg`
   }
 
   const tags = [
@@ -156,9 +151,9 @@ const CityItem = ({
     },
     {
       isPrioritary: isUsingRegionFilter,
-      node: city['region.new_name'] && (
+      node: city?.newRegion?.name && (
         <Tag isUsingFilter={isUsingRegionFilter} key="region">
-          {ucFirst(city['region.new_name'].toLowerCase())}
+          {ucFirst(city.newRegion.name.toLowerCase())}
         </Tag>
       ),
     },

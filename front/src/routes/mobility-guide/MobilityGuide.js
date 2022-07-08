@@ -117,7 +117,7 @@ const MobilityGuide = () => {
             d'embauche.
           </p>
           <p>
-            Découvrez des aides pour avoir un dosser de location en béton ou
+            Découvrez des aides pour avoir un dossier de location en béton ou
             pour accéder à un logement temporaire.
           </p>
           <p>

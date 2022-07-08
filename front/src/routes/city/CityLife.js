@@ -205,7 +205,7 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
   const mainCityElement = (
     <>
       <CityPic
-        src={city.photo || `/regions/region-${city['region.new_code']}.jpg`}
+        src={city.photo || `/regions/region-${city.newRegion.code}.jpg`}
         alt=""
       />
       <ItemLayout isMobile={isMobile} style={{ maxWidth: '100%' }}>
@@ -392,7 +392,7 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
         backLink={backLink}
         isMobile={isMobile}
         notFixed={!isMobile}
-        title={` Information sur le logement à ${ucFirstOnly(city.nom_comm)}`}
+        title={` Information sur le cadre de vie à ${ucFirstOnly(city.nom_comm)}`}
       />
       {isMobile ? mobileElements : desktopElement}
       <ElectedOfficialsBlock>
