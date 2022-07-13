@@ -119,6 +119,7 @@ const styleLineBoxUnSelected = {
     "gap": "10px",
     "margin": "20px 10px",
     "borderRadius": "8px",
+    "border": "1px solid #e7ebef",
     "background": "#fff",
 }
 
@@ -130,6 +131,7 @@ const CheckmarksSelectMobile = ({searchCriteria, title, globalWidth, onSearchPar
     const history = useHistory()
 
     useEffect(() => {
+        setItemName([""])
         if (params && params.length > 0) {
             const regex = RegExp("project=|situation=|&")
             const parameters = params.split(regex)
@@ -144,7 +146,6 @@ const CheckmarksSelectMobile = ({searchCriteria, title, globalWidth, onSearchPar
                 setQuery(validParamsStr)
             }
         }
-        setItemName([""])
     }, [])
 
     useEffect(() => {

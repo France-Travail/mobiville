@@ -31,6 +31,11 @@ import {Grid} from "@mui/material"
 
 //import TypeHelpFilter from "./components/TypeHelpFilter";
 
+
+const TitleContainer = styled.div`
+  padding: ${({ isMobile }) => (isMobile ? '20px' : '0px')};
+`
+
 const Title = styled.h1`
   font-size: 24px;
   font-weight: 700;
@@ -43,12 +48,12 @@ const Title = styled.h1`
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 900;
-  font-size: 36px;
+  font-size: ${({ isMobile }) => (isMobile ? '24px' : '36px')};
   line-height: 42px;
   display:  ${({ isMobile }) => (isMobile ? 'contents' : 'flex')};
   align-items: center;
   
-  color: ${COLOR_PRIMARY};
+  color: ${({ isMobile }) => (isMobile ? '#000' : COLOR_PRIMARY)};
 `
 
 const Header = styled.div`
@@ -110,7 +115,7 @@ const HelpsPanel = styled.div`
 
 const HelpItemImgContainer = styled.div`
   display: inline-grid;
-  vertical-align: bottom;
+  //vertical-align: top;
   
   margin-left: 5px;
   
@@ -210,6 +215,9 @@ const SearchButton = styled(Link)`
   align-items: center;
   text-align: center;
   vertical-align: middle;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 21px;
   &,
   &:hover {
     color: #eee;
@@ -326,6 +334,7 @@ const HelpsPage = ({ location: { search } }) => {
   
   width: ${({ isMobile }) => (isMobile ? '340px' : '511px')};
   height: ${({ isMobile }) => (isMobile ? '' : '231px')};
+  border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #fff')};
   
   display: block;
   
@@ -333,7 +342,7 @@ const HelpsPage = ({ location: { search } }) => {
   color: ${COLOR_TEXT_PRIMARY};
   
   &:hover {
-    border: 2px solid #191970;
+    border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #191970')};
   }
 `
 
@@ -504,9 +513,11 @@ const HelpsPage = ({ location: { search } }) => {
         // moche : on dimmensionne les images selon le nom du fichier (fonctionnait en s'appuyant sur les dimmensions du fichier mais ralenti trop la page (+ code assez lourd) :/ )
         let styleImage
         if(item.logo === "mobili-pass.jpg" || item.logo === "visale.jpg" || item.logo === "action-logement-2.png" ) {
-          styleImage = {width: '80px',  height: 'auto'}
+          styleImage = {width: '100px',  height: 'auto'}
         } else if (item.logo === "renault-group.png") {
-          styleImage = {width: '110px',  height: 'auto'}
+          styleImage = {width: '110px',  height: 'auto', paddingTop: '5px'}
+        } else if (item.logo === "pole-emploi.png") {
+          styleImage = {width: 'auto',  height: '55px'}
         } else {
           styleImage = {width: 'auto',  height: '60px'}
         }
@@ -596,10 +607,10 @@ const HelpsPage = ({ location: { search } }) => {
 
   function getTitle() {
     if(isFiltreRecherche) {
-      return <Title isMobile={isMobile}> {listEveryHelpItems.length} aide{listEveryHelpItems.length > 1 ? "s" : ""} disponible{listEveryHelpItems.length > 1 ? "s" : ""} pour votre situation </Title>
+      return <TitleContainer isMobile={isMobile}><Title isMobile={isMobile}> {listEveryHelpItems.length} aide{listEveryHelpItems.length > 1 ? "s" : ""} disponible{listEveryHelpItems.length > 1 ? "s" : ""} pour votre situation </Title></TitleContainer>
     }
 
-    return <Title isMobile={isMobile}> Toutes les aides à la mobilité professionelle et résidentielle </Title>
+    return <TitleContainer isMobile={isMobile}><Title isMobile={isMobile}> Toutes les aides à la mobilité professionelle et résidentielle </Title></TitleContainer>
   }
 
   const isScrollingUp = UseScrollingUp()

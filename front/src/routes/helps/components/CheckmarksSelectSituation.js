@@ -119,6 +119,7 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
     const history = useHistory()
 
     useEffect(() => {
+        setItemName("empty")
         if (params && params.length > 0) {
             const regex = RegExp("project=|situation=|&")
             const parameters = params.split(regex)
@@ -133,7 +134,6 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
                 setQuery(validParamsStr)
             }
         }
-        setItemName("empty")
     }, [])
 
     useEffect(() => {
@@ -176,7 +176,7 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
                     }}
                 >
                     {Object.keys(searchCriteria).map((key) => (
-                        <MenuItem key={key} value={searchCriteria[key].name}
+                        <MenuItem key={key} value={searchCriteria[key].name} class={"desktop"}
                                   style={itemName.indexOf(searchCriteria[key].name) > -1 ? styleLineBoxSelected : styleLineBoxUnSelected}>
                             <Checkbox checked={itemName.indexOf(searchCriteria[key].name) > -1}
                                       style={{display: "none"}}/>
