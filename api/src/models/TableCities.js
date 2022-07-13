@@ -24,10 +24,18 @@ import {
   loadWeatherFile,
   wikipediaDetails,
   getTensionsCities,
-  getAverageHouseRent, getCrawledImageCity,
+  getAverageHouseRent,
+  getCrawledImageCity,
+  getAllRegions,
 } from '../utils/api'
 import { distanceBetweenToCoordinates, sleep } from '../utils/utils'
 import { NO_DESCRIPTION_MSG } from '../constants/messages'
+
+function padLeadingZeros(num, size) {
+  let s = num + ''
+  while (s.length < size) s = '0' + s
+  return String(s)
+}
 
 export default (sequelizeInstance, Model) => {
   Model.franceShape = null
@@ -39,30 +47,29 @@ export default (sequelizeInstance, Model) => {
   Model.cacheLoadAverageHouseRent = null
 
   Model.syncCities = async ({ cities }) => {
-    const oldRegions = await Model.models.oldRegions.findAll()
-
+    const oldRegions = await getAllRegions()
     const oldRegionsToNewRegionsMap = oldRegions.reduce(
       (prev, oldRegion) => ({
         ...prev,
-        [oldRegion.former_code]: oldRegion.new_code,
+        [padLeadingZeros(oldRegion.former_code, 2)]: padLeadingZeros(
+          oldRegion.new_code,
+          2
+        ),
       }),
       {}
     )
-
     const data = []
 
     for (let i = 0; i < cities.length; i++) {
       const city = cities[i]
-
       data.push({
         code_comm: city.code_commune,
         nom_dept: city.departement,
         statut: city.statut,
         z_moyen: city.altitude_moyenne,
         nom_region: city.region,
-        code_reg: city.code_region,
         new_code_region:
-          oldRegionsToNewRegionsMap[parseInt(city.code_region, 10)],
+          oldRegionsToNewRegionsMap[padLeadingZeros(city.code_region, 2)],
         insee_com: city.code_insee,
         code_dept: city.code_departement,
         geo_point_2d_x: city.geo_point_2d
@@ -78,10 +85,15 @@ export default (sequelizeInstance, Model) => {
         nom_comm: city.commune,
         code_arr: city.code_arrondissement,
         population: city.population,
+        total_social_housing: isNaN(parseInt(city.lgt_sociaux, 10))
+          ? null
+          : parseInt(city.lgt_sociaux, 10),
       })
     }
 
-    await Model.bulkCreate(data, { updateOnDuplicate: ['insee_com'] })
+    await Model.bulkCreate(data, {
+      updateOnDuplicate: ['total_social_housing'],
+    }) // updateOnDuplicate == les champs a MaJ si id déja existant
     await Model.addSpecialCities()
 
     return {
@@ -99,7 +111,6 @@ export default (sequelizeInstance, Model) => {
       'statut',
       'z_moyen',
       'nom_region',
-      'code_reg',
       'code_dept',
       'geo_point_2d_x',
       'geo_point_2d_y',
@@ -119,6 +130,7 @@ export default (sequelizeInstance, Model) => {
       'cache_living_environment',
       'photo',
       'average_houseselled',
+      'total_social_housing',
     ].join(', ')
 
     const POPULATION_MARSEILLE = 861.6
@@ -296,13 +308,7 @@ export default (sequelizeInstance, Model) => {
   Model.getCity = async ({ insee }) => {
     const city = await Model.findOne({
       where: { insee_com: insee },
-      include: [
-        {
-          model: Model.models.oldRegions,
-          include: Model.models.socialhousings,
-        },
-        Model.models.equipments,
-      ],
+      include: [Model.models.equipments, Model.models.newRegions],
     })
 
     if (city) {
@@ -338,56 +344,56 @@ export default (sequelizeInstance, Model) => {
       logging: false,
     })
 
-    for(let i = 0 ; i < cities.length ; i++ ) {
-        let city = cities[i];
-        const options = {}
-        console.log(
-            `[START] Sync city ${city.dataValues.id} - ${city.dataValues.nom_comm}`
+    for (let i = 0; i < cities.length; i++) {
+      let city = cities[i]
+      const options = {}
+      console.log(
+        `[START] Sync city ${city.dataValues.id} - ${city.dataValues.nom_comm}`
+      )
+      if (city.dataValues.distance_from_sea === null) {
+        options.distance_from_sea = Model.distanceFromSea(
+          city.dataValues.geo_point_2d_x,
+          city.dataValues.geo_point_2d_y
         )
-        if (city.dataValues.distance_from_sea === null) {
-          options.distance_from_sea = Model.distanceFromSea(
-              city.dataValues.geo_point_2d_x,
-              city.dataValues.geo_point_2d_y
-          )
-        }
+      }
 
-        if (city.dataValues.average_temperature === null) {
-          options.average_temperature = await Model.averageTemperature(
-              city.dataValues.geo_point_2d_x,
-              city.dataValues.geo_point_2d_y
-          )
-        }
+      if (city.dataValues.average_temperature === null) {
+        options.average_temperature = await Model.averageTemperature(
+          city.dataValues.geo_point_2d_x,
+          city.dataValues.geo_point_2d_y
+        )
+      }
 
-        // mise à jour systématique
-        const { photo, description } = await Model.getDescription(city.nom_comm)
-        options.photo = photo
-        options.description = description
+      // mise à jour systématique
+      const { photo, description } = await Model.getDescription(city.nom_comm)
+      options.photo = photo
+      options.description = description
 
-        if (city.dataValues.average_houseselled === null) {
-          options.average_houseselled = await Model.getAveragePricing(
-              city.insee_com
-          )
-        }
+      if (city.dataValues.average_houseselled === null) {
+        options.average_houseselled = await Model.getAveragePricing(
+          city.insee_com
+        )
+      }
 
-        if (city.dataValues.city_house_tension === null) {
-          options.city_house_tension = await Model.getCityHouseTension(
-              city.insee_com
-          )
-        }
+      if (city.dataValues.city_house_tension === null) {
+        options.city_house_tension = await Model.getCityHouseTension(
+          city.insee_com
+        )
+      }
 
-        if (city.dataValues.average_houserent === null) {
-          options.average_houserent = await Model.getAverageHouseRent(
-              city.insee_com
-          )
-        }
+      if (city.dataValues.average_houserent === null) {
+        options.average_houserent = await Model.getAverageHouseRent(
+          city.insee_com
+        )
+      }
 
-        await city.update(options)
-        console.log(`[DONE] Sync city ${city.id}`)
+      await city.update(options)
+      console.log(`[DONE] Sync city ${city.id}`)
 
-        // pour l'instant on conserve le sleep au cas où
-        await sleep(700) // wait and restart command
+      // pour l'instant on conserve le sleep au cas où
+      await sleep(700) // wait and restart command
     }
-      Model.cityOnSync = false
+    Model.cityOnSync = false
   }
 
   Model.distanceFromSea = (lat, long) => {
@@ -485,9 +491,9 @@ export default (sequelizeInstance, Model) => {
   Model.getDescription = async (cityName) => {
     const cityDetails = await wikipediaDetails(cityName)
     let description = NO_DESCRIPTION_MSG
-    let photoPage = null;
-    if(cityDetails && cityDetails.pageid) {
-      photoPage = await getCrawledImageCity(cityDetails.pageid);
+    let photoPage = null
+    if (cityDetails && cityDetails.pageid) {
+      photoPage = await getCrawledImageCity(cityDetails.pageid)
     }
 
     if (cityDetails && cityDetails.extract) {
@@ -497,11 +503,16 @@ export default (sequelizeInstance, Model) => {
     }
 
     let photo = photoPage
-    if ( photo == null && cityDetails && cityDetails.original && cityDetails.original.source) {
-       photo = cityDetails.original.source
+    if (
+      photo == null &&
+      cityDetails &&
+      cityDetails.original &&
+      cityDetails.original.source
+    ) {
+      photo = cityDetails.original.source
     }
 
-    console.log("Model.getDescription photo : "+photo)
+    console.log('Model.getDescription photo : ' + photo)
 
     return {
       description,

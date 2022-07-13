@@ -163,7 +163,7 @@ const Search = () => {
   const Component = ALL_STEPS[index].components
 
   return (
-    <MainLayout style={{ marginBottom: isMobile ? 120 : 250 }}>
+    <MainLayout style={{ marginBottom: isMobile ? 120 : 250 }} menu={{ visible: !isMobile }}>
       <ProgressBar
         style={{ width: `${((index + 1) * 100) / ALL_STEPS.length}%` }}
       />
@@ -179,11 +179,11 @@ const Search = () => {
         )}
         {!isMobile && (
           <Fil>
-            <a href="/" class="accueil">
+            <a href="/" className="accueil">
               Accueil
               <ChevronRightIcon />
             </a>
-            <span class="current-page">
+            <span className="current-page">
               {index === 0
                 ? 'Rechercher un métier'
                 : 'Rechercher une ville ou une région'}

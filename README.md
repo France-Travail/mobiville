@@ -58,12 +58,12 @@ Les tables suivantes sont présentes dans la base :
 - **helps** contient les informations sur les différentes aides proposées par pôle-emploi
 - **migrations** contient les informations de migration de base de données
 - **new_regions** contient les informations de régions selon le nouveau format (réforme de 2015)
-- **old_regions** contient les informations de régions selon l’ancien format, et une correspondance avec le nouveau format. Cette table est nécessaire car de nombreuses données insee font encore référence à l’ancien format et à ses identifiants
+- ~~**old_regions** contient les informations de régions selon l’ancien format, et une correspondance avec le nouveau format. Cette table est nécessaire car de nombreuses données insee font encore référence à l’ancien format et à ses identifiants~~
 - **regions_tensions_criterions** contient un json permettant au front d’afficher les informations de régions en tension par code rome, et les critères associés.
 - **rome_codes** contient tous les codes romes et leurs libellés
 - **romeogrs** contient tous les code OGR et libellés des métiers, et leurs codes romes associés
 - **romeskills** contient la liste des compétences associée à chaque code rome
-- **socialhousings** contient les informations de logement social disponible par région (ces données devraient être mergées à new_regions)
+- ~~**socialhousings** contient les informations de logement social disponible par région (ces données devraient être mergées à new_regions)~~
 - **tensions** contient les informations de tensions par code rome et territoire. C’est notamment à partir de cette table qu’est généré le json présent dans regions_tensions_criterions
 
 ## Génération de migration
@@ -175,6 +175,13 @@ Si besoin de déployer depuis une autre branche que celle de recette ou de produ
 `api-{branch}-latest`
 `api-{branch}-{hash commit taccourci}`
 
+### Renouvellement certificat
+
+1. Suivre la procédure indiquée dans le [wiki](https://wiki.beta.pole-emploi.fr/memento-dev/securite/certificat-ssl-tls/)
+2. Puis copié/coller le nouveau certificat dans la variable CI/CD `SSL_mobiville_pole_emploi_fr_crt`
+3. Dans CI/CD > Pipeline > bouton 'Run pipeline' se mettre sur la branche master, puis `FORCE_DEPLOY = install` et `RENEW_TLS = YES`
+4. bouton 'Run pipeline' pour lancer le deploiement
+
 ### Installation from scratch
 
 Il est possible de réinstaller from scratch avec la pipeline.
@@ -239,15 +246,15 @@ Sur son poste ensuite :
 - `scp $USER@$IP_DU_SERVEUR_DISTANT:/tmp/mobivillerecette_dimanche.sql.bz2 ./`
 
 ##### Procedure de restore
-Pour un environnement de production (sinon le prefixe du fichier sera mobivillerecette_*):
-On récupere le backup de la veille: `export BACKUP_FILE_NAME=mobivilleproduction_$(date -d 'yesterday' +'%d')`
+Pour un environnement de recette (sinon le prefixe du fichier sera mobivilleproduction_*):
+On récupere le backup de la veille: `export BACKUP_FILE_NAME=mobivillerecette_$(LC_ALL="fr_FR.utf8" date -d 'yesterday' +'%A')`
 ```bash
 cp /home/docker/mobiville/backups/$BACKUP_FILE_NAME.sql.bz2 ~/
 bzip2 -d $BACKUP_FILE_NAME.sql.bz2
 docker cp ./BACKUP_FILE_NAME.sql mobiville_db_1:/
 
-docker exec -it mobiville_db_1 mariadb -u $MOBIVILLE_USER -p$MOBIVILLE_PASS mobiville -e "DROP DATABASE mobiville"
-docker exec -it mobiville_db_1 mariadb -u $MOBIVILLE_USER -p$MOBIVILLE_PASS -e "CREATE DATABASE mobiville"
-docker exec -it mobiville_db_1 bash -c "mysql -u $MOBIVILLE_USER -p$MOBIVILLE_PASS mobiville < "$BACKUP_FILE_NAME".sql"
+docker exec -it mobiville_db_1 mariadb -u $MYSQL_USER -p$MYSQL_PASSWORD mobiville -e "DROP DATABASE mobiville"
+docker exec -it mobiville_db_1 mariadb -u $MYSQL_USER -p$MYSQL_PASSWORD -e "CREATE DATABASE mobiville"
+docker exec -it mobiville_db_1 bash -c "mysql -u $MYSQL_USER -p$MYSQL_PASSWORD mobiville < "$BACKUP_FILE_NAME".sql"
 ```
 TADA !

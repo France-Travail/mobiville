@@ -127,9 +127,9 @@ const CityItem = ({
 
   let { photo } = city
   if (photo) {
-    photo = photo.replace("/2000px", "/500px")
+    photo = photo.replace('/2000px', '/500px')
   } else {
-    photo = `/regions/region-${city['region.new_code']}.jpg`
+    photo = `/regions/region-${city?.newRegion?.code}.jpg`
   }
 
   const tags = [
@@ -151,9 +151,9 @@ const CityItem = ({
     },
     {
       isPrioritary: isUsingRegionFilter,
-      node: city['region.new_name'] && (
+      node: city?.newRegion?.name && (
         <Tag isUsingFilter={isUsingRegionFilter} key="region">
-          {ucFirst(city['region.new_name'].toLowerCase())}
+          {ucFirst(city.newRegion.name.toLowerCase())}
         </Tag>
       ),
     },

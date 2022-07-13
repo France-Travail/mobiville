@@ -5,7 +5,7 @@ import Sequelize from 'sequelize'
 - statut: Type de commune,
 - z_moyen: Altitude moyenne,
 - nom_region: Nom de région,
-- code_reg: Code de la région (Ceci est l'ancien code des régions),
+- new_code_region: Code de la région (Ceci est le nouveaux code des régions),
 - insee_com: Identifiant europeen de la commune,
 - code_dept: Code du département,
 - geo_point_2d_x: Centre de la ville en longitude,
@@ -56,10 +56,6 @@ export default (sequelizeInstance) => {
       },
       nom_region: {
         type: Sequelize.STRING(255),
-        allowNull: true,
-      },
-      code_reg: {
-        type: Sequelize.INTEGER,
         allowNull: true,
       },
       new_code_region: {
@@ -143,6 +139,10 @@ export default (sequelizeInstance) => {
         type: Sequelize.TEXT,
         allowNull: true,
       },
+      total_social_housing: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
@@ -171,10 +171,6 @@ export default (sequelizeInstance) => {
     Model.hasOne(models.bassins, {
       foreignKey: 'code_commune_insee',
       sourceKey: 'insee_com',
-    })
-    Model.hasOne(models.oldRegions, {
-      foreignKey: 'former_code',
-      sourceKey: 'code_reg',
     })
     Model.hasOne(models.newRegions, {
       foreignKey: 'code',

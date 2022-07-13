@@ -23,6 +23,10 @@ export default (sequelizeInstance) => {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
+      average_delay_obtain_social_housing: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
     },
     {
       timestamps: false,
