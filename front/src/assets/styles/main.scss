@@ -83,9 +83,12 @@ input[type='color'] {
     li:last-child {
       margin-bottom: 10px !important;
     }
+    li.desktop:hover {
+      background-color: #C3E9E9 !important;
+      cursor: pointer;
+    }
   }
 }
-
 
 #project-multiple-checkbox>em, #situation-simple-checkbox>em, #age-simple-checkbox>em {
   font-family: 'Roboto', sans-serif;

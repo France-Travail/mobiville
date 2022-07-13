@@ -119,6 +119,7 @@ const styleLineBoxUnSelected = {
     "gap": "10px",
     "margin": "20px 10px",
     "borderRadius": "8px",
+    "border": "1px solid #e7ebef",
     "background": "#fff",
 }
 
@@ -130,6 +131,7 @@ const CheckmarksSelect = ({searchCriteria, title, globalWidth, onSearchParameter
     const history = useHistory()
 
     useEffect(() => {
+        setItemName([""])
         if (params && params.length > 0) {
             const regex = RegExp("project=|situation=|&")
             const parameters = params.split(regex)
@@ -144,7 +146,6 @@ const CheckmarksSelect = ({searchCriteria, title, globalWidth, onSearchParameter
                 setQuery(validParamsStr)
             }
         }
-        setItemName([""])
     }, [])
 
     useEffect(() => {
@@ -176,6 +177,21 @@ const CheckmarksSelect = ({searchCriteria, title, globalWidth, onSearchParameter
     const classes = useStyle()
     const classeCheckBox = styleCheckBox()
 
+    function countOccurences(string, word) {
+        return string.split(word).length - 1
+    }
+
+    // recursif
+    const changeTextSelected = (text) => {
+        const count = countOccurences(text,"Je recherche")
+        if(count > 1) {
+            text = replaceLast(text, "Je recherche", "" )
+            return changeTextSelected(text)
+        } else {
+            return text
+        }
+    }
+
     return (
         <DivFormControl>
             <FormControl sx={{m: 1, width: globalWidth}}>
@@ -196,19 +212,13 @@ const CheckmarksSelect = ({searchCriteria, title, globalWidth, onSearchParameter
                             item != null && item !== ""
                         ).join(', ')
 
-                        function countOccurences(string, word) {
-                            return string.split(word).length - 1
-                        }
-                        const count = countOccurences(text,"Je recherche")
-                        if(count > 1) {
-                            text = replaceLast(text, "Je recherche", "" )
-                        }
+                        text = changeTextSelected(text)
 
                         return "J"+text.toLowerCase().substring(1)
                     }}
                 >
                     {Object.keys(searchCriteria).map((key) => (
-                        <MenuItem key={key} value={searchCriteria[key].name}
+                        <MenuItem key={key} value={searchCriteria[key].name} class={"desktop"}
                                   style={itemName.indexOf(searchCriteria[key].name) > -1 ? styleLineBoxSelected : styleLineBoxUnSelected} >
                             <Checkbox checked={itemName.indexOf(searchCriteria[key].name) > -1}
                                       classes={{root: classeCheckBox.root, checked: classeCheckBox.checked}} />

@@ -118,6 +118,7 @@ const CheckmarksSelectSituationMobile = ({searchCriteria, title, globalWidth, on
     const history = useHistory()
 
     useEffect(() => {
+        setItemName("empty")
         if (params && params.length > 0) {
             const regex = RegExp("project=|situation=|&")
             const parameters = params.split(regex)
@@ -132,7 +133,6 @@ const CheckmarksSelectSituationMobile = ({searchCriteria, title, globalWidth, on
                 setQuery(validParamsStr)
             }
         }
-        setItemName("empty")
     }, [])
 
     useEffect(() => {
