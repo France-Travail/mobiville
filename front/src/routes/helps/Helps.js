@@ -35,7 +35,6 @@ import { Grid } from '@mui/material'
 
 //import TypeHelpFilter from "./components/TypeHelpFilter";
 
-
 const TitleContainer = styled.div`
   padding: ${({ isMobile }) => (isMobile ? '20px' : '0px')};
 `
@@ -56,7 +55,7 @@ const Title = styled.h1`
   line-height: 42px;
   display: ${({ isMobile }) => (isMobile ? 'contents' : 'flex')};
   align-items: center;
-  
+
   color: ${({ isMobile }) => (isMobile ? '#000' : COLOR_PRIMARY)};
 `
 
@@ -120,9 +119,9 @@ const HelpsPanel = styled.div`
 const HelpItemImgContainer = styled.div`
   display: inline-grid;
   //vertical-align: top;
-  
-  margin-left: 5px;
-  
+
+  margin-left: ${(isMobile) => (isMobile ? '0px' : '5px')};
+
   background: white;
   width: 96px;
   align-items: start;
@@ -326,28 +325,28 @@ const HelpsPage = ({ location: { search } }) => {
   `
 
   const HelpItem = styled(Link)`
-  border-radius: 8px;
-  overflow: hidden;
-  
-  justify-content: flex-end;
-  align-items: flex-end;
-  
-  padding: 18px;
-  gap: 33px;
-  
-  width: ${({ isMobile }) => (isMobile ? '340px' : '511px')};
-  height: ${({ isMobile }) => (isMobile ? '' : '231px')};
-  border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #fff')};
-  
-  display: block;
-  
-  background: #FFFFFF;
-  color: ${COLOR_TEXT_PRIMARY};
-  
-  &:hover {
-    border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #191970')};
-  }
-`
+    border-radius: 8px;
+    overflow: hidden;
+
+    justify-content: flex-end;
+    align-items: flex-end;
+
+    padding: 18px;
+    gap: 33px;
+
+    width: ${({ isMobile }) => (isMobile ? '340px' : '511px')};
+    height: ${({ isMobile }) => (isMobile ? '' : '231px')};
+    border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #fff')};
+
+    display: block;
+
+    background: #ffffff;
+    color: ${COLOR_TEXT_PRIMARY};
+
+    &:hover {
+      border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #191970')};
+    }
+  `
 
   useEffect(() => {
     onLoadPreviews()
@@ -543,47 +542,35 @@ const HelpsPage = ({ location: { search } }) => {
     ? { width: '350px', minWidth: '350px' }
     : { width: '1050px', minWidth: '1050px' }
   const logoStyle = {
-    'mobili-pass.jpg': { width: '80px', height: 'auto' },
-    'visale.jpg': { width: '80px', height: 'auto' },
-    'action-logement-2.png': { width: '80px', height: 'auto' },
-    'renault-group.png': { width: '110px', height: 'auto' },
+    'mobili-pass.jpg': { width: '100px', height: 'auto' },
+    'visale.jpg': { width: '100px', height: 'auto' },
+    'action-logement-2.png': { width: '100px', height: 'auto' },
+    'renault-group.png': { width: '110px', height: 'auto', paddingTop: '5px' },
+    'pole-emploi.png': { width: 'auto', height: '55px' },
     defaultStyle: { width: 'auto', height: '60px' },
   }
 
   function getHelpsPanel(listHelpItems) {
+    return (
+      <>
+        <Grid container spacing={2} style={gridStyle}>
+          {listHelpItems.map((item) => {
+            // kinda clunky, using labels to determine icon.
+            const helpIcon = item.type.includes('admin') ? (
+              <ReceiptLongIcon />
+            ) : item.type.includes('logement') ? (
+              <HomeWorkIcon />
+            ) : item.type.includes('financière') ? (
+              <EuroIcon />
+            ) : item.type.includes('transport') ? (
+              <DirectionsCarIcon />
+            ) : (
+              <PeopleIcon />
+            )
 
-    return <>
-
-      <Grid container spacing={2} style={gridStyle} >
-      {listHelpItems.map((item) => {
-        // kinda clunky, using labels to determine icon.
-        const helpIcon = item.type.includes('admin') ? (
-            <ReceiptLongIcon/>
-        ) : item.type.includes('logement') ? (
-            <HomeWorkIcon/>
-        ) : item.type.includes('financière') ? (
-            <EuroIcon/>
-        ) : item.type.includes('transport') ? (
-            <DirectionsCarIcon/>
-        ) : (
-            <PeopleIcon/>
-        )
-
-        // moche : on dimmensionne les images selon le nom du fichier (fonctionnait en s'appuyant sur les dimmensions du fichier mais ralenti trop la page (+ code assez lourd) :/ )
-        let styleImage
-        if(item.logo === "mobili-pass.jpg" || item.logo === "visale.jpg" || item.logo === "action-logement-2.png" ) {
-          styleImage = {width: '100px',  height: 'auto'}
-        } else if (item.logo === "renault-group.png") {
-          styleImage = {width: '110px',  height: 'auto', paddingTop: '5px'}
-        } else if (item.logo === "pole-emploi.png") {
-          styleImage = {width: 'auto',  height: '55px'}
-        } else {
-          styleImage = {width: 'auto',  height: '60px'}
-        }
-
-        return (
-            <Grid item xs={isMobile ? 12 : 6} md={6} >
-              <HelpItem
+            return (
+              <Grid item xs={isMobile ? 12 : 6} md={6}>
+                <HelpItem
                   isMobile={isMobile}
                   key={item.id}
                   to={`/aides/${item.slug}` + window.location.search}
@@ -677,11 +664,27 @@ const HelpsPage = ({ location: { search } }) => {
   }
 
   function getTitle() {
-    if(isFiltreRecherche) {
-      return <TitleContainer isMobile={isMobile}><Title isMobile={isMobile}> {listEveryHelpItems.length} aide{listEveryHelpItems.length > 1 ? "s" : ""} disponible{listEveryHelpItems.length > 1 ? "s" : ""} pour votre situation </Title></TitleContainer>
+    if (isFiltreRecherche) {
+      return (
+        <TitleContainer isMobile={isMobile}>
+          <Title isMobile={isMobile}>
+            {' '}
+            {listEveryHelpItems.length} aide
+            {listEveryHelpItems.length > 1 ? 's' : ''} disponible
+            {listEveryHelpItems.length > 1 ? 's' : ''} pour votre situation{' '}
+          </Title>
+        </TitleContainer>
+      )
     }
 
-    return <TitleContainer isMobile={isMobile}><Title isMobile={isMobile}> Toutes les aides à la mobilité professionelle et résidentielle </Title></TitleContainer>
+    return (
+      <TitleContainer isMobile={isMobile}>
+        <Title isMobile={isMobile}>
+          {' '}
+          Toutes les aides à la mobilité professionelle et résidentielle{' '}
+        </Title>
+      </TitleContainer>
+    )
   }
 
   const isScrollingUp = UseScrollingUp()
