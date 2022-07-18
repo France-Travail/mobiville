@@ -316,7 +316,7 @@ export function getRomeLabel(rome) {
   })
 }
 
-export function getPCSByRome(rome, fap) {
+export function getPCSByRome(rome) {
   return new Promise((resolve, reject) => {
     readFile(
       __dirname + '/../assets/datas/table-correspondance-pcs-rome.csv',
@@ -344,10 +344,7 @@ export function getPCSByRome(rome, fap) {
                 codeRome = row['2']
               }
 
-              if (
-                codeRome.toLowerCase() === rome.toLowerCase() &&
-                codeFaq.toLowerCase() === fap.toLowerCase()
-              ) {
+              if (codeRome.toLowerCase() === rome.toLowerCase() && !!codeFaq) {
                 finded = codePcs
                 break
               }
