@@ -10,8 +10,9 @@ import styled from 'styled-components'
 import {makeStyles} from "@mui/styles"
 import PropTypes from "prop-types"
 import {useHistory} from "react-router-dom"
+import { isMobileView } from "../../../constants/mobile"
+import { useWindowSize } from '../../../common/hooks/window-size'
 
-const globalWidth = 232
 
 
 const DivFormControl = styled.div`
@@ -21,24 +22,21 @@ const DivFormControl = styled.div`
   border-radius: 20px;
   padding: 17px 16px;
   gap: 10px;
-  width: ${globalWidth}px;
+  width: ${({globalWidth})=> (globalWidth)}px;
   height: 73px;
 
   div {
     right:12px;
-  }
-
-  div>div {
-    width: ${globalWidth -50 }px;
-    min-width: ${globalWidth -50 }px;
-    max-width: ${globalWidth -50 }px;
+    width: ${({globalWidth})=> (globalWidth -50) }px;
+    min-width: ${({globalWidth})=> (globalWidth -50) }px;
+    max-width: ${({globalWidth})=> (globalWidth -50) }px;
     background: none !important;
     padding-right:0px
   }
   
   div>svg {
     right: 0px;
-    left:${globalWidth + 15 - 50 }px;
+    left:${({globalWidth})=> (globalWidth + 15 - 50) }px;
     top:10px;
   }
   
@@ -51,7 +49,7 @@ const SelectLabel = styled.label`
   position:absolute;
   bottom: 40px;
   z-index: 1;
-  margin-left: ${Math.floor(globalWidth / 100)}px;
+  margin-left: ${({globalWidth})=> (Math.floor(globalWidth / 100))}px;
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
@@ -85,7 +83,6 @@ const useStyle = makeStyles({
     }
 })
 
-
 const styleLineBoxSelected = {
     "display": "grid",
     "flexDirection": "row",
@@ -112,7 +109,9 @@ const styleLineBoxUnSelected = {
 }
 
 
-const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearchParameters, params, placeholder, selectId}) => {
+const CheckmarksSelectSituation = ({searchCriteria, title, onSearchParameters, params, placeholder, selectId}) => {
+    const isMobile = isMobileView(useWindowSize())
+    const globalWidth = isMobile ? 350 : 232
 
     const [itemName, setItemName] = React.useState("")
     const [query, setQuery] = useState("")
@@ -158,9 +157,9 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
     const classes = useStyle()
 
     return (
-        <DivFormControl>
+        <DivFormControl globalWidth={globalWidth}>
             <FormControl sx={{m: 1, width: globalWidth}}>
-                <SelectLabel>{title}</SelectLabel>
+                <SelectLabel globalWidth={globalWidth}>{title}</SelectLabel>
                 <Select
                     labelId="simple-checkbox-label"
                     id={selectId}
@@ -176,7 +175,7 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
                     }}
                 >
                     {Object.keys(searchCriteria).map((key) => (
-                        <MenuItem key={key} value={searchCriteria[key].name} class={"desktop"}
+                        <MenuItem key={key} value={searchCriteria[key].name} class={!isMobile && "desktop"}
                                   style={itemName.indexOf(searchCriteria[key].name) > -1 ? styleLineBoxSelected : styleLineBoxUnSelected}>
                             <Checkbox checked={itemName.indexOf(searchCriteria[key].name) > -1}
                                       style={{display: "none"}}/>
@@ -192,7 +191,6 @@ const CheckmarksSelectSituation = ({searchCriteria, title, globalWidth, onSearch
 CheckmarksSelectSituation.props = {
     searchCriteria: PropTypes.array,
     title: PropTypes.string,
-    globalWidth: PropTypes.number,
     onSearchParameters: PropTypes.any,
     params: PropTypes.string,
     placeholder: PropTypes.string,
