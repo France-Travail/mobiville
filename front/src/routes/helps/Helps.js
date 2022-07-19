@@ -23,7 +23,6 @@ import { isMobileView } from '../../constants/mobile'
 import { ucFirst } from '../../utils/utils'
 import CheckmarksSelect from './components/CheckmarksSelect'
 import CheckmarksSelectSituation from './components/CheckmarksSelectSituation'
-import CheckmarksSelectMobile from './components/CheckmarksSelectMobile'
 import CheckmarksSelectSituationMobile from './components/CheckmarksSelectSituationMobile'
 import UseScrollingUp from './components/UseScrollingUp'
 
@@ -705,22 +704,12 @@ const HelpsPage = ({ location: { search } }) => {
       >
         <div>
           <HeaderSearchBloc isMobile={isMobile}>
-            {!isMobile && (
-              <CheckmarksSelect
-                searchCriteria={CATEGORIES}
-                title={'Quel est votre projet ?'}
-                onSearchParameters={onSearchParametersCategories}
-                params={params}
-              />
-            )}
-            {isMobile && (
-              <CheckmarksSelectMobile
-                searchCriteria={CATEGORIES}
-                title={'Quel est votre projet ?'}
-                onSearchParameters={onSearchParametersCategories}
-                params={params}
-              />
-            )}
+            <CheckmarksSelect
+              searchCriteria={CATEGORIES}
+              title={'Quel est votre projet ?'}
+              onSearchParameters={onSearchParametersCategories}
+              params={params}
+            />
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>
             {!isMobile && (
