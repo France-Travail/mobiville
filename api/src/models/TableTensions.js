@@ -44,12 +44,13 @@ export default (sequelizeInstance, Model) => {
       where: {
         pcs: null,
       },
+      paranoid: false,
     })
 
+    console.log(`${result.length} lignes a mettre a jour`)
     for (let i = 0; i < result.length; i++) {
       const row = result[i]
-      const pcs = await getPCSByRome(row.dataValues.rome, row.dataValues.fap)
-
+      const pcs = await getPCSByRome(row.dataValues.rome)
       await row.update({ pcs })
     }
   }
