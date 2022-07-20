@@ -66,6 +66,7 @@ const SelectLabel = styled.label`
 const styleCheckBox = makeStyles({
     root: {
         "margin-left": "40px",
+        "color" : "#E5E5E5",
         "&$checked": {
             color: COLOR_VERT_MOBIVILLE
         }
