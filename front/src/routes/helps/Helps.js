@@ -23,8 +23,6 @@ import { isMobileView } from '../../constants/mobile'
 import { ucFirst } from '../../utils/utils'
 import CheckmarksSelect from './components/CheckmarksSelect'
 import CheckmarksSelectSituation from './components/CheckmarksSelectSituation'
-import CheckmarksSelectMobile from './components/CheckmarksSelectMobile'
-import CheckmarksSelectSituationMobile from './components/CheckmarksSelectSituationMobile'
 import UseScrollingUp from './components/UseScrollingUp'
 
 import pictoHelpAccompagnement from '../../assets/images/icons/help-accompagnement.svg'
@@ -711,25 +709,14 @@ const HelpsPage = ({ location: { search } }) => {
       >
         <div>
           <HeaderSearchBloc isMobile={isMobile}>
-            {!isMobile && (
-              <CheckmarksSelect
-                searchCriteria={CATEGORIES}
-                title={'Quel est votre projet ?'}
-                onSearchParameters={onSearchParametersCategories}
-                params={params}
-              />
-            )}
-            {isMobile && (
-              <CheckmarksSelectMobile
-                searchCriteria={CATEGORIES}
-                title={'Quel est votre projet ?'}
-                onSearchParameters={onSearchParametersCategories}
-                params={params}
-              />
-            )}
+            <CheckmarksSelect
+              searchCriteria={CATEGORIES}
+              title={'Quel est votre projet ?'}
+              onSearchParameters={onSearchParametersCategories}
+              params={params}
+            />
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>
-            {!isMobile && (
               <CheckmarksSelectSituation
                 searchCriteria={SITUATIONS.slice(0, 3)}
                 title={'Votre situation'}
@@ -738,20 +725,8 @@ const HelpsPage = ({ location: { search } }) => {
                 placeholder={"Demandeur d'emploi, salarié"}
                 selectId={'situation-simple-checkbox'}
               />
-            )}
-            {isMobile && (
-              <CheckmarksSelectSituationMobile
-                searchCriteria={SITUATIONS.slice(0, 3)}
-                title={'Votre situation'}
-                onSearchParameters={onSearchParametersSituations}
-                params={params}
-                placeholder={"Demandeur d'emploi, salarié"}
-                selectId={'situation-simple-checkbox'}
-              />
-            )}
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>
-            {!isMobile && (
               <CheckmarksSelectSituation
                 searchCriteria={SITUATIONS.slice(-2)}
                 title={'Votre âge'}
@@ -760,17 +735,6 @@ const HelpsPage = ({ location: { search } }) => {
                 placeholder={'Moins de 26 ans, plus de 26 ans'}
                 selectId={'age-simple-checkbox'}
               />
-            )}
-            {isMobile && (
-              <CheckmarksSelectSituationMobile
-                searchCriteria={SITUATIONS.slice(-2)}
-                title={'Votre âge'}
-                onSearchParameters={onSearchParametersSituationsAge}
-                params={params}
-                placeholder={'Moins de 26 ans, plus de 26 ans'}
-                selectId={'age-simple-checkbox'}
-              />
-            )}
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>
             <SearchButton

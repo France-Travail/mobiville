@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import OutlinedInput from '@mui/material/OutlinedInput'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
@@ -7,58 +7,55 @@ import ListItemText from '@mui/material/ListItemText'
 import Select from '@mui/material/Select'
 import Checkbox from '@mui/material/Checkbox'
 import styled from 'styled-components'
-import {makeStyles} from "@mui/styles"
-import {COLOR_VERT_MOBIVILLE} from "../../../constants/colors"
+import { makeStyles } from "@mui/styles"
+import { COLOR_VERT_MOBIVILLE } from "../../../constants/colors"
 import PropTypes from "prop-types"
-import {useHistory} from "react-router-dom"
-
-const globalWidth = 371
+import { useHistory } from "react-router-dom"
+import { isMobileView } from "../../../constants/mobile"
+import { useWindowSize } from '../../../common/hooks/window-size'
 
 
 const DivFormControl = styled.div`
   display: inline-grid;
   background-color: #fff;
-  border : solid 1px #E4E9ED;
+  border: solid 1px #e4e9ed;
   border-radius: 20px;
   padding: 17px 16px;
   gap: 10px;
-  width: ${globalWidth}px;
+  width: ${({ globalWidth }) => globalWidth}px;
   height: 73px;
 
   div {
-    right:12px;
+    right: 12px;
+    width: ${({ globalWidth }) => globalWidth - 50}px;
+    min-width: ${({ globalWidth }) => globalWidth - 50}px;
+    max-width: ${({ globalWidth }) => globalWidth - 50}px;
+    background: none !important;
+    padding-right: 0px;
   }
 
-  div>div {
-    width: ${globalWidth -50 }px;
-    min-width: ${globalWidth -50 }px;
-    max-width: ${globalWidth -50 }px;
-    background: none !important;
-    padding-right:0px
-  }
-  
-  div>svg {
+  div > svg {
     right: 0px;
-    left:${globalWidth + 15 - 50 }px;
-    top:10px;
+    left: ${({ globalWidth }) => globalWidth + 15 - 50}px;
+    top: 10px;
   }
-  
-  div>fieldset {
-    border:none;
+
+  div > fieldset {
+    border: none;
   }
 `
 
 const SelectLabel = styled.label`
-  position:absolute;
+  position: absolute;
   bottom: 40px;
   z-index: 1;
-  margin-left: ${Math.floor(globalWidth / 100)}px;
+  margin-left: ${({globalWidth}) => Math.floor(globalWidth / 100)}px;
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
   font-size: 16px;
   line-height: 19px;
-  color: #23333E;
+  color: #23333e;
   top: -3px;
   left: -1px;
 `
@@ -125,7 +122,9 @@ const styleLineBoxUnSelected = {
 }
 
 
-const CheckmarksSelect = ({searchCriteria, title, globalWidth, onSearchParameters, params}) => {
+const CheckmarksSelect = ({searchCriteria, title, onSearchParameters, params}) => {
+    const isMobile = isMobileView(useWindowSize())
+    const globalWidth = isMobile ? 350 : 371
 
     const [itemName, setItemName] = React.useState([])
     const [query, setQuery] = useState("")
@@ -194,10 +193,10 @@ const CheckmarksSelect = ({searchCriteria, title, globalWidth, onSearchParameter
     }
 
     return (
-        <DivFormControl>
+        <DivFormControl globalWidth={globalWidth}>
             <FormControl sx={{m: 1, width: globalWidth}}>
-                <SelectLabel>{title}</SelectLabel>
-                <Select
+                <SelectLabel globalWidth={globalWidth}>{title}</SelectLabel>
+                <Select 
                     labelId="project-multiple-checkbox-label"
                     id="project-multiple-checkbox"
                     multiple
@@ -219,7 +218,7 @@ const CheckmarksSelect = ({searchCriteria, title, globalWidth, onSearchParameter
                     }}
                 >
                     {Object.keys(searchCriteria).map((key) => (
-                        <MenuItem key={key} value={searchCriteria[key].name} class={"desktop"}
+                        <MenuItem key={key} value={searchCriteria[key].name} class={!isMobile && "desktop"}
                                   style={itemName.indexOf(searchCriteria[key].name) > -1 ? styleLineBoxSelected : styleLineBoxUnSelected} >
                             <Checkbox checked={itemName.indexOf(searchCriteria[key].name) > -1}
                                       classes={{root: classeCheckBox.root, checked: classeCheckBox.checked}} />
@@ -235,7 +234,6 @@ const CheckmarksSelect = ({searchCriteria, title, globalWidth, onSearchParameter
 CheckmarksSelect.props = {
     searchCriteria: PropTypes.array,
     title: PropTypes.string,
-    globalWidth: PropTypes.number,
     onSearchParameters: PropTypes.any,
     params: PropTypes.string,
 }
