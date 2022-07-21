@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import { COLOR_RED, COLOR_GREEN, COLOR_GRAY } from '../../constants/colors'

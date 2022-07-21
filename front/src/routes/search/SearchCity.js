@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { SearchInput, SearchOptions } from '../../components/SearchComponents'
-import {COLOR_PRIMARY, COLOR_TEXT_PRIMARY} from '../../constants/colors'
+import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { ucFirstOnly } from '../../utils/utils'
 
@@ -78,14 +78,17 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
 
   const location = useLocation()
   const [codeRome] = useState(queryString.parse(location.search)?.codeRome)
-  useEffect(() => onAutocomplete(searchedValue.trim()), [searchedValue])
+  useEffect(
+    () => async () => await onAutocomplete(searchedValue.trim()),
+    [searchedValue]
+  )
 
   const { criterions, autocompletedCities, onAutocomplete } = useCities()
 
   const onSelection = (selectedItem) => {
-      setSelectedItem(selectedItem)
-      setSearchedValue(selectedItem.label)
-      window.scrollTo(0, 0)
+    setSelectedItem(selectedItem)
+    setSearchedValue(selectedItem.label)
+    window.scrollTo(0, 0)
   }
 
   const regionsList = criterions.regions.filter(
@@ -132,21 +135,25 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
         }}
       />
       <SearchResult isVisible={!selectedItem}>
-          <SearchOptions
-            isMobile={isMobile}
-            isSearchFocused={searchFocused}
-            optionsList={autocompleteList}
-            onSelect={onSelection}
-          />
+        <SearchOptions
+          isMobile={isMobile}
+          isSearchFocused={searchFocused}
+          optionsList={autocompleteList}
+          onSelect={onSelection}
+        />
       </SearchResult>
       <ButtonContainer isVisible={selectedItem}>
-          <SearchButton
-              onClick={() => onNext(
-                  selectedItem.id?.length > 3
-                      ? { city: selectedItem.id, cityName: selectedItem.cityName }
-                      : { regions: selectedItem.id }
-              )}
-          >Lancer la recherche</SearchButton>
+        <SearchButton
+          onClick={() =>
+            onNext(
+              selectedItem.id?.length > 3
+                ? { city: selectedItem.id, cityName: selectedItem.cityName }
+                : { regions: selectedItem.id }
+            )
+          }
+        >
+          Lancer la recherche
+        </SearchButton>
       </ButtonContainer>
     </Wrapper>
   )

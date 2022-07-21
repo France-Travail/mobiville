@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import queryString from 'query-string'
 import { Link, useHistory, useParams } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import { CircularProgress } from '@mui/material'
 
 import { useCities } from '../../common/contexts/citiesContext'

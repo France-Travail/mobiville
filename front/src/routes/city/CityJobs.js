@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import moment from 'moment'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import {
   FormControl,
   MenuItem,
@@ -184,7 +184,6 @@ const DURATION_TYPES = ['Temps plein', 'Temps partiel', OTHER_DURATIONS]
 const CityJobs = ({
   backLink,
   city,
-  codeRome,
   romeLabel,
   isLoading,
   jobs,
@@ -360,7 +359,7 @@ const CityJobs = ({
                 : ''
             )
             return (
-              <MenuItem value={filter}>
+              <MenuItem key={filter} value={filter}>
                 <Checkbox checked={isChecked} />
                 <ListItemText
                   // quick & dirty replace of the only label that needs it
@@ -395,7 +394,7 @@ const CityJobs = ({
             )
 
             return (
-              <MenuItem value={filter}>
+              <MenuItem key={filter} value={filter}>
                 <Checkbox checked={durationFilters.includes(filter)} />
                 <ListItemText primary={label} />
               </MenuItem>
@@ -585,11 +584,10 @@ const CityJobs = ({
 CityJobs.propTypes = {
   backLink: PropTypes.string.isRequired,
   city: PropTypes.object.isRequired,
-  codeRome: PropTypes.string.isRequired,
   romeLabel: PropTypes.string.isRequired,
   isLoading: PropTypes.bool.isRequired,
   jobs: PropTypes.arrayOf(PropTypes.object).isRequired,
-  searchValue: PropTypes.func.isRequired,
+  searchValue: PropTypes.string.isRequired,
   setSearchValue: PropTypes.func.isRequired,
 }
 
