@@ -34,7 +34,7 @@ import { Grid } from '@mui/material'
 //import TypeHelpFilter from "./components/TypeHelpFilter";
 
 const TitleContainer = styled.div`
-  padding: ${({ isMobile }) => (isMobile ? '20px' : '0px')};
+  padding: ${({ isMobile }) => (isMobile ? '5px 0px 0px 10px' : '0px')};
 `
 
 const Title = styled.h1`
@@ -54,7 +54,7 @@ const Title = styled.h1`
   display: ${({ isMobile }) => (isMobile ? 'contents' : 'flex')};
   align-items: center;
 
-  color: ${({ isMobile }) => (isMobile ? '#000' : COLOR_PRIMARY)};
+  color: ${COLOR_PRIMARY};
 `
 
 const Header = styled.div`
@@ -73,7 +73,7 @@ const Header = styled.div`
     props.isMobile &&
     `
     display: block;
-    margin: 102px 0 64px 0;
+    margin: 102px 0 0px 0;
     padding: 0;
     height:377px;
     padding: 20px 0.5%;
@@ -136,6 +136,11 @@ const HelpItemTextSubContainer = styled.div`
   display: inline-grid;
   vertical-align: top;
   width: ${({ isMobile }) => (isMobile ? '200px' : '350px')};
+`
+
+const HelpItemMobileResizer = styled.div`
+  height: 8px;
+  display: ${({ isMobile }) => (isMobile ? 'block' : 'none')};
 `
 
 const HelpItemTextTitle = styled.h4`
@@ -219,9 +224,9 @@ const SearchButton = styled(Link)`
   font-weight: 700;
   font-size: 18px;
   line-height: 21px;
-  &,
   &:hover {
     color: #eee;
+    background:#494289;
   }
 `
 
@@ -576,6 +581,7 @@ const HelpsPage = ({ location: { search } }) => {
                   <div>
                     <HelpItemTextContainer>
                       <HelpItemTextSubContainer isMobile={isMobile}>
+                        <HelpItemMobileResizer isMobile={isMobile}></HelpItemMobileResizer>
                         <HelpItemTextTitle isMobile={isMobile}>
                           {item.title}
                         </HelpItemTextTitle>
