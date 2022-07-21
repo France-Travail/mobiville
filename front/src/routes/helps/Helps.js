@@ -224,9 +224,9 @@ const SearchButton = styled(Link)`
   font-weight: 700;
   font-size: 18px;
   line-height: 21px;
-  &,
   &:hover {
     color: #eee;
+    background:#494289;
   }
 `
 
