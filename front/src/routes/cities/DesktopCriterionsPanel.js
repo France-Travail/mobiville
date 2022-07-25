@@ -104,9 +104,12 @@ const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
               control={control}
               name="environment"
               defaultValue=""
-              as={
+              render={({ field: { name, value, onChange } }) => (
                 <Select
                   displayEmpty
+                  name={name}
+                  value={value}
+                  onChange={onChange}
                   inputProps={{
                     id: 'panel-select-environment',
                   }}
@@ -118,7 +121,7 @@ const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
                     </MenuItem>
                   ))}
                 </Select>
-              }
+              )}
             />
           </SearchFormControl>
 
@@ -130,8 +133,11 @@ const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
               control={control}
               name="city"
               defaultValue=""
-              as={
+              render={({ field: { name, value, onChange } }) => (
                 <Select
+                  name={name}
+                  value={value}
+                  onChange={onChange}
                   displayEmpty
                   inputProps={{
                     id: 'panel-select-city-size',
@@ -146,7 +152,7 @@ const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
                     </MenuItem>
                   ))}
                 </Select>
-              }
+              )}
             />
           </SearchFormControl>
 
@@ -158,12 +164,15 @@ const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
               control={control}
               name="region"
               defaultValue=""
-              as={
+              render={({ field: { name, value, onChange } }) => (
                 <Select
                   displayEmpty
                   inputProps={{
                     id: 'panel-select-city-size',
                   }}
+                  name={name}
+                  value={value}
+                  onChange={onChange}
                 >
                   <MenuItem selected value="">
                     Toutes les regions
@@ -174,7 +183,7 @@ const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
                     </MenuItem>
                   ))}
                 </Select>
-              }
+              )}
             />
           </SearchFormControl>
           <SubmitButton type="submit" value="Rechercher" />

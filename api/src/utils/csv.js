@@ -1,4 +1,4 @@
-import parse from 'csv-parse'
+import { parse } from 'csv-parse'
 
 export function csvToArrayJson(data, options = {}) {
   return new Promise((resolve, reject) => {

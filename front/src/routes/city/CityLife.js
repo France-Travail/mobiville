@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowBackwardIcon from '@mui/icons-material/ArrowBack'
 import { IconButton, Tooltip } from '@mui/material'
@@ -392,7 +392,9 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
         backLink={backLink}
         isMobile={isMobile}
         notFixed={!isMobile}
-        title={` Information sur le cadre de vie à ${ucFirstOnly(city.nom_comm)}`}
+        title={` Information sur le cadre de vie à ${ucFirstOnly(
+          city.nom_comm
+        )}`}
       />
       {isMobile ? mobileElements : desktopElement}
       <ElectedOfficialsBlock>

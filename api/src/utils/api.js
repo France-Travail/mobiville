@@ -5,7 +5,7 @@ import { decompress as decompressBZ2 } from 'bz2'
 import { csvToArrayJson } from './csv'
 import { readFile, readFileSync, statSync, readdirSync } from 'fs'
 import parser from 'xml2json'
-import parse from 'csv-parse'
+import { parse } from 'csv-parse'
 import HttpsProxyAgent from 'https-proxy-agent'
 
 let romeLabelFile = null

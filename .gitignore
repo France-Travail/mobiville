@@ -8,3 +8,6 @@ tests/cypress/screenshots/
 tests/cypress/videos/
 /api/src/datas-mnt
 front/dist
+
+**/*lock.json
+**/*.lock

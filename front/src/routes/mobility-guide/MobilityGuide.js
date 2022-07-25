@@ -90,15 +90,16 @@ const MobilityGuide = () => {
             Retournez sur la page précédente et choisissez l’offre d’emploi qui
             vous convient
           </p>
-          <p>
-            En cas de déplacement pour un entretien d'embauche, vous pouvez
-            bénéficier d'aides financières, si vous êtes demandeur d'emploi :
-            <br />
+          <>
+            <p>
+              En cas de déplacement pour un entretien d'embauche, vous pouvez
+              bénéficier d'aides financières, si vous êtes demandeur d'emploi :
+            </p>
             <ul>
               <li>Prise en charge du billet de train</li>
               <li>Remboursement des frais pour un logement</li>
             </ul>
-          </p>
+          </>
           <p>
             <Link to="/aides/aide-pour-la-recherche-demploi">
               Découvrir l'aide et les conditions
@@ -182,19 +183,20 @@ const MobilityGuide = () => {
             Si vous êtes demandeur d’emploi, n’oubliez pas de vous désinscrire
             de Pôle Emploi après votre période d’essai.
           </p>
-          <p>
+          <>
             <b>Merci d’avoir utilisé notre service</b>
-            <p>
+            <br />
+            <span>
               Prenez quelques minutes pour nous donner votre avis et voter pour
               les prochaines fonctionnalités.
-            </p>
+            </span>
             <p>
               <A href="https://startupsbeta.typeform.com/to/pJJUS1Vg">
                 Enquête de satisfaction
                 <ArrowForward />
               </A>
             </p>
-          </p>
+          </>
         </ContentBlock>
       </Contents>
     </MainLayout>

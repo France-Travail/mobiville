@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import queryString from 'query-string'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import EuroIcon from '@mui/icons-material/Euro'
 import HomeWorkIcon from '@mui/icons-material/HomeWork'
@@ -717,24 +717,24 @@ const HelpsPage = ({ location: { search } }) => {
             />
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>
-              <CheckmarksSelectSituation
-                searchCriteria={SITUATIONS.slice(0, 3)}
-                title={'Votre situation'}
-                onSearchParameters={onSearchParametersSituations}
-                params={params}
-                placeholder={"Demandeur d'emploi, salarié"}
-                selectId={'situation-simple-checkbox'}
-              />
+            <CheckmarksSelectSituation
+              searchCriteria={SITUATIONS.slice(0, 3)}
+              title={'Votre situation'}
+              onSearchParameters={onSearchParametersSituations}
+              params={params}
+              placeholder={"Demandeur d'emploi, salarié"}
+              selectId={'situation-simple-checkbox'}
+            />
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>
-              <CheckmarksSelectSituation
-                searchCriteria={SITUATIONS.slice(-2)}
-                title={'Votre âge'}
-                onSearchParameters={onSearchParametersSituationsAge}
-                params={params}
-                placeholder={'Moins de 26 ans, plus de 26 ans'}
-                selectId={'age-simple-checkbox'}
-              />
+            <CheckmarksSelectSituation
+              searchCriteria={SITUATIONS.slice(-2)}
+              title={'Votre âge'}
+              onSearchParameters={onSearchParametersSituationsAge}
+              params={params}
+              placeholder={'Moins de 26 ans, plus de 26 ans'}
+              selectId={'age-simple-checkbox'}
+            />
           </HeaderSearchBloc>
           <HeaderSearchBloc isMobile={isMobile}>
             <SearchButton

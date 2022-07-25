@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
 
 import MainLayout from '../../components/MainLayout'
 import { COLOR_PRIMARY, COLOR_BACKGROUND } from '../../constants/colors'

@@ -56,10 +56,10 @@ test:sonar:
 
 test:lint:
   stage: test
-  image: node:12.18.0
+  image: node:16.16.0
   script:
     # installe de yarn
-    - (which yarn || npm i -g yarn@1.15.2)
+    - (which yarn || npm i -g yarn@1.22.15)
     - cd ./front
     # recupération des dépendances npm
     - yarn install
@@ -77,10 +77,10 @@ test:a11y:
 
 package 1/2:
   stage: build
-  image: node:12.18.0
+  image: node:16.16.0
   script:
     # installe de yarn
-    - (which yarn || npm i -g yarn@1.15.2)
+    - (which yarn || npm i -g yarn@1.22.15)
     - cd ./front
     # recupération des dépendances npm
     - yarn install

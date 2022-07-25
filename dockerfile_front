@@ -1,8 +1,8 @@
-FROM node:12.18.0
+FROM node:16.16.0
 
 WORKDIR /home/front
 
-CMD (which yarn || npm i -g yarn@1.15.2) && \
+CMD (which yarn || npm i -g yarn@1.22.15) && \
         echo "$PE_ENV" && \
         ( [ $PE_ENV = "true" ] && \
                 (export NO_PROXY="localhost,.internal,.intra" && \
