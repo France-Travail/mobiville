@@ -94,7 +94,12 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
   const regionsList = criterions.regions.filter(
     (region) =>
       region?.criterions?.[codeRome] &&
-      region.label.toLowerCase().match(searchedValue.trim().toLowerCase())
+      region.label.toLowerCase().match(
+        searchedValue
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z_-]/g, '')
+      )
   )
 
   const autocompleteList = [{ label: ALL_REGIONS_LABEL, type: REGION_TYPE }]
