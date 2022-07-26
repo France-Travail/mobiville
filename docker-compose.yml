@@ -34,7 +34,8 @@ services:
     stdin_open: true
 
   db:
-    image: mariadb:10.7.3
+    image: mariadb:10.8.2
+    # 10.8.3 incompatible avec docker < 20.xx.x : https://github.com/MariaDB/mariadb-docker/issues/434
     restart: always
     ports:
       - "127.0.0.1:3306:3306"
@@ -42,6 +43,7 @@ services:
       mobiville_network:
         ipv4_address: 173.0.0.50
     environment:
+      - MARIADB_AUTO_UPGRADE=1
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
