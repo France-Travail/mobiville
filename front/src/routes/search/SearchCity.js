@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types'
-import queryString from 'query-string'
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
@@ -76,43 +74,37 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
   const [searchedValue, setSearchedValue] = useState('')
   const [selectedItem, setSelectedItem] = useState('')
 
-  const location = useLocation()
-  const [codeRome] = useState(queryString.parse(location.search)?.codeRome)
+  const { autocompletedCities, onAutocomplete } = useCities()
+
+  // refresh list autocompletion based on searched input update
   useEffect(
-    () => async () => await onAutocomplete(searchedValue.trim()),
+    () => {
+      onAutocomplete(searchedValue.trim())
+    },
     [searchedValue]
   )
 
-  const { criterions, autocompletedCities, onAutocomplete } = useCities()
-
+  // on select list item
   const onSelection = (selectedItem) => {
     setSelectedItem(selectedItem)
     setSearchedValue(selectedItem.label)
     window.scrollTo(0, 0)
   }
 
-  const regionsList = criterions.regions.filter(
-    (region) =>
-      region?.criterions?.[codeRome] &&
-      region.label.toLowerCase().match(
-        searchedValue
-          .trim()
-          .toLowerCase()
-          .replace(/[^a-z_-]/g, '')
-      )
-  )
-
-  const autocompleteList = [{ label: ALL_REGIONS_LABEL, type: REGION_TYPE }]
-    .concat(regionsList.map((region) => ({ ...region, type: REGION_TYPE })))
-    .concat(
-      !!searchedValue &&
-        autocompletedCities.map((city) => ({
+  // format autocompleted cities list item. Append default "Toutes les régions"
+  const autocompleteList = autocompletedCities
+    .reduce((results, city) => {
+      if (!!searchedValue && searchedValue !== '') {
+        results.push({
           id: city.insee_com,
           label: `${ucFirstOnly(city.nom_comm)} (${city.postal_code})`,
           cityName: city.nom_comm,
           type: CITY_TYPE,
-        }))
-    )
+        });
+      }
+      return results;
+    }, [])
+    .concat([{ label: ALL_REGIONS_LABEL, type: REGION_TYPE }])
 
   return (
     <Wrapper>
