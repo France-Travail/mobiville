@@ -100,9 +100,9 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
           label: `${ucFirstOnly(city.nom_comm)} (${city.postal_code})`,
           cityName: city.nom_comm,
           type: CITY_TYPE,
-        });
+        })
       }
-      return results;
+      return results
     }, [])
     .concat([{ label: ALL_REGIONS_LABEL, type: REGION_TYPE }])
 
