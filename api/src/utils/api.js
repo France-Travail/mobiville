@@ -6,7 +6,6 @@ import { csvToArrayJson } from './csv'
 import { readFile, readFileSync, statSync, readdirSync } from 'fs'
 import parser from 'xml2json'
 import { parse } from 'csv-parse'
-import HttpsProxyAgent from 'https-proxy-agent'
 
 let romeLabelFile = null
 const cheerio = require('cheerio')
@@ -95,7 +94,7 @@ export function getFrenchWeatherStation() {
 
 export function loadWeatherFile(stationId) {
   return axios
-    .get(config.weatherFile(stationId))
+    .get(config.weatherFile(stationId), { ...config.proxyPeOverrides })
     .then((data) => data.data.split('\r\n'))
 }
 
@@ -117,16 +116,7 @@ const fetchHtml = async (pageid) => {
   const pageUrl = `https://fr.wikipedia.org/w/index.php?action=render&curid=${pageid}`
   try {
     console.log('fetchHTML : ' + pageUrl)
-    const { data } = await axios.get(
-      pageUrl,
-      // proxy PE + bug d'axios voir: https://github.com/axios/axios/issues/2072#issuecomment-609650888
-      {
-        ...(config.PE_ENV && { proxy: false }),
-        ...(config.PE_ENV && {
-          httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000'),
-        }),
-      }
-    )
+    const { data } = await axios.get(pageUrl, { ...config.proxyPeOverrides })
     return data
   } catch (err) {
     console.error(
@@ -157,13 +147,7 @@ export const wikipediaDetails = (pageName) =>
   axios
     .get(
       `https://fr.wikipedia.org/w/api.php?format=json&action=query&prop=extracts%7Cpageimages&piprop=original&exintro&explaintext&generator=search&gsrsearch=%22${pageName}%22%20+deepcat:%22Article%20avec%20mod%C3%A8le%20Infobox%20Commune%20de%20France%22&gsrlimit=1&redirects=1`,
-      // proxy PE + bug d'axios voir: https://github.com/axios/axios/issues/2072#issuecomment-609650888
-      {
-        ...(config.PE_ENV && { proxy: false }),
-        ...(config.PE_ENV && {
-          httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000'),
-        }),
-      }
+      { ...config.proxyPeOverrides }
     )
     .then((response) => {
       if (response.data && response.data.query && response.data.query.pages) {
