@@ -273,7 +273,7 @@ export default (sequelizeInstance, Model) => {
 
     const result = await Model.findAll({
       where: { [Op.and]: whereAnd },
-      logging: true,
+      logging: process.env.ENABLE_DB_LOGGING ? console.log : false,
       order,
       include: [
         {
@@ -454,32 +454,34 @@ export default (sequelizeInstance, Model) => {
     }
 
     try {
-      console.log(`load station file => id: ${stationId}`)
-      const file = await loadWeatherFile(stationId)
-      const findLineIndex = file.findIndex(
-        (l) => l.indexOf('Température moyenne') !== -1
-      )
-      let temperatureLine = file[findLineIndex + 1]
-      if (temperatureLine.indexOf('Statistiques') !== -1) {
-        // escape information line
-        temperatureLine = file[findLineIndex + 2]
-      }
+      if (stationId) {
+        console.log(`load station file => id: ${stationId}`)
+        const file = await loadWeatherFile(stationId)
+        const findLineIndex = file.findIndex(
+          (l) => l.indexOf('Température moyenne') !== -1
+        )
+        let temperatureLine = file[findLineIndex + 1]
+        if (temperatureLine.indexOf('Statistiques') !== -1) {
+          // escape information line
+          temperatureLine = file[findLineIndex + 2]
+        }
 
-      const allTemps = []
-      temperatureLine
-        .replace(/(\r\n|\n|\r)/gm, '')
-        .split(';')
-        .map((temp) => {
-          if (+temp) {
-            allTemps.push(+temp)
-          }
-        })
-      const meanCalc = mean(allTemps)
-      Model.averageTemperatureCache[stationId] = meanCalc
-      if ((meanCalc || null) === null) {
-        throw 'File not found'
-      } else {
-        return meanCalc
+        const allTemps = []
+        temperatureLine
+          .replace(/(\r\n|\n|\r)/gm, '')
+          .split(';')
+          .map((temp) => {
+            if (+temp) {
+              allTemps.push(+temp)
+            }
+          })
+        const meanCalc = mean(allTemps)
+        Model.averageTemperatureCache[stationId] = meanCalc
+        if ((meanCalc || null) === null) {
+          throw 'File not found'
+        } else {
+          return meanCalc
+        }
       }
     } catch (err) {
       // if file is broken or not exist
