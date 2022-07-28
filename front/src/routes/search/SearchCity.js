@@ -69,6 +69,8 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
   const REGION_TYPE = 'Régions'
   const CITY_TYPE = 'Villes'
 
+  const location = useLocation()
+
   const size = useWindowSize()
   const isMobile = isMobileView(size)
 
@@ -76,22 +78,28 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
   const [searchedValue, setSearchedValue] = useState('')
   const [selectedItem, setSelectedItem] = useState('')
 
-  const location = useLocation()
+  // read codeRome in URL to init list accordingly
   const [codeRome] = useState(queryString.parse(location.search)?.codeRome)
-  useEffect(
-    () => async () => await onAutocomplete(searchedValue.trim()),
-    [searchedValue]
-  )
 
   const { criterions, autocompletedCities, onAutocomplete } = useCities()
 
+  // refresh list autocompletion based on searched input update
+  useEffect(
+    () => {
+      onAutocomplete(searchedValue.trim())
+    },
+    [searchedValue]
+  )
+
+  // on select list item
   const onSelection = (selectedItem) => {
     setSelectedItem(selectedItem)
     setSearchedValue(selectedItem.label)
     window.scrollTo(0, 0)
   }
 
-  const regionsList = criterions.regions.filter(
+  // find best regions based on rome selected
+  const regionsForRome = criterions.regions.filter(
     (region) =>
       region?.criterions?.[codeRome] &&
       region.label.toLowerCase().match(
@@ -102,8 +110,9 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
       )
   )
 
+  // format autocompleted cities list item
   const autocompleteList = [{ label: ALL_REGIONS_LABEL, type: REGION_TYPE }]
-    .concat(regionsList.map((region) => ({ ...region, type: REGION_TYPE })))
+    .concat(regionsForRome.map((region) => ({ ...region, type: REGION_TYPE })))
     .concat(
       !!searchedValue &&
         autocompletedCities.map((city) => ({
@@ -113,7 +122,8 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
           type: CITY_TYPE,
         }))
     )
-
+    .filter(el => !!el)
+  
   return (
     <Wrapper>
       <Title
