@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types'
+import queryString from 'query-string'
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
@@ -67,6 +69,8 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
   const REGION_TYPE = 'Régions'
   const CITY_TYPE = 'Villes'
 
+  const location = useLocation()
+
   const size = useWindowSize()
   const isMobile = isMobileView(size)
 
@@ -74,7 +78,10 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
   const [searchedValue, setSearchedValue] = useState('')
   const [selectedItem, setSelectedItem] = useState('')
 
-  const { autocompletedCities, onAutocomplete } = useCities()
+  // read codeRome in URL to init list accordingly
+  const [codeRome] = useState(queryString.parse(location.search)?.codeRome)
+
+  const { criterions, autocompletedCities, onAutocomplete } = useCities()
 
   // refresh list autocompletion based on searched input update
   useEffect(
@@ -91,6 +98,18 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
     window.scrollTo(0, 0)
   }
 
+  // find best regions based on rome selected
+  const regionsForRome = criterions.regions.filter(
+    (region) =>
+      region?.criterions?.[codeRome] &&
+      region.label.toLowerCase().match(
+        searchedValue
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z_-]/g, '')
+      )
+  )
+
   // format autocompleted cities list item. Append default "Toutes les régions"
   const autocompleteList = autocompletedCities
     .reduce((results, city) => {
@@ -104,6 +123,7 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
       }
       return results
     }, [])
+    .concat(regionsForRome.map((region) => ({ ...region, type: REGION_TYPE })))
     .concat([{ label: ALL_REGIONS_LABEL, type: REGION_TYPE }])
 
   return (
