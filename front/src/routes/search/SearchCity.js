@@ -110,22 +110,20 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
       )
   )
 
-  // format autocompleted cities list item. Append default "Toutes les régions"
-  const autocompleteList = autocompletedCities
-    .reduce((results, city) => {
-      if (!!searchedValue && searchedValue !== '') {
-        results.push({
+  // format autocompleted cities list item
+  const autocompleteList = [{ label: ALL_REGIONS_LABEL, type: REGION_TYPE }]
+    .concat(regionsForRome.map((region) => ({ ...region, type: REGION_TYPE })))
+    .concat(
+      !!searchedValue &&
+        autocompletedCities.map((city) => ({
           id: city.insee_com,
           label: `${ucFirstOnly(city.nom_comm)} (${city.postal_code})`,
           cityName: city.nom_comm,
           type: CITY_TYPE,
-        })
-      }
-      return results
-    }, [])
-    .concat(regionsForRome.map((region) => ({ ...region, type: REGION_TYPE })))
-    .concat([{ label: ALL_REGIONS_LABEL, type: REGION_TYPE }])
-
+        }))
+    )
+    .filter(el => !!el)
+  
   return (
     <Wrapper>
       <Title
