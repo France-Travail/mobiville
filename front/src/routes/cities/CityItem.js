@@ -9,6 +9,8 @@ import { formatNumber, ucFirst } from '../../utils/utils'
 import {
   COLOR_GRAY,
   COLOR_PRIMARY,
+  COLOR_TAG_GREEN,
+  COLOR_TAG_RED,
   COLOR_TEXT_PRIMARY,
 } from '../../constants/colors'
 import { useWindowSize } from '../../common/hooks/window-size'
@@ -56,7 +58,6 @@ const Image = styled.div`
   border-top-left-radius: 8px;
   border-top-right-radius: ${(props) => (props.isMobile ? '8px' : '0')};
   border-bottom-left-radius: ${(props) => (props.isMobile ? '0' : '8px')};
-  margin-bottom: ${(props) => (props.isMobile ? '16px' : '0')};
   align-self: stretch;
   background-repeat: no-repeat;
   background-size: cover;
@@ -80,15 +81,15 @@ const TagsBlock = styled.div`
 
 const Tag = styled.div`
   background: white;
-  border-radius: 1000px;
-  padding: 3px 6px;
+  border-radius: 8px;
+  padding: 4px 6px;
   font-size: 12px;
   font-weight: 500;
   margin-right: 8px;
   margin-bottom: 8px;
   color: ${({ isUsingFilter }) =>
     isUsingFilter ? COLOR_PRIMARY : COLOR_TEXT_PRIMARY};
-  background: ${COLOR_GRAY};
+  background: ${(props) => (props.color ? props.color : COLOR_GRAY)};
 `
 
 const InformationsBlock = styled.div`
@@ -132,7 +133,25 @@ const CityItem = ({
     photo = `/regions/region-${city?.newRegion?.code}.jpg`
   }
 
-  const tags = [
+  const formatCityTension = (tension) => {
+    if (tension < 4) {
+      return "Opportunités d'emploi"
+    }
+    return "Peu d'opportunités d'emploi"
+  }
+
+  const topTags = [
+    {
+      isPrioritary: true,
+      node: city['bassin.tensions.ind_t'] && (
+        <Tag isUsingFilter={true} color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED} key="tension">
+          {formatCityTension(city['bassin.tensions.ind_t'])}
+        </Tag>
+      ),
+    }
+  ]
+
+  const bottomTags = [
     {
       isPrioritary: isUsingSeaFilter,
       node: city.distance_from_sea < 30 && (
@@ -180,6 +199,7 @@ const CityItem = ({
         isMobile={isMobileView(size)}
       />
       <InformationsBlock>
+        <TagsBlock>{topTags.map(({ node }) => node)}</TagsBlock>
         <Title>
           {ucFirst(city.nom_comm.toLowerCase())}
           {selected && <SelectedMarkerImg src={redMarker} alt="" />}
@@ -187,7 +207,7 @@ const CityItem = ({
         <Description>
           {(city.description || '').replace('Écouter', '')}
         </Description>
-        <TagsBlock>{tags.map(({ node }) => node)}</TagsBlock>
+        <TagsBlock>{bottomTags.map(({ node }) => node)}</TagsBlock>
         <ViewMore>
           En savoir plus
           <ArrowForwardIcon fontSize="small" style={{ marginLeft: 8 }} />

@@ -262,7 +262,7 @@ export default (sequelizeInstance, Model) => {
 
     if (onlySearchInTension) {
       bassinsToInclude.push({
-        attributes: [],
+        attributes: ['ind_t'],
         model: Model.models.tensions,
         required: true,
         where: {
