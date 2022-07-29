@@ -45,7 +45,7 @@
     "moment":"2.29.4"
   },
   "scripts": {
-    "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
+    "start": "DISABLE_ESLINT_PLUGIN=true WDS_SOCKET_PORT=80 react-scripts start",
     "build": "INLINE_RUNTIME_CHUNK=false react-scripts build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
