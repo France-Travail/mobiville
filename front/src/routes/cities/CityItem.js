@@ -134,27 +134,19 @@ const CityItem = ({
 
   const tags = [
     {
-      isPrioritary: isUsingSeaFilter,
-      node: city.distance_from_sea < 30 && (
-        <Tag isUsingFilter={isUsingSeaFilter} key="sea">
-          Mer &lt; {Math.ceil(city.distance_from_sea / 10) * 10}km
-        </Tag>
-      ),
-    },
-    {
-      isPrioritary: isUsingMountainFilter,
-      node: city.z_moyen && (
-        <Tag isUsingFilter={isUsingMountainFilter} key="mountain">
-          Altitude moyenne {city.z_moyen}m
-        </Tag>
-      ),
-    },
-    {
       isPrioritary: isUsingRegionFilter,
       node: city?.newRegion?.name && (
         <Tag isUsingFilter={isUsingRegionFilter} key="region">
           {ucFirst(city.newRegion.name.toLowerCase())}
         </Tag>
+      ),
+    },
+    {
+      isPrioritary: false,
+      node: city.totalOffres && (
+          <Tag >
+            {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
+          </Tag>
       ),
     },
     {

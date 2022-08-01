@@ -25,6 +25,7 @@ import redMarker from '../../assets/images/marker-red.png'
 import {formatNumber} from '../../utils/utils'
 
 import Pagination from '@mui/material/Pagination'
+import {useProfessions} from "../../common/contexts/professionsContext";
 
 const NotFoundContainer = styled.div`
   display: flex;
@@ -144,8 +145,22 @@ const Cities = () => {
     const [selectedCityId, setSelectedCityId] = useState(null)
     const [useAllCities, setUseAllCities] = useState(false)
     const citiesListRef = useRef(null)
+    const {
+        isLoading: isLoadingProfessions,
+        professionsCountList: professionsCountList,
+        onSearchCountList
+    } = useProfessions()
 
     const citiesItemsRef = useRef([])
+
+    useEffect(() => {
+        if(!professionsCountList) return
+        professionsCountList.map((professionsCount) => {
+            const city = cities.find((city) => city.insee_com === professionsCount.insee.toString())
+            if(city) city.totalOffres = professionsCount.total
+        })
+
+    }, [professionsCountList])
 
     useEffect(() => {
         citiesItemsRef.current = citiesItemsRef.current.slice(0, cities.length)
@@ -167,6 +182,16 @@ const Cities = () => {
             })
         }
     }, [params, sortCriterions, useAllCities])
+
+    useEffect(() => {
+        if (cities.length > 0) {
+            let listCitiesInsee = []
+            cities.map(city => {
+                listCitiesInsee.push([city.insee_com])
+            })
+            onSearchCountList({ codeRome: [params.codeRome], inseeList: listCitiesInsee })
+        }
+    },[params, useAllCities, sortCriterions, cities])
 
     const getCityUrl = (city) => {
         let url = `/city/${city.insee_com}-${city.nom_comm}`
@@ -263,7 +288,7 @@ const Cities = () => {
                     </div>
                 </CitiesTensionChoice>
             </Infopanel>
-            {cities
+            {!isLoadingProfessions && cities
                 .map((city, key) => (
                     <CityItem
                         city={city}
