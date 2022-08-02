@@ -304,9 +304,8 @@ const HelpsPage = ({ location: { search } }) => {
     order: 0;
     flex-grow: 0;
 
-    H2 {
+    h2 {
       width: ${({ isMobile }) => (isMobile ? '248px' : '410px')};
-      height: 28px;
       font-family: 'Roboto';
       font-style: normal;
       font-weight: 900;
@@ -321,10 +320,6 @@ const HelpsPage = ({ location: { search } }) => {
     img {
       margin-left: 8px;
     }
-  `
-
-  const HelpTypeTitle = styled.h2`
-    ${({ isMobile }) => (isMobile ? 'margin-bottom: 50px;' : '')}
   `
 
   const HelpItem = styled(Link)`
@@ -647,9 +642,7 @@ const HelpsPage = ({ location: { search } }) => {
 
         <HelpTypeTitleContainer isMobile={isMobile}>
           <img alt={''} src={pictoHelpAccompagnement} />{' '}
-          <HelpTypeTitle isMobile={isMobile}>
-            Les aides {isMobile ? <br /> : ''} d'accompagnement
-          </HelpTypeTitle>
+          <h2>Les aides {isMobile ? <br /> : ''} d'accompagnement</h2>
         </HelpTypeTitleContainer>
         {getHelpsPanel(listHelpItemAccompagnement)}
 
@@ -660,7 +653,8 @@ const HelpsPage = ({ location: { search } }) => {
         {getHelpsPanel(listHelpItemLogement)}
 
         <HelpTypeTitleContainer isMobile={isMobile}>
-          <img alt={''} src={pictoHelpTransport} /> <h2>Les aides Transport</h2>
+          <img alt={''} src={pictoHelpTransport} />
+          <h2>Les aides Transport</h2>
         </HelpTypeTitleContainer>
         {getHelpsPanel(listHelpItemTransport)}
       </>
@@ -685,7 +679,7 @@ const HelpsPage = ({ location: { search } }) => {
       <TitleContainer isMobile={isMobile}>
         <Title isMobile={isMobile}>
           {' '}
-          Toutes les aides à la mobilité professionelle et résidentielle{' '}
+          Toutes les aides à la mobilité professionnelle et résidentielle{' '}
         </Title>
       </TitleContainer>
     )
@@ -696,10 +690,10 @@ const HelpsPage = ({ location: { search } }) => {
   return (
     <MainLayout topMobileMenu>
       <Helmet>
-        <title>Liste des aides à la mobilité - Mobiville</title>
+        <title>Identifiez les aides à la mobilité | Mobiville</title>
         <meta
           name="description"
-          content="Trouvez facilement les aides dont vous pouvez bénéficier pour votre projet de mobilité en France"
+          content="Découvrez des conseils et des aides financières, administratives ou humaines que vous pouvez mobiliser dans votre projet de mobilité professionnelle et résidentielle."
         />
       </Helmet>
 

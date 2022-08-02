@@ -107,7 +107,7 @@ const Panel = styled.div`
   border: ${({ isMobile }) => (isMobile ? 'none' : `1px solid ${COLOR_GRAY}`)};
 `
 
-const PanelTitle = styled.h2`
+const PanelTitle = styled.p`
   font-weight: 700;
   font-size: ${({ isMobile }) => (isMobile ? '18px' : '24px')};
   margin: ${({ isMobile }) => (isMobile ? '0 0 16px' : '0px')};
@@ -200,10 +200,10 @@ const HelpDetailsPage = () => {
   return (
     <MainLayout menu={{ visible: !isMobile }}>
       <Helmet>
-        <title>{help.title} - Mobiville</title>
+        <title>{help.title} | Mobiville</title>
         <meta
           name="description"
-          content="Cette aide va vous permettre d'aborder votre projet de mobilité plus sereinement"
+          content="Obtenez une aide pour faciliter votre projet de mobilité géographique"
         />
       </Helmet>
 
