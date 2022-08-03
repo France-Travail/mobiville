@@ -81,6 +81,7 @@ const SearchRome = ({ onNext, isSearchFocused }) => {
     jobsMatchingCriterions,
     onSearchJobLabels,
   } = useCities()
+  
   const [searchFocused, setSearchFocused] = useState(false)
   const [searchedLabel, setSearchedLabel] = useState('')
   const [selectedKey, setSelectedKey] = useState('')
