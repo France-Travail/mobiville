@@ -26,7 +26,6 @@ const TextFieldMobiville = styled(TextField)`
     top: 0;
     left: 0;
     width: 100%;
-    position: ${(isMobile) => (isMobile ? 'fixed' : 'relative')};
     fieldset {
       border: 1px ${COLOR_PRIMARY} solid;
     }
@@ -42,6 +41,7 @@ const TextFieldMobiville = styled(TextField)`
   }
 `
 const SearchInput = (props) => {
+
   const isMobile = isMobileView(useWindowSize())
   const [isAutocompleteFocused, setIsAutocompleteFocused] = useState(false)
   const inputRef = useRef(null)
@@ -112,6 +112,9 @@ const NoSearchResult = () => (
 )
 
 const SearchOptions = (props) => {
+
+  const isMobile = isMobileView(useWindowSize())
+
   const [basDeListeRef, isVisible] = useElementOnScreen({
     root: null,
     rootMargin: '0px',
@@ -128,7 +131,7 @@ const SearchOptions = (props) => {
     return () => clearTimeout(handler)
   }, [isVisible, totalItemLoaded])
 
-  return props.isMobile ? (
+  return isMobile ? (
     <List>
       {props.optionsList.length === 0 ? (
         <NoSearchResult />
@@ -152,7 +155,7 @@ const SearchOptions = (props) => {
       isSearchFocused={props.isSearchFocused}
       optionsList={props.optionsList}
       onSelect={props.onSelect}
-      isMobile={props.isMobile}
+      isMobile={isMobile}
     />
   )
 }

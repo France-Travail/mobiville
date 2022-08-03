@@ -1,4 +1,4 @@
-import React, { lazy, memo, useState } from 'react'
+import React, { lazy, memo, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Typography } from '@mui/material'
 import { isEmpty } from 'lodash'
@@ -92,14 +92,30 @@ const ALL_STEPS = [
 
 const Search = () => {
   const { criterions, criterionsError } = useCities()
-  const size = useWindowSize()
   const { stepName } = useParams()
-  const index = ALL_STEPS.findIndex((f) => f.key === stepName)
   const history = useHistory()
   const location = useLocation()
-  const values = queryString.parse(location.search)
+  const size = useWindowSize()
   const isMobile = isMobileView(size)
-  const [isSearchFocused, setIsSearchFocused] = useState(false)
+
+  const [ index, setIndex ] = useState(-1)
+  const [ isSearchFocused, setIsSearchFocused ] = useState(false)
+  const [ CurrentStepComponent, setCurrentStepComponent ] = useState(lazy(() => import('./SearchRome')))
+  const [ values, setValues ] = useState('')
+
+  useEffect(() => {
+    setValues(queryString.parse(location.search))
+  }, [location])
+
+  useEffect(() => {
+    setIndex(ALL_STEPS.findIndex((f) => f.key === stepName))
+  }, [stepName])
+
+  useEffect(() => {
+    if (index > -1) {
+      setCurrentStepComponent(ALL_STEPS[index].components)
+    }
+  }, [index])
 
   if (criterionsError) {
     return <ErrorPage />
@@ -110,14 +126,15 @@ const Search = () => {
   }
 
   const onNavigate = (increase, search = '') => {
-    const x = index + increase
+    const newIndex = index + increase
+    setIndex(newIndex)
 
-    if (x === -1) {
+    if (newIndex === -1) {
       history.push('/')
-    } else if (x >= ALL_STEPS.length) {
+    } else if (newIndex >= ALL_STEPS.length) {
       history.push({ pathname: '/cities', search })
     } else {
-      history.push({ pathname: `/rechercher/${ALL_STEPS[x].key}`, search })
+      history.push({ pathname: `/rechercher/${ALL_STEPS[newIndex].key}`, search })
     }
   }
 
@@ -159,8 +176,6 @@ const Search = () => {
   if (index === -1) {
     return <div />
   }
-
-  const Component = ALL_STEPS[index].components
 
   return (
     <MainLayout style={{ marginBottom: isMobile ? 120 : 250 }} menu={{ visible: !isMobile }}>
@@ -206,11 +221,11 @@ const Search = () => {
               <ArrowBackIcon color="primary" fontSize="large" />
             </HeaderLink>
           )}
-          <Component
+          <CurrentStepComponent
             onNext={onNextStep}
             values={values}
             isSearchFocused={(b) => setIsSearchFocused(b)}
-          />
+          ></CurrentStepComponent>
         </SearchCorpus>
       </LimitedWrapper>
     </MainLayout>
