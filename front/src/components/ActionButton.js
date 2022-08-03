@@ -10,12 +10,10 @@ const ACTION_BUTTON_STYLE = `
   height: 50px;
   font-size: 18px;
   cursor: pointer;
-  border-radius: 48px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  max-width: 205px;
 `
 
 const ActionButtonContainer = styled.div`
@@ -23,10 +21,8 @@ const ActionButtonContainer = styled.div`
   margin-top: ${({ $isMobile }) => ($isMobile ? '0px' : '16px')};
   margin-bottom: ${({ $isMobile }) => ($isMobile ? '12px' : '0px')};
   justify-content: ${({ $isMobile }) => ($isMobile ? 'center' : 'flex-start')};
-  ${({ $isMobile }) => ($isMobile ? 'max-width: 365px;' : '')}
   a {
     text-align: center;
-    max-width: ${({ $isMobile }) => ($isMobile ? '231px' : '327px')};
     font-weight: 700;
   }
 `
@@ -73,6 +69,7 @@ const ActionButton = ({
   isBlue,
   isWhite,
   buttonWidth,
+  style = {},
 }) => {
   const isHttpMatched = (str) =>
     !!str?.match(new RegExp('^(http|https)://'))?.length
@@ -84,7 +81,7 @@ const ActionButton = ({
 
   return (
     <>
-      <ActionButtonContainer $isMobile={isMobile}>
+      <ActionButtonContainer $isMobile={isMobile} style={style}>
         <ActionButtonElement
           to={path}
           $isBlue={isBlue}

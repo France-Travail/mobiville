@@ -2,19 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
+import ArrowForward from '@mui/icons-material/ArrowForward'
 
-import MainLayout from '../../components/MainLayout'
-import { COLOR_PRIMARY, COLOR_BACKGROUND } from '../../constants/colors'
 import { useWindowSize } from '../../common/hooks/window-size'
+import { COLOR_BACKGROUND, COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors'
 import { isMobileView, MOBILE_WIDTH } from '../../constants/mobile'
 
 import heroHomepagePic from '../../assets/images/00-Hero-Homepage.png'
-import mobilityHomepagePic from '../../assets/images/02-Mobility-Homepage.png'
-import { ReactComponent as MapPointerIcon } from '../../assets/images/map-pointer.svg'
-import { ReactComponent as PrizeIcon } from '../../assets/images/prize.svg'
-import { ReactComponent as MoneyClockIcon } from '../../assets/images/money-clock.svg'
-import ArrowForward from '@mui/icons-material/ArrowForward'
-import ActionButton from '../../components/ActionButton'
+
+import { MainLayout, Section } from '../../components/';
+import Testimonies from './components/Testimonies'
+import MobilityGuide from './components/MobilityGuide'
+import Advantages from './components/Advantages'
 
 const H1 = styled.h1`
   font-size: 36px;
@@ -112,137 +111,14 @@ const MainNavButton = styled(Link)`
   }
 `
 
-const TaglineP = styled.p`
+const SubTitleH2 = styled.h2`
   font-weight: 400;
   line-height: 27px;
   font-size: ${({ isMobile }) => (isMobile ? '18px' : '22px')};
   margin: 0;
-  em {
-    color: #191970;
-    font-weight: 700;
-    font-style: normal;
-  }
 `
 
-const BlocksContainer = styled.div`
-  padding: ${({ isMobile }) => (isMobile ? '25px 10px 0px' : '25px 0px 0px')};
-`
-
-const AdvantageBlocksContainer = styled.div`
-  display: flex;
-  margin: 0 auto 22px;
-  flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
-`
-
-const AdvantageBlock = styled.div`
-  background: ${COLOR_BACKGROUND};
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  max-width: ${({ isMobile }) => (isMobile ? 'initial' : '336px')};
-  width: 100%;
-  overflow: hidden;
-  padding: 16px;
-
-  &:not(:first-child) {
-    ${({ isMobile }) =>
-      isMobile
-        ? `
-      margin-top: 16px;
-    `
-        : `
-      margin-left: 16px;
-    `}
-  }
-`
-
-const AdvantageIconContainer = styled.div`
-  padding-bottom: 5px;
-`
-
-const AdvantageH2 = styled.h2`
-  margin: 0 auto 20px;
-  text-align: center;
-  font-weight: 900;
-  font-size: 24px;
-`
-
-const AdvantageH3 = styled.h3`
-  margin-top: 0;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 33px;
-  margin-block-end: unset;
-  margin-bottom: 5px;
-`
-
-const AdvantageTextP = styled.p`
-  margin: 0;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-
-  text-align: justify;
-`
-
-const MobilityGuideBlock = styled(Block)`
-  padding: ${({ isMobile }) => (isMobile ? '0 16px 16px' : '0 64px')};
-  background: #c3e9e9;
-  border-radius: 16px;
-  margin-bottom: 22px;
-  padding: ${({ isMobile }) => (isMobile ? '12px' : '40px 40px 40px 64px')};
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  text-align: start;
-  .mobility-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    .centered {
-      max-height: 190px;
-      max-width: 265px;
-      align-self: center;
-    }
-  }
-`
-
-const SurveyBlock = styled(Block)`
-  padding: 32px;
-  text-align: center;
-  color: white;
-  background: ${COLOR_PRIMARY};
-  border-radius: 16px;
-  margin-bottom: 0px;
-`
-
-const MobilityGuideBlockH2 = styled.h2`
-  font-size: 24px;
-  font-weight: 900;
-  line-height: 28px;
-  margin-block-start: unset;
-  margin-block-end: unset;
-`
-const SurveyBlockH2 = MobilityGuideBlockH2
-const MobilityGuideBlockH3 = styled.h3`
-  font-size: 22px;
-  font-weight: 400;
-  line-height: 27px;
-  margin-block-start: 8px;
-  margin-block-end: unset;
-`
-const SurveyBlockH3 = MobilityGuideBlockH3
-
-const ButtonContainer = styled.div`
-  margin: 10px auto;
-
-  a {
-    margin: auto;
-  }
-`
+// === COMPONENT ===
 
 const HomePage = () => {
   const windowsSize = useWindowSize()
@@ -252,16 +128,17 @@ const HomePage = () => {
     <MainLayout
       isMobile={isMobile}
       topMobileMenu
-      style={{ background: '#fff' }}
+      style={{ background: COLOR_BACKGROUND }}
     >
       <Helmet>
-        <title>Mobiville - La Mobilité Facile en France</title>
+        <title>Trouvez l’emploi et la ville qui va avec ! | Mobiville</title>
         <meta
           name="description"
-          content="Mobiville est un service vous permettant de trouver la ville qui correspond à votre besoin ainsi que les aides financières à la mobilité."
+          content="Mobiville permet aux demandeurs d’emploi et aux salariés de choisir la ville adaptée à leur projet ainsi que les aides financières à la mobilité."
         />
       </Helmet>
 
+      {/* WELCOME SECTION */}
       <TopBlockContainer isMobile={isMobile}>
         <TopBlock isMobile={isMobile}>
           <div className="promesse-container">
@@ -269,12 +146,12 @@ const HomePage = () => {
               <H1 isMobile={isMobile}>
                 Trouvez l’emploi et la ville qui va avec !
               </H1>
-              <TaglineP isMobile={isMobile}>
+              <SubTitleH2 isMobile={isMobile}>
                 Décrochez l’emploi dans la ville {isMobile && <br />} qui vous
                 correspond {isMobile || <br />}
                 et {isMobile && <br />}identifiez les aides pour votre{' '}
                 {isMobile && <br />} projet de mobilité
-              </TaglineP>
+              </SubTitleH2>
             </div>
             <img className="hero" src={heroHomepagePic} alt="" />
           </div>
@@ -299,102 +176,15 @@ const HomePage = () => {
         </TopBlock>
       </TopBlockContainer>
 
-      <BlocksContainer isMobile={isMobile}>
-        <Block style={{ padding: 0 }}>
-          <AdvantageH2 isMobile={isMobile}>
-            Les avantages du service Mobiville
-          </AdvantageH2>
-          <AdvantageBlocksContainer isMobile={isMobile}>
-            <AdvantageBlock isMobile={isMobile}>
-              <AdvantageIconContainer>
-                <MapPointerIcon />
-              </AdvantageIconContainer>
-              <AdvantageH3>
-                Identifiez
-                <br /> la meilleure destination
-              </AdvantageH3>
-              <AdvantageTextP>
-                Mobiville vous donne une visibilité sur le marché de l’emploi,
-                de l’immobilier et le cadre de vie afin de choisir une ville qui
-                correspond à votre profil.
-              </AdvantageTextP>
-            </AdvantageBlock>
-            <AdvantageBlock isMobile={isMobile}>
-              <AdvantageIconContainer>
-                <PrizeIcon />
-              </AdvantageIconContainer>
-              <div>
-                <AdvantageH3>
-                  Évitez
-                  <br /> la concurrence
-                </AdvantageH3>
-                <AdvantageTextP>
-                  Notre service vous propose en priorité les villes avec peu de
-                  candidats sur le territoire afin d’optimiser votre recherche
-                  d’emploi.
-                </AdvantageTextP>
-              </div>
-            </AdvantageBlock>
-            <AdvantageBlock isMobile={isMobile}>
-              <AdvantageIconContainer>
-                <MoneyClockIcon />
-              </AdvantageIconContainer>
-              <div>
-                <AdvantageH3>
-                  Gagnez
-                  <br /> du temps et de l’argent
-                </AdvantageH3>
-                <AdvantageTextP>
-                  Découvrez des conseils et des aides financières,
-                  administratives ou humaines que vous pouvez mobiliser dans
-                  votre projet.
-                </AdvantageTextP>
-              </div>
-            </AdvantageBlock>
-          </AdvantageBlocksContainer>
-        </Block>
+      {/* ADVANTAGES */}
+      <Advantages></Advantages>
 
-        <MobilityGuideBlock isMobile={isMobile}>
-          <div className="mobility-container">
-            <MobilityGuideBlockH2 isMobile={isMobile}>
-              Par où commencer ?...{isMobile && <br />} Où aller ?...
-              {isMobile && <br />} Comment faire ?...
-            </MobilityGuideBlockH2>
-            <MobilityGuideBlockH3 isMobile={isMobile}>
-              Les réponses se trouvent dans notre guide à la mobilité
-            </MobilityGuideBlockH3>
-            {isMobile && (
-              <img className="centered" src={mobilityHomepagePic} alt="" />
-            )}
-            <ActionButton
-              path={'/mobility-guide'}
-              libelle={'Accéder au guide'}
-              isMobile={isMobile}
-              isBlue={true}
-            />
-          </div>
-          {!isMobile && <img src={mobilityHomepagePic} alt="" />}
-        </MobilityGuideBlock>
+      {/* MOBILITY GUIDE */}
+      <MobilityGuide></MobilityGuide>
 
-        <SurveyBlock>
-          <SurveyBlockH2 isMobile={isMobile}>
-            Mobiville a besoin de votre aide pour s’améliorer
-          </SurveyBlockH2>
-          <SurveyBlockH3 isMobile={isMobile}>
-            Aidez nous en répondant à notre enquête de satisfaction
-          </SurveyBlockH3>
-          <ButtonContainer>
-            <ActionButton
-              path={{
-                pathname: 'https://startupsbeta.typeform.com/to/kPDt1Rfk',
-              }}
-              libelle={isMobile ? 'Faire ma demande' : 'Répondre à l’enquête'}
-              isMobile={isMobile}
-              isWhite={true}
-            />
-          </ButtonContainer>
-        </SurveyBlock>
-      </BlocksContainer>
+      {/* TESTIMONIES */}
+      <Testimonies></Testimonies>
+
     </MainLayout>
   )
 }

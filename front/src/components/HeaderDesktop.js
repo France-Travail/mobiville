@@ -3,7 +3,7 @@ import {Link, useLocation} from 'react-router-dom'
 import styled from 'styled-components'
 import {Typography} from '@mui/material'
 
-import {COLOR_BACKGROUND, COLOR_PRIMARY, COLOR_TEXT_SECONDARY} from '../constants/colors'
+import {COLOR_HEADER_BACKGROUND, COLOR_PRIMARY, COLOR_TEXT_SECONDARY} from '../constants/colors'
 import LOGO from '../assets/images/LogoMobiville_gros.svg'
 import LOGO_FR from '../assets/images/marianne-logo.png'
 import LOGO_AL from '../assets/images/logo-action-logement.png'
@@ -20,7 +20,7 @@ const Header = styled.header`
   align-items: center;
   justify-content: space-around;
   padding: 16px 70px;
-  border-bottom: solid 2px ${COLOR_BACKGROUND};
+  border-bottom: solid 2px ${COLOR_HEADER_BACKGROUND};
 
   .taille-fixe {
     flex-shrink: 0;
