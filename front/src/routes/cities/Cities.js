@@ -143,7 +143,8 @@ const PaginationContainer = styled.div`
 const Cities = () => {
   const { cities, isLoading, onSearch, totalCities, sortCriterions } =
     useCities()
-  const size = useWindowSize()
+  const isMobile = isMobileView(useWindowSize())
+
   const location = useLocation()
   const history = useHistory()
   const [params, setParams] = useState(queryString.parse(location.search))
@@ -231,7 +232,6 @@ const Cities = () => {
 
   const showMobileCriterionsSelection = (bool) =>
     setShowMobileCriterionsSelection(bool)
-  const isMobile = isMobileView(size)
 
   const isUsingRegionFilter = !!params.codeRegion
   const isUsingCitySizeFilter = !!params.codeCity

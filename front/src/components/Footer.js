@@ -7,6 +7,7 @@ import { MOBILE_WIDTH } from '../constants/mobile'
 const MainSpace = styled.div`
   background: white;
   border-top: 1px solid #e4e9ed;
+
   .footer {
     margin: auto;
     display: flex;

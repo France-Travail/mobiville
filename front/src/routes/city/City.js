@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import queryString from 'query-string'
 import { Link, useHistory, useParams } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import queryString from 'query-string'
 import { Helmet } from 'react-helmet-async'
+import styled from 'styled-components'
 import { CircularProgress } from '@mui/material'
 
-import { useCities } from '../../common/contexts/citiesContext'
-import MainLayout from '../../components/MainLayout'
+import { ActionButton, MainLayout } from '../../components'
 import CityHeader from './CityHeader'
 import CityJobs from './CityJobs'
 import CityLife from './CityLife'
 import CityHousing from './CityHousing'
+import CitySubHeader from './CitySubHeader'
+
+import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import { ucFirstOnly } from '../../utils/utils'
@@ -31,8 +33,6 @@ import medalSilver from '../../assets/images/icons/medal_silver.svg'
 import redEllipse from '../../assets/images/icons/red_ellipse.svg'
 import greenEllipse from '../../assets/images/icons/green_ellipse.svg'
 import restaurantsIcon from '../../assets/images/icons/restaurants.svg'
-import CitySubHeader from './CitySubHeader'
-import ActionButton from '../../components/ActionButton'
 import pastille from '../../assets/images/icons/pastille.svg'
 
 const ElementContainer = styled.div`
@@ -720,7 +720,6 @@ const CityPage = ({ location: { pathname, search } }) => {
             isMobile={isMobile}
             isBlue={false}
             isWhite={true}
-            buttonWidth={370}
           />
         </ElementContainer>
       )}
@@ -728,12 +727,10 @@ const CityPage = ({ location: { pathname, search } }) => {
         <ElementContainer isMobile={isMobile}>
           <ActionButton
             path={'/mobility-guide'}
-            libelle={`Consultez nos conseils`}
-            libelleSecondaire={'pour votre projet'}
+            libelle={`Consultez nos conseils pour votre projet`}
             isMobile={isMobile}
             isBlue={false}
             isWhite={true}
-            buttonWidth={292}
           />
         </ElementContainer>
       )}

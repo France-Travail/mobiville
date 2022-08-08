@@ -79,53 +79,55 @@ const Testimonies = () => {
     const isMobile = isMobileView(windowsSize)
 
     return (
-      <Section>
-        <SectionTitle>Ils ont déménagé, ils témoignent</SectionTitle>
-        <Container isMobile={isMobile}>
-          <AppCarousel>
+      <div style={{ overflow: 'hidden' }}>
+        <Section>
+          <SectionTitle>Ils ont déménagé, ils témoignent</SectionTitle>
+          <Container isMobile={isMobile}>
+            <AppCarousel>
 
-            {/* Testimony 1 */}
-            <TestimonyContainer isMobile={isMobile}>
-              <TestimonyHeader isMobile={isMobile}>
+              {/* Testimony 1 */}
+              <TestimonyContainer isMobile={isMobile}>
+                <TestimonyHeader isMobile={isMobile}>
+                  <TestimonyTitle>Jonathan</TestimonyTitle>
+                  <TestimonyTitle>Conseiller technique</TestimonyTitle>
+                  <p>
+                    A déménagé à Rodez<br />
+                    Utilisation du service en avril<br />
+                    Déménagement en Août
+                  </p>
+                </TestimonyHeader>
+                <TestimonyBody isMobile={isMobile}>
+                  <p>“Faire une recherche de logement ou d’emploi dans une région/département qu’on ne connaît pas peut s’avérer difficile.</p>
+                  <p><strong>Mobiville m'a permis d'avoir toutes les infos pour lancer mon projet.</strong></p>
+                  <p>Lorsque j'ai obtenu ma promesse d'embauche, j'ai bénéficié d'un conseiller logement dédié et j’ai déménagé sereinement.”</p>
+                </TestimonyBody>
+              </TestimonyContainer>
+
+              {/* Testimony 2 */}
+              <TestimonyContainer isMobile={isMobile}>
+                <TestimonyHeader isMobile={isMobile}>
                 <TestimonyTitle>Jonathan</TestimonyTitle>
-                <TestimonyTitle>Conseiller technique</TestimonyTitle>
-                <p>
-                  A déménagé à Rodez<br />
-                  Utilisation du service en avril<br />
-                  Déménagement en Août
-                </p>
-              </TestimonyHeader>
-              <TestimonyBody isMobile={isMobile}>
-                <p>“Faire une recherche de logement ou d’emploi dans une région/département qu’on ne connaît pas peut s’avérer difficile.</p>
-                <p><strong>Mobiville m'a permis d'avoir toutes les infos pour lancer mon projet.</strong></p>
-                <p>Lorsque j'ai obtenu ma promesse d'embauche, j'ai bénéficié d'un conseiller logement dédié et j’ai déménagé sereinement.”</p>
-              </TestimonyBody>
-            </TestimonyContainer>
+                  <TestimonyTitle>Conseiller technique</TestimonyTitle>
+                  <p>
+                    A déménagé à Rodez<br />
+                    Utilisation du service en avril<br />
+                    Déménagement en Août
+                  </p>
+                </TestimonyHeader>
+                <TestimonyBody isMobile={isMobile}>
+                  <p>“Faire une recherche de logement ou d’emploi dans une région/département qu’on ne connaît pas peut s’avérer difficile.</p>
+                  <p><strong>Mobiville m'a permis d'avoir toutes les infos pour lancer mon projet.</strong></p>
+                  <p>Lorsque j'ai obtenu ma promesse d'embauche, j'ai bénéficié d'un conseiller logement dédié et j’ai déménagé sereinement.”</p>
+                </TestimonyBody>
 
-            {/* Testimony 2 */}
-            <TestimonyContainer isMobile={isMobile}>
-              <TestimonyHeader isMobile={isMobile}>
-              <TestimonyTitle>Jonathan</TestimonyTitle>
-                <TestimonyTitle>Conseiller technique</TestimonyTitle>
-                <p>
-                  A déménagé à Rodez<br />
-                  Utilisation du service en avril<br />
-                  Déménagement en Août
-                </p>
-              </TestimonyHeader>
-              <TestimonyBody isMobile={isMobile}>
-                <p>“Faire une recherche de logement ou d’emploi dans une région/département qu’on ne connaît pas peut s’avérer difficile.</p>
-                <p><strong>Mobiville m'a permis d'avoir toutes les infos pour lancer mon projet.</strong></p>
-                <p>Lorsque j'ai obtenu ma promesse d'embauche, j'ai bénéficié d'un conseiller logement dédié et j’ai déménagé sereinement.”</p>
-              </TestimonyBody>
-
-            </TestimonyContainer>
-          </AppCarousel>
-          <ImageContainer isMobile={isMobile}>
-            <img src={movingIllustration} alt="Déménagement - illustration" />
-          </ImageContainer>
-        </Container>
-      </Section>
+              </TestimonyContainer>
+            </AppCarousel>
+            <ImageContainer isMobile={isMobile}>
+              <img src={movingIllustration} alt="Déménagement - illustration" />
+            </ImageContainer>
+          </Container>
+        </Section>
+      </div>
     )
 }
 

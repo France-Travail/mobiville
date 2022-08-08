@@ -163,7 +163,7 @@ const CityItem = ({
     {
       isPrioritary: false,
       node: city.totalOffres && (
-          <Tag >
+          <Tag key="offers">
             {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
           </Tag>
       ),

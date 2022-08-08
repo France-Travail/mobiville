@@ -13,7 +13,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
 `
 
 const Main = styled.main`
@@ -87,7 +86,6 @@ MainLayout.propTypes = {
     PropTypes.node,
   ]).isRequired,
   menu: PropTypes.oneOfType([PropTypes.object]),
-  isMobile: PropTypes.bool,
   topMobileMenu: PropTypes.bool,
   style: PropTypes.object,
 }
@@ -96,7 +94,6 @@ MainLayout.defaultProps = {
   menu: {
     visible: true,
   },
-  isMobile: false,
   topMobileMenu: false,
   style: {},
 }

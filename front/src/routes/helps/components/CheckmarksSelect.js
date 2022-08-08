@@ -121,7 +121,6 @@ const styleLineBoxUnSelected = {
     "background": "#fff",
 }
 
-
 const CheckmarksSelect = ({searchCriteria, title, onSearchParameters, params}) => {
     const isMobile = isMobileView(useWindowSize())
     const globalWidth = isMobile ? 350 : 371

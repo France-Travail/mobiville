@@ -72,7 +72,7 @@ const MobilityGuide = () => {
               libelle={'Consulter notre guide sur la mobilité'}
               isMobile={isMobile}
               isBlue={true}
-              style={{ 'margin-top': '36px' }}
+              style={{ 'marginTop': '36px' }}
             />
           </TextContainer>
         </Container>
