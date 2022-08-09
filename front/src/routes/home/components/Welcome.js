@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
+import _ from 'lodash'
 
 import { useWindowSize } from "../../../common/hooks/window-size"
 import { isMobileView } from "../../../constants/mobile"
@@ -130,7 +131,7 @@ const Welcome = () => {
 
   // todo: export to child
   const isSelected = useCallback((id) => {
-    return id === selectedSearchMode;
+    return id === selectedSearchMode
   }, [selectedSearchMode])
 
   const handleChange = (buttonId) => {

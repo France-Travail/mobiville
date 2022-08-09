@@ -7,6 +7,7 @@ import { useWindowSize } from "../../../common/hooks/window-size"
 import { isMobileView } from "../../../constants/mobile"
 
 const Container = styled.div`
+  width: 100%;
   margin: ${({ isMobile }) => (isMobile ? '0 0 130px 0' : 'auto')};
   position: relative;
 
@@ -38,6 +39,8 @@ const ImageContainer = styled.div`
 `
 
 const TestimonyContainer = styled.div`
+  height: 100%;
+
   display: flex;
   flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
   text-align: left;
@@ -59,6 +62,8 @@ const TestimonyTitle = styled.p`
 `
 
 const TestimonyBody = styled.div`
+  flex: 1;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -93,7 +98,7 @@ const Testimonies = () => {
                   <p>
                     A déménagé à Rodez<br />
                     Utilisation du service en avril<br />
-                    Déménagement en Août
+                    Déménagement en août
                   </p>
                 </TestimonyHeader>
                 <TestimonyBody isMobile={isMobile}>
@@ -106,21 +111,38 @@ const Testimonies = () => {
               {/* Testimony 2 */}
               <TestimonyContainer isMobile={isMobile}>
                 <TestimonyHeader isMobile={isMobile}>
-                <TestimonyTitle>Jonathan</TestimonyTitle>
-                  <TestimonyTitle>Conseiller technique</TestimonyTitle>
+                  <TestimonyTitle>Lucy</TestimonyTitle>
+                  <TestimonyTitle>Aide médico psychologique</TestimonyTitle>
                   <p>
-                    A déménagé à Rodez<br />
-                    Utilisation du service en avril<br />
-                    Déménagement en Août
+                    A déménagé avec son mari à Toulouse<br />
+                    Utilisation du service en mai<br />
+                    Déménagement en juillet
                   </p>
                 </TestimonyHeader>
                 <TestimonyBody isMobile={isMobile}>
-                  <p>“Faire une recherche de logement ou d’emploi dans une région/département qu’on ne connaît pas peut s’avérer difficile.</p>
-                  <p><strong>Mobiville m'a permis d'avoir toutes les infos pour lancer mon projet.</strong></p>
-                  <p>Lorsque j'ai obtenu ma promesse d'embauche, j'ai bénéficié d'un conseiller logement dédié et j’ai déménagé sereinement.”</p>
+                  <p>“J'avais déjà identifié la ville de Toulouse pour mon projet de mobilité, mais en la voyant s'afficher sur Mobiville, j'ai relancé mes démarches.</p>
+                  <p><strong>J'ai pu sollicité une aide pour trouver un logement et voilà, j'ai déménagé!”</strong></p>
                 </TestimonyBody>
-
               </TestimonyContainer>
+
+              {/* Testimony 3 */}
+              <TestimonyContainer isMobile={isMobile}>
+                <TestimonyHeader isMobile={isMobile}>
+                  <TestimonyTitle>Greg</TestimonyTitle>
+                  <TestimonyTitle>Technicien de maintenance informatique</TestimonyTitle>
+                  <p>
+                    A déménagé à Chambéry<br />
+                    Utilisation du service en mars<br />
+                    Déménagement en juin
+                  </p>
+                </TestimonyHeader>
+                <TestimonyBody isMobile={isMobile}>
+                  <p>“Mobiville est une plateforme rassurante pour se lancer dans un nouveau projet professionnel et très intuitive.</p>
+                  <p>C’est vraiment une évolution géniale! Le site est complémentaire à celui de Pôle emploi. Je dirais même que ça le rajeunit, ça le booste.</p>
+                  <p><strong>Mobiville est un réel plus qui correspond à la réalité”</strong></p>
+                </TestimonyBody>
+              </TestimonyContainer>
+
             </AppCarousel>
             <ImageContainer isMobile={isMobile}>
               <img src={movingIllustration} alt="Déménagement - illustration" />
@@ -131,4 +153,4 @@ const Testimonies = () => {
     )
 }
 
-export default Testimonies;
+export default Testimonies

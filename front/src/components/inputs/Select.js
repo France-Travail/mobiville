@@ -111,7 +111,7 @@ const AppSelect = ({
   const handleChange = (event, child) => {
     const {
       target: { value },
-    } = event;
+    } = event
 
     setSelectedValue(value)
     onChange(value)

@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import CircularProgress from '@mui/material/CircularProgress'
-import styled from 'styled-components';
-import { COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors';
+import styled from 'styled-components'
+import { COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors'
 
 
 const AppAutocomplete = styled(Autocomplete)`
@@ -108,7 +108,7 @@ const TextSearchInput = ({
                 />
             )}
         />
-    );
+    )
 }
 
 TextSearchInput.propTypes = {

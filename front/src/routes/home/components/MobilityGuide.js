@@ -80,4 +80,4 @@ const MobilityGuide = () => {
     )
 }
 
-export default MobilityGuide;
+export default MobilityGuide

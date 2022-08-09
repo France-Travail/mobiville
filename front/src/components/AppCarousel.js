@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import "react-responsive-carousel/lib/styles/carousel.min.css"
 import styled from 'styled-components'
 import { COLOR_PRIMARY } from '../constants/colors'
-import { Carousel } from 'react-responsive-carousel';
+import { Carousel } from 'react-responsive-carousel'
 import { useWindowSize } from '../common/hooks/window-size'
 import { isMobileView } from '../constants/mobile'
 
@@ -25,6 +25,10 @@ const AppCarouselDot = styled.li`
     border-radius: 50%;
     background: ${({ isSelected }) => (isSelected ? COLOR_PRIMARY : '#D9D9D9')};
   }
+`
+
+const CustomCarousel = styled(Carousel)`
+  width: 100%;
 `
 
 const renderCarouselIndicator = (clickHandler, isSelected, index, label, isMobile) => {
@@ -52,14 +56,18 @@ const AppCarousel = ({
   const isMobile = isMobileView(windowsSize)
 
   return (
-    <Carousel
+    <CustomCarousel
       showArrows={showArrows}
       showStatus={showStatus}
       showThumbs={showThumbs}
       renderIndicator={(clickHandler, isSelected, index, label) => renderCarouselIndicator(clickHandler, isSelected, index, label, isMobile)}
+      selectedItem={Math.floor(Math.random() * (children.length))}
+      autoPlay
+      infiniteLoop
+      interval={4000}
     >
       {children}
-    </Carousel>
+    </CustomCarousel>
   )
 }
 

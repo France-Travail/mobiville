@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
 import { useCities } from "../../../common/contexts/citiesContext"
 import { TextSearchInput } from "../../../components"
-import { ucFirstOnly } from "../../../utils/utils";
+import { ucFirstOnly } from "../../../utils/utils"
 
 const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
   const ALL_REGIONS_LABEL = 'Toutes les régions'

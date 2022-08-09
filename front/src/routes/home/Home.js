@@ -5,7 +5,7 @@ import { useWindowSize } from '../../common/hooks/window-size'
 import { COLOR_BACKGROUND } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 
-import { MainLayout } from '../../components/';
+import { MainLayout } from '../../components/'
 import Testimonies from './components/Testimonies'
 import MobilityGuide from './components/MobilityGuide'
 import Advantages from './components/Advantages'

@@ -8,7 +8,7 @@ const computeButtonBorder = (index, lastIndex) => {
     if (index === 0) {
         return 'border-radius: 8px 0 0 8px' 
     } else if (index === lastIndex) {
-        return 'border-radius: 0 8px 8px 0';
+        return 'border-radius: 0 8px 8px 0'
     }
 }
 
@@ -87,4 +87,4 @@ ButtonGroup.propTypes = {
     onChange: PropTypes.func,
 }
 
-export default ButtonGroup;
+export default ButtonGroup
