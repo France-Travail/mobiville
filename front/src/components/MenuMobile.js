@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { Typography } from '@mui/material'
 import { COLOR_PRIMARY, COLOR_TEXT_SECONDARY } from '../constants/colors'
 import { ReactComponent as HomeIcon } from '../assets/images/home-menu.svg'
-import { ReactComponent as HelpIcon } from '../assets/images/help-menu.svg'
-import { ReactComponent as CitiesIcon } from '../assets/images/cities-menu.svg'
+import { ReactComponent as FinancialHelpIcon } from '../assets/images/icons/financial-help.svg'
+import { ReactComponent as HouseOutlineIcon } from '../assets/images/icons/house-outline.svg'
 
 const Nav = styled.nav`
   position: fixed;
@@ -13,7 +13,7 @@ const Nav = styled.nav`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1;
+  z-index: 100;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.14), 0px 2px 2px rgba(0, 0, 0, 0.12),
     0px 1px 3px rgba(0, 0, 0, 0.2);
 `
@@ -78,13 +78,13 @@ const MENU_LINK = [
   },
   {
     path: '/rechercher',
-    icon: CitiesIcon,
+    icon: HouseOutlineIcon,
     label: 'Villes',
     activePaths: ['rechercher', 'cities'],
   },
   {
     path: '/aides',
-    icon: HelpIcon,
+    icon: FinancialHelpIcon,
     label: 'Aides',
     activePaths: ['/aides'],
   },

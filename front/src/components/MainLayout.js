@@ -86,7 +86,6 @@ MainLayout.propTypes = {
     PropTypes.node,
   ]).isRequired,
   menu: PropTypes.oneOfType([PropTypes.object]),
-  isMobile: PropTypes.bool,
   topMobileMenu: PropTypes.bool,
   style: PropTypes.object,
 }
@@ -95,7 +94,6 @@ MainLayout.defaultProps = {
   menu: {
     visible: true,
   },
-  isMobile: false,
   topMobileMenu: false,
   style: {},
 }

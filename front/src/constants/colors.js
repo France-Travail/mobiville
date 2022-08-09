@@ -5,7 +5,10 @@ export const COLOR_GREEN = '#BBDAC9'
 export const COLOR_OTHER_GREEN = '#C3E9E9'
 export const COLOR_VERT_MOBIVILLE = '#37B4B4'
 export const COLOR_GREY = '#808080'
+export const COLOR_LIGHT_GREY = '#E4E9ED'
 export const COLOR_GRAY = '#F6F7FB'
+export const COLOR_SALMON = '#FCA890'
+export const COLOR_WHITE = '#FFFFFF'
 
 // TEXT
 export const COLOR_TEXT_PRIMARY = '#23333E'
@@ -13,6 +16,7 @@ export const COLOR_TEXT_SECONDARY = '#657078'
 
 // BACKGROUNDS
 export const COLOR_BACKGROUND = COLOR_GRAY
+export const COLOR_HEADER_BACKGROUND = '#F6F7FB'
 export const COLOR_SECONDARY = '#336E7B'
 
 // BUTTONS
