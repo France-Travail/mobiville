@@ -12,6 +12,10 @@ body {
   font-size: 14px;
 }
 
+body.white {
+  background-color: #FFF !important;
+}
+
 button {
   font-family: 'Roboto', sans-serif;
 }
@@ -115,4 +119,9 @@ input[type='color'] {
   top: 0;
   left: 0;
   width: 100%;
+}
+
+.stickyFilterMobile {
+  position: sticky;
+  top: calc(100vh - 100px);
 }
