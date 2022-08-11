@@ -14,7 +14,7 @@ const UseScrollingUp = () => {
   const [scrollingUp, setScrollingUp] = useState(false)
   const handleScroll = () => {
     const currScroll = window.pageYOffset
-    const isScrolled = prevScroll > currScroll
+    const isScrolled = currScroll > 100 && prevScroll > currScroll
     setScrollingUp(isScrolled)
     prevScroll = currScroll
   }
