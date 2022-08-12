@@ -120,19 +120,19 @@ const AppSelect = ({
   return (
     <AppFormControl sx={{ m: 1, ...style }}>
       <InputLabel
-        id="demo-multiple-checkbox-label"
+        id={`${_.kebabCase(label)}-label`}
         variant="filled"
         shrink={true}
       >{label}</InputLabel>
       <Placeholder
-        id="placeholder"
+        id={`${_.kebabCase(label)}-placeholder`}
         variant="filled"
         shrink={true}
         hidden={isPlaceholderHidden()}
       >{placeholder}</Placeholder>
       <Select
-        labelId="demo-multiple-checkbox-label"
-        id="demo-multiple-checkbox"
+        labelId={`${_.kebabCase(label)}-label`}
+        id={`${_.kebabCase(label)}`}
         multiple={multiple}
         value={selectedValue}
         onChange={handleChange}

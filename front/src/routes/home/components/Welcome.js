@@ -129,7 +129,6 @@ const Welcome = () => {
   const [ jobSituationSelected, setJobSituationSelected ] = useState(null)
   const [ ageSelected, setAgeSelected ] = useState(null)
 
-  // todo: export to child
   const isSelected = useCallback((id) => {
     return id === selectedSearchMode
   }, [selectedSearchMode])
@@ -141,21 +140,17 @@ const Welcome = () => {
   // === CITY SEARCH ===
 
   const computeSearchPath = useCallback(() => {
-    // http://localhost/cities?codeRegion=53&codeRome=G1201
-
     if (!!jobSelected) {
       if (!!citySelected) {
-        // todo: constant
-        if (citySelected.type === 'Villes') {
+        if (citySelected.type === CitySelect.CITY_TYPE) {
           return `/city/${citySelected.id}-${citySelected.cityName}?codeRome=${jobSelected.key}`
+        } else if (citySelected.type === CitySelect.REGION_TYPE) {
+          return `/cities?codeRegion=${citySelected.id}&codeRome=${jobSelected.key}`
         }
-        return `/cities?codeRegion=${citySelected.id}&codeRome=${jobSelected.key}`
       }
-
       return `/cities?codeRome=${jobSelected.key}`
     }
     return ''
-
   }, [jobSelected, citySelected])
 
   const onJobSelect = (job) => {

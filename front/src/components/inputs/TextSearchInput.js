@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import _ from 'lodash'
 
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import CircularProgress from '@mui/material/CircularProgress'
-import styled from 'styled-components'
-import { COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors'
 
+import { COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors'
 
 const AppAutocomplete = styled(Autocomplete)`
     flex: 1;
@@ -44,7 +45,8 @@ const TextSearchInput = ({
         onInputChange = () => {},
         isOptionEqualToValue = (option, value) => option.label === value.label,
         defaultValue,
-        openThreshold = -1
+        openThreshold = -1,
+        showEndAdornment = true
     }) => {
 
     const [ open, setOpen ] = useState(false)
@@ -53,6 +55,7 @@ const TextSearchInput = ({
     const handleInputChange = (event, value) => {
         onInputChange(event, value)
         setInputValue(value)
+        handleOpen(true)
     }
 
     const handleChange = (event, value) => {
@@ -64,12 +67,12 @@ const TextSearchInput = ({
             setOpen(isOpen)
         }
     }
-    
+
     return (
         <AppAutocomplete
             disablePortal
             disabled={disabled}
-            id={`autocomplete-${label}`}
+            id={`autocomplete-${_.kebabCase(label)}`}
             options={options}
             loading={loading}
             open={open}
@@ -101,7 +104,7 @@ const TextSearchInput = ({
                         endAdornment: (
                             <>
                                 {loading ? <CircularProgress color="inherit" size={20} /> : null}
-                                {params.InputProps.endAdornment}
+                                {showEndAdornment ? params.InputProps.endAdornment : null}
                             </>
                         ),
                     }}
