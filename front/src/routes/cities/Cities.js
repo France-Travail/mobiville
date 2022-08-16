@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import queryString from 'query-string'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import L from 'leaflet'
-import { Switch } from '@mui/material'
 
 import { useCities } from '../../common/contexts/citiesContext'
 import { MainLayout } from '../../components'
@@ -12,7 +11,6 @@ import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import {
   COLOR_BUTTON_HOVER,
-  COLOR_OTHER_GREEN,
   COLOR_PRIMARY,
 } from '../../constants/colors'
 
@@ -41,25 +39,6 @@ const NotFoundContainer = styled.div`
   font-size: 1.5rem;
   line-height: 1.5;
   color: #657078;
-`
-
-const Infopanel = styled.div`
-  display: flex;
-  background: ${COLOR_OTHER_GREEN};
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 700px;
-  margin: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 12px;
-`
-
-const CitiesTensionChoice = styled.div`
-  display: flex;
-  align-items: center;
-  padding-left: 8px;
 `
 
 const CitiesFilterContainer = styled.div`
@@ -288,26 +267,6 @@ const Cities = () => {
         </CitiesFilterText>
         <CitiesFilters />
       </CitiesFilterContainer>
-      <Infopanel>
-        <p>
-          Les villes qui vous sont proposées sont les villes où il y a des
-          offres et peu de concurrence, afin d’accélérer votre recherche
-          d’emploi.
-        </p>
-        <CitiesTensionChoice>
-          <div style={{ fontWeight: !useAllCities ? '500' : 'normal' }}>
-            Villes favorables
-          </div>
-          <Switch
-            inputProps={{ 'aria-label': 'Villes favorables' }}
-            checked={useAllCities}
-            onChange={() => setUseAllCities(!useAllCities)}
-          />
-          <div style={{ fontWeight: useAllCities ? '500' : 'normal' }}>
-            Toutes les villes
-          </div>
-        </CitiesTensionChoice>
-      </Infopanel>
       {!isLoadingProfessions &&
         cities.map((city, key) => (
           <CityItem

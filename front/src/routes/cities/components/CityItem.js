@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import _ from 'lodash'
+import styled, { css } from 'styled-components'
 
 import { formatNumber } from '../../../utils/utils'
 import {
@@ -13,7 +14,6 @@ import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
 import redMarker from '../../../assets/images/marker-red.png'
 import { ReactComponent as RightChevronIcon } from '../../../assets/images/icons/right_chevron.svg'
-import _ from 'lodash'
 
 const CityLink = styled(Link)`
   margin-top: 16px;
@@ -74,7 +74,7 @@ const Department = styled.p`
   color: ${ COLOR_PRIMARY };
 `
 
-const TagsBlock = styled.div`
+const TagsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -100,6 +100,20 @@ const InformationsContainer = styled.div`
   gap: 8px;
 `
 
+const RightChevronIconCustom = styled(RightChevronIcon)`
+  height: 12px;
+  width: 12px;
+  margin-right: 18px;
+
+  color: ${COLOR_PRIMARY};
+
+  ${({ $isMobile }) => ($isMobile && css`
+    align-self: end;
+    margin-top: -36px;
+    margin-bottom: 18px
+  `)}
+`
+
 const CityItem = ({
   city,
   selected,
@@ -108,8 +122,6 @@ const CityItem = ({
   to,
 }) => {
   const size = useWindowSize()
-
-  console.log(city)
 
   if (!city) {
     return <div />
@@ -129,36 +141,6 @@ const CityItem = ({
     return "Peu d'opportunités d'emploi"
   }
 
-  const topTags = [
-    {
-      node: city['bassin.tensions.ind_t'] && (
-        <Tag
-          $color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED}
-          key="tension"
-        >
-          {formatCityTension(city['bassin.tensions.ind_t'])}
-        </Tag>
-      ),
-    }
-  ]
-
-  const bottomTags = [
-    {
-      node: city.totalOffres && (
-          <Tag key="offers">
-            {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
-          </Tag>
-      ),
-    },
-    {
-      node: city.population && (
-        <Tag key="citysize">
-          {formatNumber(city.population * 1000)} habitants
-        </Tag>
-      ),
-    },
-  ]
-
   return (
     <CityLink
       onMouseOver={onMouseOver}
@@ -173,7 +155,13 @@ const CityItem = ({
       />
 
       <InformationsContainer>
-        <TagsBlock>{topTags.map(({ node }) => node)}</TagsBlock>
+        <TagsContainer>
+          <Tag
+            $color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED}
+          >
+            {formatCityTension(city['bassin.tensions.ind_t'])}
+          </Tag>
+        </TagsContainer>
 
         <Title>
           {_.capitalize(city.nom_comm)}
@@ -181,15 +169,17 @@ const CityItem = ({
         </Title>
         <Department>{_.capitalize(city.nom_dept)}</Department>
 
-        <TagsBlock>{bottomTags.map(({ node }) => node)}</TagsBlock>
+        <TagsContainer>
+          <Tag>
+            {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
+          </Tag>
+          <Tag>
+            {formatNumber(city.population * 1000)} habitants
+          </Tag>
+        </TagsContainer>
       </InformationsContainer>
 
-      <RightChevronIcon style={{
-        color: COLOR_PRIMARY,
-        height: '12px',
-        width: '12px',
-        marginRight: '18px',
-      }} />
+      <RightChevronIconCustom $isMobile={isMobileView(size)} />
     </CityLink>
   )
 }
