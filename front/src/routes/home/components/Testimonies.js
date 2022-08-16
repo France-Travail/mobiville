@@ -114,7 +114,7 @@ const Testimonies = () => {
                   <TestimonyTitle>Lucy</TestimonyTitle>
                   <TestimonyTitle>Aide médico psychologique</TestimonyTitle>
                   <p>
-                    A déménagé avec son mari à Toulouse<br />
+                    A déménagé avec son mari<br />à Toulouse<br />
                     Utilisation du service en mai<br />
                     Déménagement en juillet
                   </p>

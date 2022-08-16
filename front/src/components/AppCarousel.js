@@ -47,9 +47,11 @@ const renderCarouselIndicator = (clickHandler, isSelected, index, label, isMobil
 
 const AppCarousel = ({
   children,
-  showArrows,
-  showStatus,
-  showThumbs,
+  showArrows = false,
+  showStatus = false,
+  showThumbs = false,
+  interval = 6000,
+  swipeScrollTolerance = 40,
   ...props
 }) => {
   const windowsSize = useWindowSize()
@@ -64,7 +66,11 @@ const AppCarousel = ({
       selectedItem={Math.floor(Math.random() * (children.length))}
       autoPlay
       infiniteLoop
-      interval={4000}
+      interval={interval}
+
+      swipeScrollTolerance={swipeScrollTolerance}
+      preventMovementUntilSwipeScrollTolerance={true}
+      stopOnHover={true}
     >
       {children}
     </CustomCarousel>
@@ -79,12 +85,6 @@ AppCarousel.props = {
   showArrows: PropTypes.bool,
   showStatus: PropTypes.bool,
   showThumbs: PropTypes.bool,
-}
-
-AppCarousel.defaultProps = {
-  showArrows: false,
-  showStatus: false,
-  showThumbs: false,
 }
 
 export default AppCarousel
