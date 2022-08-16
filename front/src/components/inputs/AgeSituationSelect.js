@@ -4,6 +4,7 @@ import { AGE_SITUATIONS } from '../../constants/search'
 
 const AgeSituationSelect = ({
   onChange,
+  value,
   label = "Votre âge",
   placeholder = "Moins de 26 ans, plus de 26 ans",
   style = {}
@@ -16,6 +17,7 @@ const AgeSituationSelect = ({
   return (
     <Select
       style={{ ...style }}
+      value={value}
       label={label}
       placeholder={placeholder}
       options={AGE_SITUATIONS}
@@ -26,6 +28,7 @@ const AgeSituationSelect = ({
 
 AgeSituationSelect.propTypes = {
   onChange: PropTypes.func.isRequired,
+  value: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
   style: PropTypes.object,

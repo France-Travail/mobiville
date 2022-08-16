@@ -4,6 +4,7 @@ import { JOB_SITUATIONS } from '../../constants/search'
 
 const JobSituationSelect = ({
   onChange,
+  value,
   label = "Votre situation",
   placeholder = "Demandeur d'emploi, salarié",
   style = {}
@@ -16,6 +17,7 @@ const JobSituationSelect = ({
   return (
     <Select
       style={{ ...style }}
+      value={value}
       label={label}
       placeholder={placeholder}
       options={JOB_SITUATIONS}
@@ -26,6 +28,7 @@ const JobSituationSelect = ({
 
 JobSituationSelect.propTypes = {
   onChange: PropTypes.func.isRequired,
+  value: PropTypes.string,
   label: PropTypes.string,
   placeholder: PropTypes.string,
   style: PropTypes.object,

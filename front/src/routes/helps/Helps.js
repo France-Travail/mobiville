@@ -54,16 +54,13 @@ const Title = styled.h1`
 `
 
 const Header = styled.div`
-  font-weight: bold;
+  height: 118px;
+
   display: flex;
   align-items: center;
-  height: 118px;
-  background-color: ${COLOR_OTHER_GREEN};
 
-  div,
-  a {
-    margin: 0 auto;
-  }
+  font-weight: bold;
+  background-color: ${COLOR_OTHER_GREEN};
 
   ${(props) =>
     props.isMobile &&
@@ -250,6 +247,68 @@ const ViewMore = styled.div`
   padding-top: 8px;
 `
 
+
+const HelpTypeTitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: ${({ isFirst }) => (isFirst ? '' : '40px')};
+  margin-bottom: 20px;
+
+  width: ${({ isMobile }) => (isMobile ? '342px' : '1033px')};
+  height: 71px;
+
+  background: #c7c7f3;
+  border-radius: 4px;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+
+  h2 {
+    width: ${({ isMobile }) => (isMobile ? '248px' : '410px')};
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 28px;
+    color: #191970;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+  }
+
+  img {
+    margin-left: 8px;
+  }
+`
+
+const HelpItem = styled(Link)`
+  border-radius: 8px;
+  overflow: hidden;
+
+  justify-content: flex-end;
+  align-items: flex-end;
+
+  padding: 18px;
+  gap: 33px;
+
+  width: ${({ isMobile }) => (isMobile ? '340px' : '511px')};
+  height: ${({ isMobile }) => (isMobile ? '' : '231px')};
+  border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #fff')};
+
+  display: block;
+
+  background: #ffffff;
+  color: ${COLOR_TEXT_PRIMARY};
+
+  &:hover {
+    border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #191970')};
+  }
+`
+
 const CATEGORIES = [
   {
     key: 'emploi',
@@ -304,67 +363,6 @@ const Helps = ({ location: { search } }) => {
 
   const size = useWindowSize()
   const isMobile = isMobileView(size)
-
-  const HelpTypeTitleContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-
-    margin-top: ${({ isFirst }) => (isFirst ? '' : '40px')};
-    margin-bottom: 20px;
-
-    width: ${({ isMobile }) => (isMobile ? '342px' : '1033px')};
-    height: 71px;
-
-    background: #c7c7f3;
-    border-radius: 4px;
-
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-
-    h2 {
-      width: ${({ isMobile }) => (isMobile ? '248px' : '410px')};
-      font-family: 'Roboto';
-      font-style: normal;
-      font-weight: 900;
-      font-size: 24px;
-      line-height: 28px;
-      color: #191970;
-      flex: none;
-      order: 1;
-      flex-grow: 0;
-    }
-
-    img {
-      margin-left: 8px;
-    }
-  `
-
-  const HelpItem = styled(Link)`
-    border-radius: 8px;
-    overflow: hidden;
-
-    justify-content: flex-end;
-    align-items: flex-end;
-
-    padding: 18px;
-    gap: 33px;
-
-    width: ${({ isMobile }) => (isMobile ? '340px' : '511px')};
-    height: ${({ isMobile }) => (isMobile ? '' : '231px')};
-    border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #fff')};
-
-    display: block;
-
-    background: #ffffff;
-    color: ${COLOR_TEXT_PRIMARY};
-
-    &:hover {
-      border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #191970')};
-    }
-  `
 
   useEffect(() => {
     onLoadPreviews()
@@ -512,10 +510,9 @@ const Helps = ({ location: { search } }) => {
               )
 
               return (
-                  <Grid item xs={isMobile ? 12 : 6} md={6}>
+                  <Grid item xs={isMobile ? 12 : 6} md={6} key={item.id}>
                     <HelpItem
                         isMobile={isMobile}
-                        key={item.id}
                         to={`/aides/${item.slug}` + window.location.search}
                     >
                       <div>
@@ -680,7 +677,7 @@ const Helps = ({ location: { search } }) => {
                 isMobile={isMobile}
                 className={`${!isMobile && isScrollingUp ? 'stickyHeader' : ''}`}
             >
-              <HelpsFilter CATEGORIES={CATEGORIES} SITUATIONS={SITUATIONS} />
+              <HelpsFilter />
             </Header>
         )}
 

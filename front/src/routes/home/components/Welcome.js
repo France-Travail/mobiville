@@ -86,7 +86,7 @@ const Welcome = () => {
 
   const [ projectsSelected, setProjectsSelected ] = useState([])
   const [ jobSituationSelected, setJobSituationSelected ] = useState(null)
-  const [ ageSelected, setAgeSelected ] = useState(null)
+  const [ ageSituationSelected, setAgeSituationSelected ] = useState(null)
 
   const isSelected = useCallback((id) => {
     return id === selectedSearchMode
@@ -130,8 +130,8 @@ const Welcome = () => {
     setJobSituationSelected(jobSituation)
   }
 
-  const handleAgeChange = (age) => {
-    setAgeSelected(age)
+  const handleAgeSituationChange = (age) => {
+    setAgeSituationSelected(age)
   }
 
   const computeHelpsSearchPath = useCallback(() => {
@@ -149,8 +149,8 @@ const Welcome = () => {
       jobSituationURLFormatted = `situation=${JOB_SITUATIONS.find(j => j.option === jobSituationSelected)?.key}`
     }
 
-    if (!!ageSelected) {
-      ageURLFormatted = `situation=${AGE_SITUATIONS.find(a => a.option === ageSelected)?.key}`
+    if (!!ageSituationSelected) {
+      ageURLFormatted = `situation=${AGE_SITUATIONS.find(a => a.option === ageSituationSelected)?.key}`
     }
     
     const paramsURLFormatted = [
@@ -162,7 +162,7 @@ const Welcome = () => {
       .join('&')
 
     return `/aides?${paramsURLFormatted}`
-  }, [ projectsSelected, jobSituationSelected, ageSelected ])
+  }, [ projectsSelected, jobSituationSelected, ageSituationSelected ])
 
   return (
     <Container isMobile={isMobile}>
@@ -238,16 +238,19 @@ const Welcome = () => {
             <ProjectsSelect
               style={{ flex: 5 }}
               onChange={handleProjectsChange}
+              value={projectsSelected}
             ></ProjectsSelect>
 
             <JobSituationSelect
               style={{ flex: 3 }}
               onChange={handleJobSituationChange}
+              value={jobSituationSelected}
             ></JobSituationSelect>
 
             <AgeSituationSelect
               style={{ flex: 3 }}
-              onChange={handleAgeChange}
+              onChange={handleAgeSituationChange}
+              value={ageSituationSelected}
             ></AgeSituationSelect>
 
             <ActionButton

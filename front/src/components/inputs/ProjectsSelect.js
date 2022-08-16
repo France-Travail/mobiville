@@ -4,10 +4,12 @@ import { PROJECTS } from '../../constants/search'
 
 const ProjectsSelect = ({
   onChange,
+  value,
   label = "Quel est votre projet ?",
   placeholder = "Recherche d'emploi, logement, déménagement",
   style = {}
 }) => {
+
   const renderValues = (projects) => {
     const LOOKING_FOR_TERM = "je recherche"
 
@@ -43,6 +45,7 @@ const ProjectsSelect = ({
   return (
     <Select
       multiple
+      value={value}
       style={{ ...style }}
       label={label}
       placeholder={placeholder}
@@ -55,6 +58,7 @@ const ProjectsSelect = ({
 
 ProjectsSelect.propTypes = {
   onChange: PropTypes.func.isRequired,
+  value: PropTypes.array.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
   style: PropTypes.object,

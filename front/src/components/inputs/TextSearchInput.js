@@ -1,13 +1,13 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import _ from 'lodash'
 
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import CircularProgress from '@mui/material/CircularProgress'
 
-import { COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors'
+import { COLOR_LIGHT_GREY, COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors'
 
 const AppAutocomplete = styled(Autocomplete)`
     flex: 1;
@@ -15,11 +15,19 @@ const AppAutocomplete = styled(Autocomplete)`
     color: ${ COLOR_PRIMARY };
     border-radius: 20px;
     padding: 7px 0 0 5px;
+    border: 1px solid ${ COLOR_LIGHT_GREY } !important;
 
     & div.MuiInputBase-root {
         height: 66px;
         border-radius: inherit;
         background: none;
+
+        ${({ $isPlaceholderSelected }) => (!$isPlaceholderSelected) && css`
+            & input.MuiInputBase-input {
+                color: ${ COLOR_PRIMARY } !important;
+                font-weight: 700 !important;
+            }
+        `}
     }
 
     & label {
@@ -68,8 +76,13 @@ const TextSearchInput = ({
         }
     }
 
+    const isPlaceholderSelected = useCallback(() => {
+        return (!inputValue)
+    }, [inputValue])
+    
     return (
         <AppAutocomplete
+            $isPlaceholderSelected={isPlaceholderSelected()}
             disablePortal
             disabled={disabled}
             id={`autocomplete-${_.kebabCase(label)}`}

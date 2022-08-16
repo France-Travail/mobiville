@@ -1,251 +1,134 @@
-import { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
-import {Link} from 'react-router-dom'
-import CheckmarksSelect from './CheckmarksSelect'
-import CheckmarksSelectSituation from './CheckmarksSelectSituation'
-import {isMobileView} from "../../../constants/mobile"
-import {useWindowSize} from "../../../common/hooks/window-size"
-import pictoReset from '../../../assets/images/icons/reset.svg'
+import { useLocation } from 'react-router-dom'
 
-const SearchBloc = styled.div`
-  display: inline-grid;
-  align-items: center;
-  margin: 0px 5px !important;
-  vertical-align: bottom;
+import { ProjectsSelect, JobSituationSelect, AgeSituationSelect, ActionButton, Button } from '../../../components'
 
-  ${(props) =>
-    props.isMobile &&
-    `
-    padding: 5px 0px;
-    
-    div {
-        margin: 0px auto;
-      }
-    
-  `}
+import { AGE_SITUATIONS, JOB_SITUATIONS, PROJECTS } from '../../../constants/search'
+import { ReactComponent as ResetIcon } from '../../../assets/images/icons/reset.svg'
+import { useWindowSize } from '../../../common/hooks/window-size'
+import { isMobileView } from '../../../constants/mobile'
+
+const Container = styled.div`
+    max-width: 1036px;
+    width: 100%;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: ${ ({ $isMobile }) => ($isMobile ? `column` : `row`) };
+    justify-items: ${ ({ $isMobile }) => ($isMobile ? `start` : `center`) };;
+    gap: 8px;
 `
 
-const SearchButton = styled(Link)`
-  width: ${({ isMobile }) => (isMobile ? '350px' : '184px')};
-  height: 73px;
-  display: flex;
-  border-radius: 20px;
-  display: inline-grid;
-  padding: 17px 16px;
-  gap: 10px;
-  background: #191970;
-  color: #eee;
-  align-items: center;
-  text-align: center;
-  vertical-align: middle;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 21px;
-  &:hover {
-    color: #eee;
-    background:#494289;
-  }
-`
+const HelpFilters = ({}) => {
 
-const SearchReset = styled(Link)`
-  display: flex !important;
-  width: 350px;
-  height: 73px;
-  display: flex;
-  display: inline-grid;
-  padding: 0px 115px 0px;
-  gap: 10px;
-  background: #FFF;
-  color: #191970;
-  align-items: center;
-  text-align: center;
-  vertical-align: middle;
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
-`
-
-const EmptyDiv = styled.div`
-  display: inline-grid;
-  background-color: #fff;
-  border: solid 1px #e4e9ed;
-  border-radius: 20px;
-  padding: 17px 16px;
-  gap: 10px;
-  width: 350px;
-  height: 73px;
-`
-
-const HelpFilters = ({CATEGORIES, SITUATIONS, removeBodyClassFunction}) => {
     const isMobile = isMobileView(useWindowSize())
+    const { search } = useLocation()
 
-    const [wholeUrlParameters, setWholeUrlParameters] = useState('')
-    const [searchParametersCategories, setSearchParametersCategories] = useState('')
-    const [searchParametersSituations, setSearchParametersSituations] = useState('')
-    const [searchParametersSituationsAge, setSearchParametersSituationsAge] = useState('')
-
-    const [isReset, setReset] = useState(false)
-
-    const useRemoveBodyClassFunction = () => {
-        if(removeBodyClassFunction) removeBodyClassFunction()
-    }
-
-    const onSearchParametersCategories = function (parameter) {
-        let listParameter = parameter.toString().replaceAll(',', '&project=')
-        CATEGORIES.forEach(
-            (categorie) =>
-                (listParameter = listParameter.replaceAll(
-                    categorie.name,
-                    categorie.key
-                ))
-        )
-        if (listParameter.length === 0) setSearchParametersCategories('')
-        else setSearchParametersCategories('project=' + listParameter)
-    }
-    const onSearchParametersSituations = function (parameter) {
-        if (parameter === 'empty') {
-            setSearchParametersSituations('')
-            return
-        }
-        let listParameter = parameter.toString().replaceAll(',', '&situation=')
-        SITUATIONS.forEach(
-            (situation) =>
-                (listParameter = listParameter.replaceAll(
-                    situation.name,
-                    situation.key
-                ))
-        )
-        setSearchParametersSituations('situation=' + listParameter)
-    }
-    const onSearchParametersSituationsAge = function (parameter) {
-        if (parameter === 'empty') {
-            setSearchParametersSituationsAge('')
-            return
-        }
-        let listParameter = parameter.toString().replaceAll(',', '&situation=')
-        SITUATIONS.forEach(
-            (situation) =>
-                (listParameter = listParameter.replaceAll(
-                    situation.name,
-                    situation.key
-                ))
-        )
-        setSearchParametersSituationsAge('situation=' + listParameter)
-    }
-
-    const updateQueryParameter = function () {
-        const urlParameters =
-            '?' +
-            searchParametersCategories +
-            '&' +
-            searchParametersSituations +
-            '&' +
-            searchParametersSituationsAge
-        if (
-            !urlParameters.includes('situation') &&
-            !urlParameters.includes('project')
-        ) {
-            setWholeUrlParameters('')
-        } else {
-            setWholeUrlParameters(urlParameters)
-        }
-    }
-
-    const resetQueryParameter = function () {
-        window.history.pushState("","",window.location.url)
-        // Reset des composants par destruction / reconstruction dans le DOM. Pas très beau mais fonctionne bien
-        setReset(true)
-        setTimeout(() => {
-            setReset(false)
-        }, 1)
-        setWholeUrlParameters('')
-    }
-
-    const params = decodeURIComponent(window.location.search)
+    const [ projectsSelected, setProjectsSelected ] = useState([])
+    const [ jobSituationSelected, setJobSituationSelected ] = useState('')
+    const [ ageSelected, setAgeSituationSelected ] = useState('')
 
     useEffect(() => {
-        updateQueryParameter()
-    }, [
-        searchParametersCategories,
-        searchParametersSituations,
-        searchParametersSituationsAge,
-    ])
+        const entries = new URLSearchParams(search).entries()
+        
+        for (let [ _, value ] of entries) {
+            const projectFound = PROJECTS.find(project => project.key === value)
+            const ageSituationFound = AGE_SITUATIONS.find(ageSituation => ageSituation.key === value)
+            const jobSituationFound = JOB_SITUATIONS.find(jobSituation => jobSituation.key === value)
+
+            if (!!projectFound) {
+                // append to existing project, removing duplicated values with Set's constructor
+                setProjectsSelected(projectsSelected => [...new Set([
+                    ...projectsSelected,
+                    projectFound.option
+                ])])
+            } else if (!!ageSituationFound) {
+                setAgeSituationSelected(ageSituationFound.option)
+            } else if (!!jobSituationFound) {
+                setJobSituationSelected(jobSituationFound.option)
+            }
+        }
+    }, [search])
+
+    const computeSearchPath = useCallback(() => {
+        let projectsURLFormatted = null
+        let jobSituationURLFormatted = null
+        let ageURLFormatted = null
+    
+        if (!!projectsSelected && projectsSelected.length > 0) {
+          projectsURLFormatted = projectsSelected.map(project => {
+            return `project=${PROJECTS.find(p => p.option === project)?.key}`
+          }).join('&')
+        }
+    
+        if (!!jobSituationSelected) {
+          jobSituationURLFormatted = `situation=${JOB_SITUATIONS.find(j => j.option === jobSituationSelected)?.key}`
+        }
+    
+        if (!!ageSelected) {
+          ageURLFormatted = `situation=${AGE_SITUATIONS.find(a => a.option === ageSelected)?.key}`
+        }
+        
+        const paramsURLFormatted = [
+          projectsURLFormatted,
+          jobSituationURLFormatted,
+          ageURLFormatted
+        ]
+          .filter(item => item != null)
+          .join('&')
+    
+        return `/aides?${paramsURLFormatted}`
+      }, [ projectsSelected, jobSituationSelected, ageSelected ])
+    
+    const resetInputs = () => {
+        setProjectsSelected([])
+        setJobSituationSelected('')
+        setAgeSituationSelected('')
+    }
 
     return (
-        <div>
-            <SearchBloc isMobile={isMobile}>
-                {!isReset && (
-                <CheckmarksSelect
-                    searchCriteria={CATEGORIES}
-                    title={'Quel est votre projet ?'}
-                    onSearchParameters={onSearchParametersCategories}
-                    params={params}
-                />
-                )}
-                {isReset && (
-                    <EmptyDiv></EmptyDiv>
-                )}
-            </SearchBloc>
-            <SearchBloc isMobile={isMobile}>
-                {!isReset && (
-                <CheckmarksSelectSituation
-                    searchCriteria={SITUATIONS.slice(0, 3)}
-                    title={'Votre situation'}
-                    onSearchParameters={onSearchParametersSituations}
-                    params={params}
-                    placeholder={"Demandeur d'emploi, salarié"}
-                    selectId={'situation-simple-checkbox'}
-                />
-                )}
-                {isReset && (
-                    <EmptyDiv></EmptyDiv>
-                )}
-            </SearchBloc>
-            <SearchBloc isMobile={isMobile}>
-                {!isReset && (
-                <CheckmarksSelectSituation
-                    searchCriteria={SITUATIONS.slice(-2)}
-                    title={'Votre âge'}
-                    onSearchParameters={onSearchParametersSituationsAge}
-                    params={params}
-                    placeholder={'Moins de 26 ans, plus de 26 ans'}
-                    selectId={'age-simple-checkbox'}
-                />
-                )}
-                {isReset && (
-                    <EmptyDiv></EmptyDiv>
-                )}
-            </SearchBloc>
-            <SearchBloc isMobile={isMobile}>
-                <SearchButton
-                    isMobile={isMobile}
-                    to={`/aides${wholeUrlParameters}`}
-                    onClick={useRemoveBodyClassFunction}
-                >
-                    Rechercher
-                </SearchButton>
-            </SearchBloc>
-            {(isMobile && wholeUrlParameters !== "" ) && (
-                <SearchBloc isMobile={isMobile}>
-                    <SearchReset
-                        isMobile={isMobile}
-                        onClick={() => resetQueryParameter()}
-                        to={`/aides-filters`}
+        <Container $isMobile={isMobile}>
+            <ProjectsSelect
+                style={{ flex: 3 }}
+                value={projectsSelected}
+                onChange={(projects) => setProjectsSelected(projects)}
+            ></ProjectsSelect>
+
+            <JobSituationSelect
+                style={{ flex: 2 }}
+                value={jobSituationSelected}
+                onChange={(jobSituation) => setJobSituationSelected(jobSituation)}
+            ></JobSituationSelect>
+
+            <AgeSituationSelect
+                style={{ flex: 2 }}
+                value={ageSelected}
+                onChange={(ageSituation) => setAgeSituationSelected(ageSituation)}
+            ></AgeSituationSelect>
+
+            <ActionButton
+                style={{ flex: 2 }}
+                path={computeSearchPath()}
+                isBlue
+            ></ActionButton>
+
+            {
+                isMobile
+                    ? (<Button
+                        primary={false}
+                        light={true}
+                        onClick={resetInputs}
                     >
-                        <img alt={''} src={pictoReset} />
-                        <span>Réinitialiser</span>
-                    </SearchReset>
-                </SearchBloc>
-            )}
-        </div>
+                        <ResetIcon />
+                        Réinitialiser
+                    </Button>)
+                    : null
+            }
+        </Container>
     )
 }
 
-HelpFilters.propTypes = {
-    CATEGORIES: PropTypes.array,
-    SITUATIONS: PropTypes.array,
-    removeBodyClassFunction: PropTypes.any
-}
+HelpFilters.propTypes = {}
 
 export default HelpFilters
