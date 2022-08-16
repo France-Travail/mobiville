@@ -3,10 +3,11 @@ import { Link, useHistory, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import queryString from 'query-string'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import L from 'leaflet'
 import { Switch } from '@mui/material'
 
 import { useCities } from '../../common/contexts/citiesContext'
-import MainLayout from '../../components/MainLayout'
+import { MainLayout } from '../../components'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import {
@@ -15,13 +16,12 @@ import {
   COLOR_PRIMARY,
 } from '../../constants/colors'
 
-import CityItem from './CityItem'
+import CityItem from './components/CityItem'
 import MobileCriterionsPanel from './MobileCriterionsPanel'
 import DesktopCriterionsPanel from './DesktopCriterionsPanel'
 import MobileCriterionsSelection from './MobileCriterionsSelection'
 import CitiesFilters from './CitiesFilters'
 import noResultsPic from '../../assets/images/no_results.svg'
-import getLeafletIcon from '../../components/getLeafletIcon'
 
 import blueMarker from '../../assets/images/marker-blue.png'
 import yellowMarker from '../../assets/images/marker-yellow.png'
@@ -233,11 +233,6 @@ const Cities = () => {
   const showMobileCriterionsSelection = (bool) =>
     setShowMobileCriterionsSelection(bool)
 
-  const isUsingRegionFilter = !!params.codeRegion
-  const isUsingCitySizeFilter = !!params.codeCity
-  const isUsingSeaFilter = params.codeEnvironment === 'side-sea'
-  const isUsingMountainFilter = params.codeEnvironment === 'mountain'
-
   const [page, setPage] = React.useState(1)
 
   useEffect(() => {
@@ -257,6 +252,19 @@ const Cities = () => {
   const handlePageChange = (event, value) => {
     setPage(value)
   }
+
+  const getLeafletIcon = (requiredFile) => (
+    new L.Icon({
+      iconUrl: requiredFile,
+      iconRetinaUrl: requiredFile,
+      iconAnchor: [12, 41],
+      popupAnchor: [0, -41],
+      shadowUrl: null,
+      shadowSize: null,
+      shadowAnchor: null,
+      className: 'leaflet-marker-icon',
+    })
+  )
 
   if (showMobilePanel) {
     return (
@@ -306,10 +314,6 @@ const Cities = () => {
             city={city}
             selected={selectedCityId === city.id}
             sortCriterions={sortCriterions}
-            isUsingRegionFilter={isUsingRegionFilter}
-            isUsingCitySizeFilter={isUsingCitySizeFilter}
-            isUsingSeaFilter={isUsingSeaFilter}
-            isUsingMountainFilter={isUsingMountainFilter}
             key={city.id}
             to={getCityUrl(city)}
             onMouseOver={() => setHoveredCityId(city.id)}
@@ -444,7 +448,5 @@ const Cities = () => {
 }
 
 Cities.propTypes = {}
-
-Cities.defaultProps = {}
 
 export default React.memo(Cities)
