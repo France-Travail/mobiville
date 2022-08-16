@@ -11,7 +11,7 @@ import CitySelect from './CitySelect'
 import heroHomepagePic from '../../../assets/images/00-Hero-Homepage.png'
 import { ReactComponent as HouseOutlineIcon } from '../../../assets/images/icons/house-outline.svg'
 import { ReactComponent as FinancialHelpIcon } from '../../../assets/images/icons/financial-help.svg'
-import { AGE_SITUATIONS, JOB_SITUATIONS, PROJECTS } from '../../../constants/search'
+import { AGE_SITUATIONS, CITY_TYPE, JOB_SITUATIONS, PROJECTS, REGION_TYPE } from '../../../constants/search'
 
 const Container = styled.section`
   background: linear-gradient(180deg, #ddddea 0%, #c3e9e9 100%);
@@ -100,9 +100,9 @@ const Welcome = () => {
   const computeSearchPath = useCallback(() => {
     if (!!jobSelected) {
       if (!!citySelected) {
-        if (citySelected.type === CitySelect.CITY_TYPE) {
+        if (citySelected.type === CITY_TYPE) {
           return `/city/${citySelected.id}-${citySelected.cityName}?codeRome=${jobSelected.key}`
-        } else if (citySelected.type === CitySelect.REGION_TYPE) {
+        } else if (citySelected.type === REGION_TYPE) {
           return `/cities?codeRegion=${citySelected.id}&codeRome=${jobSelected.key}`
         }
       }
