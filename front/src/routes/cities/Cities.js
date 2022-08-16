@@ -130,7 +130,6 @@ const Cities = () => {
   const [showMobilePanel, setShowMobileCriterionsSelection] = useState(false)
   const [hoveredCityId, setHoveredCityId] = useState(null)
   const [selectedCityId, setSelectedCityId] = useState(null)
-  const [useAllCities, setUseAllCities] = useState(false)
   const citiesListRef = useRef(null)
   const {
     isLoading: isLoadingProfessions,
@@ -167,10 +166,10 @@ const Cities = () => {
       onSearch({
         ...params,
         sortBy: sortCriterions,
-        onlySearchInTension: !useAllCities,
+        onlySearchInTension: true,
       })
     }
-  }, [params, sortCriterions, useAllCities])
+  }, [params, sortCriterions])
 
   useEffect(() => {
     if (cities.length > 0) {
@@ -183,7 +182,7 @@ const Cities = () => {
         inseeList: listCitiesInsee,
       })
     }
-  }, [params, useAllCities, sortCriterions, cities])
+  }, [params, sortCriterions, cities])
 
   const getCityUrl = (city) => {
     let url = `/city/${city.insee_com}-${city.nom_comm}`
@@ -216,11 +215,11 @@ const Cities = () => {
 
   useEffect(() => {
     onSearch(
-      { ...params, sortBy: sortCriterions, onlySearchInTension: !useAllCities },
+      { ...params, sortBy: sortCriterions, onlySearchInTension: true },
       page * 10,
       cities
     )
-  }, [useAllCities, page])
+  }, [ params, sortCriterions, page, cities ])
 
   const itemsPerPage = 10
   const [noOfPages, setNoOfPages] = React.useState(0)
