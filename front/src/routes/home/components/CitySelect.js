@@ -7,6 +7,7 @@ import { ucFirstOnly } from "../../../utils/utils"
 
 const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
   const ALL_REGIONS_LABEL = 'Toutes les régions'
+  const ALL_REGION_TYPE = 'ALL_REGION'
   const REGION_TYPE = 'Régions'
   const CITY_TYPE = 'Villes'
 
@@ -14,7 +15,7 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
     criterions,
     autocompletedCities,
     onAutocomplete,
-    isLoadingAutocomplete
+    // isLoadingAutocomplete
   } = useCities()
 
   const [ options, setOptions ] = useState([])
@@ -37,7 +38,7 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
     }
 
     // format autocompleted cities list item
-    setOptions([{ label: ALL_REGIONS_LABEL, type: REGION_TYPE }]
+    setOptions([{ label: ALL_REGIONS_LABEL, type: ALL_REGION_TYPE }]
       .concat(regionsForRome.map((region) => ({ ...region, type: REGION_TYPE })))
       .concat(
         !!inputValue &&
@@ -72,11 +73,12 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
       label="L'endroit qui vous fait envie"
       placeholder="Choisissez une région ou indiquez une ville"
       options={options ?? []}
-      loading={isLoadingAutocomplete}
+      // loading={isLoadingAutocomplete}
       disabled={(!codeRome || codeRome === '')}
       onInputChange={onInputChange}
       onChange={onChange}
       defaultValue={defaultValue}
+      showEndAdornment={false}
     ></TextSearchInput>
   )
 }

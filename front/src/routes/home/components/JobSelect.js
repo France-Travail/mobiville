@@ -11,7 +11,7 @@ const JobSelect = ({ onSelect, defaultValue }) => {
         initializeJobsAutocomplete,
         jobsMatchingCriterions,
         onSearchJobLabels,
-        isLoadingJobsMatchingCriterion
+        // isLoadingJobsMatchingCriterion
     } = useCities()
 
     useEffect(() => {
@@ -40,11 +40,12 @@ const JobSelect = ({ onSelect, defaultValue }) => {
             label="Votre métier"
             placeholder="Saisissez votre métier"
             options={jobsMatchingCriterions ?? []}
-            loading={isLoadingJobsMatchingCriterion}
+            // loading={isLoadingJobsMatchingCriterion}
             onInputChange={onInputChange}
             onChange={onChange}
             defaultValue={defaultValue}
             openThreshold={2}
+            showEndAdornment={false}
         ></TextSearchInput>
     )
 }
