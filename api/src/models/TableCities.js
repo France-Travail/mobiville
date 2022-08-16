@@ -174,7 +174,7 @@ export default (sequelizeInstance, Model) => {
     codeCriterion = [],
     codeRome = [],
     onlySearchInTension = true,
-    order = [['population', 'desc']],
+    order,
     offset = 0,
   }) => {
     /*
@@ -274,7 +274,6 @@ export default (sequelizeInstance, Model) => {
     const result = await Model.findAll({
       where: { [Op.and]: whereAnd },
       logging: process.env.ENABLE_DB_LOGGING ? console.log : false,
-      order,
       include: [
         {
           attributes: [],
@@ -296,6 +295,12 @@ export default (sequelizeInstance, Model) => {
             rome_id: codeRome,
           },
         },
+      ],
+      // order : 1 - tension sur le métier > 2 - custom order (montagne, mer...) > 3 - population
+      order: [
+        [sequelizeInstance.models.bassins, sequelizeInstance.models.tensions, 'ind_t', 'ASC'],
+        ...(!!order ? order : []),
+        ['population', 'DESC']
       ],
       raw: true,
     })
