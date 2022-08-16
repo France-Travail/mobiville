@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
+
 import { MenuItem, Select } from '@mui/material'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import { useCities } from '../../common/contexts/citiesContext'
+
+import { useCities } from '../../../common/contexts/citiesContext'
 
 const Wrapper = styled.div`
   display: flex;

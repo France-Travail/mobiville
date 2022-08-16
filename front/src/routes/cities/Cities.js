@@ -15,12 +15,12 @@ import {
 } from '../../constants/colors'
 
 import CityItem from './components/CityItem'
-import MobileCriterionsPanel from './MobileCriterionsPanel'
-import DesktopCriterionsPanel from './DesktopCriterionsPanel'
-import MobileCriterionsSelection from './MobileCriterionsSelection'
-import CitiesFilters from './CitiesFilters'
-import noResultsPic from '../../assets/images/no_results.svg'
+import MobileCriterionsPanel from './components/MobileCriterionsPanel'
+import DesktopCriterionsPanel from './components/DesktopCriterionsPanel'
+import MobileCriterionsSelection from './components/MobileCriterionsSelection'
+import CitiesFilters from './components/CitiesFilters'
 
+import noResultsPic from '../../assets/images/no_results.svg'
 import blueMarker from '../../assets/images/marker-blue.png'
 import yellowMarker from '../../assets/images/marker-yellow.png'
 import redMarker from '../../assets/images/marker-red.png'
