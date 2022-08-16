@@ -31,9 +31,7 @@ const CityLink = styled(Link)`
 
   &:hover,
   &:focus {
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.14),
-      0px 2px 2px rgba(0, 0, 0, 0.12),
-      0px 1px 3px rgba(0, 0, 0, 0.2);
+    border: 1px solid ${ COLOR_PRIMARY };
     color: inherit;
   }
 `
