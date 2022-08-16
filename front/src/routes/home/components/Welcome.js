@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import _ from 'lodash'
 
 import { useWindowSize } from "../../../common/hooks/window-size"
 import { isMobileView } from "../../../constants/mobile"

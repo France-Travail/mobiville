@@ -20,7 +20,7 @@ const Container = styled.div`
     gap: 8px;
 `
 
-const HelpFilters = ({}) => {
+const HelpFilters = () => {
 
     const isMobile = isMobileView(useWindowSize())
     const { search } = useLocation()
@@ -32,7 +32,9 @@ const HelpFilters = ({}) => {
     useEffect(() => {
         const entries = new URLSearchParams(search).entries()
         
-        for (let [ _, value ] of entries) {
+        for (let entry of entries) {
+            const value = entry[1]
+
             const projectFound = PROJECTS.find(project => project.key === value)
             const ageSituationFound = AGE_SITUATIONS.find(ageSituation => ageSituation.key === value)
             const jobSituationFound = JOB_SITUATIONS.find(jobSituation => jobSituation.key === value)

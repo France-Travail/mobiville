@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types'
+import _ from 'lodash'
+
 import { Select } from '..'
 import { PROJECTS } from '../../constants/search'
 
