@@ -4,13 +4,9 @@ import PropTypes from 'prop-types'
 import { useCities } from "../../../common/contexts/citiesContext"
 import { TextSearchInput } from "../../../components"
 import { ucFirstOnly } from "../../../utils/utils"
+import { ALL_REGIONS_LABEL, ALL_REGION_TYPE, CITY_TYPE, REGION_TYPE } from "../../../constants/search"
 
 const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
-  const ALL_REGIONS_LABEL = 'Toutes les régions'
-  const ALL_REGION_TYPE = 'ALL_REGION'
-  const REGION_TYPE = 'Régions'
-  const CITY_TYPE = 'Villes'
-
   const {
     criterions,
     autocompletedCities,

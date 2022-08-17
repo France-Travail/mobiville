@@ -125,3 +125,8 @@ input[type='color'] {
   position: sticky;
   top: calc(100vh - 100px);
 }
+
+// input select menu dropdown
+div.MuiPaper-root {
+  margin-top: 5px !important;
+}

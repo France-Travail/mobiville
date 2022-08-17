@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { FormControl, MenuItem, InputLabel, Select } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
-import { useCities } from '../../common/contexts/citiesContext'
-import { COLOR_PRIMARY } from '../../constants/colors'
+import styled from 'styled-components'
+
+import { FormControl, MenuItem, InputLabel, Select } from '@mui/material'
+
+import { useCities } from '../../../common/contexts/citiesContext'
+import { COLOR_PRIMARY } from '../../../constants/colors'
 
 const SearchPanel = styled.div`
   margin-bottom: 36px;

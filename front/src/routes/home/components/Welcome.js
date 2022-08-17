@@ -1,17 +1,17 @@
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import _ from 'lodash'
 
 import { useWindowSize } from "../../../common/hooks/window-size"
 import { isMobileView } from "../../../constants/mobile"
 import { COLOR_PRIMARY } from '../../../constants/colors'
-import { ActionButton, ButtonGroup, Select, Section } from '../../../components'
+import { ActionButton, ButtonGroup, Section, ProjectsSelect, JobSituationSelect, AgeSituationSelect } from '../../../components'
 import JobSelect from './JobSelect'
 import CitySelect from './CitySelect'
 
 import heroHomepagePic from '../../../assets/images/00-Hero-Homepage.png'
 import { ReactComponent as HouseOutlineIcon } from '../../../assets/images/icons/house-outline.svg'
 import { ReactComponent as FinancialHelpIcon } from '../../../assets/images/icons/financial-help.svg'
+import { AGE_SITUATIONS, CITY_TYPE, JOB_SITUATIONS, PROJECTS, REGION_TYPE } from '../../../constants/search'
 
 const Container = styled.section`
   background: linear-gradient(180deg, #ddddea 0%, #c3e9e9 100%);
@@ -75,48 +75,6 @@ const ButtonGroupLabel = styled.p`
   margin: 8px 0;
 `
 
-// input data
-const projects = [
-  {
-    key: 'déménage',
-    option: 'je déménage prochainement'
-  },
-  {
-    key: 'logement',
-    option: 'je recherche un logement',
-  },
-  {
-    key: 'emploi',
-    option: 'je recherche un emploi',
-  }
-]
-
-const jobSituation = [
-  {
-    key: "demandeur d'emploi",
-    option: "je suis demandeur d'emploi",
-  },
-  {
-    key: 'salarié',
-    option: 'je suis salarié',
-  },
-  {
-    key: 'alternance',
-    option: 'je suis alternant',
-  }
-]
-
-const ageSituation = [
-  {
-    key: 'moins de 26 ans',
-    option: "j'ai moins de 26 ans",
-  },
-  {
-    key: 'plus de 26 ans',
-    option: "j'ai plus de 26 ans",
-  }
-]
-
 const Welcome = () => {
   const isMobile = isMobileView(useWindowSize())
 
@@ -127,7 +85,7 @@ const Welcome = () => {
 
   const [ projectsSelected, setProjectsSelected ] = useState([])
   const [ jobSituationSelected, setJobSituationSelected ] = useState(null)
-  const [ ageSelected, setAgeSelected ] = useState(null)
+  const [ ageSituationSelected, setAgeSituationSelected ] = useState(null)
 
   const isSelected = useCallback((id) => {
     return id === selectedSearchMode
@@ -142,9 +100,9 @@ const Welcome = () => {
   const computeSearchPath = useCallback(() => {
     if (!!jobSelected) {
       if (!!citySelected) {
-        if (citySelected.type === CitySelect.CITY_TYPE) {
+        if (citySelected.type === CITY_TYPE) {
           return `/city/${citySelected.id}-${citySelected.cityName}?codeRome=${jobSelected.key}`
-        } else if (citySelected.type === CitySelect.REGION_TYPE) {
+        } else if (citySelected.type === REGION_TYPE) {
           return `/cities?codeRegion=${citySelected.id}&codeRome=${jobSelected.key}`
         }
       }
@@ -163,34 +121,6 @@ const Welcome = () => {
 
   // === HELP SEARCH ===
 
-  const renderProjectsValue = (projects) => {
-    const LOOKING_FOR_TERM = "je recherche"
-
-    // placeholder
-    if (projects.length === 0) {
-      return "Recherche d'emploi, logement, déménagement"
-    }
-
-    const filteredByTerm = (term) => projects.filter(project => project.includes(term))
-
-    const lookingForProjects = filteredByTerm(LOOKING_FOR_TERM)
-    const otherProjects = projects.filter(project => !lookingForProjects.includes(project))
-
-    const lookingForProjectsText = [
-      LOOKING_FOR_TERM,
-      lookingForProjects.map(project => project.replace(`${LOOKING_FOR_TERM} `, "")).join(", ")
-    ].join(" ")
-    
-    const renderedText = [
-      ...otherProjects,
-      (lookingForProjects.length > 0) ? lookingForProjectsText : null
-    ]
-      .filter(item => item != null)
-      .join(", ")
-
-    return _.capitalize(renderedText)
-  }
-
   const handleProjectsChange = (projects) => {
     setProjectsSelected(projects)
   }
@@ -199,8 +129,8 @@ const Welcome = () => {
     setJobSituationSelected(jobSituation)
   }
 
-  const handleAgeChange = (age) => {
-    setAgeSelected(age)
+  const handleAgeSituationChange = (age) => {
+    setAgeSituationSelected(age)
   }
 
   const computeHelpsSearchPath = useCallback(() => {
@@ -210,16 +140,16 @@ const Welcome = () => {
 
     if (!!projectsSelected && projectsSelected.length > 0) {
       projectsURLFormatted = projectsSelected.map(project => {
-        return `project=${projects.find(p => p.option === project)?.key}`
+        return `project=${PROJECTS.find(p => p.option === project)?.key}`
       }).join('&')
     }
 
     if (!!jobSituationSelected) {
-      jobSituationURLFormatted = `situation=${jobSituation.find(j => j.option === jobSituationSelected)?.key}`
+      jobSituationURLFormatted = `situation=${JOB_SITUATIONS.find(j => j.option === jobSituationSelected)?.key}`
     }
 
-    if (!!ageSelected) {
-      ageURLFormatted = `situation=${ageSituation.find(a => a.option === ageSelected)?.key}`
+    if (!!ageSituationSelected) {
+      ageURLFormatted = `situation=${AGE_SITUATIONS.find(a => a.option === ageSituationSelected)?.key}`
     }
     
     const paramsURLFormatted = [
@@ -231,7 +161,7 @@ const Welcome = () => {
       .join('&')
 
     return `/aides?${paramsURLFormatted}`
-  }, [ projectsSelected, jobSituationSelected, ageSelected ])
+  }, [ projectsSelected, jobSituationSelected, ageSituationSelected ])
 
   return (
     <Container isMobile={isMobile}>
@@ -304,31 +234,23 @@ const Welcome = () => {
             hidden={!isSelected('help')}
           >
 
-            <Select
-              multiple
+            <ProjectsSelect
               style={{ flex: 5 }}
-              label="Quel est votre projet ?"
-              placeholder="Recherche d'emploi, logement, déménagement"
-              options={projects}
-              renderValue={renderProjectsValue}
               onChange={handleProjectsChange}
-            ></Select>
+              value={projectsSelected}
+            ></ProjectsSelect>
 
-            <Select
+            <JobSituationSelect
               style={{ flex: 3 }}
-              label="Votre situation"
-              placeholder="Demandeur d'emploi, salarié"
-              options={jobSituation}
               onChange={handleJobSituationChange}
-            ></Select>
+              value={jobSituationSelected}
+            ></JobSituationSelect>
 
-            <Select
+            <AgeSituationSelect
               style={{ flex: 3 }}
-              label="Votre âge"
-              placeholder="Moins de 26 ans, plus de 26 ans"
-              options={ageSituation}
-              onChange={handleAgeChange}
-            ></Select>
+              onChange={handleAgeSituationChange}
+              value={ageSituationSelected}
+            ></AgeSituationSelect>
 
             <ActionButton
               style={{

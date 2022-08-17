@@ -30,7 +30,7 @@ import HelpsFilter from "./components/HelpFilters"
 //import TypeHelpFilter from "./components/TypeHelpFilter";
 
 const TitleContainer = styled.div`
-  padding: ${({ isMobile }) => (isMobile ? '5px 0px 0px 10px' : '0px')};
+  padding: ${({ $isMobile }) => ($isMobile ? '5px 0px 0px 10px' : '0px')};
 `
 
 const Title = styled.h1`
@@ -45,34 +45,30 @@ const Title = styled.h1`
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 900;
-  font-size: ${({ isMobile }) => (isMobile ? '24px' : '36px')};
+  font-size: ${({ $isMobile }) => ($isMobile ? '24px' : '36px')};
   line-height: 42px;
-  display: ${({ isMobile }) => (isMobile ? 'contents' : 'flex')};
+  display: ${({ $isMobile }) => ($isMobile ? 'contents' : 'flex')};
   align-items: center;
 
   color: ${COLOR_PRIMARY};
 `
 
 const Header = styled.div`
-  font-weight: bold;
+  height: 118px;
+
   display: flex;
   align-items: center;
-  height: 118px;
+
+  font-weight: bold;
   background-color: ${COLOR_OTHER_GREEN};
 
-  div,
-  a {
-    margin: 0 auto;
-  }
-
-  ${(props) =>
-    props.isMobile &&
-    `
-    display: block;
-    margin: 102px 0 0px 0;
-    padding: 0;
-    height:377px;
-    padding: 20px 0.5%;
+  ${({ $isMobile }) =>
+    $isMobile && `
+      display: block;
+      margin: 102px 0 0px 0;
+      padding: 0;
+      height:377px;
+      padding: 20px 0.5%;
   `}
 `
 
@@ -93,10 +89,10 @@ const BlocFilterMobile = styled(Link)`
   display: flex;
   align-items: center;
   vertical-align: bottom;
-  width: ${({ isResults }) => (isResults ? '95px' : '224px')};
+  width: ${({ $isResults }) => ($isResults ? '95px' : '224px')};
   height: 32px;
   
-  margin:${({ isResults }) => (isResults ? '' : '120px auto 0px !important')};
+  margin:${({ $isResults }) => ($isResults ? '' : '120px auto 0px !important')};
   
   font-family: 'Roboto';
   font-style: normal;
@@ -142,25 +138,24 @@ const Container = styled.div`
   margin: 0 auto 64px auto;
   align-items: flex-start;
 
-  ${(props) =>
-    props.isMobile &&
-    `
-    padding: 0 16px;
-    display: block;
-    padding: 0;
+  ${({ $isMobile }) =>
+    $isMobile && `
+      padding: 0 16px;
+      display: block;
+      padding: 0;
   `}
 `
 
 const HelpsPanel = styled.div`
   flex: 1;
-  padding: ${({ isMobile }) => (isMobile ? '16px' : '')};
+  padding: ${({ $isMobile }) => ($isMobile ? '16px' : '')};
 `
 
 const HelpItemImgContainer = styled.div`
   display: inline-grid;
   //vertical-align: top;
 
-  margin-left: ${(isMobile) => (isMobile ? '0px' : '5px')};
+  margin-left: ${({ $isMobile }) => ($isMobile ? '0px' : '5px')};
 
   background: white;
   width: 96px;
@@ -177,12 +172,12 @@ const HelpItemTextContainer = styled.div`
 const HelpItemTextSubContainer = styled.div`
   display: inline-grid;
   vertical-align: top;
-  width: ${({ isMobile }) => (isMobile ? '200px' : '350px')};
+  width: ${({ $isMobile }) => ($isMobile ? '200px' : '350px')};
 `
 
 const HelpItemMobileResizer = styled.div`
   height: 8px;
-  display: ${({ isMobile }) => (isMobile ? 'block' : 'none')};
+  display: ${({ $isMobile }) => ($isMobile ? 'block' : 'none')};
 `
 
 const HelpItemTextTitle = styled.h4`
@@ -192,7 +187,7 @@ const HelpItemTextTitle = styled.h4`
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
-  line-height: ${({ isMobile }) => (isMobile ? '21px' : '33px')};
+  line-height: ${({ $isMobile }) => ($isMobile ? '21px' : '33px')};
 
   vertical-align: bottom;
   display: contents;
@@ -250,6 +245,68 @@ const ViewMore = styled.div`
   padding-top: 8px;
 `
 
+
+const HelpTypeTitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+
+  margin-top: ${({ isFirst }) => (isFirst ? '' : '40px')};
+  margin-bottom: 20px;
+
+  width: ${({ $isMobile }) => ($isMobile ? '342px' : '1033px')};
+  height: 71px;
+
+  background: #c7c7f3;
+  border-radius: 4px;
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+
+  h2 {
+    width: ${({ $isMobile }) => ($isMobile ? '248px' : '410px')};
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 28px;
+    color: #191970;
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+  }
+
+  img {
+    margin-left: 8px;
+  }
+`
+
+const HelpItem = styled(Link)`
+  border-radius: 8px;
+  overflow: hidden;
+
+  justify-content: flex-end;
+  align-items: flex-end;
+
+  padding: 18px;
+  gap: 33px;
+
+  width: ${({ $isMobile }) => ($isMobile ? '340px' : '511px')};
+  height: ${({ $isMobile }) => ($isMobile ? '' : '231px')};
+  border: ${({ $isMobile }) => ($isMobile ? 'none' : '2px solid #fff')};
+
+  display: block;
+
+  background: #ffffff;
+  color: ${COLOR_TEXT_PRIMARY};
+
+  &:hover {
+    border: ${({ $isMobile }) => ($isMobile ? 'none' : '2px solid #191970')};
+  }
+`
+
 const CATEGORIES = [
   {
     key: 'emploi',
@@ -304,67 +361,6 @@ const Helps = ({ location: { search } }) => {
 
   const size = useWindowSize()
   const isMobile = isMobileView(size)
-
-  const HelpTypeTitleContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
-
-    margin-top: ${({ isFirst }) => (isFirst ? '' : '40px')};
-    margin-bottom: 20px;
-
-    width: ${({ isMobile }) => (isMobile ? '342px' : '1033px')};
-    height: 71px;
-
-    background: #c7c7f3;
-    border-radius: 4px;
-
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-
-    h2 {
-      width: ${({ isMobile }) => (isMobile ? '248px' : '410px')};
-      font-family: 'Roboto';
-      font-style: normal;
-      font-weight: 900;
-      font-size: 24px;
-      line-height: 28px;
-      color: #191970;
-      flex: none;
-      order: 1;
-      flex-grow: 0;
-    }
-
-    img {
-      margin-left: 8px;
-    }
-  `
-
-  const HelpItem = styled(Link)`
-    border-radius: 8px;
-    overflow: hidden;
-
-    justify-content: flex-end;
-    align-items: flex-end;
-
-    padding: 18px;
-    gap: 33px;
-
-    width: ${({ isMobile }) => (isMobile ? '340px' : '511px')};
-    height: ${({ isMobile }) => (isMobile ? '' : '231px')};
-    border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #fff')};
-
-    display: block;
-
-    background: #ffffff;
-    color: ${COLOR_TEXT_PRIMARY};
-
-    &:hover {
-      border: ${({ isMobile }) => (isMobile ? 'none' : '2px solid #191970')};
-    }
-  `
 
   useEffect(() => {
     onLoadPreviews()
@@ -512,17 +508,16 @@ const Helps = ({ location: { search } }) => {
               )
 
               return (
-                  <Grid item xs={isMobile ? 12 : 6} md={6}>
+                  <Grid item xs={isMobile ? 12 : 6} md={6} key={item.id}>
                     <HelpItem
-                        isMobile={isMobile}
-                        key={item.id}
+                        $isMobile={isMobile}
                         to={`/aides/${item.slug}` + window.location.search}
                     >
                       <div>
                         <HelpItemTextContainer>
-                          <HelpItemTextSubContainer isMobile={isMobile}>
-                            <HelpItemMobileResizer isMobile={isMobile}></HelpItemMobileResizer>
-                            <HelpItemTextTitle isMobile={isMobile}>
+                          <HelpItemTextSubContainer $isMobile={isMobile}>
+                            <HelpItemMobileResizer $isMobile={isMobile}></HelpItemMobileResizer>
+                            <HelpItemTextTitle $isMobile={isMobile}>
                               {item.title}
                             </HelpItemTextTitle>
                             <HelpItemType>
@@ -579,25 +574,25 @@ const Helps = ({ location: { search } }) => {
     if (isFiltreRecherche) return
     return (
         <>
-          <HelpTypeTitleContainer isFirst={true} isMobile={isMobile}>
+          <HelpTypeTitleContainer isFirst={true} $isMobile={isMobile}>
             <img alt={''} src={pictoHelpFinanciere} />{' '}
             <h2>Les aides financières</h2>
           </HelpTypeTitleContainer>
           {getHelpsPanel(listHelpItemFinance)}
 
-          <HelpTypeTitleContainer isMobile={isMobile}>
+          <HelpTypeTitleContainer $isMobile={isMobile}>
             <img alt={''} src={pictoHelpAccompagnement} />{' '}
             <h2>Les aides {isMobile ? <br /> : ''} d'accompagnement</h2>
           </HelpTypeTitleContainer>
           {getHelpsPanel(listHelpItemAccompagnement)}
 
-          <HelpTypeTitleContainer isMobile={isMobile}>
+          <HelpTypeTitleContainer $isMobile={isMobile}>
             <img alt={''} src={pictoHelpLogement} />{' '}
             <h2>Les aides au logement</h2>
           </HelpTypeTitleContainer>
           {getHelpsPanel(listHelpItemLogement)}
 
-          <HelpTypeTitleContainer isMobile={isMobile}>
+          <HelpTypeTitleContainer $isMobile={isMobile}>
             <img alt={''} src={pictoHelpTransport} />
             <h2>Les aides Transport</h2>
           </HelpTypeTitleContainer>
@@ -609,8 +604,8 @@ const Helps = ({ location: { search } }) => {
   function getTitle() {
     if (isFiltreRecherche) {
       return (
-          <TitleContainer isMobile={isMobile}>
-            <Title isMobile={isMobile}>
+          <TitleContainer $isMobile={isMobile}>
+            <Title $isMobile={isMobile}>
               {' '}
               {listEveryHelpItems.length} aide
               {listEveryHelpItems.length > 1 ? 's' : ''} disponible
@@ -621,8 +616,8 @@ const Helps = ({ location: { search } }) => {
     }
 
     return (
-        <TitleContainer isMobile={isMobile}>
-          <Title isMobile={isMobile}>
+        <TitleContainer $isMobile={isMobile}>
+          <Title $isMobile={isMobile}>
             {' '}
             Toutes les aides à la mobilité professionnelle et résidentielle{' '}
           </Title>
@@ -646,8 +641,8 @@ const Helps = ({ location: { search } }) => {
         {isMobile && isResults && (
             <>
               <MySearchContainer>
-                <TitleContainer isMobile={isMobile}>
-                  <Title isMobile={isMobile}>
+                <TitleContainer $isMobile={isMobile}>
+                  <Title $isMobile={isMobile}>
                     Ma recherche
                   </Title>
                 </TitleContainer>
@@ -661,7 +656,7 @@ const Helps = ({ location: { search } }) => {
                 {search.includes("=alternance") && (<BlocFilterMobileSearchResult>Alternance</BlocFilterMobileSearchResult>)}
                 {search.includes("=moins de 26 ans") && (<BlocFilterMobileSearchResult>Moins de 26 ans</BlocFilterMobileSearchResult>)}
                 {search.includes("=plus de 26 ans") && (<BlocFilterMobileSearchResult>Plus de 26 ans</BlocFilterMobileSearchResult>)}
-                <BlocFilterMobile isResults={isResults} to={`/aides-filters` + window.location.search}>
+                <BlocFilterMobile $isResults={isResults} to={`/aides-filters` + window.location.search}>
                   <img alt={''} src={pictoFilterMobile} />
                   <div>Modifier</div>
                 </BlocFilterMobile>
@@ -669,7 +664,7 @@ const Helps = ({ location: { search } }) => {
             </>
         )}
         {(isMobile && !isResults) && (
-            <BlocFilterMobile isResults={isResults} to={`/aides-filters` + window.location.search} className={`${isScrollingUp ? 'stickyFilterMobile' : ''}`}>
+            <BlocFilterMobile $isResults={isResults} to={`/aides-filters` + window.location.search} className={`${isScrollingUp ? 'stickyFilterMobile' : ''}`}>
               <img alt={''} src={pictoFilterMobile} />
               <div>Filtrer selon votre situation</div>
             </BlocFilterMobile>
@@ -677,10 +672,10 @@ const Helps = ({ location: { search } }) => {
 
         {!isMobile && (
             <Header
-                isMobile={isMobile}
+                $isMobile={isMobile}
                 className={`${!isMobile && isScrollingUp ? 'stickyHeader' : ''}`}
             >
-              <HelpsFilter CATEGORIES={CATEGORIES} SITUATIONS={SITUATIONS} />
+              <HelpsFilter />
             </Header>
         )}
 
@@ -689,8 +684,8 @@ const Helps = ({ location: { search } }) => {
         {/*EN ATTENTE MODICATIONS UX*/}
         {/*<TypeHelpFilter />*/}
 
-        <Container isMobile={isMobile}>
-          <HelpsPanel isMobile={isMobile}>
+        <Container $isMobile={isMobile}>
+          <HelpsPanel $isMobile={isMobile}>
             {getAllHelpsPanel(isFiltreRecherche)}
 
             {getFilteredHelpsPanel(listHelpItem, isFiltreRecherche)}

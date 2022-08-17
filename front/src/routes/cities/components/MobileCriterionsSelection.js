@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
 
-import { COLOR_PRIMARY, COLOR_TEXT_SECONDARY } from '../../constants/colors'
-import { useCities } from '../../common/contexts/citiesContext'
-import { ucFirst } from '../../utils/utils'
+import { COLOR_PRIMARY, COLOR_TEXT_SECONDARY } from '../../../constants/colors'
+import { useCities } from '../../../common/contexts/citiesContext'
+import { ucFirst } from '../../../utils/utils'
 
 // TODO use svg components
 const IconBlock = styled.i`

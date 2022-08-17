@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+
 import { Typography } from '@mui/material'
 import TuneIcon from '@mui/icons-material/Tune'
 
-import { useCities } from '../../common/contexts/citiesContext'
-import { ucFirst } from '../../utils/utils'
-import { COLOR_GRAY, COLOR_PRIMARY } from '../../constants/colors'
+import { useCities } from '../../../common/contexts/citiesContext'
+import { ucFirst } from '../../../utils/utils'
+import { COLOR_GRAY, COLOR_PRIMARY } from '../../../constants/colors'
 
 const EmptySpace = styled.div`
   height: 120px;

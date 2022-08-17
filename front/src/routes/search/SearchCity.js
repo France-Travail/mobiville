@@ -8,6 +8,7 @@ import { useWindowSize } from '../../common/hooks/window-size'
 import { SearchInput, SearchOptions } from '../../components/SearchComponents'
 import { COLOR_PRIMARY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
+import { ALL_REGIONS_LABEL, ALL_REGION_TYPE, CITY_TYPE, REGION_TYPE } from '../../constants/search'
 import { ucFirstOnly } from '../../utils/utils'
 
 const Wrapper = styled.div`
@@ -65,10 +66,6 @@ const SearchButton = styled.a`
 `
 
 const SearchCity = ({ onNext, isSearchFocused }) => {
-  const ALL_REGIONS_LABEL = 'Toutes les régions'
-  const REGION_TYPE = 'Régions'
-  const CITY_TYPE = 'Villes'
-
   const location = useLocation()
 
   const size = useWindowSize()
@@ -111,7 +108,7 @@ const SearchCity = ({ onNext, isSearchFocused }) => {
   )
 
   // format autocompleted cities list item
-  const autocompleteList = [{ label: ALL_REGIONS_LABEL, type: REGION_TYPE }]
+  const autocompleteList = [{ label: ALL_REGIONS_LABEL, type: ALL_REGION_TYPE }]
     .concat(regionsForRome.map((region) => ({ ...region, type: REGION_TYPE })))
     .concat(
       !!searchedValue &&

@@ -3,26 +3,24 @@ import { Link, useHistory, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import queryString from 'query-string'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import { Switch } from '@mui/material'
+import L from 'leaflet'
 
 import { useCities } from '../../common/contexts/citiesContext'
-import MainLayout from '../../components/MainLayout'
+import { MainLayout } from '../../components'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import {
   COLOR_BUTTON_HOVER,
-  COLOR_OTHER_GREEN,
   COLOR_PRIMARY,
 } from '../../constants/colors'
 
-import CityItem from './CityItem'
-import MobileCriterionsPanel from './MobileCriterionsPanel'
-import DesktopCriterionsPanel from './DesktopCriterionsPanel'
-import MobileCriterionsSelection from './MobileCriterionsSelection'
-import CitiesFilters from './CitiesFilters'
-import noResultsPic from '../../assets/images/no_results.svg'
-import getLeafletIcon from '../../components/getLeafletIcon'
+import CityItem from './components/CityItem'
+import MobileCriterionsPanel from './components/MobileCriterionsPanel'
+import DesktopCriterionsPanel from './components/DesktopCriterionsPanel'
+import MobileCriterionsSelection from './components/MobileCriterionsSelection'
+import CitiesFilters from './components/CitiesFilters'
 
+import noResultsPic from '../../assets/images/no_results.svg'
 import blueMarker from '../../assets/images/marker-blue.png'
 import yellowMarker from '../../assets/images/marker-yellow.png'
 import redMarker from '../../assets/images/marker-red.png'
@@ -41,25 +39,6 @@ const NotFoundContainer = styled.div`
   font-size: 1.5rem;
   line-height: 1.5;
   color: #657078;
-`
-
-const Infopanel = styled.div`
-  display: flex;
-  background: ${COLOR_OTHER_GREEN};
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 700px;
-  margin: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-size: 12px;
-`
-
-const CitiesTensionChoice = styled.div`
-  display: flex;
-  align-items: center;
-  padding-left: 8px;
 `
 
 const CitiesFilterContainer = styled.div`
@@ -151,7 +130,6 @@ const Cities = () => {
   const [showMobilePanel, setShowMobileCriterionsSelection] = useState(false)
   const [hoveredCityId, setHoveredCityId] = useState(null)
   const [selectedCityId, setSelectedCityId] = useState(null)
-  const [useAllCities, setUseAllCities] = useState(false)
   const citiesListRef = useRef(null)
   const {
     isLoading: isLoadingProfessions,
@@ -188,10 +166,10 @@ const Cities = () => {
       onSearch({
         ...params,
         sortBy: sortCriterions,
-        onlySearchInTension: !useAllCities,
+        onlySearchInTension: true,
       })
     }
-  }, [params, sortCriterions, useAllCities])
+  }, [params, sortCriterions])
 
   useEffect(() => {
     if (cities.length > 0) {
@@ -204,7 +182,7 @@ const Cities = () => {
         inseeList: listCitiesInsee,
       })
     }
-  }, [params, useAllCities, sortCriterions, cities])
+  }, [params, sortCriterions, cities])
 
   const getCityUrl = (city) => {
     let url = `/city/${city.insee_com}-${city.nom_comm}`
@@ -233,20 +211,15 @@ const Cities = () => {
   const showMobileCriterionsSelection = (bool) =>
     setShowMobileCriterionsSelection(bool)
 
-  const isUsingRegionFilter = !!params.codeRegion
-  const isUsingCitySizeFilter = !!params.codeCity
-  const isUsingSeaFilter = params.codeEnvironment === 'side-sea'
-  const isUsingMountainFilter = params.codeEnvironment === 'mountain'
-
   const [page, setPage] = React.useState(1)
 
   useEffect(() => {
     onSearch(
-      { ...params, sortBy: sortCriterions, onlySearchInTension: !useAllCities },
+      { ...params, sortBy: sortCriterions, onlySearchInTension: true },
       page * 10,
       cities
     )
-  }, [useAllCities, page])
+  }, [ params, sortCriterions, page, cities ])
 
   const itemsPerPage = 10
   const [noOfPages, setNoOfPages] = React.useState(0)
@@ -257,6 +230,19 @@ const Cities = () => {
   const handlePageChange = (event, value) => {
     setPage(value)
   }
+
+  const getLeafletIcon = (requiredFile) => (
+    new L.Icon({
+      iconUrl: requiredFile,
+      iconRetinaUrl: requiredFile,
+      iconAnchor: [12, 41],
+      popupAnchor: [0, -41],
+      shadowUrl: null,
+      shadowSize: null,
+      shadowAnchor: null,
+      className: 'leaflet-marker-icon',
+    })
+  )
 
   if (showMobilePanel) {
     return (
@@ -280,36 +266,12 @@ const Cities = () => {
         </CitiesFilterText>
         <CitiesFilters />
       </CitiesFilterContainer>
-      <Infopanel>
-        <p>
-          Les villes qui vous sont proposées sont les villes où il y a des
-          offres et peu de concurrence, afin d’accélérer votre recherche
-          d’emploi.
-        </p>
-        <CitiesTensionChoice>
-          <div style={{ fontWeight: !useAllCities ? '500' : 'normal' }}>
-            Villes favorables
-          </div>
-          <Switch
-            inputProps={{ 'aria-label': 'Villes favorables' }}
-            checked={useAllCities}
-            onChange={() => setUseAllCities(!useAllCities)}
-          />
-          <div style={{ fontWeight: useAllCities ? '500' : 'normal' }}>
-            Toutes les villes
-          </div>
-        </CitiesTensionChoice>
-      </Infopanel>
       {!isLoadingProfessions &&
         cities.map((city, key) => (
           <CityItem
             city={city}
             selected={selectedCityId === city.id}
             sortCriterions={sortCriterions}
-            isUsingRegionFilter={isUsingRegionFilter}
-            isUsingCitySizeFilter={isUsingCitySizeFilter}
-            isUsingSeaFilter={isUsingSeaFilter}
-            isUsingMountainFilter={isUsingMountainFilter}
             key={city.id}
             to={getCityUrl(city)}
             onMouseOver={() => setHoveredCityId(city.id)}
@@ -444,7 +406,5 @@ const Cities = () => {
 }
 
 Cities.propTypes = {}
-
-Cities.defaultProps = {}
 
 export default React.memo(Cities)

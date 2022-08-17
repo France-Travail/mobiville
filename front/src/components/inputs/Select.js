@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import _ from 'lodash'
@@ -18,13 +18,15 @@ const AppFormControl = styled(FormControl)`
   background: ${ COLOR_WHITE };
   color: ${ COLOR_PRIMARY };
   border-radius: 20px;
-  border: none !important;
+  border: 1px solid ${ COLOR_LIGHT_GREY } !important;
   margin: 0 !important;
 
   & div.MuiSelect-select {
     background: inherit !important;
     padding-top: 20px;
     padding-bottom: 13px;
+    color: ${ COLOR_PRIMARY } !important;
+    font-weight: 700 !important;
   }
 
   & fieldset.MuiOutlinedInput-notchedOutline {
@@ -49,10 +51,6 @@ const AppFormControl = styled(FormControl)`
     font-weight: 700;
     margin-top: 7px;
     padding-left: 6px;
-  }
-
-  & div.MuiPaper-root {
-    margin-top: 9px !important;
   }
 
   & ul.MuiList-root {
@@ -90,30 +88,27 @@ const AppMenuItem = styled(MenuItem)`
 
 const AppSelect = ({
   options,
+  value = "",
   label = "",
   placeholder = "",
   onChange = () => {},
   renderValue = (selected) => (_.capitalize(_.toLower(selected))),
   multiple = false,
-  defaultValue = null,
   style = {}
 }) => {
-  // set default empty value depending on mode (multi)
-  const [ selectedValue, setSelectedValue ] = useState(defaultValue ?? multiple ? [] : '')
 
   const isPlaceholderHidden = useCallback(() => {
     if (!multiple) {
-      return !!selectedValue
+      return !!value
     }
-    return !(selectedValue.length === 0)
-  }, [selectedValue])
+    return !(value.length === 0)
+  }, [value])
 
   const handleChange = (event, child) => {
     const {
       target: { value },
     } = event
 
-    setSelectedValue(value)
     onChange(value)
   }
 
@@ -134,7 +129,7 @@ const AppSelect = ({
         labelId={`${_.kebabCase(label)}-label`}
         id={`${_.kebabCase(label)}`}
         multiple={multiple}
-        value={selectedValue}
+        value={(value ?? "")}
         onChange={handleChange}
         renderValue={renderValue}
       >
@@ -144,7 +139,7 @@ const AppSelect = ({
             value={option.option}
           >
             { multiple
-              ? <Checkbox checked={selectedValue.indexOf(option.option) > -1} />
+              ? <Checkbox checked={value.indexOf(option.option) > -1} />
               : null
             }
             <ListItemText
@@ -159,12 +154,12 @@ const AppSelect = ({
 
 AppSelect.propTypes = {
   options: PropTypes.array.isRequired,
+  value: PropTypes.any,
   label: PropTypes.string,
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
   renderValue: PropTypes.func,
   multiple: PropTypes.bool,
-  defaultValue: PropTypes.any,
   style: PropTypes.object,
 }
 
