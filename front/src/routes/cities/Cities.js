@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, memo } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import queryString from 'query-string'
@@ -120,24 +120,31 @@ const PaginationContainer = styled.div`
 `
 
 const Cities = () => {
-  const { cities, isLoading, onSearch, totalCities, sortCriterions } =
-    useCities()
-  const isMobile = isMobileView(useWindowSize())
 
+  const isMobile = isMobileView(useWindowSize())
   const location = useLocation()
   const history = useHistory()
-  const [params, setParams] = useState(queryString.parse(location.search))
-  const [showMobilePanel, setShowMobileCriterionsSelection] = useState(false)
-  const [hoveredCityId, setHoveredCityId] = useState(null)
-  const [selectedCityId, setSelectedCityId] = useState(null)
-  const citiesListRef = useRef(null)
+
+  const [ params, setParams ] = useState(queryString.parse(location.search))
+  const [ showMobilePanel, setShowMobileCriterionsSelection ] = useState(false)
+
   const {
     isLoading: isLoadingProfessions,
     professionsCountList,
     onSearchCountList,
   } = useProfessions()
 
+  // cities
+  const { cities, isLoading, onSearch, totalCities, sortCriterions } = useCities()
+  const [ hoveredCityId, setHoveredCityId ] = useState(null)
+  const [ selectedCityId, setSelectedCityId ] = useState(null)
+  const citiesListRef = useRef(null)
   const citiesItemsRef = useRef([])
+
+  // pagination
+  const itemsPerPage = 10
+  const [ page, setPage ] = useState(1)
+  const [ noOfPages, setNoOfPages ] = useState(0)
 
   useEffect(() => {
     if (!professionsCountList) return
@@ -160,16 +167,18 @@ const Cities = () => {
       setParams(queryString.parse(location.search))
     }
   }, [location])
-
+  
   useEffect(() => {
-    if (params?.codeRome) {
-      onSearch({
+    onSearch(
+      {
         ...params,
         sortBy: sortCriterions,
-        onlySearchInTension: true,
-      })
-    }
-  }, [params, sortCriterions])
+        onlySearchInTension: true
+      },
+      (page ?? 0) * 10,
+      (cities ?? [])
+    )
+  }, [ params, sortCriterions, page ])
 
   useEffect(() => {
     if (cities.length > 0) {
@@ -211,18 +220,6 @@ const Cities = () => {
   const showMobileCriterionsSelection = (bool) =>
     setShowMobileCriterionsSelection(bool)
 
-  const [page, setPage] = React.useState(1)
-
-  useEffect(() => {
-    onSearch(
-      { ...params, sortBy: sortCriterions, onlySearchInTension: true },
-      page * 10,
-      cities
-    )
-  }, [ params, sortCriterions, page, cities ])
-
-  const itemsPerPage = 10
-  const [noOfPages, setNoOfPages] = React.useState(0)
   useEffect(() => {
     setNoOfPages(Math.ceil(totalCities / itemsPerPage))
   }, [totalCities])
@@ -407,4 +404,4 @@ const Cities = () => {
 
 Cities.propTypes = {}
 
-export default React.memo(Cities)
+export default memo(Cities)
