@@ -1,0 +1,47 @@
+{
+  "name": "mobiville-test",
+  "version": "0.0.1",
+  "description": "Tests E2E de mobiville",
+  "main": "",
+  "repository": "https://github.com/StartupsPoleEmploi/mobiville",
+  "author": "Pole-emploi",
+  "license": "AGPL",
+  "devDependencies": {
+    "@babel/core": "^7.18.10",
+    "@babel/preset-env": "^7.18.10",
+    "@badeball/cypress-cucumber-preprocessor": "^12.1.0",
+    "@cypress/webpack-preprocessor": "^5.12.2",
+    "babel-loader": "^8.2.5",
+    "chalk": "^4.1.0",
+    "cross-env": "^7.0.3",
+    "cypress": "^10.6.0",
+    "cypress-intellij-reporter": "0.0.7",
+    "cypress-multi-reporters": "^1.5.0",
+    "fs-extra": "^10.0.0",
+    "jsonpath-plus": "^6.0.1",
+    "mocha-junit-reporter": "^2.0.2",
+    "mocha-multi-reporters": "^1.5.1",
+    "mochawesome": "^7.0.1",
+    "mochawesome-merge": "^4.2.1",
+    "mochawesome-report-generator": "^6.0.1",
+    "multiple-cucumber-html-reporter": "^1.19.0",
+    "nyc": "^15.1.0",
+    "properties-reader": "^2.2.0",
+    "tedious": "14.2.0",
+    "webpack": "^5.74.0"
+  },
+  "scripts": {
+    "cypress:run": " cross-env NO_PROXY=\"localhost,*.intra,*.pe-qvr.net\" cypress run",
+    "cypress:open": "cross-env NO_PROXY=\"localhost,*.intra,*.pe-qvr.net\" HTTP_PROXY=\"host.docker.internal:9000\" cypress open",
+    "generate-multiple-cucumber-html-report": "node multiple-cucumber-html-report/generate-cucumber-html-report.js false"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true,
+    "cucumberJson": {
+      "generate": true,
+      "outputFolder": "cypress/reports/cucumber-json",
+      "filePrefix": "",
+      "fileSuffix": ".feature"
+    }
+  }
+}
