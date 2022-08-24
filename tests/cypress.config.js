@@ -40,7 +40,7 @@ module.exports = defineConfig({
     video: false,
     videoCompression: false,
     screenshotsFolder: 'cypress/reports/screenshots',
-    baseUrl: "https://mobiville.beta.pole-emploi.fr/",
+    baseUrl: 'https://mobiville.beta.pole-emploi.fr/',
     reporter: 'cypress-multi-reporters',
     reporterOptions: {
       configFile: 'reporter.json',

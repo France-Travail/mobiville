@@ -31,8 +31,8 @@
     "webpack": "^5.74.0"
   },
   "scripts": {
-    "cypress:run": " cross-env NO_PROXY=\"localhost,*.intra,*.pe-qvr.net\" cypress run",
-    "cypress:open": "cross-env NO_PROXY=\"localhost,*.intra,*.pe-qvr.net,*.internal\" HTTP_PROXY=\"http://host.internal:9000\" cypress open",
+    "cypress:run": " cross-env NO_PROXY=\"localhost,*.intra,*.pe-qvr.net\" HTTP_PROXY=\"http://localhost:9000\" cypress run",
+    "cypress:open": "cross-env NO_PROXY=\"localhost,*.intra,*.pe-qvr.net,*.internal\" HTTP_PROXY=\"http://localhost:9000\" cypress open",
     "generate-multiple-cucumber-html-report": "node multiple-cucumber-html-report/generate-cucumber-html-report.js false"
   },
   "cypress-cucumber-preprocessor": {
