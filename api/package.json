@@ -1,6 +1,7 @@
 {
   "name": "mobiville-api",
   "version": "0.0.1",
+  "license": "AGPL",
   "engines": {
     "node": "16.16.0"
   },

@@ -6,6 +6,7 @@ images-docker
 node_modules
 tests/cypress/screenshots/
 tests/cypress/videos/
+tests/cypress/reports/
 /api/src/datas-mnt
 front/dist
 
