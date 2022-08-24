@@ -47,11 +47,20 @@ const TestimonyContainer = styled.div`
   padding: ${({ isMobile }) => (isMobile ? '20px 20px 0 20px' : '0')};
 `
 
-const TestimonyHeader = styled.div`
-  width: ${({ isMobile }) => (isMobile ? '' : '300px')};
+const TestimonyHeaderContainer = styled.div`
+  min-width: ${({ isMobile }) => (isMobile ? '' : '315px')};
+  min-height: ${({ isMobile }) => (isMobile ? '' : '315px')};
   background: ${COLOR_SALMON};
   border-radius: ${({ isMobile }) => (isMobile ? '4px 4px 0 0' : '4px 0 0 4px')};
-  padding: 49px;
+  padding: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const TestimonyHeader = styled.div`
+  min-width: 200px;
 `
 
 const TestimonyTitle = styled.p`
@@ -59,6 +68,21 @@ const TestimonyTitle = styled.p`
   font-size: 24px;
   font-weight: 700;
   margin: 0;
+
+  display-box: content;
+`
+
+const TestimonyJob = styled(TestimonyTitle)`
+  font-weight: 900;
+  line-height: 21px;
+  padding: 6px 0;
+`
+
+const TestimonyDescription = styled.p`
+  margin: 0;
+
+  font-size: 18px;
+  line-height: 24px;
 `
 
 const TestimonyBody = styled.div`
@@ -67,8 +91,9 @@ const TestimonyBody = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  
   padding: 13px;
-  padding-bottom: ${({ isMobile }) => (isMobile ? '120px' : '0')};
+  padding-bottom: ${({ isMobile }) => (isMobile ? '120px' : '20px')};
   border-radius: ${({ isMobile }) => (isMobile ? '0 0 4px 4px' : '0 4px 4px 0')};
 
   background: ${COLOR_WHITE};
@@ -76,6 +101,8 @@ const TestimonyBody = styled.div`
 
   p {
     width: ${({ isMobile }) => (isMobile ? '100%' : '80%')};
+    
+    font-size: 18px;
   }
 `
 
@@ -92,15 +119,17 @@ const Testimonies = () => {
 
               {/* Testimony 1 */}
               <TestimonyContainer isMobile={isMobile}>
-                <TestimonyHeader isMobile={isMobile}>
-                  <TestimonyTitle>Jonathan</TestimonyTitle>
-                  <TestimonyTitle>Conseiller technique</TestimonyTitle>
-                  <p>
-                    A déménagé à Rodez<br />
-                    Utilisation du service en avril<br />
-                    Déménagement en août
-                  </p>
-                </TestimonyHeader>
+                <TestimonyHeaderContainer isMobile={isMobile}>
+                  <TestimonyHeader isMobile={isMobile}>
+                    <TestimonyTitle>Jonathan</TestimonyTitle>
+                    <TestimonyJob>Conseiller technique</TestimonyJob>
+                    <TestimonyDescription>
+                      A déménagé à Rodez<br />
+                      Utilisation du service en avril<br />
+                      Déménagement en août
+                    </TestimonyDescription>
+                  </TestimonyHeader>
+                </TestimonyHeaderContainer>
                 <TestimonyBody isMobile={isMobile}>
                   <p>“Faire une recherche de logement ou d’emploi dans une région/département qu’on ne connaît pas peut s’avérer difficile.</p>
                   <p><strong>Mobiville m'a permis d'avoir toutes les infos pour lancer mon projet.</strong></p>
@@ -110,15 +139,17 @@ const Testimonies = () => {
 
               {/* Testimony 2 */}
               <TestimonyContainer isMobile={isMobile}>
-                <TestimonyHeader isMobile={isMobile}>
-                  <TestimonyTitle>Lucy</TestimonyTitle>
-                  <TestimonyTitle>Aide médico psychologique</TestimonyTitle>
-                  <p>
-                    A déménagé avec son mari<br />à Toulouse<br />
-                    Utilisation du service en mai<br />
-                    Déménagement en juillet
-                  </p>
-                </TestimonyHeader>
+                <TestimonyHeaderContainer isMobile={isMobile}>
+                  <TestimonyHeader isMobile={isMobile}>
+                    <TestimonyTitle>Lucy</TestimonyTitle>
+                    <TestimonyJob>Aide médico psychologique</TestimonyJob>
+                    <TestimonyDescription>
+                      A déménagé avec son mari<br />à Toulouse<br />
+                      Utilisation du service en mai<br />
+                      Déménagement en juillet
+                    </TestimonyDescription>
+                  </TestimonyHeader>
+                </TestimonyHeaderContainer>
                 <TestimonyBody isMobile={isMobile}>
                   <p>“J'avais déjà identifié la ville de Toulouse pour mon projet de mobilité, mais en la voyant s'afficher sur Mobiville, j'ai relancé mes démarches.</p>
                   <p><strong>J'ai pu sollicité une aide pour trouver un logement et voilà, j'ai déménagé!”</strong></p>
@@ -127,15 +158,17 @@ const Testimonies = () => {
 
               {/* Testimony 3 */}
               <TestimonyContainer isMobile={isMobile}>
-                <TestimonyHeader isMobile={isMobile}>
-                  <TestimonyTitle>Greg</TestimonyTitle>
-                  <TestimonyTitle>Technicien de maintenance informatique</TestimonyTitle>
-                  <p>
-                    A déménagé à Chambéry<br />
-                    Utilisation du service en mars<br />
-                    Déménagement en juin
-                  </p>
-                </TestimonyHeader>
+                <TestimonyHeaderContainer isMobile={isMobile}>
+                  <TestimonyHeader isMobile={isMobile}>
+                    <TestimonyTitle>Greg</TestimonyTitle>
+                    <TestimonyJob>Technicien de<br />maintenance informatique</TestimonyJob>
+                    <TestimonyDescription>
+                      A déménagé à Chambéry<br />
+                      Utilisation du service en mars<br />
+                      Déménagement en juin
+                    </TestimonyDescription>
+                  </TestimonyHeader>
+                </TestimonyHeaderContainer>
                 <TestimonyBody isMobile={isMobile}>
                   <p>“Mobiville est une plateforme rassurante pour se lancer dans un nouveau projet professionnel et très intuitive.</p>
                   <p>C’est vraiment une évolution géniale! Le site est complémentaire à celui de Pôle emploi. Je dirais même que ça le rajeunit, ça le booste.</p>

@@ -39,6 +39,7 @@ const JobSelect = ({ onSelect, defaultValue }) => {
         <TextSearchInput
             label="Votre métier"
             placeholder="Saisissez votre métier"
+            groupLabel="Métiers"
             options={jobsMatchingCriterions ?? []}
             // loading={isLoadingJobsMatchingCriterion}
             onInputChange={onInputChange}

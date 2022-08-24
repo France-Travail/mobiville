@@ -15,6 +15,7 @@ const ActionButtonElement = styled(Link)`
   width: 100%;
   height: 100%;
   border-radius: inherit;
+  padding: 14px 16px;
 
   display: flex;
   align-items: center;
@@ -31,7 +32,6 @@ const ActionButtonElement = styled(Link)`
   ${({ $isBlue }) => $isBlue ? '' : 'border : solid 2px ' + COLOR_PRIMARY + ' !important;'}
   background-color: ${({ $isBlue }) => ($isBlue ? COLOR_PRIMARY : 'inherit')};
   ${({ $isWhite }) => ($isWhite ? 'background-color: #fff;' : '')}
-  padding:12px;
 
   :active {
     background: ${({ $isBlue }) => ($isBlue ? COLOR_PRIMARY : 'inherit')};
