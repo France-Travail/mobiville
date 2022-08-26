@@ -34,7 +34,7 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
     }
 
     // format autocompleted cities list item
-    setOptions([{ label: ALL_REGIONS_LABEL, type: ALL_REGION_TYPE }]
+    setOptions([{ label: ALL_REGIONS_LABEL, type: ALL_REGION_TYPE, style: 'primary' }]
       .concat(regionsForRome.map((region) => ({ ...region, type: REGION_TYPE })))
       .concat(
         !!inputValue &&

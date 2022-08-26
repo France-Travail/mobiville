@@ -11,12 +11,12 @@ import {
   MenuItem,
   ListItemText
 } from '@mui/material'
-import { COLOR_LIGHT_GREY, COLOR_OTHER_GREEN, COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors'
+import { COLOR_LIGHT_GREY, COLOR_OTHER_GREEN, COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_WHITE } from '../../constants/colors'
 
 const AppFormControl = styled(FormControl)`
   width: 100%;
   background: ${ COLOR_WHITE };
-  color: ${ COLOR_PRIMARY };
+  color: ${ COLOR_PRIMARY } !important;
   border-radius: 20px;
   border: 1px solid ${ COLOR_LIGHT_GREY } !important;
   margin: 0 !important;
@@ -61,11 +61,15 @@ const AppFormControl = styled(FormControl)`
   }
 `
 
+const CustomInputLabel = styled(InputLabel)`
+  color: ${ COLOR_TEXT_PRIMARY } !important;
+`
+
 const Placeholder = styled(InputLabel)`
   margin-top: 33px !important;
   font-size: 18px !important;
   font-weight: 400 !important;
-  color: rgba(0, 0, 0, 0.4) !important; 
+  color: ${ COLOR_TEXT_PRIMARY } !important; 
   visibility: ${({ hidden }) => (hidden ? 'hidden' : 'visible') };
 `
 
@@ -114,11 +118,11 @@ const AppSelect = ({
 
   return (
     <AppFormControl sx={{ m: 1, ...style }}>
-      <InputLabel
+      <CustomInputLabel
         id={`${_.kebabCase(label)}-label`}
         variant="filled"
         shrink={true}
-      >{label}</InputLabel>
+      >{label}</CustomInputLabel>
       <Placeholder
         id={`${_.kebabCase(label)}-placeholder`}
         variant="filled"

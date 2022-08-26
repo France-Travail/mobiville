@@ -8,14 +8,14 @@ import { ActionButton, ButtonGroup, Section, ProjectsSelect, JobSituationSelect,
 import JobSelect from './JobSelect'
 import CitySelect from './CitySelect'
 
-import heroHomepagePic from '../../../assets/images/00-Hero-Homepage.png'
+import heroHomepagePic from '../../../assets/images/hero-homepage.png'
 import { ReactComponent as HouseOutlineIcon } from '../../../assets/images/icons/house-outline.svg'
 import { ReactComponent as FinancialHelpIcon } from '../../../assets/images/icons/financial-help.svg'
 import { AGE_SITUATIONS, CITY_TYPE, JOB_SITUATIONS, PROJECTS, REGION_TYPE } from '../../../constants/search'
 
 const Container = styled.section`
   background: linear-gradient(180deg, #ddddea 0%, #c3e9e9 100%);
-  padding-bottom: 90px;
+  padding-bottom: 80px;
   border-radius: 0;
 `
 
@@ -24,15 +24,21 @@ const Container = styled.section`
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row') };
-  justify-content: center;
-  align-items: center;
+  align-items: start;
+  justify-content: space-between;
+  gap: ${({ isMobile }) => (isMobile ? '32px' : '0') };
 
-  margin-top: ${({ isMobile }) => (isMobile ? '102px' : '') };
+  margin-top: ${({ isMobile }) => (isMobile ? '102px' : '30px') };
 `
 
 const TitleWrapper = styled.div`
+  flex: auto;
+
   display: flex;
   flex-direction: column;
+  justify-content: center;
+
+  margin-top: 22px;
 `
 
 const Title = styled.h1`
@@ -49,12 +55,19 @@ const SubTitle = styled.h2`
   margin: 0;
 `
 
+const HeroImage = styled.img`
+  align-self: center;
+
+  padding-right: 64px;
+`
+
 // === SEARCH BLOCK ===
 
 const SearchContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: start;
+  margin-top: ${({isMobile}) => (isMobile ? '' : '-96px')};
 `
 
 const InputGroup = styled.div`
@@ -166,36 +179,42 @@ const Welcome = () => {
   return (
     <Container isMobile={isMobile}>
       <Section>
+
         <TitleContainer isMobile={isMobile}>
           <TitleWrapper>
             <Title>Trouvez l’emploi et la ville qui va avec !</Title>
-            <SubTitle>Décrochez l’emploi dans la ville qui vous correspond et identifiez les aides pour votre projet de mobilité</SubTitle>
+            <SubTitle>
+              Décrochez l’emploi dans la ville qui vous correspond<br />
+              et identifiez les aides pour votre projet de mobilité
+            </SubTitle>
           </TitleWrapper>
 
-            <img className="hero" src={heroHomepagePic} alt="" />
+          <HeroImage src={heroHomepagePic} alt="" />
         </TitleContainer>
 
-        <SearchContainer>
-          <ButtonGroupLabel>Que recherchez-vous ?</ButtonGroupLabel>
-          <ButtonGroup
-            onChange={(buttonId) => handleChange(buttonId)}
-          >
-            <button
-              type="button"
-              id="city"
+        <SearchContainer isMobile={isMobile}>
+          <div>
+            <ButtonGroupLabel>Que recherchez-vous ?</ButtonGroupLabel>
+            <ButtonGroup
+              onChange={(buttonId) => handleChange(buttonId)}
             >
-              <HouseOutlineIcon />
-              <p>Une ville</p>
-            </button>
+              <button
+                type="button"
+                id="city"
+              >
+                <HouseOutlineIcon />
+                <p>Une ville</p>
+              </button>
 
-            <button
-              type="button"
-              id="help"
-            >
-              <FinancialHelpIcon />
-              <p>Une aide</p>
-            </button>
-          </ButtonGroup>
+              <button
+                type="button"
+                id="help"
+              >
+                <FinancialHelpIcon />
+                <p>Une aide</p>
+              </button>
+            </ButtonGroup>
+          </div>
 
           {/* CITY */}
           <InputGroup

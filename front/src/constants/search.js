@@ -1,6 +1,6 @@
 export const NB_MAX_REGION = 1
 
-export const ALL_REGIONS_LABEL = 'Toutes les régions'
+export const ALL_REGIONS_LABEL = 'Régions les plus attractives'
 export const ALL_REGION_TYPE = 'ALL_REGION'
 export const REGION_TYPE = 'Régions'
 export const CITY_TYPE = 'Villes'

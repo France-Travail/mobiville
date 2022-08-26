@@ -110,7 +110,7 @@ const HelpFilters = () => {
             ></AgeSituationSelect>
 
             <ActionButton
-                style={{ flex: 2 }}
+                style={{ flex: 2, minHeight: 73 }}
                 path={computeSearchPath()}
                 isBlue
             ></ActionButton>
