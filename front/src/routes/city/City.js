@@ -133,7 +133,7 @@ const BlockLinkSyle = `
   
   div {
     margin:auto;
-    width: 232px;
+    min-width: 232px;
   }
 `
 
