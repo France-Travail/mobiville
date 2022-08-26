@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 import PropTypes from 'prop-types'
+import _ from "lodash"
 
-import { useCities } from "../../../common/contexts/citiesContext"
-import { TextSearchInput } from "../../../components"
-import { ucFirstOnly } from "../../../utils/utils"
-import { ALL_REGIONS_LABEL, ALL_REGION_TYPE, CITY_TYPE, REGION_TYPE } from "../../../constants/search"
+import { useCities } from "../../common/contexts/citiesContext"
+import { ALL_REGIONS_LABEL, ALL_REGION_TYPE, CITY_TYPE, REGION_TYPE } from "../../constants/search"
+import TextSearchInput from "./TextSearchInput"
 
 const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
   const {
@@ -40,7 +40,7 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
         !!inputValue &&
           autocompletedCities.map((city) => ({
             id: city.insee_com,
-            label: `${ucFirstOnly(city.nom_comm)} (${city.postal_code})`,
+            label: `${_.capitalize(city.nom_comm)} (${city.postal_code})`,
             cityName: city.nom_comm,
             type: CITY_TYPE,
           }))

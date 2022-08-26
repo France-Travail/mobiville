@@ -210,7 +210,7 @@ const Footer = () => {
             </a>
           </div>
           <CopyRight>
-            Un site crée par Pole Emploi 2020-2022 -tous droits réservés
+            Un site créé par Pole Emploi 2020-2022 -tous droits réservés
           </CopyRight>
         </WrapperLogos>
       </div>
