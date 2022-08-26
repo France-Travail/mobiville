@@ -18,9 +18,9 @@ import pictoHelpLogement from '../../assets/images/icons/help-logement.svg'
 import pictoHelpTransport from '../../assets/images/icons/help-transport.svg'
 import pictoFilterMobile from '../../assets/images/icons/filter-mobille.svg'
 import {Grid} from '@mui/material'
-import HelpsFilter from "./components/HelpFilters"
 import MobileAppliedFilters from './components/MobileAppliedFilters'
 import HelpCard from './components/HelpCard'
+import { HelpForm } from '../../components'
 
 //import TypeHelpFilter from "./components/TypeHelpFilter";
 
@@ -418,7 +418,7 @@ const Helps = ({ location: { search } }) => {
                 $isMobile={isMobile}
                 className={`${!isMobile && isScrollingUp ? 'stickyHeader' : ''}`}
             >
-              <HelpsFilter />
+              <HelpForm />
             </Header>
         )}
 

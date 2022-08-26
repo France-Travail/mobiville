@@ -10,7 +10,7 @@ import WelcomeSearchForm from './WelcomeSearchForm'
 
 const Container = styled.section`
   background: linear-gradient(180deg, #ddddea 0%, #c3e9e9 100%);
-  padding-bottom: 80px;
+  padding-bottom: ${({ $isMobile }) => ($isMobile ? '40px' : '80px')};
   border-radius: 0;
 `
 
@@ -18,12 +18,12 @@ const Container = styled.section`
 
 const TitleContainer = styled.div`
   display: flex;
-  flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row') };
+  flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row') };
   align-items: start;
   justify-content: space-between;
-  gap: ${({ isMobile }) => (isMobile ? '32px' : '0') };
+  gap: ${({ $isMobile }) => ($isMobile ? '32px' : '0') };
 
-  margin-top: ${({ isMobile }) => (isMobile ? '102px' : '30px') };
+  margin-top: ${({ $isMobile }) => ($isMobile ? '102px' : '30px') };
 `
 
 const TitleWrapper = styled.div`
@@ -46,7 +46,6 @@ const Title = styled.h1`
 const SubTitle = styled.h2`
   font-weight: 400;
   line-height: 27px;
-  font-size: ${({ isMobile }) => (isMobile ? '18px' : '22px')};
   margin: 0;
 `
 
@@ -61,10 +60,10 @@ const Welcome = () => {
   const isMobile = isMobileView(useWindowSize())
 
   return (
-    <Container isMobile={isMobile}>
+    <Container $isMobile={isMobile}>
       <Section>
 
-        <TitleContainer isMobile={isMobile}>
+        <TitleContainer $isMobile={isMobile}>
           <TitleWrapper>
             <Title>Trouvez l’emploi et la ville qui va avec !</Title>
             <SubTitle>

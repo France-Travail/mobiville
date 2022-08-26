@@ -1,6 +1,4 @@
-import { Modale } from "../../components"
-import CityForm from "../../components/CityForm"
-import HelpFilters from "./components/HelpFilters"
+import { HelpForm, Modale } from "../../components"
 
 const HelpsSearchPage = () => {
     return (
@@ -8,7 +6,7 @@ const HelpsSearchPage = () => {
             title="Recherchez une aide"
             closeLink="/"
         >
-            <HelpFilters></HelpFilters>
+            <HelpForm />
         </Modale>
     )
 }

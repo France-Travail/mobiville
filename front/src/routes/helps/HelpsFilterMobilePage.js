@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet-async'
 
-import HelpsFilter from "./components/HelpFilters"
-import { Modale } from '../../components'
+import { HelpForm, Modale } from '../../components'
 
 const HelpsFilterMobilePage = () => (
   <>
@@ -18,7 +17,7 @@ const HelpsFilterMobilePage = () => (
       closeLink="/aides"
     >
 
-      <HelpsFilter />
+      <HelpForm />
 
     </Modale>
 

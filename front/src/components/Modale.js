@@ -37,7 +37,7 @@ const CloseLink = styled(Link)`
 `
 
 const Title = styled.h1`
-  margin: 45px 0;
+  margin: 45px 0 32px 0;
 
   font-size: 36px;
   font-weight: 900;
