@@ -1,17 +1,12 @@
-import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 import { useWindowSize } from "../../../common/hooks/window-size"
 import { isMobileView } from "../../../constants/mobile"
 import { COLOR_PRIMARY } from '../../../constants/colors'
-import { ActionButton, ButtonGroup, Section, ProjectsSelect, JobSituationSelect, AgeSituationSelect } from '../../../components'
-import JobSelect from './JobSelect'
-import CitySelect from './CitySelect'
+import { Section } from '../../../components'
 
 import heroHomepagePic from '../../../assets/images/hero-homepage.png'
-import { ReactComponent as HouseOutlineIcon } from '../../../assets/images/icons/house-outline.svg'
-import { ReactComponent as FinancialHelpIcon } from '../../../assets/images/icons/financial-help.svg'
-import { AGE_SITUATIONS, CITY_TYPE, JOB_SITUATIONS, PROJECTS, REGION_TYPE } from '../../../constants/search'
+import WelcomeSearchForm from './WelcomeSearchForm'
 
 const Container = styled.section`
   background: linear-gradient(180deg, #ddddea 0%, #c3e9e9 100%);
@@ -61,120 +56,9 @@ const HeroImage = styled.img`
   padding-right: 64px;
 `
 
-// === SEARCH BLOCK ===
-
-const SearchContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  margin-top: ${({isMobile}) => (isMobile ? '' : '-96px')};
-`
-
-const InputGroup = styled.div`
-  width: 100%;
-
-  display: flex;
-  flex-direction: ${({isMobile}) => (isMobile ? 'column' : 'row')};
-  gap: 8px;
-
-  margin-top: 24px;
-
-  display: ${ ({ hidden }) => (hidden ? 'none' : 'visible') };
-`
-
-const ButtonGroupLabel = styled.p`
-  font-weight: bold;
-  font-size: 16px;
-  margin: 8px 0;
-`
 
 const Welcome = () => {
   const isMobile = isMobileView(useWindowSize())
-
-  const [ selectedSearchMode, setSelectedSearchMode ] = useState('city')
-
-  const [ jobSelected, setJobSelected ] = useState('')
-  const [ citySelected, setCitySelected ] = useState('')
-
-  const [ projectsSelected, setProjectsSelected ] = useState([])
-  const [ jobSituationSelected, setJobSituationSelected ] = useState(null)
-  const [ ageSituationSelected, setAgeSituationSelected ] = useState(null)
-
-  const isSelected = useCallback((id) => {
-    return id === selectedSearchMode
-  }, [selectedSearchMode])
-
-  const handleChange = (buttonId) => {
-    setSelectedSearchMode(buttonId)
-  }
-
-  // === CITY SEARCH ===
-
-  const computeSearchPath = useCallback(() => {
-    if (!!jobSelected) {
-      if (!!citySelected) {
-        if (citySelected.type === CITY_TYPE) {
-          return `/city/${citySelected.id}-${citySelected.cityName}?codeRome=${jobSelected.key}`
-        } else if (citySelected.type === REGION_TYPE) {
-          return `/cities?codeRegion=${citySelected.id}&codeRome=${jobSelected.key}`
-        }
-      }
-      return `/cities?codeRome=${jobSelected.key}`
-    }
-    return ''
-  }, [jobSelected, citySelected])
-
-  const onJobSelect = (job) => {
-    setJobSelected(job)
-  }
-
-  const onCitySelect = (city) => {
-    setCitySelected(city)
-  }
-
-  // === HELP SEARCH ===
-
-  const handleProjectsChange = (projects) => {
-    setProjectsSelected(projects)
-  }
-
-  const handleJobSituationChange = (jobSituation) => {
-    setJobSituationSelected(jobSituation)
-  }
-
-  const handleAgeSituationChange = (age) => {
-    setAgeSituationSelected(age)
-  }
-
-  const computeHelpsSearchPath = useCallback(() => {
-    let projectsURLFormatted = null
-    let jobSituationURLFormatted = null
-    let ageURLFormatted = null
-
-    if (!!projectsSelected && projectsSelected.length > 0) {
-      projectsURLFormatted = projectsSelected.map(project => {
-        return `project=${PROJECTS.find(p => p.option === project)?.key}`
-      }).join('&')
-    }
-
-    if (!!jobSituationSelected) {
-      jobSituationURLFormatted = `situation=${JOB_SITUATIONS.find(j => j.option === jobSituationSelected)?.key}`
-    }
-
-    if (!!ageSituationSelected) {
-      ageURLFormatted = `situation=${AGE_SITUATIONS.find(a => a.option === ageSituationSelected)?.key}`
-    }
-    
-    const paramsURLFormatted = [
-      projectsURLFormatted,
-      jobSituationURLFormatted,
-      ageURLFormatted
-    ]
-      .filter(item => item != null)
-      .join('&')
-
-    return `/aides?${paramsURLFormatted}`
-  }, [ projectsSelected, jobSituationSelected, ageSituationSelected ])
 
   return (
     <Container isMobile={isMobile}>
@@ -192,102 +76,8 @@ const Welcome = () => {
           <HeroImage src={heroHomepagePic} alt="" />
         </TitleContainer>
 
-        <SearchContainer isMobile={isMobile}>
-          <div>
-            <ButtonGroupLabel>Que recherchez-vous ?</ButtonGroupLabel>
-            <ButtonGroup
-              onChange={(buttonId) => handleChange(buttonId)}
-            >
-              <button
-                type="button"
-                id="city"
-              >
-                <HouseOutlineIcon />
-                <p>Une ville</p>
-              </button>
-
-              <button
-                type="button"
-                id="help"
-              >
-                <FinancialHelpIcon />
-                <p>Une aide</p>
-              </button>
-            </ButtonGroup>
-          </div>
-
-          {/* CITY */}
-          <InputGroup
-            isMobile={isMobile}
-            hidden={!isSelected('city')}
-          >
-            
-            <JobSelect
-              onSelect={(job) => onJobSelect(job)}
-            ></JobSelect>
-
-            <CitySelect
-              onSelect={(city) => onCitySelect(city)}
-              codeRome={!!jobSelected ? jobSelected.key : null}
-            ></CitySelect>
-
-            <ActionButton
-              style={{
-                height: '73px',
-                ...(isMobile ?
-                  {} :
-                  {
-                    boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.3)',
-                    width: '184px',
-                  })
-              }}
-              path={computeSearchPath()}
-              isBlue
-            ></ActionButton>
-
-          </InputGroup>
-
-          {/* HELP */}
-          <InputGroup
-            isMobile={isMobile}
-            hidden={!isSelected('help')}
-          >
-
-            <ProjectsSelect
-              style={{ flex: 5 }}
-              onChange={handleProjectsChange}
-              value={projectsSelected}
-            ></ProjectsSelect>
-
-            <JobSituationSelect
-              style={{ flex: 3 }}
-              onChange={handleJobSituationChange}
-              value={jobSituationSelected}
-            ></JobSituationSelect>
-
-            <AgeSituationSelect
-              style={{ flex: 3 }}
-              onChange={handleAgeSituationChange}
-              value={ageSituationSelected}
-            ></AgeSituationSelect>
-
-            <ActionButton
-              style={{
-                height: '73px',
-                ...(isMobile ?
-                  {} :
-                  {
-                    boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.3)',
-                    width: '184px',
-                  })
-                }}
-                path={computeHelpsSearchPath()}
-                isBlue
-            ></ActionButton>
-
-          </InputGroup>
-
-        </SearchContainer>
+        <WelcomeSearchForm></WelcomeSearchForm>
+          
       </Section>
     </Container>
   )
