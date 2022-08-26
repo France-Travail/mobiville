@@ -11,7 +11,9 @@ export const fetchAutocompleteCities = (body) =>
     .then((response) => response.data || null)
 
 export const getCriterions = () =>
-  axios.get('/api/cities/criterions').then((response) => response.data || null)
+  axios
+    .get('/api/cities/criterions')
+    .then((response) => response.data || null)
 
 export const loadCity = (insee) =>
   axios

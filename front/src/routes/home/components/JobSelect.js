@@ -19,7 +19,7 @@ const JobSelect = ({ onSelect, defaultValue }) => {
     }, [])
 
     const throttledOnSearchJobLabels = useMemo(
-        () => throttle((search) => onSearchJobLabels(search), 200),
+        () => throttle((value) => (onSearchJobLabels(value)), 200),
         []
     )
 

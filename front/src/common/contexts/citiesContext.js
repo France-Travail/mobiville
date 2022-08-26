@@ -15,6 +15,9 @@ const CitiesContext = React.createContext()
 let lastSearchParams = {}
 
 export function CitiesProvider(props) {
+
+  const [ cityInput, setCityInput ] = useState(null)
+
   const [cities, _setCities] = useState([])
   const [totalCities, _setTotalCities] = useState(0)
   const [jobsMatchingCriterions, setJobsMatchingCriterions] = useState([])
@@ -111,33 +114,41 @@ export function CitiesProvider(props) {
       .then(() => _setIsLoadingSimilarCities(false))
   }
 
-  const onSearchJobLabels = useCallback(
-    (label) => {
-      if (!label.trim()) {
+  const onSearchJobLabels = (label) => {
+    setCityInput(label)
+  }
+
+  useEffect(() => {
+
+    if (!!criterions?.codeRomes) {
+
+      if (!cityInput?.trim()) {
         setJobsMatchingCriterions(criterions.codeRomes)
-        return
+      } else {
+        setIsLoadingJobsMatchingCriterion(true)  
+        searchJobLabels({ label: cityInput })
+          .then((results) => {
+            // augment rome labels with job title matches
+            setJobsMatchingCriterions(
+              results.reduce((prev, result) => {
+                const romeFound = criterions.codeRomes
+                  .filter((obj) => Object.keys(obj).includes('key'))
+                  .find(({ key }) => result.codeRome === key)
+                return prev.concat({
+                  key: romeFound?.key,
+                  label: romeFound?.label.concat(` (${result.label}, …)`),
+                })
+              }, [])
+            )
+            setIsLoadingJobsMatchingCriterion(false)
+          })
+          .catch(() => {
+            setIsLoadingJobsMatchingCriterion(false)
+          })
       }
+    }
 
-      setIsLoadingJobsMatchingCriterion(true)
-
-      searchJobLabels({ label }).then((results) => {
-        // augment rome labels with job title matches
-        setJobsMatchingCriterions(
-          results.reduce((prev, result) => {
-            const romeFound = criterions.codeRomes
-              .filter((obj) => Object.keys(obj).includes('key'))
-              .find(({ key }) => result.codeRome === key)
-            return prev.concat({
-              key: romeFound?.key,
-              label: romeFound?.label.concat(` (${result.label}, …)`),
-            })
-          }, [])
-        )
-        setIsLoadingJobsMatchingCriterion(false)
-      })
-    },
-    [criterions]
-  )
+  }, [ cityInput, criterions ])
 
   const initializeJobsAutocomplete = () => setAutocompletedCities([])
 
