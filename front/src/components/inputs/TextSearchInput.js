@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import _ from 'lodash'
@@ -97,7 +97,6 @@ const TextSearchInput = ({
     const handleInputChange = (event, value) => {
         onInputChange(event, value)
         setInputValue(value)
-        handleOpen(true)
     }
 
     const handleChange = (event, value) => {
@@ -109,6 +108,12 @@ const TextSearchInput = ({
             setOpen(isOpen)
         }
     }
+
+    useEffect(() => {
+        if (openThreshold > 0 && inputValue.length <= openThreshold) {
+            setOpen(false)
+        }
+    }, [ inputValue, openThreshold ])
 
     const isPlaceholderSelected = useCallback(() => {
         return (!inputValue)
@@ -147,6 +152,7 @@ const TextSearchInput = ({
                     {/* render group label if exists */}
                     { groupLabel
                         ? (<CustomBox
+                            key={groupLabel}
                             $primary
                             component="li"
                         >
@@ -157,6 +163,7 @@ const TextSearchInput = ({
                     {/* render options */}
                     {params.children.map(child => (
                         <CustomBox
+                            key={child.key}
                             component="li"
                             {...child.props}
                         >
