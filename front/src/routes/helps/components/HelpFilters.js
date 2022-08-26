@@ -16,7 +16,7 @@ const Container = styled.div`
 
     display: flex;
     flex-direction: ${ ({ $isMobile }) => ($isMobile ? `column` : `row`) };
-    justify-items: ${ ({ $isMobile }) => ($isMobile ? `start` : `center`) };;
+    justify-items: ${ ({ $isMobile }) => ($isMobile ? `start` : `center`) };
     gap: 8px;
 `
 

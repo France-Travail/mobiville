@@ -40,12 +40,18 @@ const Container = styled.div`
     border-radius: 6px;
 `
 
-const ButtonGroup = ({ defaultSelected, children, onChange = () => {} }) => {
+const ButtonGroup = ({
+    defaultSelected,
+    children,
+    onChange = () => {},
+    onClick = () => {}
+}) => {
 
-    const [ selected, setSelected ] = useState(defaultSelected ?? children[0].props.id)
+    const [ selected, setSelected ] = useState(defaultSelected ?? (children[0]?.props?.id ?? null))
 
     const handleButtonClick = (buttonId) => {
         setSelected(buttonId)
+        onClick(buttonId)
     }
 
     useEffect(() => {
@@ -65,7 +71,7 @@ const ButtonGroup = ({ defaultSelected, children, onChange = () => {} }) => {
                     }}
                     selected={selected === child.props.id}
                 >
-                    { child.props.children.map(child => ({
+                    {/* { child.props.children.map(child => ({
                         ...child,
                         props: {
                             ...child.props,
@@ -74,7 +80,8 @@ const ButtonGroup = ({ defaultSelected, children, onChange = () => {} }) => {
                                 pointerEvents: 'none',
                             }
                         }
-                    })) }
+                    })) } */}
+                    { child.props.children }
                 </Button>
             ))}
         </Container>

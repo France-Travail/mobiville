@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { throttle } from 'lodash'
 
-import { TextSearchInput } from '../../../components'
-import { useCities } from '../../../common/contexts/citiesContext'
+import { TextSearchInput } from '../../components'
+import { useCities } from '../../common/contexts/citiesContext'
 
 const JobSelect = ({ onSelect, defaultValue }) => {
 
