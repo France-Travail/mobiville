@@ -1,8 +1,22 @@
-const { When, Then } = require('@badeball/cypress-cucumber-preprocessor')
+const { Given, When, Then, And } = require('@badeball/cypress-cucumber-preprocessor');
+import {SHORT_WAIT_TIME,MIDDLE_WAIT_TIME,LONG_WAIT_TIME} from "../../e2e/accueil/common/common";
+
+const boutonUneVille = "button[type=button][id=city]";
 
 When("Je/je suis sur (l'accueil) mobiville/Mobiville", () => {
   cy.visit('/', { timeout: 15000 })
   acceptRgpd()
+})
+
+Given("je suis sur la Homepage de Mobiville", () => {
+  cy.visit('/', {timeout: SHORT_WAIT_TIME});
+  acceptRgpd();
+})
+
+Given("je suis dans le moteur de recherche Ville", () => {
+  cy.visit('/', {timeout: SHORT_WAIT_TIME});
+  acceptRgpd();
+  cy.get(boutonUneVille, {timeout: SHORT_WAIT_TIME}).click();
 })
 
 function acceptRgpd() {
