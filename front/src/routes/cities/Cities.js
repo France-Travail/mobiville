@@ -149,12 +149,23 @@ const Cities = () => {
   useEffect(() => {
     if (!professionsCountList) return
     professionsCountList.map((professionsCount) => {
-      const city = cities.find(
+      /*cities.filter(
+          (city) => city.insee_com === professionsCount.insee.toString()
+      ).map((city) => ( {...city,totalOffres: professionsCount}))*/
+
+      let city = cities.find(
         (city) => city.insee_com === professionsCount.insee.toString()
       )
-      if (city) city.totalOffres = professionsCount.total
+      if (city) {
+        //city.totalOffres = professionsCount.total
+        city = {...city,totalOffres: professionsCount}
+      }
+
+      console.log("MAJ DU city.totalOffres : "+city.totalOffres)
       return true // useless lint validation "warning"
     })
+
+
   }, [professionsCountList])
 
   useEffect(() => {
@@ -263,8 +274,7 @@ const Cities = () => {
         </CitiesFilterText>
         <CitiesFilters />
       </CitiesFilterContainer>
-      {!isLoadingProfessions &&
-        cities.map((city, key) => (
+      {cities.map((city, key) => (
           <CityItem
             city={city}
             selected={selectedCityId === city.id}
@@ -274,6 +284,8 @@ const Cities = () => {
             onMouseOver={() => setHoveredCityId(city.id)}
             onMouseLeave={() => setHoveredCityId(null)}
             itemRef={(el) => (citiesItemsRef.current[key] = el)}
+            isLoadingProfessions={isLoadingProfessions}
+            //totalOffres={city.totalOffres}
           />
         ))}
       {!isLoading && cities.length === 0 && (

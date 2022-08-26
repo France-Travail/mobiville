@@ -1,19 +1,17 @@
-import { Link } from 'react-router-dom'
+import {useEffect, useState} from 'react'
+import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import styled, { css } from 'styled-components'
+import styled, {css} from 'styled-components'
 
-import { formatNumber } from '../../../utils/utils'
-import {
-  COLOR_GRAY,
-  COLOR_PRIMARY,
-  COLOR_TAG_GREEN,
-  COLOR_TAG_RED,
-} from '../../../constants/colors'
-import { useWindowSize } from '../../../common/hooks/window-size'
-import { isMobileView } from '../../../constants/mobile'
+import {formatNumber} from '../../../utils/utils'
+import {COLOR_GRAY, COLOR_PRIMARY, COLOR_TAG_GREEN, COLOR_TAG_RED,} from '../../../constants/colors'
+import {useWindowSize} from '../../../common/hooks/window-size'
+import {isMobileView} from '../../../constants/mobile'
 import redMarker from '../../../assets/images/marker-red.png'
-import { ReactComponent as RightChevronIcon } from '../../../assets/images/icons/right_chevron.svg'
+import {ReactComponent as RightChevronIcon} from '../../../assets/images/icons/right_chevron.svg'
+
+import {CircularProgress} from '@mui/material'
 
 const CityLink = styled(Link)`
   margin-top: 16px;
@@ -113,11 +111,20 @@ const RightChevronIconCustom = styled(RightChevronIcon)`
 `
 
 const CityItem = ({
+  city: {
+    nom_comm,
+    nom_dept,
+    population,
+    totalOffres,
+    // bassin_int: ['bassin.tensions.ind_t']
+   },
   city,
   selected,
   onMouseOver,
   onMouseLeave,
   to,
+  isLoadingProfessions,
+  //totalOffres,
 }) => {
   const size = useWindowSize()
 
@@ -153,27 +160,34 @@ const CityItem = ({
       />
 
       <InformationsContainer>
-        <TagsContainer>
+        {/*<TagsContainer>
           <Tag
-            $color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED}
+            $color={'bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED}
           >
             {formatCityTension(city['bassin.tensions.ind_t'])}
           </Tag>
-        </TagsContainer>
+        </TagsContainer>*/}
 
         <Title>
-          {_.capitalize(city.nom_comm)}
+          {_.capitalize(nom_comm)}
           {selected && <SelectedMarkerImg src={redMarker} alt="" />}
         </Title>
-        <Department>{_.capitalize(city.nom_dept)}</Department>
+        <Department>{_.capitalize(nom_dept)}</Department>
 
         <TagsContainer>
           <Tag>
-            {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
+            {formatNumber(population * 1000)} habitants
           </Tag>
+          {!isLoadingProfessions && (
           <Tag>
-            {formatNumber(city.population * 1000)} habitants
+            {totalOffres} offre{totalOffres > 0 ? "s" : ""} d'emploi
           </Tag>
+          )}
+
+          <>
+            {isLoadingProfessions ? <CircularProgress color="inherit" size={20} /> : null}
+          </>
+
         </TagsContainer>
       </InformationsContainer>
 
@@ -188,6 +202,8 @@ CityItem.propTypes = {
   onMouseOver: PropTypes.func.isRequired,
   onMouseLeave: PropTypes.func.isRequired,
   to: PropTypes.string.isRequired,
+  isLoadingProfessions: PropTypes.any,
+  //totalOffres: PropTypes.any,
 }
 
 CityItem.defaultProps = {}
