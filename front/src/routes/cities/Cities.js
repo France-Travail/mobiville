@@ -141,31 +141,34 @@ const Cities = () => {
   const citiesListRef = useRef(null)
   const citiesItemsRef = useRef([])
 
+  const [ formattedCities, setFormattedCities ] = useState([])
+
   // pagination
   const itemsPerPage = 10
   const [ page, setPage ] = useState(1)
   const [ noOfPages, setNoOfPages ] = useState(0)
 
   useEffect(() => {
+    setFormattedCities(cities)
+  }, [cities])
+
+  useEffect(() => {
     if (!professionsCountList) return
+    let newFormattedCities = formattedCities
     professionsCountList.map((professionsCount) => {
-      /*cities.filter(
-          (city) => city.insee_com === professionsCount.insee.toString()
-      ).map((city) => ( {...city,totalOffres: professionsCount}))*/
-
-      let city = cities.find(
-        (city) => city.insee_com === professionsCount.insee.toString()
-      )
-      if (city) {
-        //city.totalOffres = professionsCount.total
-        city = {...city,totalOffres: professionsCount}
-      }
-
-      console.log("MAJ DU city.totalOffres : "+city.totalOffres)
-      return true // useless lint validation "warning"
+      newFormattedCities = newFormattedCities
+        .map((city) => {
+          if (city.insee_com === professionsCount.insee[0].toString()) {
+            return {
+              ...city,
+              totalOffres: professionsCount.total
+            }
+          }
+          return city
+        })
     })
 
-
+    setFormattedCities(newFormattedCities)
   }, [professionsCountList])
 
   useEffect(() => {
@@ -274,7 +277,7 @@ const Cities = () => {
         </CitiesFilterText>
         <CitiesFilters />
       </CitiesFilterContainer>
-      {cities.map((city, key) => (
+      {formattedCities.map((city, key) => (
           <CityItem
             city={city}
             selected={selectedCityId === city.id}
@@ -285,7 +288,6 @@ const Cities = () => {
             onMouseLeave={() => setHoveredCityId(null)}
             itemRef={(el) => (citiesItemsRef.current[key] = el)}
             isLoadingProfessions={isLoadingProfessions}
-            //totalOffres={city.totalOffres}
           />
         ))}
       {!isLoading && cities.length === 0 && (

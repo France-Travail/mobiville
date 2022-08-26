@@ -111,20 +111,12 @@ const RightChevronIconCustom = styled(RightChevronIcon)`
 `
 
 const CityItem = ({
-  city: {
-    nom_comm,
-    nom_dept,
-    population,
-    totalOffres,
-    // bassin_int: ['bassin.tensions.ind_t']
-   },
   city,
   selected,
   onMouseOver,
   onMouseLeave,
   to,
   isLoadingProfessions,
-  //totalOffres,
 }) => {
   const size = useWindowSize()
 
@@ -132,11 +124,10 @@ const CityItem = ({
     return <div />
   }
 
-  let { photo } = city
-  if (photo) {
-    photo = photo.replace('/2000px', '/500px')
+  if (city.photo) {
+    city.photo = city.photo.replace('/2000px', '/500px')
   } else {
-    photo = `/regions/region-${city?.newRegion?.code}.jpg`
+    city.photo = `/regions/region-${city.newRegion?.code}.jpg`
   }
 
   const formatCityTension = (tension) => {
@@ -155,38 +146,36 @@ const CityItem = ({
     >
 
       <Image
-        style={{ backgroundImage: `url(${photo})` }}
+        style={{ backgroundImage: `url(${city.photo})` }}
         $isMobile={isMobileView(size)}
       />
 
       <InformationsContainer>
-        {/*<TagsContainer>
+        <TagsContainer>
           <Tag
-            $color={'bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED}
+            $color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED}
           >
             {formatCityTension(city['bassin.tensions.ind_t'])}
           </Tag>
-        </TagsContainer>*/}
+        </TagsContainer>
 
         <Title>
-          {_.capitalize(nom_comm)}
+          {_.capitalize(city.nom_comm)}
           {selected && <SelectedMarkerImg src={redMarker} alt="" />}
         </Title>
-        <Department>{_.capitalize(nom_dept)}</Department>
+        <Department>{_.capitalize(city.nom_dept)}</Department>
 
         <TagsContainer>
           <Tag>
-            {formatNumber(population * 1000)} habitants
+            {formatNumber(city.population * 1000)} habitants
           </Tag>
-          {!isLoadingProfessions && (
-          <Tag>
-            {totalOffres} offre{totalOffres > 0 ? "s" : ""} d'emploi
-          </Tag>
-          )}
-
-          <>
-            {isLoadingProfessions ? <CircularProgress color="inherit" size={20} /> : null}
-          </>
+          {!isLoadingProfessions
+          ? (
+            <Tag>
+              {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
+            </Tag>
+            )
+          : <CircularProgress color="inherit" size={20} /> }
 
         </TagsContainer>
       </InformationsContainer>
@@ -203,9 +192,6 @@ CityItem.propTypes = {
   onMouseLeave: PropTypes.func.isRequired,
   to: PropTypes.string.isRequired,
   isLoadingProfessions: PropTypes.any,
-  //totalOffres: PropTypes.any,
 }
-
-CityItem.defaultProps = {}
 
 export default CityItem
