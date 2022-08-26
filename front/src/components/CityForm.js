@@ -9,7 +9,6 @@ import { CitySelect, JobSelect, ActionButton } from './'
 
 const Container = styled.div`
   width: 100%;
-  margin-top: 24px;
 
   display: flex;
   flex-direction: ${ ({ $isMobile }) => ($isMobile ? `column` : `row`) };
@@ -17,9 +16,6 @@ const Container = styled.div`
   gap: 8px;
 
   display: ${ ({ $hidden }) => ($hidden ? 'none' : 'visible') };
-`
-
-const CustomActionButton = styled(ActionButton)`
 `
 
 const CityForm = ({
