@@ -258,3 +258,11 @@ docker exec -it mobiville_db_1 mariadb -u $MYSQL_USER -p$MYSQL_PASSWORD -e "CREA
 docker exec -it mobiville_db_1 bash -c "mysql -u $MYSQL_USER -p$MYSQL_PASSWORD mobiville < "$BACKUP_FILE_NAME".sql"
 ```
 TADA !
+
+##### Test E2E
+
+:warning: pour executer la tache yarn/npm cypress:run sans erreur et avoir les resultats de test, il faut installer un (formatteur)[https://github.com/cucumber/json-formatter] dans le PATH de sa machine
+
+Sous Windows : `mkdir %USERPROFILE%\Bin & curl https://github.com/cucumber/json-formatter/releases/download/v19.0.0/cucumber-json-formatter-windows-amd64 >  %USERPROFILE%\Bin\cucumber-json-formatter.exe `
+
+Sous Linux : `curl https://github.com/cucumber/json-formatter/releases/download/v19.0.0/cucumber-json-formatter-linux-amd64 > ~/bin/cucumber-json-formatter`
