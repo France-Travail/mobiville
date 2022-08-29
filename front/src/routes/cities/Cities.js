@@ -155,7 +155,7 @@ const Cities = () => {
   useEffect(() => {
     if (!professionsCountList) return
     let newFormattedCities = formattedCities
-    professionsCountList.map((professionsCount) => {
+    professionsCountList.forEach((professionsCount) => {
       newFormattedCities = newFormattedCities
         .map((city) => {
           if (city.insee_com === professionsCount.insee[0].toString()) {
