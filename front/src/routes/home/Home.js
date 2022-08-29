@@ -22,6 +22,7 @@ const HomePage = () => {
       isMobile={isMobile}
       topMobileMenu
       style={{ background: COLOR_BACKGROUND }}
+      displaySearch={false}
     >
       <Helmet>
         <title>Trouvez l’emploi et la ville qui va avec ! | Mobiville</title>
@@ -42,7 +43,6 @@ const HomePage = () => {
 
       {/* TESTIMONIES */}
       <Testimonies></Testimonies>
-
     </MainLayout>
   )
 }
