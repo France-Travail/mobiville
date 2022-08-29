@@ -1,4 +1,3 @@
-import {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
@@ -151,14 +150,6 @@ const CityItem = ({
       />
 
       <InformationsContainer>
-        <TagsContainer>
-          <Tag
-            $color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED}
-          >
-            {formatCityTension(city['bassin.tensions.ind_t'])}
-          </Tag>
-        </TagsContainer>
-
         <Title>
           {_.capitalize(city.nom_comm)}
           {selected && <SelectedMarkerImg src={redMarker} alt="" />}
@@ -166,6 +157,11 @@ const CityItem = ({
         <Department>{_.capitalize(city.nom_dept)}</Department>
 
         <TagsContainer>
+          <Tag
+              $color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED}
+          >
+            {formatCityTension(city['bassin.tensions.ind_t'])}
+          </Tag>
           <Tag>
             {formatNumber(city.population * 1000)} habitants
           </Tag>
