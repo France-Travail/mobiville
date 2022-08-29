@@ -166,13 +166,11 @@ const CityItem = ({
             {formatNumber(city.population * 1000)} habitants
           </Tag>
           {!isLoadingProfessions
-          ? (
-            <Tag>
-              {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
-            </Tag>
-            )
-          : <CircularProgress color="inherit" size={20} /> }
-
+            ? (<Tag>
+                {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
+              </Tag>)
+            : <CircularProgress color="inherit" size={20} />
+          }
         </TagsContainer>
       </InformationsContainer>
 
