@@ -61,12 +61,12 @@ const DesktopContainer = styled.div`
 `
 
 const CitiesList = styled.div`
-  max-width: ${({ isMobile }) => (isMobile ? 'auto' : '600px')};
+  max-width: ${({ isMobile }) => (isMobile ? 'auto' : '620px')};
   padding: ${({ isMobile }) => (isMobile ? '0 16px' : '0 8px 0 8px')};
   //overflow: ${({ isMobile }) => (isMobile ? 'inherit' : 'auto')};
 
   a {
-    margin: 8px;
+    margin: 8px 2px;
   }
 `
 
@@ -141,20 +141,34 @@ const Cities = () => {
   const citiesListRef = useRef(null)
   const citiesItemsRef = useRef([])
 
+  const [ formattedCities, setFormattedCities ] = useState([])
+
   // pagination
   const itemsPerPage = 10
   const [ page, setPage ] = useState(1)
   const [ noOfPages, setNoOfPages ] = useState(0)
 
   useEffect(() => {
+    setFormattedCities(cities)
+  }, [cities])
+
+  useEffect(() => {
     if (!professionsCountList) return
-    professionsCountList.map((professionsCount) => {
-      const city = cities.find(
-        (city) => city.insee_com === professionsCount.insee.toString()
-      )
-      if (city) city.totalOffres = professionsCount.total
-      return true // useless lint validation "warning"
+    let newFormattedCities = formattedCities
+    professionsCountList.forEach((professionsCount) => {
+      newFormattedCities = newFormattedCities
+        .map((city) => {
+          if (city.insee_com === professionsCount.insee[0].toString()) {
+            return {
+              ...city,
+              totalOffres: professionsCount.total
+            }
+          }
+          return city
+        })
     })
+
+    setFormattedCities(newFormattedCities)
   }, [professionsCountList])
 
   useEffect(() => {
@@ -263,8 +277,7 @@ const Cities = () => {
         </CitiesFilterText>
         <CitiesFilters />
       </CitiesFilterContainer>
-      {!isLoadingProfessions &&
-        cities.map((city, key) => (
+      {formattedCities.map((city, key) => (
           <CityItem
             city={city}
             selected={selectedCityId === city.id}
@@ -274,6 +287,7 @@ const Cities = () => {
             onMouseOver={() => setHoveredCityId(city.id)}
             onMouseLeave={() => setHoveredCityId(null)}
             itemRef={(el) => (citiesItemsRef.current[key] = el)}
+            isLoadingProfessions={isLoadingProfessions}
           />
         ))}
       {!isLoading && cities.length === 0 && (
