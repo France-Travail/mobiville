@@ -14,7 +14,7 @@
 		"postinstall": "husky install",
 		"pre-commit-lint": "yarn lint-staged"
 	},
-	"license": "AGPL",
+	"license": "AGPL-3.0-only",
 	"repository": {
 		"type": "git",
 		"url": "ssh://git@git.beta.pole-emploi.fr:23/mobiville/mobiville.git"
