@@ -68,7 +68,7 @@ test:lint:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $FORCE_DEPLOY == ""'
 
 test:e2e:
-  stage: deploy_staging
+  stage: test
   image: cypress/browsers:node16.14.2-slim-chrome103-ff102
   script:
     # TODO attendre la fin de déploiement en beta
@@ -82,7 +82,7 @@ test:e2e:
     - yarn cypress:run-vanilla
     - yarn generate-multiple-cucumber-html-report
   rules:
-    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == "" && $CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == ""'
 
 
 test:a11y:
