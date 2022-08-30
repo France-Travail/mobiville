@@ -70,7 +70,7 @@ const LogoImagePartner = styled.img`
 const HeaderDesktop = (props) => {
   const location = useLocation()
 
-  const searchSelected = location.pathname.includes('rechercher')
+  const searchSelected = location.pathname.includes('city-search')
   const helpSelected = location.pathname.includes('aides')
 
   function displaySearch() {
@@ -78,7 +78,7 @@ const HeaderDesktop = (props) => {
     if (flag)
       return (
         <IconsContainer>
-          <Item to="/rechercher" selected={searchSelected}>
+          <Item to="/city-search" selected={searchSelected}>
             <Text>Rechercher une ville</Text>
           </Item>
           <Item to="/aides" selected={helpSelected}>
