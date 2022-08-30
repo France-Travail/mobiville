@@ -1,33 +1,29 @@
-import { useEffect, useRef, useState, memo } from 'react'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import {memo, useEffect, useRef, useState} from 'react'
+import {Link, useHistory, useLocation} from 'react-router-dom'
 import styled from 'styled-components'
 import queryString from 'query-string'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet'
 import L from 'leaflet'
 
-import { useCities } from '../../common/contexts/citiesContext'
-import { MainLayout } from '../../components'
-import { useWindowSize } from '../../common/hooks/window-size'
-import { isMobileView } from '../../constants/mobile'
-import {
-  COLOR_BUTTON_HOVER,
-  COLOR_PRIMARY,
-} from '../../constants/colors'
+import {useCities} from '../../common/contexts/citiesContext'
+import {MainLayout} from '../../components'
+import {useWindowSize} from '../../common/hooks/window-size'
+import {isMobileView} from '../../constants/mobile'
+import {COLOR_BUTTON_HOVER, COLOR_PRIMARY,} from '../../constants/colors'
 
 import CityItem from './components/CityItem'
 import MobileCriterionsPanel from './components/MobileCriterionsPanel'
 import DesktopCriterionsPanel from './components/DesktopCriterionsPanel'
 import MobileCriterionsSelection from './components/MobileCriterionsSelection'
-import CitiesFilters from './components/CitiesFilters'
 
 import noResultsPic from '../../assets/images/no_results.svg'
-import blueMarker from '../../assets/images/marker-blue.png'
-import yellowMarker from '../../assets/images/marker-yellow.png'
-import redMarker from '../../assets/images/marker-red.png'
-import { formatNumber } from '../../utils/utils'
+import blueMarker from '../../assets/images/marker-blue.svg'
+import hoverMarker from '../../assets/images/marker-hover.svg'
+import selectedMarker from '../../assets/images/marker-selected.svg'
+import {formatNumber} from '../../utils/utils'
 
 import Pagination from '@mui/material/Pagination'
-import { useProfessions } from '../../common/contexts/professionsContext'
+import {useProfessions} from '../../common/contexts/professionsContext'
 
 const NotFoundContainer = styled.div`
   display: flex;
@@ -49,11 +45,6 @@ const CitiesFilterContainer = styled.div`
   padding-bottom: 16px;
 `
 
-const CitiesFilterText = styled.div`
-  flex: 1;
-  font-weight: 500;
-`
-
 const DesktopContainer = styled.div`
   display: flex;
   margin: 0 auto;
@@ -63,10 +54,9 @@ const DesktopContainer = styled.div`
 const CitiesList = styled.div`
   max-width: ${({ isMobile }) => (isMobile ? 'auto' : '620px')};
   padding: ${({ isMobile }) => (isMobile ? '0 16px' : '0 8px 0 8px')};
-  //overflow: ${({ isMobile }) => (isMobile ? 'inherit' : 'auto')};
 
   a {
-    margin: 8px 2px;
+    margin: 8px -4px;
   }
 `
 
@@ -119,6 +109,26 @@ const PaginationContainer = styled.div`
   }
 `
 
+const TitleContainer = styled.div`
+  font-family: 'Roboto';
+  font-style: normal;
+  color: #191970;
+  width: 600px;
+  margin: 8px;
+`
+
+const Title = styled.h1`
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 28px;
+`
+
+const SubTitle = styled.h2`
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+`
+
 const Cities = () => {
 
   const isMobile = isMobileView(useWindowSize())
@@ -147,6 +157,27 @@ const Cities = () => {
   const itemsPerPage = 10
   const [ page, setPage ] = useState(1)
   const [ noOfPages, setNoOfPages ] = useState(0)
+
+  const { criterions } = useCities()
+
+  const [regionLabel, setRegionLabel] = useState("")
+  const [metierLabel, setMetierLabel] = useState("")
+
+  useEffect(() => {
+    if(params.codeRegion) {
+      const region = criterions.regions.find(
+          (region) => params.codeRegion === region.id
+      )
+      setRegionLabel(region.label)
+    }
+    if(params.codeRome) {
+      const metier = criterions.codeRomes.find(
+          (codeRome) => params.codeRome === codeRome.key
+      )
+      setMetierLabel(metier.label)
+    }
+
+  }, [])
 
   useEffect(() => {
     setFormattedCities(cities)
@@ -270,13 +301,10 @@ const Cities = () => {
 
   const citiesList = (
     <CitiesList isMobile={isMobile} ref={citiesListRef}>
-      <CitiesFilterContainer>
-        <CitiesFilterText>
-          <span>{totalCities}</span>{' '}
-          {totalCities > 1 ? 'villes correspondantes' : 'ville correspondante'}
-        </CitiesFilterText>
-        <CitiesFilters />
-      </CitiesFilterContainer>
+        <TitleContainer>
+          <Title>{totalCities} villes pour {metierLabel} en {regionLabel}</Title>
+          <SubTitle>Classement des villes par opportunités d'emploi</SubTitle>
+        </TitleContainer>
       {formattedCities.map((city, key) => (
           <CityItem
             city={city}
@@ -382,9 +410,9 @@ const Cities = () => {
                   position={[city.geo_point_2d_x, city.geo_point_2d_y]}
                   icon={getLeafletIcon(
                     city.id === selectedCityId
-                      ? redMarker
+                      ? selectedMarker
                       : city.id === hoveredCityId
-                      ? yellowMarker
+                      ? hoverMarker
                       : blueMarker
                   )}
                   eventHandlers={{

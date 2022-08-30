@@ -7,7 +7,7 @@ import {formatNumber} from '../../../utils/utils'
 import {COLOR_GRAY, COLOR_PRIMARY, COLOR_TAG_GREEN, COLOR_TAG_RED,} from '../../../constants/colors'
 import {useWindowSize} from '../../../common/hooks/window-size'
 import {isMobileView} from '../../../constants/mobile'
-import redMarker from '../../../assets/images/marker-red.png'
+import selectedMarker from '../../../assets/images/marker-selected.svg'
 import {ReactComponent as RightChevronIcon} from '../../../assets/images/icons/right_chevron.svg'
 
 import {CircularProgress} from '@mui/material'
@@ -152,7 +152,7 @@ const CityItem = ({
       <InformationsContainer>
         <Title>
           {_.capitalize(city.nom_comm)}
-          {selected && <SelectedMarkerImg src={redMarker} alt="" />}
+          {selected && <SelectedMarkerImg src={selectedMarker} alt="" />}
         </Title>
         <Department>{_.capitalize(city.nom_dept)}</Department>
 
