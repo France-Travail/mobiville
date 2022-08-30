@@ -137,7 +137,7 @@ const Cities = () => {
   } = useProfessions()
 
   // cities
-  const { cities, isLoading, onSearch, totalCities, sortCriterions } = useCities()
+  const { cities, isLoading, onSearch, totalCities, criterions, sortCriterions } = useCities()
   const [ hoveredCityId, setHoveredCityId ] = useState(null)
   const [ selectedCityId, setSelectedCityId ] = useState(null)
   const citiesListRef = useRef(null)
@@ -150,26 +150,23 @@ const Cities = () => {
   const [ page, setPage ] = useState(1)
   const [ noOfPages, setNoOfPages ] = useState(0)
 
-  const { criterions } = useCities()
-
-  const [regionLabel, setRegionLabel] = useState("")
-  const [metierLabel, setMetierLabel] = useState("")
+  const [ regionLabel, setRegionLabel ] = useState("")
+  const [ metierLabel, setMetierLabel ] = useState("")
 
   useEffect(() => {
-    if(params.codeRegion) {
+    if (!!params?.codeRegion) {
       const region = criterions.regions.find(
           (region) => params.codeRegion === region.id
       )
       setRegionLabel(region.label)
     }
-    if(params.codeRome) {
+    if (!!params?.codeRome) {
       const metier = criterions.codeRomes.find(
           (codeRome) => params.codeRome === codeRome.key
       )
       setMetierLabel(metier.label)
     }
-
-  }, [])
+  }, [ params, criterions ])
 
   useEffect(() => {
     setFormattedCities(cities)
@@ -293,23 +290,23 @@ const Cities = () => {
 
   const citiesList = (
     <CitiesList isMobile={isMobile} ref={citiesListRef}>
-        <TitleContainer>
-          <Title>{totalCities} villes pour {metierLabel} en {regionLabel}</Title>
-          <SubTitle>Classement des villes par opportunités d'emploi</SubTitle>
-        </TitleContainer>
+      <TitleContainer>
+        <Title>{totalCities} villes pour {metierLabel} en {regionLabel}</Title>
+        <SubTitle>Classement des villes par opportunités d'emploi</SubTitle>
+      </TitleContainer>
       {formattedCities.map((city, key) => (
-          <CityItem
-            city={city}
-            selected={selectedCityId === city.id}
-            sortCriterions={sortCriterions}
-            key={city.id}
-            to={getCityUrl(city)}
-            onMouseOver={() => setHoveredCityId(city.id)}
-            onMouseLeave={() => setHoveredCityId(null)}
-            itemRef={(el) => (citiesItemsRef.current[key] = el)}
-            isLoadingProfessions={isLoadingProfessions}
-          />
-        ))}
+        <CityItem
+          city={city}
+          selected={selectedCityId === city.id}
+          sortCriterions={sortCriterions}
+          key={city.id}
+          to={getCityUrl(city)}
+          onMouseOver={() => setHoveredCityId(city.id)}
+          onMouseLeave={() => setHoveredCityId(null)}
+          itemRef={(el) => (citiesItemsRef.current[key] = el)}
+          isLoadingProfessions={isLoadingProfessions}
+        />
+      ))}
       {!isLoading && cities.length === 0 && (
         <NotFoundContainer>
           <img alt="" src={noResultsPic} style={{ marginBottom: '2rem' }} />
