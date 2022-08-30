@@ -37,14 +37,6 @@ const NotFoundContainer = styled.div`
   color: #657078;
 `
 
-const CitiesFilterContainer = styled.div`
-  display: flex;
-  max-width: 700px;
-  align-items: center;
-  margin: auto;
-  padding-bottom: 16px;
-`
-
 const DesktopContainer = styled.div`
   display: flex;
   margin: 0 auto;
