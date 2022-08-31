@@ -1,17 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import {COLOR_GRAY, COLOR_TEXT_PRIMARY} from '../../constants/colors'
 
-const HEIGHT = 60
+import {
+  COLOR_GRAY,
+  COLOR_PRIMARY,
+  COLOR_TEXT_PRIMARY,
+  COLOR_WHITE
+} from '../../constants/colors'
+
 const PADDING = 16
 
 const HeaderContainer = styled.div`
+  height: 60px;
   left: 0;
   right: 0;
-  background-color: white;
+
+  background-color: ${ COLOR_WHITE };
   width: 100%;
   display: flex;
   align-items: center;
@@ -42,44 +49,45 @@ const HeaderArrowLink = styled(Link)`
   width: 160px;
   height: 32px;
   border-radius: 100px;
-  background: ${COLOR_GRAY};
+  background: ${ COLOR_GRAY };
   background: #F6F7FB;
   margin-right: 40px;
 
   &,
   &:hover {
-    color: ${COLOR_TEXT_PRIMARY};
+    color: ${ COLOR_TEXT_PRIMARY };
   }
 `
 
-const H1 = styled.h1`
-  font-family: 'Roboto';
-  font-style: normal;
+const BackText = styled.p`
+  padding: 4px 12px 4px 4px;
+  
   font-weight: 500;
   font-size: 12px;
   line-height: 14px;
-  color: #191970;
-  padding: 4px 12px 4px 4px;
+  color: ${ COLOR_PRIMARY };
 `
 
-const CitySubHeader = ({backLink, desktopTitleWidth, isMobile}) => (
-    <>
-        <HeaderContainer isMobile={isMobile} style={{height: HEIGHT}}>
-            <HeaderSubContainer
-                isMobile={isMobile}
-                style={{
-                    maxWidth: desktopTitleWidth
-                        ? `calc(${desktopTitleWidth}px + ${PADDING}px * 2)`
-                        : null,
-                }}
-            >
-                <HeaderArrowLink to={backLink} title="Retour">
-                    <ArrowBackIcon color="primary" fontSize="large"/>
-                    <H1>Retour aux résultats</H1>
-                </HeaderArrowLink>
-            </HeaderSubContainer>
-        </HeaderContainer>
-    </>
+const CitySubHeader = ({
+  backLink,
+  desktopTitleWidth,
+  isMobile
+}) => (
+  <HeaderContainer isMobile={isMobile}>
+    <HeaderSubContainer
+      isMobile={isMobile}
+      style={{
+        maxWidth: desktopTitleWidth
+          ? `calc(${desktopTitleWidth}px + ${PADDING}px * 2)`
+          : null,
+      }}
+    >
+      <HeaderArrowLink to={backLink} title="Retour">
+        <ArrowBackIcon color="primary" fontSize="large"/>
+        <BackText>Retour aux résultats</BackText>
+      </HeaderArrowLink>
+    </HeaderSubContainer>
+  </HeaderContainer>
 )
 
 CitySubHeader.props = {
