@@ -121,6 +121,14 @@ const SubTitle = styled.h2`
   line-height: 27px;
 `
 
+const PopupLink = styled(Link)`
+  color: #191970 !important;
+  
+  &:hover {
+   color: #4E4EC9 !important;
+  }
+`
+
 const Cities = () => {
 
   const isMobile = isMobileView(useWindowSize())
@@ -291,7 +299,7 @@ const Cities = () => {
   const citiesList = (
     <CitiesList isMobile={isMobile} ref={citiesListRef}>
       <TitleContainer>
-        <Title>{totalCities} villes pour {metierLabel} en {regionLabel}</Title>
+        <Title>{totalCities} {!!metierLabel ? `villes pour ${metierLabel}` : '' } {!!regionLabel ? `en ${regionLabel}` : '' }</Title>
         <SubTitle>Classement des villes par opportunités d'emploi</SubTitle>
       </TitleContainer>
       {formattedCities.map((city, key) => (
@@ -416,10 +424,10 @@ const Cities = () => {
                   }}
                 >
                   <Popup>
-                    <Link to={getCityUrl(city)}>
+                    <PopupLink to={getCityUrl(city)}>
                       <b>{city.nom_comm}</b> (
                       {formatNumber(city.population * 1000)} habitants)
-                    </Link>
+                    </PopupLink>
                   </Popup>
                 </Marker>
               ))}
