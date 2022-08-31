@@ -42,6 +42,9 @@ export const Routes = () => (
           <Route exact path="/faq" component={FAQ} />
           <Route exact path="/legal" component={Legal} />
           <Route exact path="/accessibility" component={Accessibility} />
+
+          {/* Redirection sur la home page si le path ne match aucune route */}
+          <Route component={() => <Redirect to="/"/>} />
         </Switch>
       </Router>
     </Suspense>
