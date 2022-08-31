@@ -424,7 +424,7 @@ const CityJobs = ({
   )
 
   return (
-    <MainLayout isMobile={isMobile}>
+    <MainLayout>
       <Helmet>
         <title>
           Travailler dans {romeLabel} à {ucFirstOnly(city.nom_comm)} - Mobiville

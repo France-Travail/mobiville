@@ -400,7 +400,7 @@ const CityPage = () => {
   )
 
   return (
-    <MainLayout isMobile={isMobile} menu={{ visible: !isMobile }}>
+    <MainLayout menu={{ visible: !isMobile }}>
       <Helmet>
         <title>Pourquoi vivre à {ucFirstOnly(city.nom_comm)} - Mobiville</title>
         <meta
