@@ -189,7 +189,7 @@ const Cities = () => {
         sortBy: sortCriterions,
         onlySearchInTension: true
       },
-      (page ?? 0) * 10,
+      (!!page ? page-1 : 0) * 10,
       (cities ?? [])
     )
   }, [ params, sortCriterions, page ])
