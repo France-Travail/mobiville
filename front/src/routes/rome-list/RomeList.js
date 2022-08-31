@@ -3,7 +3,6 @@ import { Link as _Link } from 'react-router-dom'
 import styled from 'styled-components'
 import axios from 'axios'
 import { deburr, sortBy } from 'lodash'
-import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined'
 
 import MainLayout from '../../components/MainLayout'
 import { isMobileView } from '../../constants/mobile'
@@ -200,12 +199,7 @@ const RomeList = () => {
   return (
     <MainLayout>
       {isMobile && (
-        <H1 isMobile>
-          <Link to="/rechercher" style={{ marginRight: 8, marginTop: 6 }}>
-            <ArrowBackOutlinedIcon />
-          </Link>
-          Les métiers disponibles sur Mobiville
-        </H1>
+        <H1 isMobile>Les métiers disponibles sur Mobiville</H1>
       )}
       <Wrapper style={{ marginTop: isMobile ? PAGE_HEADER_SIZE : 0 }}>
         {!isMobile && <H1>Les métiers disponibles sur Mobiville</H1>}
@@ -218,14 +212,7 @@ const RomeList = () => {
             <Ul>
               {Object.keys(dataByCategory[categoryLetter]).map((index) => (
                 <Li key={dataByCategory[categoryLetter][index].rome}>
-                  <Link
-                    to={`/rechercher/region?codeRome=${dataByCategory[categoryLetter][index].rome}`}
-                    title={dataByCategory[categoryLetter][index].ogrs.join(
-                      ', '
-                    )}
-                  >
-                    {dataByCategory[categoryLetter][index].label}
-                  </Link>
+                  {dataByCategory[categoryLetter][index].label}
                 </Li>
               ))}
             </Ul>

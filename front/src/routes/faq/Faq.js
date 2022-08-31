@@ -29,7 +29,7 @@ const BASE_ACCORDION_DATA = [
       'Je ne trouve pas mon métier dans la liste proposée, c’est normal?',
     answer: (
       <>
-        Le service cible en priorité <Link to="/rome-list">les métiers</Link>{' '}
+        Le service cible en priorité les métiers{' '}
         dans lesquels il y a des difficultés de recrutement, de nouveaux métiers
         seront intégrés progressivement.
       </>
