@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, memo } from 'react'
+import { useEffect, useRef, useState, memo, useCallback } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import styled from 'styled-components'
 import queryString from 'query-string'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
@@ -363,32 +364,58 @@ const Cities = () => {
     )
   }
 
-  return (
-    <MainLayout
-      style={{
-        overflow: isMobile ? 'inherit' : '',
-        minHeight: isMobile ? undefined : '',
-      }}
-    >
-      {isMobile ? (
-        <MobileCriterionsPanel
-          criterions={params}
-          showMobileCriterionsSelection={showMobileCriterionsSelection}
-          total={totalCities}
+  const computedHelmet = useCallback(() => {
+    if (!!params?.codeRegion && !!cities && !!cities[0] && !!cities[0]['newRegion.name']) {
+      return (
+        <Helmet>
+          <title>Où travailler en { cities[0]['newRegion.name'] } | Mobiville</title>
+          <meta
+            name="description"
+            content={`Découvrez les villes qui vous correspondent le mieux dans la région ${cities[0]['newRegion.name']}`}
+          />
+        </Helmet>
+      )
+    }
+    return (
+      <Helmet>
+        <title>Où travailler en France | Mobiville</title>
+        <meta
+          name="description"
+          content={`Découvrez les villes qui vous correspondent le mieux à votre recherche d'emploi en France`}
         />
-      ) : (
-        <DesktopCriterionsPanel
-          paramsUrl={params}
-          total={totalCities}
-          onSubmit={onSubmit}
-        />
-      )}
+      </Helmet>
+    )
+  }, [ cities, params ])
 
-      {isMobile ? (
-        citiesList
-      ) : (
-        <DesktopContainer>
-          {citiesList}
+  return (
+    <>
+      { computedHelmet() }
+      
+      <MainLayout
+        style={{
+          overflow: isMobile ? 'inherit' : '',
+          minHeight: isMobile ? undefined : '',
+        }}
+      >
+        {isMobile ? (
+          <MobileCriterionsPanel
+            criterions={params}
+            showMobileCriterionsSelection={showMobileCriterionsSelection}
+            total={totalCities}
+          />
+        ) : (
+          <DesktopCriterionsPanel
+            paramsUrl={params}
+            total={totalCities}
+            onSubmit={onSubmit}
+          />
+        )}
+
+        {isMobile ? (
+          citiesList
+        ) : (
+          <DesktopContainer>
+            {citiesList}
 
           {!isLoading && cities.length ? (
             <StyledMapContainer
@@ -441,6 +468,7 @@ const Cities = () => {
         </DesktopContainer>
       )}
     </MainLayout>
+  </>
   )
 }
 
