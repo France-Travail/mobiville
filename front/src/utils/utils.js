@@ -73,11 +73,6 @@ export const ucFirst = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
-export const ucFirstOnly = (s) => {
-  if (typeof s !== 'string') return ''
-  return ucFirst(s.trim().toLowerCase())
-}
-
 export const thereAre = (date) => moment(date).fromNow()
 
 const numberFormatter = Intl.NumberFormat()

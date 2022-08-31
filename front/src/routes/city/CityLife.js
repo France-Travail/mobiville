@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet-async'
+import _ from "lodash"
+
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowBackwardIcon from '@mui/icons-material/ArrowBack'
 import { IconButton, Tooltip } from '@mui/material'
@@ -24,7 +26,6 @@ import {
   SERVICES_ENVIRONMENT,
 } from '../../constants/lifeCriterions'
 
-import { ucFirstOnly } from '../../utils/utils'
 import SubHeader from '../../components/SubHeader'
 import MainLayout from '../../components/MainLayout'
 
@@ -291,7 +292,7 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
           <ElementLine key={t.label}>
             <IconImg src={`/icons/${t.icon}`} alt="" />
             <p className="title">
-              {t.label} de {ucFirstOnly(city.nom_comm)}
+              {t.label} de {_.capitalize(city.nom_comm)}
             </p>
             <p className="details">{t.total}</p>
           </ElementLine>
@@ -380,10 +381,10 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
   return (
     <MainLayout isMobile={isMobile}>
       <Helmet>
-        <title>La vie à {ucFirstOnly(city.nom_comm)} - Mobiville</title>
+        <title>La vie à {_.capitalize(city.nom_comm)} - Mobiville</title>
         <meta
           name="description"
-          content={`Toutes les informations clés de cadre de vie sur la ville de ${ucFirstOnly(
+          content={`Toutes les informations clés de cadre de vie sur la ville de ${_.capitalize(
             city.nom_comm
           )}`}
         />
@@ -392,7 +393,7 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
         backLink={backLink}
         isMobile={isMobile}
         notFixed={!isMobile}
-        title={` Information sur le cadre de vie à ${ucFirstOnly(
+        title={` Information sur le cadre de vie à ${_.capitalize(
           city.nom_comm
         )}`}
       />
