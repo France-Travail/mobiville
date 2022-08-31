@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Link as _Link } from 'react-router-dom'
 import styled from 'styled-components'
 import axios from 'axios'
 import { deburr, sortBy } from 'lodash'
@@ -137,10 +136,6 @@ const Ul = styled.ul`
 const Li = styled.li`
   padding-bottom: 8px;
   font-size: 14px;
-`
-
-const Link = styled(_Link)`
-  color: #000;
 `
 
 const RomeList = () => {

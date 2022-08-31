@@ -159,7 +159,7 @@ const HeaderDesktop = ({
 }
 
 HeaderDesktop.propTypes = {
-  displaySearch: PropTypes.boolean
+  displaySearch: PropTypes.bool
 }
 
 export default HeaderDesktop

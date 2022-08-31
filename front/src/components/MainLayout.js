@@ -98,6 +98,7 @@ MainLayout.propTypes = {
   menu: PropTypes.oneOfType([PropTypes.object]),
   topMobileMenu: PropTypes.bool,
   style: PropTypes.object,
+  displaySearch: PropTypes.bool
 }
 
 export default MainLayout

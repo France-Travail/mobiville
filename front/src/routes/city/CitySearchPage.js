@@ -47,8 +47,8 @@ const CitySearchPage = () => {
         </Link>,
         <Typography key="2">
           Rechercher un métier
-        </Typography>,
-    ];
+        </Typography>
+    ]
 
     if (isMobile) {
         return (
