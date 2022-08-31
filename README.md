@@ -15,11 +15,11 @@ Mobiville est un outil d’aide à la décision pour orienter les candidats à l
 Pré-requis: [docker, docker-compose](https://www.docker.com/get-started) et [yarn](https://yarnpkg.com/getting-started/install)
 
 ### Version de nodeJS
-Il faut s'assurer d'etre sous **node 12.18.4**
+Il faut s'assurer d'etre sous **node 16.16.0**
 Avec [nvm](https://github.com/nvm-sh/nvm) pour Windows et un poste PE il faut ouvrir un cmd en self élévation:
 ```bash
-nvm install 12.18.4
-nvm use 12.18.4
+nvm install 16.16.0
+nvm use 16.16.0
 ``` 
 
 ### Construire et démarrer les conteneurs
