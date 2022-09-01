@@ -53,8 +53,10 @@ const GoToMainContent = styled.a`
 
 const MainLayout = ({
   children,
-  menu,
-  topMobileMenu,
+  menu = {
+    visible: true,
+  },
+  topMobileMenu = false,
   style = {},
   displaySearch = true,
 }) => {
@@ -96,14 +98,7 @@ MainLayout.propTypes = {
   menu: PropTypes.oneOfType([PropTypes.object]),
   topMobileMenu: PropTypes.bool,
   style: PropTypes.object,
-}
-
-MainLayout.defaultProps = {
-  menu: {
-    visible: true,
-  },
-  topMobileMenu: false,
-  style: {},
+  displaySearch: PropTypes.bool
 }
 
 export default MainLayout

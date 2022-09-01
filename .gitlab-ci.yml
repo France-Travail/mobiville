@@ -38,7 +38,7 @@ variables:
   RENEW_TLS:
     value: "NO"
     description: replace TLS certificate with "YES"
-  a11y_urls: "https://mobiville.pole-emploi.fr https://mobiville.beta.pole-emploi.fr/rechercher/romehttps://mobiville.beta.pole-emploi.fr/cities?code_rome=j1501&code_criterion=small-city,mountain&code_region=94&code_city=small-city&code_environment=mountain https://mobiville.beta.pole-emploi.fr/city/2b036-bigorno?code_rome=j1501"
+  a11y_urls: "https://mobiville.pole-emploi.fr https://mobiville.beta.pole-emploi.fr/cities?code_rome=j1501&code_criterion=small-city,mountain&code_region=94&code_city=small-city&code_environment=mountain https://mobiville.beta.pole-emploi.fr/city/2b036-bigorno?code_rome=j1501"
 
 
 include:
