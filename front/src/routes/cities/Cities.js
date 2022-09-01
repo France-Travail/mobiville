@@ -49,6 +49,7 @@ const CitiesList = styled.div`
 
   a {
     margin: 8px -4px;
+    ${({ $isMobile }) => ($isMobile ? 'width: 612px;' : '')}
   }
 `
 
@@ -383,7 +384,7 @@ const Cities = () => {
         <DesktopContainer>
           {citiesList}
 
-          {cities.length ? (
+          {!isLoading && cities.length ? (
             <StyledMapContainer
               center={cities.length > 1 ? null : firstCityCoordinates}
               zoom={cities.length > 1 ? null : 6}
@@ -415,10 +416,6 @@ const Cities = () => {
                   eventHandlers={{
                     popupopen: () => {
                       setSelectedCityId(city.id)
-                      citiesItemsRef.current[key].scrollIntoView({
-                        behavior: 'smooth',
-                      })
-                      citiesItemsRef.current[key].focus()
                     },
                     popupclose: () => setSelectedCityId(null),
                   }}

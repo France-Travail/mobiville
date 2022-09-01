@@ -118,6 +118,7 @@ const CityItem = ({
   isLoadingProfessions,
 }) => {
   const size = useWindowSize()
+  const isMobile= isMobileView(size)
 
   if (!city) {
     return <div />
@@ -141,7 +142,7 @@ const CityItem = ({
       onMouseOver={onMouseOver}
       onMouseLeave={onMouseLeave}
       to={to}
-      $isMobile={isMobileView(size)}
+      $isMobile={isMobile}
     >
 
       <Image
@@ -150,6 +151,7 @@ const CityItem = ({
       />
 
       <InformationsContainer>
+
         <Title>
           {_.capitalize(city.nom_comm)}
           {selected && <SelectedMarkerImg src={selectedMarker} alt="" />}
@@ -157,20 +159,18 @@ const CityItem = ({
         <Department>{_.capitalize(city.nom_dept)}</Department>
 
         <TagsContainer>
-          <Tag
-              $color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED}
-          >
+          <Tag $color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED} >
             {formatCityTension(city['bassin.tensions.ind_t'])}
           </Tag>
           <Tag>
             {formatNumber(city.population * 1000)} habitants
           </Tag>
-          {!isLoadingProfessions
-            ? (<Tag>
-                {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
-              </Tag>)
-            : <CircularProgress color="inherit" size={20} />
-          }
+            {!isLoadingProfessions
+              ? (<Tag>
+                  {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
+                </Tag>)
+              : <CircularProgress color="inherit" size={20} />
+            }
         </TagsContainer>
       </InformationsContainer>
 
