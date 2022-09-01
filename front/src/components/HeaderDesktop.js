@@ -97,14 +97,14 @@ const HeaderDesktop = ({
 }) => {
   const location = useLocation()
 
-  const searchSelected = location.pathname.includes('city-search')
+  const searchSelected = location.pathname.includes('rechercher')
   const helpSelected = location.pathname.includes('aides')
 
   const Navigation = () => (
     <>
       {displaySearch
         ? (<NavContainer>
-            <NavItem to="/city-search" $isSelected={searchSelected}>
+            <NavItem to="/rechercher" $isSelected={searchSelected}>
               Rechercher une ville
             </NavItem>
             <NavItem to="/aides" $isSelected={helpSelected}>

@@ -77,10 +77,10 @@ const MENU_LINK = [
     label: 'Accueil',
   },
   {
-    path: '/city-search',
+    path: '/rechercher',
     icon: HouseOutlineIcon,
     label: 'Villes',
-    activePaths: ['city-search', 'cities'],
+    activePaths: ['rechercher', 'cities'],
   },
   {
     path: '/aides',
