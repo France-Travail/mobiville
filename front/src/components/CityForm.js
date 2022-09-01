@@ -67,7 +67,7 @@ const CityForm = ({
             <ActionButton
                 style={{
                     minHeight: 73,
-                    boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.3)',
+                    boxShadow: isMobile ? 'none' : '0px 5px 10px rgba(0, 0, 0, 0.3)',
                     width: isMobile ? '100%' : 184,
                 }}
                 path={computeSearchPath()}
