@@ -4,12 +4,14 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import L from 'leaflet'
 
 import { useCities } from '../../common/contexts/citiesContext'
 import { COLOR_GRAY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
 import { formatNumber } from '../../utils/utils'
 import crowd from '../../assets/images/icons/crowd.svg'
 import weather from '../../assets/images/icons/weather.svg'
+import blueMarker from "../../assets/images/marker-blue.svg"
 
 const Container = styled.div`
   background-color: #fff;
@@ -110,6 +112,19 @@ const H1 = styled.h1`
 const CityHeader = ({ backLink, isMobile, titlesNode }) => {
   const { city } = useCities()
 
+  const getLeafletIcon = (requiredFile) => (
+      new L.Icon({
+        iconUrl: requiredFile,
+        iconRetinaUrl: requiredFile,
+        iconAnchor: [12, 41],
+        popupAnchor: [0, -41],
+        shadowUrl: null,
+        shadowSize: null,
+        shadowAnchor: null,
+        className: 'leaflet-marker-icon',
+      })
+  )
+
   return (
     <Container isMobile={isMobile}>
       {isMobile && (
@@ -134,7 +149,8 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
 
-            <Marker position={[city.geo_point_2d_x, city.geo_point_2d_y]} />
+            <Marker position={[city.geo_point_2d_x, city.geo_point_2d_y]} icon={getLeafletIcon(blueMarker)} />
+
           </StyledMapContainer>
         )}
       </PicAndMapContainer>
