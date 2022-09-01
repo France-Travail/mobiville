@@ -51,7 +51,7 @@ const WelcomeSearchForm = () => {
         if (buttonId === HELPS_BUTTON_ID) {
             history.push('/aides-search')
         } else if (buttonId === CITIES_BUTTON_ID) {
-            history.push('/city-search')
+            history.push('/rechercher')
         }
     }
   }

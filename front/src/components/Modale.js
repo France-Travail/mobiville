@@ -68,9 +68,12 @@ const Modale = ({
 }
 
 Modale.propTypes = {
-    children: PropTypes.arrayOf(PropTypes.node).isRequired,
-    closeLink: PropTypes.string.isRequired,
-    title: PropTypes.string
+  children: PropTypes.oneOfType([
+    PropTypes.node,
+    PropTypes.arrayOf(PropTypes.node),
+  ]).isRequired,
+  closeLink: PropTypes.string.isRequired,
+  title: PropTypes.string,
 }
 
 export default Modale

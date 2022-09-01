@@ -1,60 +1,52 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
 import { Typography } from '@mui/material'
 
 import {
   COLOR_HEADER_BACKGROUND,
   COLOR_PRIMARY,
   COLOR_TEXT_SECONDARY,
+  COLOR_WHITE,
 } from '../constants/colors'
 import LOGO from '../assets/images/LogoMobiville_gros.svg'
 import LOGO_FR from '../assets/images/marianne-logo.png'
 import LOGO_AL from '../assets/images/logo-action-logement.png'
 import LOGO_PE from '../assets/images/logo-pole-emploi.png'
 
-const Header = styled.header`
-  height: 102px;
-  top: 0;
-  left: 0;
-  right: 0;
+const Container = styled.header`
+  height: 100px;
+  width: 100%;
+  padding: 16px 90px;
   z-index: 1001; //leaflet map est a 1000zindex
-  background: #ffffff;
+
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  padding: 16px 70px;
-  border-bottom: solid 2px ${COLOR_HEADER_BACKGROUND};
+  justify-content: space-between;
 
-  .taille-fixe {
-    flex-shrink: 0;
-    width: 300px;
-  }
+  background: ${ COLOR_WHITE };
+  border-bottom: solid 2px ${ COLOR_HEADER_BACKGROUND };
 `
 
-const Item = styled(Link)`
-  && {
-    margin: 0px 11px;
-    text-decoration: none;
-    position: relative;
-    display: flex;
-    align-items: center;
-    color: ${(props) =>
-      props.selected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY};
-  }
-`
+const HomeLink = styled(Link)`
+  height: 100%;
 
-const IconsContainer = styled.div`
   display: flex;
-  justify-content: center;
-  flex-grow: 1;
+  align-items: center;
+  gap: 12px;
 
-  a:hover {
-    color: ${COLOR_PRIMARY};
+  & > img {
+    height: 100%;
   }
 `
 
-const Text = styled(Typography)`
+// PARTNERS LOGOS
+const PartnerText = styled(Typography)`
+  padding-bottom: 8px;
+
+  color: ${ COLOR_TEXT_SECONDARY };
+
   && {
     font-weight: 500;
     font-size: 14px;
@@ -62,79 +54,112 @@ const Text = styled(Typography)`
   }
 `
 
-const LogoImagePartner = styled.img`
-  height: 28px;
-  margin-left: 16px;
+const PartnersContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
-const HeaderDesktop = (props) => {
+const PartnersLogoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+`
+
+const LogoImagePartner = styled.img`
+  height: 28px;
+`
+
+// NAVIGATION
+const NavContainer = styled.div`
+  display: flex;
+  gap: 32px;
+`
+
+const NavItem = styled(Link)`
+  && {
+    position: relative;
+    
+    display: flex;
+    align-items: center;
+
+    text-decoration: none;
+    color: ${({ $isSelected }) => $isSelected ? COLOR_PRIMARY : COLOR_TEXT_SECONDARY};
+    font-weight: ${({ $isSelected }) => $isSelected ? '900' : '400'};
+  }
+
+  &:hover {
+    color: ${ COLOR_PRIMARY };
+  }
+`
+
+const HeaderDesktop = ({
+  displaySearch = true
+}) => {
   const location = useLocation()
 
   const searchSelected = location.pathname.includes('rechercher')
   const helpSelected = location.pathname.includes('aides')
 
-  function displaySearch() {
-    const flag = props.displaySearch
-    if (flag)
-      return (
-        <IconsContainer>
-          <Item to="/rechercher" selected={searchSelected}>
-            <Text>Rechercher une ville</Text>
-          </Item>
-          <Item to="/aides" selected={helpSelected}>
-            <Text>Rechercher des aides</Text>
-          </Item>
-        </IconsContainer>
-      )
-  }
+  const Navigation = () => (
+    <>
+      {displaySearch
+        ? (<NavContainer>
+            <NavItem to="/rechercher" $isSelected={searchSelected}>
+              Rechercher une ville
+            </NavItem>
+            <NavItem to="/aides" $isSelected={helpSelected}>
+              Rechercher des aides
+            </NavItem>
+          </NavContainer>)
+        : null
+      }
+    </>
+  )
 
   return (
-    <Header>
-      <Link
+    <Container>
+      <HomeLink
         to="/"
         className="taille-fixe"
         title="Retour à l’accueil"
-        style={{ display: 'flex', alignItems: 'center' }}
       >
         <img
           src={LOGO_FR}
           alt="Retour à la page d’accueil"
-          style={{ height: 70, marginRight: 16 }}
         />
         <img
           src={LOGO}
           alt="Retour à la page d’accueil"
-          style={{ height: 85 }}
         />
-      </Link>
-      {displaySearch()}
-      <div className="taille-fixe" style={{ display: 'flex' }}>
-        <div style={{ marginLeft: 'auto' }}>
-          <Text style={{ color: COLOR_TEXT_SECONDARY, paddingBottom: 8 }}>
-            Proposé par
-          </Text>
-          <a
-            href="https://www.actionlogement.fr/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <LogoImagePartner src={LOGO_AL} alt="Action logement" />
-          </a>
-          <a
-            href="https://www.pole-emploi.fr/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <LogoImagePartner src={LOGO_PE} alt="Pôle Emploi" />
-          </a>
-        </div>
-      </div>
-    </Header>
+      </HomeLink>
+
+      <Navigation />
+
+      <PartnersContainer>
+          <PartnerText>Proposé par</PartnerText>
+          <PartnersLogoContainer>
+            <a
+                href="https://www.actionlogement.fr/"
+                target="_blank"
+                rel="noreferrer"
+            >
+              <LogoImagePartner src={LOGO_AL} alt="Action logement"/>
+            </a>
+            <a
+                href="https://www.pole-emploi.fr/"
+                target="_blank"
+                rel="noreferrer"
+            >
+              <LogoImagePartner src={LOGO_PE} alt="Pôle Emploi"/>
+            </a>
+          </PartnersLogoContainer>
+        </PartnersContainer>
+    </Container>
   )
 }
 
-HeaderDesktop.propTypes = {}
-
-HeaderDesktop.defaultProps = {}
+HeaderDesktop.propTypes = {
+  displaySearch: PropTypes.bool
+}
 
 export default HeaderDesktop
