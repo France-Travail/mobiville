@@ -1,11 +1,7 @@
 import { useCallback, useState } from 'react'
-import { useHistory } from "react-router-dom"
+import { useNavigate } from 'react-router-dom'
 
-import {
-    ButtonGroup,
-    CityForm,
-    HelpForm
-} from '../../../components'
+import { ButtonGroup, CityForm, HelpForm } from '../../../components'
 
 import { ReactComponent as HouseOutlineIcon } from '../../../assets/images/icons/house-outline.svg'
 import { ReactComponent as FinancialHelpIcon } from '../../../assets/images/icons/financial-help.svg'
@@ -33,26 +29,29 @@ const ButtonGroupLabel = styled.p`
 `
 
 const WelcomeSearchForm = () => {
-    const HELPS_BUTTON_ID = 'helps'
-    const CITIES_BUTTON_ID = 'cities'
+  const HELPS_BUTTON_ID = 'helps'
+  const CITIES_BUTTON_ID = 'cities'
 
-    const isMobile = isMobileView(useWindowSize())
-    const history = useHistory()
+  const isMobile = isMobileView(useWindowSize())
+  const navigate = useNavigate()
 
-    const [ selectedSearchMode, setSelectedSearchMode ] = useState('city')
-    
-  const isSelected = useCallback((id) => {
-    return id === selectedSearchMode
-  }, [selectedSearchMode])
+  const [selectedSearchMode, setSelectedSearchMode] = useState('city')
+
+  const isSelected = useCallback(
+    (id) => {
+      return id === selectedSearchMode
+    },
+    [selectedSearchMode]
+  )
 
   const handleClick = (buttonId) => {
     // redirect to modale on mobile
     if (isMobile) {
-        if (buttonId === HELPS_BUTTON_ID) {
-            history.push('/aides-search')
-        } else if (buttonId === CITIES_BUTTON_ID) {
-            history.push('/rechercher')
-        }
+      if (buttonId === HELPS_BUTTON_ID) {
+        navigate('/aides-search')
+      } else if (buttonId === CITIES_BUTTON_ID) {
+        navigate('/rechercher')
+      }
     }
   }
 
@@ -60,48 +59,38 @@ const WelcomeSearchForm = () => {
     setSelectedSearchMode(buttonId)
   }
 
-    return (
-        <Container $isMobile={isMobile}>
-            <div>
-                <ButtonGroupLabel>Que recherchez-vous ?</ButtonGroupLabel>
-                <ButtonGroup
-                    onChange={handleChange}
-                    onClick={handleClick}
-                >
-                    <button
-                        type="button"
-                        id={CITIES_BUTTON_ID}
-                    >
-                        <HouseOutlineIcon />
-                        <p>Une ville</p>
-                    </button>
+  return (
+    <Container $isMobile={isMobile}>
+      <div>
+        <ButtonGroupLabel>Que recherchez-vous ?</ButtonGroupLabel>
+        <ButtonGroup onChange={handleChange} onClick={handleClick}>
+          <button type="button" id={CITIES_BUTTON_ID}>
+            <HouseOutlineIcon />
+            <p>Une ville</p>
+          </button>
 
-                    <button
-                        type="button"
-                        id={HELPS_BUTTON_ID}
-                        style={{
-                            border: (isMobile ? `1px solid ${ COLOR_PRIMARY }` : 'none')
-                        }}
-                    >
-                        <FinancialHelpIcon />
-                        <p>Une aide</p>
-                    </button>
-                </ButtonGroup>
-            </div>
+          <button
+            type="button"
+            id={HELPS_BUTTON_ID}
+            style={{
+              border: isMobile ? `1px solid ${COLOR_PRIMARY}` : 'none',
+            }}
+          >
+            <FinancialHelpIcon />
+            <p>Une aide</p>
+          </button>
+        </ButtonGroup>
+      </div>
 
-            { !isMobile &&
-                <>
-                    <CityForm
-                        hidden={!isSelected(CITIES_BUTTON_ID)}
-                    ></CityForm>
+      {!isMobile && (
+        <>
+          <CityForm hidden={!isSelected(CITIES_BUTTON_ID)}></CityForm>
 
-                    <HelpForm
-                        hidden={!isSelected(HELPS_BUTTON_ID)}
-                    ></HelpForm>
-                </>
-            }
-      </Container>
-    )
+          <HelpForm hidden={!isSelected(HELPS_BUTTON_ID)}></HelpForm>
+        </>
+      )}
+    </Container>
+  )
 }
 
 export default WelcomeSearchForm

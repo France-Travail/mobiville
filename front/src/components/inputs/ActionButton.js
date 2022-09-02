@@ -7,7 +7,7 @@ import { COLOR_PRIMARY } from '../../constants/colors'
 const ActionButtonContainer = styled.div`
   display: flex;
   justify-content: ${({ isMobile }) => (isMobile ? 'center' : 'flex-start')};
-  
+
   border-radius: 20px;
 `
 
@@ -29,7 +29,8 @@ const ActionButtonElement = styled(Link)`
   cursor: pointer;
 
   color: ${({ $isBlue }) => ($isBlue ? '#fff' : COLOR_PRIMARY)};
-  ${({ $isBlue }) => $isBlue ? '' : 'border : solid 2px ' + COLOR_PRIMARY + ' !important;'}
+  ${({ $isBlue }) =>
+    $isBlue ? '' : 'border : solid 2px ' + COLOR_PRIMARY + ' !important;'}
   background-color: ${({ $isBlue }) => ($isBlue ? COLOR_PRIMARY : 'inherit')};
   ${({ $isWhite }) => ($isWhite ? 'background-color: #fff;' : '')}
 
@@ -56,14 +57,14 @@ const ActionButtonElement = styled(Link)`
 
 const ActionButton = ({
   path,
-  libelle = "Rechercher",
+  libelle = 'Rechercher',
   isMobile = false,
   isBlue = true,
   isWhite = false,
   style = {},
 }) => {
-
-  const isHttpMatched = (str) => !!str?.match(new RegExp('^(http|https)://'))?.length
+  const isHttpMatched = (str) =>
+    !!str?.match(new RegExp('^(http|https)://'))?.length
 
   const isExternalLink =
     !!path &&
@@ -72,10 +73,7 @@ const ActionButton = ({
     isHttpMatched(path.pathname)
 
   return (
-    <ActionButtonContainer
-      isMobile={isMobile}
-      style={{ ...style }}
-    >
+    <ActionButtonContainer isMobile={isMobile} style={{ ...style }}>
       <ActionButtonElement
         to={path}
         $isBlue={isBlue}

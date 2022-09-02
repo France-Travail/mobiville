@@ -198,191 +198,180 @@ const HelpDetailsPage = () => {
   }
 
   return (
-      <MainLayout menu={{ visible: !isMobile }}>
-        <Helmet>
-          <title>{help.title} | Mobiville</title>
-          <meta
-              name="description"
-              content="Obtenez une aide pour faciliter votre projet de mobilité géographique"
-          />
-        </Helmet>
+    <MainLayout menu={{ visible: !isMobile }}>
+      <Helmet>
+        <title>{help.title} | Mobiville</title>
+        <meta
+          name="description"
+          content="Obtenez une aide pour faciliter votre projet de mobilité géographique"
+        />
+      </Helmet>
 
-        <Container isMobile={isMobile}>
-          {!isMobile && (
-              <div>
-                <HeaderLink
-                    to={`/aides` + window.location.search}
-                    title="Fermer"
-                    isMobile={isMobile}
-                >
-                  <ArrowBackIcon color="primary" fontSize="large" />
-                </HeaderLink>
-                <TitleContainer isMobile={isMobile}>
-                  <TitleTextContainer isMobile={isMobile}>
-                    <HelpType>
-                      {help.type.includes('admin') ? (
-                          <ReceiptLongIcon />
-                      ) : help.type.includes('logement') ? (
-                          <HomeWorkIcon />
-                      ) : help.type.includes('financière') ? (
-                          <EuroIcon />
-                      ) : help.type.includes('transport') ? (
-                          <DirectionsCarIcon />
-                      ) : (
-                          <PeopleIcon />
-                      )}
-                      <HelpItemText>{help.type}</HelpItemText>
-                    </HelpType>
-                    <HeaderTitle>{help.title}</HeaderTitle>
-                    <DescriptionAide>{help.goal}</DescriptionAide>
-                  </TitleTextContainer>
-                  <TitleImgContainer isMobile={isMobile}>
-                    <img
-                        src={`/help-logos/${help.logo}`}
-                        alt=""
-                        style={{
-                          width: 96,
-                          height: 'auto',
-                        }}
-                    />
-                  </TitleImgContainer>
-                  <TitleDemande>
-                    <DescriptionAideProposee>
-                      Aide proposée par {help.partner}
-                    </DescriptionAideProposee>
-
-                    <div>
-                      <HelpLink
-                          target="_blank"
-                          href={help.link}
-                          tag-exit={`faire-ma-demande/${help.title}`}
-                          isMobile={isMobile}
-                          ref={containerRef}
-                      >
-                        Demander l'aide
-                      </HelpLink>
-                    </div>
-                  </TitleDemande>
-                </TitleContainer>
-              </div>
-          )}
-          {isMobile && (
-              <TitleContainer isMobile={isMobile}>
-                <HeaderLink to={`/aides` + window.location.search} title="Fermer" isMobile={isMobile}>
-                  <CloseIcon color="primary" fontSize="large" />
-                </HeaderLink>
-                <TitleImgContainer isMobile={isMobile}>
-                  <img
-                      src={`/help-logos/${help.logo}`}
-                      alt=""
-                      style={{
-                        width: 96,
-                        height: 'auto',
-                      }}
-                  />
-                </TitleImgContainer>
-                <TitleTextContainer isMobile={isMobile}>
-                  <HeaderTitle isMobile={isMobile}>{help.title}</HeaderTitle>
-                  <DescriptionAide isMobile={isMobile}>{help.goal}</DescriptionAide>
-
-                  <DescriptionAideProposee isMobile={isMobile}>
-                    Aide proposée par {help.partner}
-                  </DescriptionAideProposee>
-
-                  <a
-                      target="_blank"
-                      href={help.link}
-                      style={{ cursor: 'pointer' }}
-                      tag-exit={`faire-ma-demande/${help.title}`}
-                  >
-                    <HelpLink
-                        target="_blank"
-                        href={help.link}
-                        tag-exit={`faire-ma-demande/${help.title}`}
-                        isMobile={isMobile}
-                        ref={containerRef}
-                    >
-                      Demander l'aide
-                    </HelpLink>
-                  </a>
-                </TitleTextContainer>
-              </TitleContainer>
-          )}
-          <PanelsContainer isMobile={isMobile}>
-            <DoublePanelsContainer isMobile={isMobile}>
-              <Panel isMobile={isMobile}>
-                <PanelTitle isMobile={isMobile}>Public concerné</PanelTitle>
-                <Description
-                    dangerouslySetInnerHTML={{
-                      __html: help.who
-                          .split('^')
-                          .map((t) => ucFirst(t))
-                          .join(' · '),
-                    }}
+      <Container isMobile={isMobile}>
+        {!isMobile && (
+          <div>
+            <HeaderLink
+              to={`/aides` + window.location.search}
+              title="Fermer"
+              isMobile={isMobile}
+            >
+              <ArrowBackIcon color="primary" fontSize="large" />
+            </HeaderLink>
+            <TitleContainer isMobile={isMobile}>
+              <TitleTextContainer isMobile={isMobile}>
+                <HelpType>
+                  {help.type.includes('admin') ? (
+                    <ReceiptLongIcon />
+                  ) : help.type.includes('logement') ? (
+                    <HomeWorkIcon />
+                  ) : help.type.includes('financière') ? (
+                    <EuroIcon />
+                  ) : help.type.includes('transport') ? (
+                    <DirectionsCarIcon />
+                  ) : (
+                    <PeopleIcon />
+                  )}
+                  <HelpItemText>{help.type}</HelpItemText>
+                </HelpType>
+                <HeaderTitle>{help.title}</HeaderTitle>
+                <DescriptionAide>{help.goal}</DescriptionAide>
+              </TitleTextContainer>
+              <TitleImgContainer isMobile={isMobile}>
+                <img
+                  src={`/help-logos/${help.logo}`}
+                  alt=""
+                  style={{
+                    width: 96,
+                    height: 'auto',
+                  }}
                 />
-              </Panel>
-              <Panel isMobile={isMobile}>
-                <PanelTitle isMobile={isMobile}>Est-elle cumulable ?</PanelTitle>
-                <Description
-                    dangerouslySetInnerHTML={{
-                      __html: help.cumulable,
-                    }}
-                />
-              </Panel>
-            </DoublePanelsContainer>
+              </TitleImgContainer>
+              <TitleDemande>
+                <DescriptionAideProposee>
+                  Aide proposée par {help.partner}
+                </DescriptionAideProposee>
 
-            <Panel isMobile={isMobile}>
-              <PanelTitle isMobile={isMobile}>
-                Descriptif de l{"'"}
-                aide
-              </PanelTitle>
-              <Description
-                  dangerouslySetInnerHTML={{
-                    __html: help.description,
-                  }}
-              />
-            </Panel>
-            <Panel isMobile={isMobile}>
-              <PanelTitle isMobile={isMobile}>
-                Quand faire la demande ?
-              </PanelTitle>
-              <Description
-                  dangerouslySetInnerHTML={{
-                    __html: help.when,
-                  }}
-              />
-            </Panel>
-            <Panel isMobile={isMobile}>
-              <PanelTitle isMobile={isMobile}>Quelles conditions ?</PanelTitle>
-              <Description
-                  dangerouslySetInnerHTML={{
-                    __html: help.conditions,
-                  }}
-              />
-            </Panel>
-          </PanelsContainer>
-          <div />
-        </Container>
-        {!isVisibleHelpButton && (
-            <StickyHelp>
-              <a
-                  target="_blank"
-                  href={help.link}
-                  style={{ cursor: 'pointer' }}
-                  tag-exit={`faire-ma-demande/${help.title}`}
-              >
-                <HelpLink
+                <div>
+                  <HelpLink
                     target="_blank"
                     href={help.link}
                     tag-exit={`faire-ma-demande/${help.title}`}
                     isMobile={isMobile}
-                >
-                  Demander l'aide
-                </HelpLink>
-              </a>
-            </StickyHelp>
+                    ref={containerRef}
+                  >
+                    Demander l'aide
+                  </HelpLink>
+                </div>
+              </TitleDemande>
+            </TitleContainer>
+          </div>
         )}
-      </MainLayout>
+        {isMobile && (
+          <TitleContainer isMobile={isMobile}>
+            <HeaderLink
+              to={`/aides` + window.location.search}
+              title="Fermer"
+              isMobile={isMobile}
+            >
+              <CloseIcon color="primary" fontSize="large" />
+            </HeaderLink>
+            <TitleImgContainer isMobile={isMobile}>
+              <img
+                src={`/help-logos/${help.logo}`}
+                alt=""
+                style={{
+                  width: 96,
+                  height: 'auto',
+                }}
+              />
+            </TitleImgContainer>
+            <TitleTextContainer isMobile={isMobile}>
+              <HeaderTitle isMobile={isMobile}>{help.title}</HeaderTitle>
+              <DescriptionAide isMobile={isMobile}>{help.goal}</DescriptionAide>
+
+              <DescriptionAideProposee isMobile={isMobile}>
+                Aide proposée par {help.partner}
+              </DescriptionAideProposee>
+              <HelpLink
+                target="_blank"
+                href={help.link}
+                tag-exit={`faire-ma-demande/${help.title}`}
+                isMobile={isMobile}
+                ref={containerRef}
+              >
+                Demander l'aide
+              </HelpLink>
+            </TitleTextContainer>
+          </TitleContainer>
+        )}
+        <PanelsContainer isMobile={isMobile}>
+          <DoublePanelsContainer isMobile={isMobile}>
+            <Panel isMobile={isMobile}>
+              <PanelTitle isMobile={isMobile}>Public concerné</PanelTitle>
+              <Description
+                dangerouslySetInnerHTML={{
+                  __html: help.who
+                    .split('^')
+                    .map((t) => ucFirst(t))
+                    .join(' · '),
+                }}
+              />
+            </Panel>
+            <Panel isMobile={isMobile}>
+              <PanelTitle isMobile={isMobile}>Est-elle cumulable ?</PanelTitle>
+              <Description
+                dangerouslySetInnerHTML={{
+                  __html: help.cumulable,
+                }}
+              />
+            </Panel>
+          </DoublePanelsContainer>
+
+          <Panel isMobile={isMobile}>
+            <PanelTitle isMobile={isMobile}>
+              Descriptif de l{"'"}
+              aide
+            </PanelTitle>
+            <Description
+              dangerouslySetInnerHTML={{
+                __html: help.description,
+              }}
+            />
+          </Panel>
+          <Panel isMobile={isMobile}>
+            <PanelTitle isMobile={isMobile}>
+              Quand faire la demande ?
+            </PanelTitle>
+            <Description
+              dangerouslySetInnerHTML={{
+                __html: help.when,
+              }}
+            />
+          </Panel>
+          <Panel isMobile={isMobile}>
+            <PanelTitle isMobile={isMobile}>Quelles conditions ?</PanelTitle>
+            <Description
+              dangerouslySetInnerHTML={{
+                __html: help.conditions,
+              }}
+            />
+          </Panel>
+        </PanelsContainer>
+        <div />
+      </Container>
+      {!isVisibleHelpButton && (
+        <StickyHelp>
+          <HelpLink
+            target="_blank"
+            href={help.link}
+            tag-exit={`faire-ma-demande/${help.title}`}
+            isMobile={isMobile}
+          >
+            Demander l'aide
+          </HelpLink>
+        </StickyHelp>
+      )}
+    </MainLayout>
   )
 }
 

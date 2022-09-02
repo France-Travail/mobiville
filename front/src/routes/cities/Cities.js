@@ -1,15 +1,15 @@
-import {memo, useEffect, useRef, useState} from 'react'
-import {Link, useHistory, useLocation} from 'react-router-dom'
+import { useEffect, useRef, useState, memo } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import queryString from 'query-string'
-import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 import L from 'leaflet'
 
-import {useCities} from '../../common/contexts/citiesContext'
-import {MainLayout} from '../../components'
-import {useWindowSize} from '../../common/hooks/window-size'
-import {isMobileView} from '../../constants/mobile'
-import {COLOR_BUTTON_HOVER, COLOR_PRIMARY,} from '../../constants/colors'
+import { useCities } from '../../common/contexts/citiesContext'
+import { MainLayout } from '../../components'
+import { useWindowSize } from '../../common/hooks/window-size'
+import { isMobileView } from '../../constants/mobile'
+import { COLOR_BUTTON_HOVER, COLOR_PRIMARY } from '../../constants/colors'
 
 import CityItem from './components/CityItem'
 import MobileCriterionsPanel from './components/MobileCriterionsPanel'
@@ -20,10 +20,10 @@ import noResultsPic from '../../assets/images/no_results.svg'
 import blueMarker from '../../assets/images/marker-blue.svg'
 import hoverMarker from '../../assets/images/marker-hover.svg'
 import selectedMarker from '../../assets/images/marker-selected.svg'
-import {formatNumber} from '../../utils/utils'
+import { formatNumber } from '../../utils/utils'
 
 import Pagination from '@mui/material/Pagination'
-import {useProfessions} from '../../common/contexts/professionsContext'
+import { useProfessions } from '../../common/contexts/professionsContext'
 
 const NotFoundContainer = styled.div`
   display: flex;
@@ -101,7 +101,6 @@ const PaginationContainer = styled.div`
     color: #fff;
   }
 `
-
 const TitleContainer = styled.div`
   font-family: 'Roboto';
   font-style: normal;
@@ -124,20 +123,19 @@ const SubTitle = styled.h2`
 
 const PopupLink = styled(Link)`
   color: #191970 !important;
-  
+
   &:hover {
-   color: #4E4EC9 !important;
+    color: #4e4ec9 !important;
   }
 `
 
 const Cities = () => {
-
   const isMobile = isMobileView(useWindowSize())
   const location = useLocation()
-  const history = useHistory()
+  const navigate = useNavigate()
 
-  const [ params, setParams ] = useState(queryString.parse(location.search))
-  const [ showMobilePanel, setShowMobileCriterionsSelection ] = useState(false)
+  const [params, setParams] = useState(queryString.parse(location.search))
+  const [showMobilePanel, setShowMobileCriterionsSelection] = useState(false)
 
   const {
     isLoading: isLoadingProfessions,
@@ -146,36 +144,43 @@ const Cities = () => {
   } = useProfessions()
 
   // cities
-  const { cities, isLoading, onSearch, totalCities, criterions, sortCriterions } = useCities()
-  const [ hoveredCityId, setHoveredCityId ] = useState(null)
-  const [ selectedCityId, setSelectedCityId ] = useState(null)
+  const {
+    cities,
+    isLoading,
+    onSearch,
+    totalCities,
+    criterions,
+    sortCriterions,
+  } = useCities()
+  const [hoveredCityId, setHoveredCityId] = useState(null)
+  const [selectedCityId, setSelectedCityId] = useState(null)
   const citiesListRef = useRef(null)
   const citiesItemsRef = useRef([])
 
-  const [ formattedCities, setFormattedCities ] = useState([])
+  const [formattedCities, setFormattedCities] = useState([])
 
   // pagination
   const itemsPerPage = 10
-  const [ page, setPage ] = useState(1)
-  const [ noOfPages, setNoOfPages ] = useState(0)
+  const [page, setPage] = useState(1)
+  const [noOfPages, setNoOfPages] = useState(0)
 
-  const [ regionLabel, setRegionLabel ] = useState("")
-  const [ metierLabel, setMetierLabel ] = useState("")
+  const [regionLabel, setRegionLabel] = useState('')
+  const [metierLabel, setMetierLabel] = useState('')
 
   useEffect(() => {
     if (!!params?.codeRegion) {
       const region = criterions.regions.find(
-          (region) => params.codeRegion === region.id
+        (region) => params.codeRegion === region.id
       )
       setRegionLabel(region.label)
     }
     if (!!params?.codeRome) {
       const metier = criterions.codeRomes.find(
-          (codeRome) => params.codeRome === codeRome.key
+        (codeRome) => params.codeRome === codeRome.key
       )
       setMetierLabel(metier.label)
     }
-  }, [ params, criterions ])
+  }, [params, criterions])
 
   useEffect(() => {
     setFormattedCities(cities)
@@ -185,16 +190,15 @@ const Cities = () => {
     if (!professionsCountList) return
     let newFormattedCities = formattedCities
     professionsCountList.forEach((professionsCount) => {
-      newFormattedCities = newFormattedCities
-        .map((city) => {
-          if (city.insee_com === professionsCount.insee[0].toString()) {
-            return {
-              ...city,
-              totalOffres: professionsCount.total
-            }
+      newFormattedCities = newFormattedCities.map((city) => {
+        if (city.insee_com === professionsCount.insee[0].toString()) {
+          return {
+            ...city,
+            totalOffres: professionsCount.total,
           }
-          return city
-        })
+        }
+        return city
+      })
     })
 
     setFormattedCities(newFormattedCities)
@@ -210,18 +214,18 @@ const Cities = () => {
       setParams(queryString.parse(location.search))
     }
   }, [location])
-  
+
   useEffect(() => {
     onSearch(
       {
         ...params,
         sortBy: sortCriterions,
-        onlySearchInTension: true
+        onlySearchInTension: true,
       },
-      (!!page ? page-1 : 0) * 10,
-      (cities ?? [])
+      (!!page ? page - 1 : 0) * 10,
+      cities ?? []
     )
-  }, [ params, sortCriterions, page ])
+  }, [params, sortCriterions, page])
 
   useEffect(() => {
     if (cities.length > 0) {
@@ -254,7 +258,7 @@ const Cities = () => {
       codeEnvironment: environment,
     }
 
-    history.push({
+    navigate({
       pathname: '/cities',
       search: queryString.stringify(data),
     })
@@ -271,7 +275,7 @@ const Cities = () => {
     setPage(value)
   }
 
-  const getLeafletIcon = (requiredFile) => (
+  const getLeafletIcon = (requiredFile) =>
     new L.Icon({
       iconUrl: requiredFile,
       iconRetinaUrl: requiredFile,
@@ -282,7 +286,6 @@ const Cities = () => {
       shadowAnchor: null,
       className: 'leaflet-marker-icon',
     })
-  )
 
   if (showMobilePanel) {
     return (
@@ -300,7 +303,10 @@ const Cities = () => {
   const citiesList = (
     <CitiesList isMobile={isMobile} ref={citiesListRef}>
       <TitleContainer>
-        <Title>{totalCities} {!!metierLabel ? `villes pour ${metierLabel}` : '' } {!!regionLabel ? `en ${regionLabel}` : '' }</Title>
+        <Title>
+          {totalCities} {!!metierLabel ? `villes pour ${metierLabel}` : ''}{' '}
+          {!!regionLabel ? `en ${regionLabel}` : ''}
+        </Title>
         <SubTitle>Classement des villes par opportunités d'emploi</SubTitle>
       </TitleContainer>
       {formattedCities.map((city, key) => (
