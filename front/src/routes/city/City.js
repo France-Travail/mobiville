@@ -404,7 +404,7 @@ const CityPage = () => {
   return (
     <MainLayout menu={{ visible: !isMobile }}>
       <Helmet>
-        <title>Travailler comme {romeLabel} à {_.capitalize(city.nom_comm)} | Mobiville</title>
+        <title>{_.upperFirst(romeLabel)} à {_.capitalize(city.nom_comm)} | Mobiville</title>
         <meta
           name="description"
           content={`Explorez le marché de l'emploi de ${_.capitalize(city.nom_comm)} pour le métier de ${romeLabel} ainsi que les informations sur l’immobilier, les services et les équipements.`}
