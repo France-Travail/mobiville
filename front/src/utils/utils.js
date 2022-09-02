@@ -75,7 +75,7 @@ export const ucFirst = (s) => {
 
 export const thereAre = (date) => moment(date).fromNow()
 
-export const formatDate = (date) => date.toLocaleDateString("fr-FR");
+export const formatDate = (date) => date.toLocaleDateString("fr-FR")
 
 const numberFormatter = Intl.NumberFormat()
 export const formatNumber = (number) => numberFormatter.format(Math.floor(number))

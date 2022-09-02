@@ -168,6 +168,29 @@ const Cities = () => {
   const [regionLabel, setRegionLabel] = useState('')
   const [metierLabel, setMetierLabel] = useState('')
 
+  const computedHelmet = useCallback(() => {
+    if (!!params?.codeRegion && !!cities && !!cities[0] && !!cities[0]['newRegion.name']) {
+      return (
+        <Helmet>
+          <title>Où travailler en { cities[0]['newRegion.name'] } | Mobiville</title>
+          <meta
+            name="description"
+            content={`Découvrez les villes qui correspondent le mieux à votre recherche d'emploi dans la région ${cities[0]['newRegion.name']} et la liste des villes les plus attractives pour votre métier`}
+          />
+        </Helmet>
+      )
+    }
+    return (
+      <Helmet>
+        <title>Où travailler en France | Mobiville</title>
+        <meta
+          name="description"
+          content={`Découvrez les villes qui correspondent le mieux à votre recherche d'emploi et la liste des villes les plus attractives pour votre métier`}
+        />
+      </Helmet>
+    )
+  }, [ cities, params ])
+
   useEffect(() => {
     if (!!params?.codeRegion) {
       const region = criterions.regions.find(
@@ -363,29 +386,6 @@ const Cities = () => {
       }
     )
   }
-
-  const computedHelmet = useCallback(() => {
-    if (!!params?.codeRegion && !!cities && !!cities[0] && !!cities[0]['newRegion.name']) {
-      return (
-        <Helmet>
-          <title>Où travailler en { cities[0]['newRegion.name'] } | Mobiville</title>
-          <meta
-            name="description"
-            content={`Découvrez les villes qui correspondent le mieux à votre recherche d'emploi dans la région ${cities[0]['newRegion.name']} et la liste des villes les plus attractives pour votre métier`}
-          />
-        </Helmet>
-      )
-    }
-    return (
-      <Helmet>
-        <title>Où travailler en France | Mobiville</title>
-        <meta
-          name="description"
-          content={`Découvrez les villes qui correspondent le mieux à votre recherche d'emploi et la liste des villes les plus attractives pour votre métier`}
-        />
-      </Helmet>
-    )
-  }, [ cities, params ])
 
   return (
     <>

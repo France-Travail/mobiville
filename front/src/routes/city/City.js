@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useLocation, useParams } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import _ from "lodash"
 import queryString from 'query-string'
 import { Helmet } from 'react-helmet-async'
@@ -743,7 +742,5 @@ const CityPage = () => {
 }
 
 CityPage.propTypes = {}
-
-CityPage.defaultProps = {}
 
 export default CityPage
