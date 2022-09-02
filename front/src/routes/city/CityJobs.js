@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import moment from 'moment'
@@ -26,7 +26,7 @@ import {
   COLOR_PRIMARY,
   COLOR_TEXT_SECONDARY,
 } from '../../constants/colors'
-import { thereAre } from '../../utils/utils'
+import { formatDate, thereAre } from '../../utils/utils'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import MainLayout from '../../components/MainLayout'
@@ -428,15 +428,11 @@ const CityJobs = ({
     <MainLayout>
       <Helmet>
         <title>
-          Travailler dans {romeLabel} à {_.capitalize(city.nom_comm)} - Mobiville
+          Emplois : {_.capitalize(city.nom_comm)} ({city.postal_code}) - {formatDate(new Date())} | Mobiville
         </title>
         <meta
           name="description"
-          content={`Explorez le marché de l'emploi de ${_.capitalize(
-            city.nom_comm
-          )} pour le métier de ${{
-            romeLabel,
-          }}. Offres disponibles, salaires, …`}
+          content={`Accédez à l’ensemble des offres d’emploi de ${_.capitalize(city.nom_comm)} (${city.postal_code}) pour le métier de ${romeLabel}`}
         />
       </Helmet>
       <SubHeader backLink={backLink} node={subHeaderNode} isMobile={isMobile} />
@@ -591,7 +587,5 @@ CityJobs.propTypes = {
   searchValue: PropTypes.string.isRequired,
   setSearchValue: PropTypes.func.isRequired,
 }
-
-CityJobs.defaultProps = {}
 
 export default CityJobs

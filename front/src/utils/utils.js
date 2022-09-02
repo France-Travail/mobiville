@@ -75,9 +75,10 @@ export const ucFirst = (s) => {
 
 export const thereAre = (date) => moment(date).fromNow()
 
+export const formatDate = (date) => date.toLocaleDateString("fr-FR");
+
 const numberFormatter = Intl.NumberFormat()
-export const formatNumber = (number) =>
-  numberFormatter.format(Math.floor(number))
+export const formatNumber = (number) => numberFormatter.format(Math.floor(number))
 
 export const useElementOnScreen = (options) => {
   const containerRef = useRef()
