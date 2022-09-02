@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet-async'
@@ -381,12 +381,12 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
   return (
     <MainLayout isMobile={isMobile}>
       <Helmet>
-        <title>La vie à {_.capitalize(city.nom_comm)} - Mobiville</title>
+        <title>
+          Services et équipements : {_.capitalize(city.nom_comm)} ({city.code_dept}) | Mobiville
+        </title>
         <meta
           name="description"
-          content={`Toutes les informations clés de cadre de vie sur la ville de ${_.capitalize(
-            city.nom_comm
-          )}`}
+          content={`Découvrez les services et équipements disponibles à ${_.capitalize(city.nom_comm)} : transports, santé, culture et loisirs, éducation, environnement`}
         />
       </Helmet>
       <SubHeader

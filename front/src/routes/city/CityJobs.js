@@ -428,11 +428,11 @@ const CityJobs = ({
     <MainLayout>
       <Helmet>
         <title>
-          Emplois : {_.capitalize(city.nom_comm)} ({city.postal_code}) - {formatDate(new Date())} | Mobiville
+          Emplois : {_.capitalize(city.nom_comm)} ({city.code_dept}) - {formatDate(new Date())} | Mobiville
         </title>
         <meta
           name="description"
-          content={`Accédez à l’ensemble des offres d’emploi de ${_.capitalize(city.nom_comm)} (${city.postal_code}) pour le métier de ${romeLabel}`}
+          content={`Accédez à l’ensemble des offres d’emploi de ${_.capitalize(city.nom_comm)} (${city.code_dept}) pour le métier de ${romeLabel}`}
         />
       </Helmet>
       <SubHeader backLink={backLink} node={subHeaderNode} isMobile={isMobile} />
