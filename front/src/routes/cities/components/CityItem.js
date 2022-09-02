@@ -1,19 +1,16 @@
-import { Link } from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import styled, { css } from 'styled-components'
+import styled, {css} from 'styled-components'
 
-import { formatNumber } from '../../../utils/utils'
-import {
-  COLOR_GRAY,
-  COLOR_PRIMARY,
-  COLOR_TAG_GREEN,
-  COLOR_TAG_RED,
-} from '../../../constants/colors'
-import { useWindowSize } from '../../../common/hooks/window-size'
-import { isMobileView } from '../../../constants/mobile'
-import redMarker from '../../../assets/images/marker-red.png'
-import { ReactComponent as RightChevronIcon } from '../../../assets/images/icons/right_chevron.svg'
+import {formatNumber} from '../../../utils/utils'
+import {COLOR_GRAY, COLOR_PRIMARY, COLOR_TAG_GREEN, COLOR_TAG_RED,} from '../../../constants/colors'
+import {useWindowSize} from '../../../common/hooks/window-size'
+import {isMobileView} from '../../../constants/mobile'
+import selectedMarker from '../../../assets/images/marker-selected.svg'
+import {ReactComponent as RightChevronIcon} from '../../../assets/images/icons/right_chevron.svg'
+
+import {CircularProgress} from '@mui/material'
 
 const CityLink = styled(Link)`
   margin-top: 16px;
@@ -118,18 +115,19 @@ const CityItem = ({
   onMouseOver,
   onMouseLeave,
   to,
+  isLoadingProfessions,
 }) => {
   const size = useWindowSize()
+  const isMobile= isMobileView(size)
 
   if (!city) {
     return <div />
   }
 
-  let { photo } = city
-  if (photo) {
-    photo = photo.replace('/2000px', '/500px')
+  if (city.photo) {
+    city.photo = city.photo.replace('/2000px', '/500px')
   } else {
-    photo = `/regions/region-${city?.newRegion?.code}.jpg`
+    city.photo = `/regions/region-${city.newRegion?.code}.jpg`
   }
 
   const formatCityTension = (tension) => {
@@ -144,36 +142,35 @@ const CityItem = ({
       onMouseOver={onMouseOver}
       onMouseLeave={onMouseLeave}
       to={to}
-      $isMobile={isMobileView(size)}
+      $isMobile={isMobile}
     >
 
       <Image
-        style={{ backgroundImage: `url(${photo})` }}
+        style={{ backgroundImage: `url(${city.photo})` }}
         $isMobile={isMobileView(size)}
       />
 
       <InformationsContainer>
-        <TagsContainer>
-          <Tag
-            $color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED}
-          >
-            {formatCityTension(city['bassin.tensions.ind_t'])}
-          </Tag>
-        </TagsContainer>
 
         <Title>
           {_.capitalize(city.nom_comm)}
-          {selected && <SelectedMarkerImg src={redMarker} alt="" />}
+          {selected && <SelectedMarkerImg src={selectedMarker} alt="" />}
         </Title>
         <Department>{_.capitalize(city.nom_dept)}</Department>
 
         <TagsContainer>
-          <Tag>
-            {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
+          <Tag $color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED} >
+            {formatCityTension(city['bassin.tensions.ind_t'])}
           </Tag>
           <Tag>
             {formatNumber(city.population * 1000)} habitants
           </Tag>
+            {!isLoadingProfessions
+              ? (<Tag>
+                  {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
+                </Tag>)
+              : <CircularProgress color="inherit" size={20} />
+            }
         </TagsContainer>
       </InformationsContainer>
 
@@ -188,8 +185,7 @@ CityItem.propTypes = {
   onMouseOver: PropTypes.func.isRequired,
   onMouseLeave: PropTypes.func.isRequired,
   to: PropTypes.string.isRequired,
+  isLoadingProfessions: PropTypes.any,
 }
-
-CityItem.defaultProps = {}
 
 export default CityItem

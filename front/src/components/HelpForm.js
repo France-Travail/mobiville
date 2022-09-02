@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { useLocation } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
-import { ProjectsSelect, JobSituationSelect, AgeSituationSelect, ActionButton, Button } from '../../../components'
-
-import { AGE_SITUATIONS, JOB_SITUATIONS, PROJECTS } from '../../../constants/search'
-import { ReactComponent as ResetIcon } from '../../../assets/images/icons/reset.svg'
-import { useWindowSize } from '../../../common/hooks/window-size'
-import { isMobileView } from '../../../constants/mobile'
+import { ProjectsSelect, JobSituationSelect, AgeSituationSelect, ActionButton, Button } from '.'
+import { AGE_SITUATIONS, JOB_SITUATIONS, PROJECTS } from '../constants/search'
+import { ReactComponent as ResetIcon } from '../assets/images/icons/reset.svg'
+import { isMobileView } from '../constants/mobile'
+import { useWindowSize } from '../common/hooks/window-size'
 
 const Container = styled.div`
     max-width: 1036px;
@@ -16,11 +16,15 @@ const Container = styled.div`
 
     display: flex;
     flex-direction: ${ ({ $isMobile }) => ($isMobile ? `column` : `row`) };
-    justify-items: ${ ({ $isMobile }) => ($isMobile ? `start` : `center`) };;
+    justify-items: ${ ({ $isMobile }) => ($isMobile ? `start` : `center`) };
     gap: 8px;
+
+    display: ${ ({ $hidden }) => ($hidden ? 'none' : 'visible') };
 `
 
-const HelpFilters = () => {
+const HelpForm = ({
+    hidden = false
+}) => {
 
     const isMobile = isMobileView(useWindowSize())
     const { search } = useLocation()
@@ -90,7 +94,7 @@ const HelpFilters = () => {
     }
 
     return (
-        <Container $isMobile={isMobile}>
+        <Container $isMobile={isMobile} $hidden={hidden}>
             <ProjectsSelect
                 style={{ flex: 3 }}
                 value={projectsSelected}
@@ -110,7 +114,11 @@ const HelpFilters = () => {
             ></AgeSituationSelect>
 
             <ActionButton
-                style={{ flex: 2 }}
+                style={{
+                    flex: 2,
+                    boxShadow: isMobile ? 'none' : '0px 5px 10px rgba(0, 0, 0, 0.3)',
+                    minHeight: 73
+                }}
                 path={computeSearchPath()}
                 isBlue
             ></ActionButton>
@@ -131,6 +139,8 @@ const HelpFilters = () => {
     )
 }
 
-HelpFilters.propTypes = {}
+HelpForm.propTypes = {
+    hidden: PropTypes.bool
+}
 
-export default HelpFilters
+export default HelpForm

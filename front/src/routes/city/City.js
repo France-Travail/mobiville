@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useHistory, useParams } from 'react-router-dom'
-import PropTypes from 'prop-types'
+import { Link, useNavigate, useLocation, useParams } from 'react-router-dom'
 import queryString from 'query-string'
 import { Helmet } from 'react-helmet-async'
 import styled from 'styled-components'
@@ -133,7 +132,7 @@ const BlockLinkSyle = `
   
   div {
     margin:auto;
-    width: 232px;
+    min-width: 232px;
   }
 `
 
@@ -225,7 +224,7 @@ const JOB = 'job'
 const LIFE = 'life'
 const HOUSING = 'housing'
 
-const CityPage = ({ location: { pathname, search } }) => {
+const CityPage = () => {
   const {
     onLoadCity,
     isLoadingCity,
@@ -248,10 +247,12 @@ const CityPage = ({ location: { pathname, search } }) => {
 
   const { insee, section } = useParams()
   const [inseeCode] = insee.split('-')
-  const params = queryString.parse(search)
   const size = useWindowSize()
-  const history = useHistory()
+  const navigate = useNavigate()
   const [infosTravail, setInfosTravail] = useState(null)
+
+  const location = useLocation()
+  const params = queryString.parse(location.search)
 
   const [jobSearchValue, setJobSearchValue] = useState(
     decodeURIComponent(params.jobSearch || '')
@@ -272,11 +273,14 @@ const CityPage = ({ location: { pathname, search } }) => {
     if (!jobSearchValue) return
     if (jobSearchValue === decodeURIComponent(params.jobSearch)) return
 
-    history.replace({
-      pathname,
-      search: queryString.stringify({ ...params, jobSearch: jobSearchValue }),
-    })
-  }, [history, jobSearchValue, params, pathname])
+    navigate(
+      {
+        pathname: location.pathname,
+        search: queryString.stringify({ ...params, jobSearch: jobSearchValue }),
+      },
+      { replace: true }
+    )
+  }, [navigate, jobSearchValue, params, location.pathname])
 
   useEffect(() => {
     if (city && codeRome) {
@@ -738,16 +742,8 @@ const CityPage = ({ location: { pathname, search } }) => {
   )
 }
 
-CityPage.propTypes = {
-  location: PropTypes.shape({
-    search: PropTypes.string.isRequired,
-  }),
-}
+CityPage.propTypes = {}
 
-CityPage.defaultProps = {
-  location: {
-    search: '',
-  },
-}
+CityPage.defaultProps = {}
 
 export default CityPage

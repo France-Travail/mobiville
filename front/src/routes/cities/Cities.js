@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, memo } from 'react'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import queryString from 'query-string'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
@@ -9,21 +9,17 @@ import { useCities } from '../../common/contexts/citiesContext'
 import { MainLayout } from '../../components'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
-import {
-  COLOR_BUTTON_HOVER,
-  COLOR_PRIMARY,
-} from '../../constants/colors'
+import { COLOR_BUTTON_HOVER, COLOR_PRIMARY } from '../../constants/colors'
 
 import CityItem from './components/CityItem'
 import MobileCriterionsPanel from './components/MobileCriterionsPanel'
 import DesktopCriterionsPanel from './components/DesktopCriterionsPanel'
 import MobileCriterionsSelection from './components/MobileCriterionsSelection'
-import CitiesFilters from './components/CitiesFilters'
 
 import noResultsPic from '../../assets/images/no_results.svg'
-import blueMarker from '../../assets/images/marker-blue.png'
-import yellowMarker from '../../assets/images/marker-yellow.png'
-import redMarker from '../../assets/images/marker-red.png'
+import blueMarker from '../../assets/images/marker-blue.svg'
+import hoverMarker from '../../assets/images/marker-hover.svg'
+import selectedMarker from '../../assets/images/marker-selected.svg'
 import { formatNumber } from '../../utils/utils'
 
 import Pagination from '@mui/material/Pagination'
@@ -41,19 +37,6 @@ const NotFoundContainer = styled.div`
   color: #657078;
 `
 
-const CitiesFilterContainer = styled.div`
-  display: flex;
-  max-width: 700px;
-  align-items: center;
-  margin: auto;
-  padding-bottom: 16px;
-`
-
-const CitiesFilterText = styled.div`
-  flex: 1;
-  font-weight: 500;
-`
-
 const DesktopContainer = styled.div`
   display: flex;
   margin: 0 auto;
@@ -61,12 +44,12 @@ const DesktopContainer = styled.div`
 `
 
 const CitiesList = styled.div`
-  max-width: ${({ isMobile }) => (isMobile ? 'auto' : '600px')};
+  max-width: ${({ isMobile }) => (isMobile ? 'auto' : '620px')};
   padding: ${({ isMobile }) => (isMobile ? '0 16px' : '0 8px 0 8px')};
-  //overflow: ${({ isMobile }) => (isMobile ? 'inherit' : 'auto')};
 
   a {
-    margin: 8px;
+    margin: 8px -4px;
+    ${({ $isMobile }) => ($isMobile ? 'width: 612px;' : '')}
   }
 `
 
@@ -118,15 +101,41 @@ const PaginationContainer = styled.div`
     color: #fff;
   }
 `
+const TitleContainer = styled.div`
+  font-family: 'Roboto';
+  font-style: normal;
+  color: #191970;
+  width: 600px;
+  margin: 8px;
+`
+
+const Title = styled.h1`
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 28px;
+`
+
+const SubTitle = styled.h2`
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+`
+
+const PopupLink = styled(Link)`
+  color: #191970 !important;
+
+  &:hover {
+    color: #4e4ec9 !important;
+  }
+`
 
 const Cities = () => {
-
   const isMobile = isMobileView(useWindowSize())
   const location = useLocation()
-  const history = useHistory()
+  const navigate = useNavigate()
 
-  const [ params, setParams ] = useState(queryString.parse(location.search))
-  const [ showMobilePanel, setShowMobileCriterionsSelection ] = useState(false)
+  const [params, setParams] = useState(queryString.parse(location.search))
+  const [showMobilePanel, setShowMobileCriterionsSelection] = useState(false)
 
   const {
     isLoading: isLoadingProfessions,
@@ -135,26 +144,64 @@ const Cities = () => {
   } = useProfessions()
 
   // cities
-  const { cities, isLoading, onSearch, totalCities, sortCriterions } = useCities()
-  const [ hoveredCityId, setHoveredCityId ] = useState(null)
-  const [ selectedCityId, setSelectedCityId ] = useState(null)
+  const {
+    cities,
+    isLoading,
+    onSearch,
+    totalCities,
+    criterions,
+    sortCriterions,
+  } = useCities()
+  const [hoveredCityId, setHoveredCityId] = useState(null)
+  const [selectedCityId, setSelectedCityId] = useState(null)
   const citiesListRef = useRef(null)
   const citiesItemsRef = useRef([])
 
+  const [formattedCities, setFormattedCities] = useState([])
+
   // pagination
   const itemsPerPage = 10
-  const [ page, setPage ] = useState(1)
-  const [ noOfPages, setNoOfPages ] = useState(0)
+  const [page, setPage] = useState(1)
+  const [noOfPages, setNoOfPages] = useState(0)
+
+  const [regionLabel, setRegionLabel] = useState('')
+  const [metierLabel, setMetierLabel] = useState('')
+
+  useEffect(() => {
+    if (!!params?.codeRegion) {
+      const region = criterions.regions.find(
+        (region) => params.codeRegion === region.id
+      )
+      setRegionLabel(region.label)
+    }
+    if (!!params?.codeRome) {
+      const metier = criterions.codeRomes.find(
+        (codeRome) => params.codeRome === codeRome.key
+      )
+      setMetierLabel(metier.label)
+    }
+  }, [params, criterions])
+
+  useEffect(() => {
+    setFormattedCities(cities)
+  }, [cities])
 
   useEffect(() => {
     if (!professionsCountList) return
-    professionsCountList.map((professionsCount) => {
-      const city = cities.find(
-        (city) => city.insee_com === professionsCount.insee.toString()
-      )
-      if (city) city.totalOffres = professionsCount.total
-      return true // useless lint validation "warning"
+    let newFormattedCities = formattedCities
+    professionsCountList.forEach((professionsCount) => {
+      newFormattedCities = newFormattedCities.map((city) => {
+        if (city.insee_com === professionsCount.insee[0].toString()) {
+          return {
+            ...city,
+            totalOffres: professionsCount.total,
+          }
+        }
+        return city
+      })
     })
+
+    setFormattedCities(newFormattedCities)
   }, [professionsCountList])
 
   useEffect(() => {
@@ -167,18 +214,18 @@ const Cities = () => {
       setParams(queryString.parse(location.search))
     }
   }, [location])
-  
+
   useEffect(() => {
     onSearch(
       {
         ...params,
         sortBy: sortCriterions,
-        onlySearchInTension: true
+        onlySearchInTension: true,
       },
-      (page ?? 0) * 10,
-      (cities ?? [])
+      (!!page ? page - 1 : 0) * 10,
+      cities ?? []
     )
-  }, [ params, sortCriterions, page ])
+  }, [params, sortCriterions, page])
 
   useEffect(() => {
     if (cities.length > 0) {
@@ -211,7 +258,7 @@ const Cities = () => {
       codeEnvironment: environment,
     }
 
-    history.push({
+    navigate({
       pathname: '/cities',
       search: queryString.stringify(data),
     })
@@ -228,7 +275,7 @@ const Cities = () => {
     setPage(value)
   }
 
-  const getLeafletIcon = (requiredFile) => (
+  const getLeafletIcon = (requiredFile) =>
     new L.Icon({
       iconUrl: requiredFile,
       iconRetinaUrl: requiredFile,
@@ -239,7 +286,6 @@ const Cities = () => {
       shadowAnchor: null,
       className: 'leaflet-marker-icon',
     })
-  )
 
   if (showMobilePanel) {
     return (
@@ -256,26 +302,26 @@ const Cities = () => {
 
   const citiesList = (
     <CitiesList isMobile={isMobile} ref={citiesListRef}>
-      <CitiesFilterContainer>
-        <CitiesFilterText>
-          <span>{totalCities}</span>{' '}
-          {totalCities > 1 ? 'villes correspondantes' : 'ville correspondante'}
-        </CitiesFilterText>
-        <CitiesFilters />
-      </CitiesFilterContainer>
-      {!isLoadingProfessions &&
-        cities.map((city, key) => (
-          <CityItem
-            city={city}
-            selected={selectedCityId === city.id}
-            sortCriterions={sortCriterions}
-            key={city.id}
-            to={getCityUrl(city)}
-            onMouseOver={() => setHoveredCityId(city.id)}
-            onMouseLeave={() => setHoveredCityId(null)}
-            itemRef={(el) => (citiesItemsRef.current[key] = el)}
-          />
-        ))}
+      <TitleContainer>
+        <Title>
+          {totalCities} {!!metierLabel ? `villes pour ${metierLabel}` : ''}{' '}
+          {!!regionLabel ? `en ${regionLabel}` : ''}
+        </Title>
+        <SubTitle>Classement des villes par opportunités d'emploi</SubTitle>
+      </TitleContainer>
+      {formattedCities.map((city, key) => (
+        <CityItem
+          city={city}
+          selected={selectedCityId === city.id}
+          sortCriterions={sortCriterions}
+          key={city.id}
+          to={getCityUrl(city)}
+          onMouseOver={() => setHoveredCityId(city.id)}
+          onMouseLeave={() => setHoveredCityId(null)}
+          itemRef={(el) => (citiesItemsRef.current[key] = el)}
+          isLoadingProfessions={isLoadingProfessions}
+        />
+      ))}
       {!isLoading && cities.length === 0 && (
         <NotFoundContainer>
           <img alt="" src={noResultsPic} style={{ marginBottom: '2rem' }} />
@@ -344,7 +390,7 @@ const Cities = () => {
         <DesktopContainer>
           {citiesList}
 
-          {cities.length ? (
+          {!isLoading && cities.length ? (
             <StyledMapContainer
               center={cities.length > 1 ? null : firstCityCoordinates}
               zoom={cities.length > 1 ? null : 6}
@@ -368,27 +414,23 @@ const Cities = () => {
                   position={[city.geo_point_2d_x, city.geo_point_2d_y]}
                   icon={getLeafletIcon(
                     city.id === selectedCityId
-                      ? redMarker
+                      ? selectedMarker
                       : city.id === hoveredCityId
-                      ? yellowMarker
+                      ? hoverMarker
                       : blueMarker
                   )}
                   eventHandlers={{
                     popupopen: () => {
                       setSelectedCityId(city.id)
-                      citiesItemsRef.current[key].scrollIntoView({
-                        behavior: 'smooth',
-                      })
-                      citiesItemsRef.current[key].focus()
                     },
                     popupclose: () => setSelectedCityId(null),
                   }}
                 >
                   <Popup>
-                    <Link to={getCityUrl(city)}>
+                    <PopupLink to={getCityUrl(city)}>
                       <b>{city.nom_comm}</b> (
                       {formatNumber(city.population * 1000)} habitants)
-                    </Link>
+                    </PopupLink>
                   </Popup>
                 </Marker>
               ))}

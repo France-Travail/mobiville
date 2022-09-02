@@ -49,7 +49,7 @@ const AdvantageIconContainer = styled.div`
 const AdvantageTitle = styled.h3`
   margin-top: 0;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 33px;
   margin-block-end: unset;
   margin-bottom: 5px;
@@ -58,11 +58,13 @@ const AdvantageTitle = styled.h3`
 
 const AdvantageText = styled.p`
   margin: 0;
+  padding: 4px;
+  padding-top: 0;
+
+  text-align: left;
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-
-  text-align: justify;
 `
 
 const Advantages = () => {

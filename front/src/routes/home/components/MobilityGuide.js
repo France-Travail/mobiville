@@ -17,13 +17,6 @@ const Container = styled.div`
 
   background: #c3e9e9;
   border-radius: inherit;
-
-  div {
-    flex: 1;
-    img {
-      width: 100%;
-    }
-  }
 `
 
 const H2 = styled.h2`
@@ -39,7 +32,7 @@ const Text = styled.p`
   font-size: 18px;
   font-weight: 400;
   line-height: 27px;
-  margin-block-start: 8px;
+  margin-block-start: 5px;
   margin-block-end: unset;
 `
 
@@ -50,7 +43,13 @@ const TextContainer = styled.div`
   background-color: white;
   padding: 32px;
   border-radius: 16px;
-  align-self: stretch;
+`
+
+const ImageContainer = styled.div`
+  flex: 1;
+  img {
+    width: 100%;
+  }
 `
 
 const MobilityGuide = () => {
@@ -60,9 +59,9 @@ const MobilityGuide = () => {
     return (
       <Section isMobileFullWidth={true} isMobile={isMobile}>
         <Container isMobile={isMobile}>
-          <div>
+          <ImageContainer>
             <img src={mobilityHomepagePic} alt="" />
-          </div>
+          </ImageContainer>
           <TextContainer>
             <H2 isMobile={isMobile}>Des conseils et astuces</H2>
             <Text isMobile={isMobile}>Par où commencer ?... Où aller ?... Comment faire ?...</Text>
@@ -72,7 +71,11 @@ const MobilityGuide = () => {
               libelle={'Consulter notre guide sur la mobilité'}
               isMobile={isMobile}
               isBlue={true}
-              style={{ 'marginTop': '36px' }}
+              style={{
+                marginTop: 16,
+                marginRight: 'auto',
+                lineHeight: '21px'
+              }}
             />
           </TextContainer>
         </Container>

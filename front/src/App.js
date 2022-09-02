@@ -1,6 +1,6 @@
 import React from 'react'
 import CssBaseline from '@mui/material/CssBaseline'
-import { Routes } from './routes/Routes'
+import { MobivilleRoutes } from './routes/Routes'
 
 function App() {
   // import tag commander
@@ -16,7 +16,7 @@ function App() {
   return (
     <>
       <CssBaseline />
-      <Routes />
+      <MobivilleRoutes />
     </>
   )
 }

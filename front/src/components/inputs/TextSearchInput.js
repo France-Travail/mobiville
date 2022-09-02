@@ -1,18 +1,27 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import _ from 'lodash'
 
-import TextField from '@mui/material/TextField'
-import Autocomplete from '@mui/material/Autocomplete'
-import CircularProgress from '@mui/material/CircularProgress'
+import {
+    TextField,
+    Autocomplete,
+    CircularProgress,
+    Box,
+    Popper
+ } from '@mui/material'
 
-import { COLOR_LIGHT_GREY, COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors'
+import {
+    COLOR_LIGHT_GREY,
+    COLOR_PRIMARY,
+    COLOR_TEXT_PRIMARY,
+    COLOR_TEXT_SECONDARY,
+    COLOR_WHITE
+} from '../../constants/colors'
 
 const AppAutocomplete = styled(Autocomplete)`
     flex: 1;
     background: ${ COLOR_WHITE };
-    color: ${ COLOR_PRIMARY };
     border-radius: 20px;
     padding: 7px 0 0 5px;
     border: 1px solid ${ COLOR_LIGHT_GREY } !important;
@@ -33,13 +42,36 @@ const AppAutocomplete = styled(Autocomplete)`
     & label {
         font-size: 20px;
         font-weight: 700;
+
+        color: ${({ disabled }) => disabled
+            ? `${ COLOR_TEXT_SECONDARY }`
+            : `${ COLOR_TEXT_PRIMARY }`} !important;
     }
 
-    & input.MuiFilledInput-input {
+    & input.MuiInputBase-input {
+        color: ${ COLOR_TEXT_PRIMARY } !important;
         padding-top: 0 !important;
         padding-bottom: 0 !important;
         font-size: 14px;
         font-weight: 400;
+    }
+
+    & ::placeholder {
+        opacity: 1 !important;
+    }
+`
+
+const CustomBox = styled(Box)`
+    ${({ $primary }) => ($primary) && css`
+        color: ${ COLOR_PRIMARY };
+        font-weight: 700;
+    `}
+`
+
+const CustomPopper = styled(Popper)`
+    // groupLabel styling
+    & .MuiAutocomplete-listbox > li.MuiBox-root:not(.MuiAutocomplete-option) {
+        padding: 6px 16px;
     }
 `
 
@@ -48,6 +80,8 @@ const TextSearchInput = ({
         onChange,
         label = "",
         placeholder = "",
+        noOptionsText = "Aucun résultat trouvé...",
+        groupLabel = null,
         loading = false,
         disabled = false,
         onInputChange = () => {},
@@ -63,7 +97,6 @@ const TextSearchInput = ({
     const handleInputChange = (event, value) => {
         onInputChange(event, value)
         setInputValue(value)
-        handleOpen(true)
     }
 
     const handleChange = (event, value) => {
@@ -76,18 +109,28 @@ const TextSearchInput = ({
         }
     }
 
+    useEffect(() => {
+        if (openThreshold > 0 && inputValue.length <= openThreshold) {
+            setOpen(false)
+        }
+    }, [ inputValue, openThreshold ])
+
     const isPlaceholderSelected = useCallback(() => {
         return (!inputValue)
     }, [inputValue])
     
     return (
         <AppAutocomplete
-            $isPlaceholderSelected={isPlaceholderSelected()}
+            // states and basics
+            id={`autocomplete-${_.kebabCase(label)}`}
             disablePortal
             disabled={disabled}
-            id={`autocomplete-${_.kebabCase(label)}`}
             options={options}
             loading={loading}
+            defaultValue={defaultValue}
+            noOptionsText={noOptionsText}
+
+            // interactions logic
             open={open}
             onOpen={() => {
                 handleOpen(true)
@@ -96,11 +139,53 @@ const TextSearchInput = ({
                 setOpen(false)
             }}
             openOnFocus
-            isOptionEqualToValue={isOptionEqualToValue}
-            getOptionLabel={(option) => option?.label ?? ''}
-            defaultValue={defaultValue}
             onInputChange={handleInputChange}
             onChange={handleChange}
+
+            // rendering
+            $isPlaceholderSelected={isPlaceholderSelected()}
+            isOptionEqualToValue={isOptionEqualToValue}
+
+            // - grouping
+            groupBy={(option) => !!option}
+            renderGroup={(params) => (<>
+                    {/* render group label if exists */}
+                    { groupLabel
+                        ? (<CustomBox
+                            key={groupLabel}
+                            $primary
+                            component="li"
+                        >
+                            { groupLabel }
+                        </CustomBox>)
+                        : null
+                    }
+                    {/* render options */}
+                    {params.children.map(child => (
+                        <CustomBox
+                            key={child.key}
+                            component="li"
+                            {...child.props}
+                        >
+                            { child.props.children }
+                        </CustomBox>
+                    ))}
+                </>
+            )}
+
+            // - options
+            getOptionLabel={(option) => option?.label ?? ''}
+            renderOption={(props, option) => (
+                <CustomBox
+                    $primary={option.style === "primary"}
+                    component="li"
+                    {...props}
+                >
+                    { option.label }
+                </CustomBox>
+            )}
+
+            // - input
             renderInput={(params) => (
                 <TextField
                     {...params}
@@ -123,6 +208,9 @@ const TextSearchInput = ({
                     }}
                 />
             )}
+
+            // - popper
+            PopperComponent={CustomPopper}
         />
     )
 }
@@ -132,6 +220,8 @@ TextSearchInput.propTypes = {
     onChange: PropTypes.func.isRequired,
     label: PropTypes.string,
     placeholder: PropTypes.string,
+    noOptionsText: PropTypes.string, 
+    groupLabel: PropTypes.string,
     loading: PropTypes.bool,
     disabled: PropTypes.bool,
     onInputChange: PropTypes.func,

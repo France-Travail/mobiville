@@ -51,7 +51,15 @@ const GoToMainContent = styled.a`
   }
 `
 
-const MainLayout = ({ children, menu, topMobileMenu, style = {} }) => {
+const MainLayout = ({
+  children,
+  menu = {
+    visible: true,
+  },
+  topMobileMenu = false,
+  style = {},
+  displaySearch = true,
+}) => {
   const size = useWindowSize()
   const location = useLocation()
 
@@ -64,7 +72,9 @@ const MainLayout = ({ children, menu, topMobileMenu, style = {} }) => {
       <GoToMainContent href="#main">Aller au contenu</GoToMainContent>
       {isMobileView(size) && topMobileMenu && <HeaderMobile />}
       {isMobileView(size) && menu.visible && <MenuMobile {...menu} />}
-      {!isMobileView(size) && menu.visible && <HeaderDesktop {...menu} />}
+      {!isMobileView(size) && menu.visible && (
+        <HeaderDesktop displaySearch={displaySearch} {...menu} />
+      )}
       <Main
         id="main"
         tabIndex="-1"
@@ -88,14 +98,7 @@ MainLayout.propTypes = {
   menu: PropTypes.oneOfType([PropTypes.object]),
   topMobileMenu: PropTypes.bool,
   style: PropTypes.object,
-}
-
-MainLayout.defaultProps = {
-  menu: {
-    visible: true,
-  },
-  topMobileMenu: false,
-  style: {},
+  displaySearch: PropTypes.bool
 }
 
 export default MainLayout

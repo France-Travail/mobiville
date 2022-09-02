@@ -2,8 +2,8 @@ import { useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { throttle } from 'lodash'
 
-import { TextSearchInput } from '../../../components'
-import { useCities } from '../../../common/contexts/citiesContext'
+import { TextSearchInput } from '../../components'
+import { useCities } from '../../common/contexts/citiesContext'
 
 const JobSelect = ({ onSelect, defaultValue }) => {
 
@@ -19,7 +19,7 @@ const JobSelect = ({ onSelect, defaultValue }) => {
     }, [])
 
     const throttledOnSearchJobLabels = useMemo(
-        () => throttle((search) => onSearchJobLabels(search), 200),
+        () => throttle((value) => (onSearchJobLabels(value)), 200),
         []
     )
 
@@ -39,6 +39,7 @@ const JobSelect = ({ onSelect, defaultValue }) => {
         <TextSearchInput
             label="Votre métier"
             placeholder="Saisissez votre métier"
+            groupLabel="Métiers"
             options={jobsMatchingCriterions ?? []}
             // loading={isLoadingJobsMatchingCriterion}
             onInputChange={onInputChange}
