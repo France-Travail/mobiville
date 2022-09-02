@@ -33,6 +33,8 @@
   "scripts": {
     "cypress:run": " cross-env NO_PROXY=\"localhost,*.intra,*.pe-qvr.net\" HTTP_PROXY=\"http://localhost:9000\" cypress run",
     "cypress:open": "cross-env NO_PROXY=\"localhost,*.intra,*.pe-qvr.net,*.internal\" HTTP_PROXY=\"http://localhost:9000\" cypress open",
+    "cypress-run-recette": " cross-env NO_PROXY=\"localhost,*.intra,*.pe-qvr.net\" HTTP_PROXY=\"http://localhost:9000\" cypress run",
+    "cypress-open-recette": "cross-env NO_PROXY=\"localhost,*.intra,*.pe-qvr.net,*.internal\" HTTP_PROXY=\"http://localhost:9000\" cypress open",
     "generate-multiple-cucumber-html-report": "node multiple-cucumber-html-report/generate-cucumber-html-report.js false"
   },
   "cypress-cucumber-preprocessor": {
