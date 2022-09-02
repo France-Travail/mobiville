@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState, memo } from 'react'
+import { useEffect, useRef, useState, memo } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import queryString from 'query-string'
@@ -101,6 +101,33 @@ const PaginationContainer = styled.div`
     color: #fff;
   }
 `
+const TitleContainer = styled.div`
+  font-family: 'Roboto';
+  font-style: normal;
+  color: #191970;
+  width: 600px;
+  margin: 8px;
+`
+
+const Title = styled.h1`
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 28px;
+`
+
+const SubTitle = styled.h2`
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+`
+
+const PopupLink = styled(Link)`
+  color: #191970 !important;
+
+  &:hover {
+    color: #4e4ec9 !important;
+  }
+`
 
 const Cities = () => {
   const isMobile = isMobileView(useWindowSize())
@@ -117,8 +144,14 @@ const Cities = () => {
   } = useProfessions()
 
   // cities
-  const { cities, isLoading, onSearch, totalCities, sortCriterions } =
-    useCities()
+  const {
+    cities,
+    isLoading,
+    onSearch,
+    totalCities,
+    criterions,
+    sortCriterions,
+  } = useCities()
   const [hoveredCityId, setHoveredCityId] = useState(null)
   const [selectedCityId, setSelectedCityId] = useState(null)
   const citiesListRef = useRef(null)
@@ -130,6 +163,24 @@ const Cities = () => {
   const itemsPerPage = 10
   const [page, setPage] = useState(1)
   const [noOfPages, setNoOfPages] = useState(0)
+
+  const [regionLabel, setRegionLabel] = useState('')
+  const [metierLabel, setMetierLabel] = useState('')
+
+  useEffect(() => {
+    if (!!params?.codeRegion) {
+      const region = criterions.regions.find(
+        (region) => params.codeRegion === region.id
+      )
+      setRegionLabel(region.label)
+    }
+    if (!!params?.codeRome) {
+      const metier = criterions.codeRomes.find(
+        (codeRome) => params.codeRome === codeRome.key
+      )
+      setMetierLabel(metier.label)
+    }
+  }, [params, criterions])
 
   useEffect(() => {
     setFormattedCities(cities)
