@@ -2,7 +2,7 @@ import Router from '@koa/router'
 
 const router = new Router({ prefix: '/professions' })
 
-import { searchJob, infosTravail, infosTensionTravail } from '../utils/pe-api'
+import {searchJob, infosTravail, infosTensionTravail, searchJobCount} from '../utils/pe-api'
 import { meanBy } from 'lodash'
 
 const CODE_INSEE_LYON_FIRST_DISTRICT = '69381'
@@ -52,27 +52,52 @@ router.post(
 
 router.post(
     '/searchCountList',
-    async ({
+        async ({
              request: {
                body: { codeRome, inseeList },
              },
              response,
            }) => {
         let responseArray = []
-        for (const insee of inseeList) {
-          const result = await searchJob({
-              codeRome,
-              insee:getInseeCodesForSearch(insee),
-              distance: 30,
-          })
-            let responseItem = {}
-            responseItem.insee = insee
-          if (result) {
-              responseItem.total = result.resultats.length
-              responseArray.push(responseItem)
-          }
-      }
-      response.body = JSON.stringify(responseArray)
+
+            async function callToSearchJobCount(insee) {
+                const result = await searchJobCount({
+                    codeRome,
+                    insee: getInseeCodesForSearch(insee),
+                    distance: 30,
+                })
+                let responseItem = {}
+                responseItem.insee = insee
+                responseItem.total = 0
+                if (result && result.filtresPossibles) {
+                    const filtresPossibles = result.filtresPossibles
+                    const typesContrats = filtresPossibles.find(filtrePossibles => filtrePossibles.filtre === 'typeContrat')
+                    let totalOffres = 0
+                    typesContrats.agregation.forEach((agregat) => {
+                        totalOffres += agregat.nbResultats
+                    })
+                    responseItem.total = totalOffres
+                }
+                responseArray.push(responseItem)
+            }
+
+            // on divise par deux la taille de la liste si elle est trop grande pour limiter le nombre d'appels asynchrones
+            // normalement la pagination en mode liste et de 10 donc on est pas sensé passer dans le if mais
+            if(inseeList.length > 10 ) {
+                const half = Math.ceil(inseeList.length / 2)
+                await Promise.all(inseeList.slice(0, half).map(async (insee) => {
+                    await callToSearchJobCount(insee);
+                }))
+                await Promise.all(inseeList.slice(half).map(async (insee) => {
+                    await callToSearchJobCount(insee);
+                }))
+            } else {
+                await Promise.all(inseeList.map(async (insee) => {
+                    await callToSearchJobCount(insee);
+                }))
+            }
+
+        response.body = JSON.stringify(responseArray)
     }
 )
 

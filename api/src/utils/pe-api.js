@@ -3,6 +3,7 @@ import axios from 'axios'
 import { stringify } from 'querystring'
 import HttpsProxyAgent from 'https-proxy-agent';
 import { setupCache } from 'axios-cache-adapter'
+import {sleep} from "./utils";
 
 
 // cache de 15 minutes pour le token
@@ -50,8 +51,8 @@ const apiEmploiStore = axios.create({
 })
 export async function searchJob({ codeRome = [], insee = [], distance = 10 }) {
     const token = await getAccessToken()
-    const response = await apiEmploiStore
-        .get(
+    const callToOffres = function () {
+        return apiEmploiStore.get(
             'https://api.emploi-store.fr/partenaire/offresdemploi/v2/offres/search',
             {
                 params: {
@@ -62,11 +63,54 @@ export async function searchJob({ codeRome = [], insee = [], distance = 10 }) {
                 headers: { Authorization: `Bearer ${token}` },
                 ...(config.PE_ENV && {proxy: false}),
                 ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
-            }
-        )
-        .then(async (result) => result.data)
+            })
+            .then(async (result) => result)
+            .catch((error) => {
+                console.log("pe-api.js searchJobCount() --> ERROR. Request : "+error.request.res.responseUrl+". Error status : "+error.response.status)
+                if(error.response.status !== 429) console.log(error)
+                return error.response
+            })
+    }
+    return fetchAndRetryIfNecessary(callToOffres)
+}
 
-    return response
+const MAX_RETRY_429 = 5
+async function fetchAndRetryIfNecessary (callAPIFn, tryNumber = 1) {
+    const response = await callAPIFn()
+    if (tryNumber <= MAX_RETRY_429 && response.status === 429) {
+        const retryAfter = response.headers['retry-after']
+        await sleep(retryAfter)
+        return fetchAndRetryIfNecessary(callAPIFn, ++tryNumber)
+    }
+    if (tryNumber < MAX_RETRY_429 && response.status === 429)
+        console.log("pe-api.js fetchAndRetryIfNecessary() -->  ERROR : MAX Http 429 RETRY Reached : "+MAX_RETRY_429)
+    return response.data
+}
+
+export async function searchJobCount({ codeRome = [], insee = [], distance = 10 }) {
+    const token = await getAccessToken()
+    const callToOffres = function () {
+       return apiEmploiStore.get(
+        'https://api.emploi-store.fr/partenaire/offresdemploi/v2/offres/search',
+        {
+            params: {
+                range: '0-0',
+                codeROME: codeRome.join(','),
+                commune: insee.join(','),
+                distance,
+            },
+            headers: { Authorization: `Bearer ${token}` },
+            ...(config.PE_ENV && {proxy: false}),
+            ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
+        })
+       .then(async (result) => result)
+       .catch((error) => {
+           console.log("pe-api.js searchJobCount() --> ERROR. Request : "+error.request.res.responseUrl+". Error status : "+error.response.status)
+           if(error.response.status !== 429) console.log(error)
+           return error.response
+       })
+    }
+    return fetchAndRetryIfNecessary(callToOffres)
 }
 
 export async function infosTravail({ codeProfession, codeDept }) {
