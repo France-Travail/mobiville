@@ -399,6 +399,16 @@ const CityPage = () => {
     </TitlesContainer>
   )
 
+  const getNombreOffres = function() {
+    let totalOffres = 0
+    // un .find() ne fonctionne pas ici, utilisation d'un .map()
+    professions.map((profession) => {
+      console.log("profession : " + profession.totalOffres)
+      if(profession.totalOffres) totalOffres = profession.totalOffres
+    })
+    return totalOffres
+  }
+
   return (
     <MainLayout isMobile={isMobile} menu={{ visible: !isMobile }}>
       <Helmet>
@@ -465,7 +475,8 @@ const CityPage = () => {
                 <BlockContentLiImg src={briefcase} />
                 <BlockContentLiDesc>
                   <BlockContentLiValue>
-                    {professions?.length}{' '}
+                    {!!professions && getNombreOffres()}{' '}
+
                   </BlockContentLiValue>
                   Offres d’emploi
                 </BlockContentLiDesc>
