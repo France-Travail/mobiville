@@ -12,13 +12,15 @@ export function ProfessionsProvider(props) {
     const [professions, _setProfessions] = useState([])
     const [isLoading, _setIsLoading] = useState(false)
     const [professionsCountList, _setProfessionsCountList] = useState([])
+    const [totalOffres, _setTotalOffres] = useState(null)
 
     const onSearch = useCallback((params) => {
         _setIsLoading(true)
 
         return searchProfessions(params)
-            .then((jobs) => {
-                _setProfessions(orderBy(jobs, ['dateCreation'], ['desc']))
+            .then((jobsData) => {
+                _setProfessions(orderBy(jobsData.resultats, ['dateCreation'], ['desc']))
+                _setTotalOffres(jobsData.totalOffres)
             })
             .then(() => _setIsLoading(false))
     }, [])
@@ -45,6 +47,7 @@ export function ProfessionsProvider(props) {
                 professions,
                 isLoading,
                 professionsCountList,
+                totalOffres,
                 // function
                 onSearch,
                 onSearchInfosTravail,
