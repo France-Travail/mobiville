@@ -48,7 +48,7 @@ router.post(
       distance: 30,
     })
     response.body = {
-      resultats: result ? result?.resultats : [],
+      resultats: result ? result.resultats : [],
       totalOffres: result ? getTotalOffres(result) : undefined,
     }
   }
