@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import moment from 'moment'
 import { Helmet } from 'react-helmet-async'
+import _ from "lodash"
 import {
   FormControl,
   MenuItem,
@@ -25,7 +26,7 @@ import {
   COLOR_PRIMARY,
   COLOR_TEXT_SECONDARY,
 } from '../../constants/colors'
-import { thereAre, ucFirstOnly } from '../../utils/utils'
+import { formatDate, thereAre } from '../../utils/utils'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import MainLayout from '../../components/MainLayout'
@@ -416,7 +417,7 @@ const CityJobs = ({
         {romeLabel}
         <br />
         <span style={{ fontSize: 12 }}>
-          Dans un rayon de 30 km de {ucFirstOnly(city.nom_comm)}
+          Dans un rayon de 30 km de {_.capitalize(city.nom_comm)}
         </span>
       </JobTitleText>
       {!isMobile && jobFilters}
@@ -424,18 +425,14 @@ const CityJobs = ({
   )
 
   return (
-    <MainLayout isMobile={isMobile}>
+    <MainLayout>
       <Helmet>
         <title>
-          Travailler dans {romeLabel} à {ucFirstOnly(city.nom_comm)} - Mobiville
+          Emplois : {_.capitalize(city.nom_comm)} ({city.code_dept}) - {formatDate(new Date())} | Mobiville
         </title>
         <meta
           name="description"
-          content={`Explorez le marché de l'emploi de ${ucFirstOnly(
-            city.nom_comm
-          )} pour le métier de ${{
-            romeLabel,
-          }}. Offres disponibles, salaires, …`}
+          content={`Accédez à l’ensemble des offres d’emploi de ${_.capitalize(city.nom_comm)} (${city.code_dept}) pour le métier de ${romeLabel}`}
         />
       </Helmet>
       <SubHeader backLink={backLink} node={subHeaderNode} isMobile={isMobile} />
@@ -590,7 +587,5 @@ CityJobs.propTypes = {
   searchValue: PropTypes.string.isRequired,
   setSearchValue: PropTypes.func.isRequired,
 }
-
-CityJobs.defaultProps = {}
 
 export default CityJobs

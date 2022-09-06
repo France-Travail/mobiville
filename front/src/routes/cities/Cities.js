@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, memo } from 'react'
+import { useEffect, useRef, useState, memo, useCallback } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import styled from 'styled-components'
 import queryString from 'query-string'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
@@ -166,6 +167,29 @@ const Cities = () => {
 
   const [regionLabel, setRegionLabel] = useState('')
   const [metierLabel, setMetierLabel] = useState('')
+
+  const computedHelmet = useCallback(() => {
+    if (!!params?.codeRegion && !!cities && !!cities[0] && !!cities[0]['newRegion.name']) {
+      return (
+        <Helmet>
+          <title>Où travailler en { cities[0]['newRegion.name'] } | Mobiville</title>
+          <meta
+            name="description"
+            content={`Découvrez les villes qui correspondent le mieux à votre recherche d'emploi dans la région ${cities[0]['newRegion.name']} et la liste des villes les plus attractives pour votre métier`}
+          />
+        </Helmet>
+      )
+    }
+    return (
+      <Helmet>
+        <title>Où travailler en France | Mobiville</title>
+        <meta
+          name="description"
+          content={`Découvrez les villes qui correspondent le mieux à votre recherche d'emploi et la liste des villes les plus attractives pour votre métier`}
+        />
+      </Helmet>
+    )
+  }, [ cities, params ])
 
   useEffect(() => {
     if (!!params?.codeRegion) {
@@ -364,31 +388,34 @@ const Cities = () => {
   }
 
   return (
-    <MainLayout
-      style={{
-        overflow: isMobile ? 'inherit' : '',
-        minHeight: isMobile ? undefined : '',
-      }}
-    >
-      {isMobile ? (
-        <MobileCriterionsPanel
-          criterions={params}
-          showMobileCriterionsSelection={showMobileCriterionsSelection}
-          total={totalCities}
-        />
-      ) : (
-        <DesktopCriterionsPanel
-          paramsUrl={params}
-          total={totalCities}
-          onSubmit={onSubmit}
-        />
-      )}
+    <>
+      { computedHelmet() }
+      
+      <MainLayout
+        style={{
+          overflow: isMobile ? 'inherit' : '',
+          minHeight: isMobile ? undefined : '',
+        }}
+      >
+        {isMobile ? (
+          <MobileCriterionsPanel
+            criterions={params}
+            showMobileCriterionsSelection={showMobileCriterionsSelection}
+            total={totalCities}
+          />
+        ) : (
+          <DesktopCriterionsPanel
+            paramsUrl={params}
+            total={totalCities}
+            onSubmit={onSubmit}
+          />
+        )}
 
-      {isMobile ? (
-        citiesList
-      ) : (
-        <DesktopContainer>
-          {citiesList}
+        {isMobile ? (
+          citiesList
+        ) : (
+          <DesktopContainer>
+            {citiesList}
 
           {!isLoading && cities.length ? (
             <StyledMapContainer
@@ -441,6 +468,7 @@ const Cities = () => {
         </DesktopContainer>
       )}
     </MainLayout>
+  </>
   )
 }
 
