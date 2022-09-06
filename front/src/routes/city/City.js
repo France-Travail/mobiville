@@ -404,7 +404,8 @@ const CityPage = () => {
     let totalOffres = 0
     // un .find() ne fonctionne pas ici, utilisation d'un .map()
     professions.map((profession) => {
-      if(profession.totalOffres) totalOffres = profession.totalOffres
+      if (profession.totalOffres) totalOffres = profession.totalOffres
+      return true // Array.prototype.map() expects a return value from arrow function  array-callback-return
     })
     return totalOffres
   }
