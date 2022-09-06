@@ -89,14 +89,14 @@ router.post(
             if(inseeList.length > 10 ) {
                 const half = Math.ceil(inseeList.length / 2)
                 await Promise.all(inseeList.slice(0, half).map(async (insee) => {
-                    await callToSearchJobCount(insee);
+                    await callToSearchJobCount(insee)
                 }))
                 await Promise.all(inseeList.slice(half).map(async (insee) => {
-                    await callToSearchJobCount(insee);
+                    await callToSearchJobCount(insee)
                 }))
             } else {
                 await Promise.all(inseeList.map(async (insee) => {
-                    await callToSearchJobCount(insee);
+                    await callToSearchJobCount(insee)
                 }))
             }
 

@@ -404,7 +404,6 @@ const CityPage = () => {
     let totalOffres = 0
     // un .find() ne fonctionne pas ici, utilisation d'un .map()
     professions.map((profession) => {
-      console.log("profession : " + profession.totalOffres)
       if(profession.totalOffres) totalOffres = profession.totalOffres
     })
     return totalOffres

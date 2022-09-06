@@ -1,9 +1,9 @@
 import config from 'config'
 import axios from 'axios'
 import { stringify } from 'querystring'
-import HttpsProxyAgent from 'https-proxy-agent';
+import HttpsProxyAgent from 'https-proxy-agent'
 import { setupCache } from 'axios-cache-adapter'
-import {sleep} from "./utils";
+import {sleep} from "./utils"
 
 
 // cache de 15 minutes pour le token
