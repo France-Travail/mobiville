@@ -74,7 +74,7 @@ export async function searchJob({ codeRome = [], insee = [], distance = 10 }) {
     return fetchAndRetryIfNecessary(callToOffres)
 }
 
-const MAX_RETRY_429 = 5
+const MAX_RETRY_429 = 10
 async function fetchAndRetryIfNecessary (callAPIFn, tryNumber = 1) {
     const response = await callAPIFn()
     if (tryNumber <= MAX_RETRY_429 && response.status === 429) {

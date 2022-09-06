@@ -44,11 +44,24 @@ router.post(
       })
       if (result) {
         response.body = result.resultats
+        response.body.push({totalOffres:getTotalOffres(result)})
       } else {
         response.body = []
       }
     }
 )
+
+const getTotalOffres = function(result) {
+    let totalOffres = 0
+    if (result && result.filtresPossibles) {
+        const filtresPossibles = result.filtresPossibles
+        const typesContrats = filtresPossibles.find(filtrePossibles => filtrePossibles.filtre === 'typeContrat')
+        typesContrats.agregation.forEach((agregat) => {
+            totalOffres += agregat.nbResultats
+        })
+    }
+    return totalOffres
+}
 
 router.post(
     '/searchCountList',
@@ -68,21 +81,11 @@ router.post(
                 })
                 let responseItem = {}
                 responseItem.insee = insee
-                responseItem.total = 0
-                if (result && result.filtresPossibles) {
-                    const filtresPossibles = result.filtresPossibles
-                    const typesContrats = filtresPossibles.find(filtrePossibles => filtrePossibles.filtre === 'typeContrat')
-                    let totalOffres = 0
-                    typesContrats.agregation.forEach((agregat) => {
-                        totalOffres += agregat.nbResultats
-                    })
-                    responseItem.total = totalOffres
-                }
+                responseItem.total = getTotalOffres(result)
                 responseArray.push(responseItem)
             }
 
             // on divise par deux la taille de la liste si elle est trop grande pour limiter le nombre d'appels asynchrones
-            // normalement la pagination en mode liste et de 10 donc on est pas sensé passer dans le if mais
             if(inseeList.length > 10 ) {
                 const half = Math.ceil(inseeList.length / 2)
                 await Promise.all(inseeList.slice(0, half).map(async (insee) => {
