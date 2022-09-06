@@ -42,11 +42,9 @@ router.post(
         insee: getInseeCodesForSearch(insee),
         distance: 30,
       })
-      if (result) {
-        response.body = result.resultats
-        response.body.push({totalOffres:getTotalOffres(result)})
-      } else {
-        response.body = []
+      response.body = {
+        resultats: result ? result?.resultats : [],
+        totalOffres: result ? getTotalOffres(result) : undefined,
       }
     }
 )
@@ -71,33 +69,41 @@ router.post(
              },
              response,
            }) => {
-        let responseArray = []
-
-            async function callToSearchJobCount(insee) {
-                const result = await searchJobCount({
+             async function callToSearchJobCount(insee) {
+              return {
+                insee: insee,
+                total: getTotalOffres(
+                  await searchJobCount({
                     codeRome,
                     insee: getInseeCodesForSearch(insee),
                     distance: 30,
-                })
-                let responseItem = {}
-                responseItem.insee = insee
-                responseItem.total = getTotalOffres(result)
-                responseArray.push(responseItem)
+                  })
+                ),
+              }
             }
-
-            // on divise par deux la taille de la liste si elle est trop grande pour limiter le nombre d'appels asynchrones
+            
+            let responseArray = []
             if(inseeList.length > 10 ) {
+              // on divise par deux la taille de la liste si elle est trop grande pour limiter le nombre d'appels asynchrones
                 const half = Math.ceil(inseeList.length / 2)
-                await Promise.all(inseeList.slice(0, half).map(async (insee) => {
-                    await callToSearchJobCount(insee)
-                }))
-                await Promise.all(inseeList.slice(half).map(async (insee) => {
-                    await callToSearchJobCount(insee)
-                }))
+                responseArray.push(
+                  ...(await Promise.all(
+                    inseeList
+                      .slice(0, half)
+                      .map((insee) => callToSearchJobCount(insee))
+                  )),
+                  ...(await Promise.all(
+                    inseeList
+                      .slice(half)
+                      .map((insee) => callToSearchJobCount(insee))
+                  ))
+                )
             } else {
-                await Promise.all(inseeList.map(async (insee) => {
-                    await callToSearchJobCount(insee)
-                }))
+              responseArray.push(
+                ...(await Promise.all(
+                  inseeList.map((insee) => callToSearchJobCount(insee))
+                ))
+              )
             }
 
         response.body = JSON.stringify(responseArray)

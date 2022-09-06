@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useLocation, useParams } from 'react-router-dom'
-import _ from "lodash"
+import _ from 'lodash'
 import queryString from 'query-string'
 import { Helmet } from 'react-helmet-async'
 import styled from 'styled-components'
@@ -243,6 +243,7 @@ const CityPage = () => {
     onSearch: onSearchProfessions,
     onSearchInfosTravail,
     professions,
+    totalOffres,
   } = useProfessions()
 
   const { insee, section } = useParams()
@@ -382,8 +383,7 @@ const CityPage = () => {
   const titlesNode = (
     <TitlesContainer isMobile={isMobile}>
       <RegionName isMobile={isMobile}>
-        {_.capitalize(city.nom_region)}
-        {' '}<img src={pastille} alt="" />{' '}
+        {_.capitalize(city.nom_region)} <img src={pastille} alt="" />{' '}
         {_.capitalize(city.nom_dept)}
       </RegionName>
       {!isMobile && (
@@ -400,23 +400,17 @@ const CityPage = () => {
     </TitlesContainer>
   )
 
-  const getNombreOffres = function() {
-    let totalOffres = 0
-    // un .find() ne fonctionne pas ici, utilisation d'un .map()
-    professions.map((profession) => {
-      if (profession.totalOffres) totalOffres = profession.totalOffres
-      return true // Array.prototype.map() expects a return value from arrow function  array-callback-return
-    })
-    return totalOffres
-  }
-
   return (
     <MainLayout menu={{ visible: !isMobile }}>
       <Helmet>
-        <title>{_.upperFirst(romeLabel)} à {_.capitalize(city.nom_comm)} | Mobiville</title>
+        <title>
+          {_.upperFirst(romeLabel)} à {_.capitalize(city.nom_comm)} | Mobiville
+        </title>
         <meta
           name="description"
-          content={`Explorez le marché de l'emploi de ${_.capitalize(city.nom_comm)} pour le métier de ${romeLabel} ainsi que les informations sur l’immobilier, les services et les équipements.`}
+          content={`Explorez le marché de l'emploi de ${_.capitalize(
+            city.nom_comm
+          )} pour le métier de ${romeLabel} ainsi que les informations sur l’immobilier, les services et les équipements.`}
         />
       </Helmet>
 
@@ -473,10 +467,7 @@ const CityPage = () => {
               <BlockContentLi>
                 <BlockContentLiImg src={briefcase} />
                 <BlockContentLiDesc>
-                  <BlockContentLiValue>
-                    {!!professions && getNombreOffres()}{' '}
-
-                  </BlockContentLiValue>
+                  <BlockContentLiValue>{totalOffres} </BlockContentLiValue>
                   Offres d’emploi
                 </BlockContentLiDesc>
               </BlockContentLi>
