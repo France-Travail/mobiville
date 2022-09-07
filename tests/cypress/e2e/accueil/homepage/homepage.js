@@ -55,8 +55,8 @@ function boutonRechercheEndroitAide(){
       return boutonRechercherAide;
     case "Ville" :
       return boutonRechercherEndroit;
-    }
   }
+}
 
 And("je clique sur rechercher", function () {
   cy.get(boutonRechercheEndroitAide(), {timeout: SHORT_WAIT_TIME}).click({force: true});
