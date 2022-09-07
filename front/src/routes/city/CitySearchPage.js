@@ -62,7 +62,6 @@ const CitySearchPage = () => {
     } else {
         return (
             <MainLayout
-                isMobile={isMobile}
                 style={{ background: COLOR_BACKGROUND }}
             >
                 <Container>

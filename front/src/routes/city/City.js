@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useLocation, useParams } from 'react-router-dom'
+import _ from 'lodash'
 import queryString from 'query-string'
 import { Helmet } from 'react-helmet-async'
 import styled from 'styled-components'
@@ -15,7 +16,6 @@ import CitySubHeader from './CitySubHeader'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
-import { ucFirstOnly } from '../../utils/utils'
 import { useProfessions } from '../../common/contexts/professionsContext'
 import { COLOR_GRAY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
 
@@ -201,7 +201,7 @@ const CityName = styled.h1`
   margin-bottom: 0;
 `
 
-const RegionName = styled.h2`
+const RegionName = styled.p`
   font-size: ${({ isMobile }) => (isMobile ? '14px' : '12px')};
   margin: 0;
   padding: 0;
@@ -243,6 +243,7 @@ const CityPage = () => {
     onSearch: onSearchProfessions,
     onSearchInfosTravail,
     professions,
+    totalOffres,
   } = useProfessions()
 
   const { insee, section } = useParams()
@@ -382,32 +383,34 @@ const CityPage = () => {
   const titlesNode = (
     <TitlesContainer isMobile={isMobile}>
       <RegionName isMobile={isMobile}>
-        {ucFirstOnly(city.nom_region)} <img src={pastille} alt="" />{' '}
-        {ucFirstOnly(city.nom_dept)}
+        {_.capitalize(city.nom_region)} <img src={pastille} alt="" />{' '}
+        {_.capitalize(city.nom_dept)}
       </RegionName>
       {!isMobile && (
         <CityName isMobile={isMobile}>
-          {ucFirstOnly(city.nom_comm)}{' '}
+          {_.capitalize(city.nom_comm)}{' '}
           <CityJob>pour le métier {romeLabel} </CityJob>{' '}
         </CityName>
       )}
       {isMobile && (
         <CityName isMobile={isMobile}>
-          {ucFirstOnly(city.nom_comm)} <br /> pour le métier {romeLabel}
+          {_.capitalize(city.nom_comm)} <br /> pour le métier {romeLabel}
         </CityName>
       )}
     </TitlesContainer>
   )
 
   return (
-    <MainLayout isMobile={isMobile} menu={{ visible: !isMobile }}>
+    <MainLayout menu={{ visible: !isMobile }}>
       <Helmet>
-        <title>Pourquoi vivre à {ucFirstOnly(city.nom_comm)} - Mobiville</title>
+        <title>
+          {_.upperFirst(romeLabel)} à {_.capitalize(city.nom_comm)} | Mobiville
+        </title>
         <meta
           name="description"
-          content={`Toutes les informations clés sur la ville de ${ucFirstOnly(
+          content={`Explorez le marché de l'emploi de ${_.capitalize(
             city.nom_comm
-          )} : Cadre de vie, emploi, logement et bien plus.`}
+          )} pour le métier de ${romeLabel} ainsi que les informations sur l’immobilier, les services et les équipements.`}
         />
       </Helmet>
 
@@ -464,9 +467,7 @@ const CityPage = () => {
               <BlockContentLi>
                 <BlockContentLiImg src={briefcase} />
                 <BlockContentLiDesc>
-                  <BlockContentLiValue>
-                    {professions?.length}{' '}
-                  </BlockContentLiValue>
+                  <BlockContentLiValue>{totalOffres} </BlockContentLiValue>
                   Offres d’emploi
                 </BlockContentLiDesc>
               </BlockContentLi>
@@ -637,7 +638,7 @@ const CityPage = () => {
                             <b>XXX offres</b>
                           </BlockContentLi>*/}
                       <BlockContentLi isPaddingReduced={true}>
-                        <b>{ucFirstOnly(similarCity.nom_comm)}</b>
+                        <b>{_.capitalize(similarCity.nom_comm)}</b>
                         <br /> ({similarCity['newRegion.name']})
                       </BlockContentLi>
                     </BlockContentUl>
@@ -695,7 +696,7 @@ const CityPage = () => {
                             <b>XXX Km</b>
                           </BlockContentLi>*/}
                       <BlockContentLi isPaddingReduced={true}>
-                        <b>{ucFirstOnly(closeCity.nom_comm)}</b>
+                        <b>{_.capitalize(closeCity.nom_comm)}</b>
                         <br /> ({closeCity['newRegion.name']})
                       </BlockContentLi>
                     </BlockContentUl>
@@ -743,7 +744,5 @@ const CityPage = () => {
 }
 
 CityPage.propTypes = {}
-
-CityPage.defaultProps = {}
 
 export default CityPage

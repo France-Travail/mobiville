@@ -60,7 +60,7 @@ const MainLayout = ({
   style = {},
   displaySearch = true,
 }) => {
-  const size = useWindowSize()
+  const ismobile = isMobileView(useWindowSize())
   const location = useLocation()
 
   useEffect(() => {
@@ -70,16 +70,16 @@ const MainLayout = ({
   return (
     <Container>
       <GoToMainContent href="#main">Aller au contenu</GoToMainContent>
-      {isMobileView(size) && topMobileMenu && <HeaderMobile />}
-      {isMobileView(size) && menu.visible && <MenuMobile {...menu} />}
-      {!isMobileView(size) && menu.visible && (
+      {ismobile && topMobileMenu && <HeaderMobile />}
+      {ismobile && menu.visible && <MenuMobile {...menu} />}
+      {!ismobile && menu.visible && (
         <HeaderDesktop displaySearch={displaySearch} {...menu} />
       )}
       <Main
         id="main"
         tabIndex="-1"
         style={{
-          paddingBottom: isMobileView(size) ? 30 : 60,
+          paddingBottom: ismobile ? 30 : 60,
           ...style,
         }}
       >
