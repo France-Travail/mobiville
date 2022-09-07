@@ -58,6 +58,7 @@ const ActionButtonElement = styled(Link)`
 const ActionButton = ({
   path,
   libelle = 'Rechercher',
+  isMainSearch = false,
   isMobile = false,
   isBlue = true,
   isWhite = false,
@@ -75,6 +76,7 @@ const ActionButton = ({
   return (
     <ActionButtonContainer isMobile={isMobile} style={{ ...style }}>
       <ActionButtonElement
+        data-automation-id={isMainSearch ? 'search-action' : undefined}
         to={path}
         $isBlue={isBlue}
         $isWhite={isWhite}
@@ -90,6 +92,7 @@ ActionButton.propTypes = {
   path: PropTypes.string.isRequired,
   libelle: PropTypes.string,
   isMobile: PropTypes.bool,
+  isMainSearch: PropTypes.bool,
   isBlue: PropTypes.bool,
   isWhite: PropTypes.bool,
   style: PropTypes.object,

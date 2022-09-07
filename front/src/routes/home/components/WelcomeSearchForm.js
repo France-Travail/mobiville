@@ -64,13 +64,14 @@ const WelcomeSearchForm = () => {
       <div>
         <ButtonGroupLabel>Que recherchez-vous ?</ButtonGroupLabel>
         <ButtonGroup onChange={handleChange} onClick={handleClick}>
-          <button type="button" id={CITIES_BUTTON_ID}>
+          <button data-automation-id="search-ville" type="button" id={CITIES_BUTTON_ID}>
             <HouseOutlineIcon />
             <p>Une ville</p>
           </button>
 
           <button
             type="button"
+            data-automation-id="search-aide"
             id={HELPS_BUTTON_ID}
             style={{
               border: isMobile ? `1px solid ${COLOR_PRIMARY}` : 'none',

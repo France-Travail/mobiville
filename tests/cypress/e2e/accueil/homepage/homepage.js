@@ -1,13 +1,10 @@
-// import processParams from '../../../../../support/processor'
 const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor')
 import {SHORT_WAIT_TIME,MIDDLE_WAIT_TIME,LONG_WAIT_TIME} from "../common/common";
 
-const boutonEndroit = "button[type=button][id=cities]";
 const champSaisieMetier = "input[type=text][id=autocomplete-votre-metier]";
 const listeMetiers = "ul[role=listbox][id=autocomplete-votre-metier-listbox] > li";
 const champSaisieEndroit = "input[type=text][id=autocomplete-lendroit-qui-vous-fait-envie]";
 const listeEndroits = "ul[role=listbox][id=autocomplete-lendroit-qui-vous-fait-envie-listbox] > li";
-const boutonRechercherEndroit = "main[id=main] * > a[href*=cit]";
 
 const rappelCritereMetierRegion = "main[id=main] * > div > h1";
 const resultatsRechercheVille = "main[id=main] * > div > h2";
@@ -16,19 +13,15 @@ const rappelCritereVille = "main[id=main] * > div > h1";
 const rappelCritereMetier = "main[id=main] * > div > h1 > span";
 const resultatVille = "main[id=main] * > ul > li > div";
 
-const boutonAide = "button[type=button][id=helps]";
 const boutoncritere1 = "div[role=button][id=quel-est-votre-projet]";
 const boutoncritere2 = "div[role=button][id=votre-situation]";
 const boutoncritere3 = "div[role=button][id=votre-age]";
 const selectionCritere = "div[id=menu-] * > ul[role=listbox] > li[role=option] * > span";
-const boutonRechercherAide = "main[id=main] * > a[href*=aides]";
 
 const resultatsRechercheAide = "main[id=main] > div > h1";
 
-var TYPE_RECHERCHE = "Ville";
-var METIER = "";
-var ENDROIT = "";
-export {TYPE_RECHERCHE, METIER, ENDROIT};
+let METIER = "";
+let ENDROIT = "";
 
 When("je saisis {string} dans le métier", function (metier) {
   cy.get(champSaisieMetier, {timeout: SHORT_WAIT_TIME}).type(metier);
@@ -47,33 +40,6 @@ And("je choisis {string} dans la liste des régions/villes", function (propositi
   ENDROIT = propositionendroit;
   cy.get(champSaisieEndroit, {timeout: SHORT_WAIT_TIME}).click();
   cy.contains(listeEndroits, propositionendroit, {timeout: SHORT_WAIT_TIME}).click();
-})
-
-function boutonRechercheEndroitAide(){
-  switch (TYPE_RECHERCHE) {
-    case "Aide" :
-      return boutonRechercherAide;
-    case "Ville" :
-      return boutonRechercherEndroit;
-    }
-  }
-
-And("je clique sur rechercher", function () {
-  cy.get(boutonRechercheEndroitAide(), {timeout: SHORT_WAIT_TIME}).click({force: true});
-})
-
-function boutonSelectionEndroitAide(boutonEndroitAide){
-  switch (boutonEndroitAide) {
-    case "Aide" :
-      return boutonAide;
-    case "Ville" :
-      return boutonEndroit;
-    }
-  }
-
-When("je clique sur le bouton {string} sous le texte \"que recherchez vous\"", function (boutonEndroitAide) {
-  TYPE_RECHERCHE = boutonEndroitAide;
-  cy.get(boutonSelectionEndroitAide(boutonEndroitAide), {timeout: SHORT_WAIT_TIME}).click();
 })
 
 function boutonSelectionCritere(critere){
