@@ -192,13 +192,13 @@ const Cities = () => {
   }, [ cities, params ])
 
   useEffect(() => {
-    if (!!params?.codeRegion) {
-      const region = criterions.regions.find(
+      if (!!params?.codeRegion && !!criterions?.regions ) {
+        const region = criterions.regions.find(
         (region) => params.codeRegion === region.id
-      )
-      setRegionLabel(region.label)
-    }
-    if (!!params?.codeRome) {
+        )
+        setRegionLabel(region.label)
+      }
+      if (!!params?.codeRome && !!criterions?.codeRomes) {
       const metier = criterions.codeRomes.find(
         (codeRome) => params.codeRome === codeRome.key
       )
