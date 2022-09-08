@@ -50,7 +50,7 @@ const CitiesList = styled.div`
 
   a {
     margin: 8px -4px;
-    ${({ $isMobile }) => ($isMobile ? 'width: 612px;' : '')}
+    ${({ isMobile }) => (isMobile ? '' : 'width: 612px;')}
   }
 `
 
@@ -106,8 +106,8 @@ const TitleContainer = styled.div`
   font-family: 'Roboto';
   font-style: normal;
   color: #191970;
-  width: 600px;
   margin: 8px;
+  ${({ isMobile }) => (isMobile ? 'width: 360px;' : 'width: 600px;')}
 `
 
 const Title = styled.h1`
@@ -326,7 +326,7 @@ const Cities = () => {
 
   const citiesList = (
     <CitiesList isMobile={isMobile} ref={citiesListRef}>
-      <TitleContainer>
+      <TitleContainer isMobile={isMobile} >
         <Title>
           {totalCities} {!!metierLabel ? `villes pour ${metierLabel}` : ''}{' '}
           {!!regionLabel ? `en ${regionLabel}` : ''}
