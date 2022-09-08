@@ -46,7 +46,7 @@ const DesktopContainer = styled.div`
 
 const CitiesList = styled.div`
   max-width: ${({ isMobile }) => (isMobile ? 'auto' : '620px')};
-  padding: ${({ isMobile }) => (isMobile ? '0 16px' : '0 8px 0 8px')};
+  padding: ${({ isMobile }) => (isMobile ? '10 16px' : '0 8px 0 8px')};
 
   a {
     margin: 8px -4px;
