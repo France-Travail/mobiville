@@ -151,7 +151,7 @@ const Footer = () => {
           </Item>
           <Item>
             <a
-              href="https://nextcloud.beta.pole-emploi.fr/s/Dsmn2peD6fgPMTX"
+              href="https://nextcloud.beta.pole-emploi.fr/s/stats-mobiville"
               target="_blank"
               rel="noreferrer"
             >
