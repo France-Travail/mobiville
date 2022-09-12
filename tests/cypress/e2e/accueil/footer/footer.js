@@ -1,6 +1,5 @@
-// import processParams from '../../../../../support/processor'
-const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor')
-import {SHORT_WAIT_TIME,MIDDLE_WAIT_TIME,LONG_WAIT_TIME} from "../common/common";
+const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor');
+import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "../common/common";
 
 const footer = "div[class=footer] > div > p";
 const lienACliquer = "div[class=footer] * > a";
