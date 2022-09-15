@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
-import { useWindowSize } from "../../../common/hooks/window-size"
-import { isMobileView } from "../../../constants/mobile"
+import { useWindowSize } from '../../../common/hooks/window-size'
+import { isMobileView } from '../../../constants/mobile'
 import { COLOR_PRIMARY } from '../../../constants/colors'
 import { Section } from '../../../components'
 
@@ -18,12 +18,12 @@ const Container = styled.section`
 
 const TitleContainer = styled.div`
   display: flex;
-  flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row') };
+  flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row')};
   align-items: start;
   justify-content: space-between;
-  gap: ${({ $isMobile }) => ($isMobile ? '32px' : '0') };
+  gap: ${({ $isMobile }) => ($isMobile ? '32px' : '0')};
 
-  margin-top: ${({ $isMobile }) => ($isMobile ? '102px' : '30px') };
+  margin-top: ${({ $isMobile }) => ($isMobile ? '102px' : '30px')};
 `
 
 const TitleWrapper = styled.div`
@@ -53,8 +53,8 @@ const HeroImage = styled.img`
   align-self: center;
 
   padding-right: 64px;
+  max-width: 100vw;
 `
-
 
 const Welcome = () => {
   const isMobile = isMobileView(useWindowSize())
@@ -62,12 +62,12 @@ const Welcome = () => {
   return (
     <Container $isMobile={isMobile}>
       <Section>
-
         <TitleContainer $isMobile={isMobile}>
           <TitleWrapper>
             <Title>Trouvez l’emploi et la ville qui va avec !</Title>
             <SubTitle>
-              Décrochez l’emploi dans la ville qui vous correspond<br />
+              Décrochez l’emploi dans la ville qui vous correspond
+              <br />
               et identifiez les aides pour votre projet de mobilité
             </SubTitle>
           </TitleWrapper>
@@ -76,7 +76,6 @@ const Welcome = () => {
         </TitleContainer>
 
         <WelcomeSearchForm></WelcomeSearchForm>
-          
       </Section>
     </Container>
   )
