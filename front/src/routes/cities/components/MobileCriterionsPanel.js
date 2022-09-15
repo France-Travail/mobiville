@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
@@ -10,7 +10,7 @@ import { ucFirst } from '../../../utils/utils'
 import { COLOR_GRAY, COLOR_PRIMARY } from '../../../constants/colors'
 
 const EmptySpace = styled.div`
-  height: 120px;
+  height: ${({ $wrapperHeight }) => $wrapperHeight}px;
 `
 
 const Wrapper = styled.div`
@@ -53,7 +53,7 @@ const MobileCriterionsPanel = ({
   total,
 }) => {
   const { criterions: allCriterions } = useCities()
-
+  const wrapper = useRef()
   const findCriterionsValue = (val) => {
     let foundLabel = null
     if (allCriterions) {
@@ -77,8 +77,12 @@ const MobileCriterionsPanel = ({
   }, [])
 
   return (
-    <EmptySpace>
-      <Wrapper>
+    <EmptySpace
+      $wrapperHeight={
+        wrapper && wrapper.current && wrapper.current.clientHeight
+      }
+    >
+      <Wrapper ref={wrapper}>
         <Title>Mes critères</Title>
         <TagsBlock>
           <Tag
