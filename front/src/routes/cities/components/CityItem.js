@@ -1,16 +1,21 @@
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import styled, {css} from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import {formatNumber} from '../../../utils/utils'
-import {COLOR_GRAY, COLOR_PRIMARY, COLOR_TAG_GREEN, COLOR_TAG_RED,} from '../../../constants/colors'
-import {useWindowSize} from '../../../common/hooks/window-size'
-import {isMobileView} from '../../../constants/mobile'
+import { formatNumber } from '../../../utils/utils'
+import {
+  COLOR_GRAY,
+  COLOR_PRIMARY,
+  COLOR_TAG_GREEN,
+  COLOR_TAG_RED,
+} from '../../../constants/colors'
+import { useWindowSize } from '../../../common/hooks/window-size'
+import { isMobileView } from '../../../constants/mobile'
 import selectedMarker from '../../../assets/images/marker-selected.svg'
-import {ReactComponent as RightChevronIcon} from '../../../assets/images/icons/right_chevron.svg'
+import { ReactComponent as RightChevronIcon } from '../../../assets/images/icons/right_chevron.svg'
 
-import {CircularProgress} from '@mui/material'
+import { CircularProgress } from '@mui/material'
 
 const CityLink = styled(Link)`
   margin-top: 16px;
@@ -21,6 +26,7 @@ const CityLink = styled(Link)`
   display: flex;
   flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row')};
   align-items: ${({ $isMobile }) => ($isMobile ? 'stretch' : 'center')};
+  max-width: ${({ $isMobile }) => ($isMobile ? '100%' : 'inherit')};
 
   background: #ffffff;
   color: inherit;
@@ -28,14 +34,14 @@ const CityLink = styled(Link)`
 
   &:hover,
   &:focus {
-    border: 1px solid ${ COLOR_PRIMARY };
+    border: 1px solid ${COLOR_PRIMARY};
     color: inherit;
   }
 `
 
 const Title = styled.p`
   margin: 0;
-  
+
   font-weight: bold;
   font-size: 18px;
 `
@@ -53,9 +59,9 @@ const Image = styled.div`
   border-top-left-radius: 8px;
   border-top-right-radius: ${({ $isMobile }) => ($isMobile ? '8px' : '0')};
   border-bottom-left-radius: ${({ $isMobile }) => ($isMobile ? '0' : '8px')};
-  
+
   align-self: stretch;
-  
+
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -66,7 +72,7 @@ const Department = styled.p`
 
   font-size: 16px;
   font-weight: 400;
-  color: ${ COLOR_PRIMARY };
+  color: ${COLOR_PRIMARY};
 `
 
 const TagsContainer = styled.div`
@@ -102,11 +108,13 @@ const RightChevronIconCustom = styled(RightChevronIcon)`
 
   color: ${COLOR_PRIMARY};
 
-  ${({ $isMobile }) => ($isMobile && css`
-    align-self: end;
-    margin-top: -36px;
-    margin-bottom: 18px
-  `)}
+  ${({ $isMobile }) =>
+    $isMobile &&
+    css`
+      align-self: end;
+      margin-top: -36px;
+      margin-bottom: 18px;
+    `}
 `
 
 const CityItem = ({
@@ -118,7 +126,7 @@ const CityItem = ({
   isLoadingProfessions,
 }) => {
   const size = useWindowSize()
-  const isMobile= isMobileView(size)
+  const isMobile = isMobileView(size)
 
   if (!city) {
     return <div />
@@ -144,14 +152,12 @@ const CityItem = ({
       to={to}
       $isMobile={isMobile}
     >
-
       <Image
         style={{ backgroundImage: `url(${city.photo})` }}
         $isMobile={isMobileView(size)}
       />
 
       <InformationsContainer>
-
         <Title>
           {_.capitalize(city.nom_comm)}
           {selected && <SelectedMarkerImg src={selectedMarker} alt="" />}
@@ -159,18 +165,23 @@ const CityItem = ({
         <Department>{_.capitalize(city.nom_dept)}</Department>
 
         <TagsContainer>
-          <Tag $color={city['bassin.tensions.ind_t'] < 4 ? COLOR_TAG_GREEN : COLOR_TAG_RED} >
+          <Tag
+            $color={
+              city['bassin.tensions.ind_t'] < 4
+                ? COLOR_TAG_GREEN
+                : COLOR_TAG_RED
+            }
+          >
             {formatCityTension(city['bassin.tensions.ind_t'])}
           </Tag>
-          <Tag>
-            {formatNumber(city.population * 1000)} habitants
-          </Tag>
-            {!isLoadingProfessions
-              ? (<Tag>
-                  {city.totalOffres} offre{city.totalOffres > 0 ? "s" : ""} d'emploi
-                </Tag>)
-              : <CircularProgress color="inherit" size={20} />
-            }
+          <Tag>{formatNumber(city.population * 1000)} habitants</Tag>
+          {!isLoadingProfessions ? (
+            <Tag>
+              {city.totalOffres} offre{city.totalOffres > 0 ? 's' : ''} d'emploi
+            </Tag>
+          ) : (
+            <CircularProgress color="inherit" size={20} />
+          )}
         </TagsContainer>
       </InformationsContainer>
 

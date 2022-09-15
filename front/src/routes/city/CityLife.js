@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Helmet } from 'react-helmet-async'
-import _ from "lodash"
+import _ from 'lodash'
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import ArrowBackwardIcon from '@mui/icons-material/ArrowBack'
@@ -46,7 +46,7 @@ const CityPic = styled.img`
   height: 229px;
   width: 100%;
   border-radius: 8px 8px 0 0;
-  margin: 0 8px -8px;
+  margin: ${({ $isMobile }) => ($isMobile ? 'unset' : '0 8px -8px;')};
 `
 
 const ItemLayout = styled.div`
@@ -206,6 +206,7 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
   const mainCityElement = (
     <>
       <CityPic
+        $isMobile={isMobile}
         src={city.photo || `/regions/region-${city.newRegion.code}.jpg`}
         alt=""
       />
@@ -382,11 +383,14 @@ const CityLife = ({ backLink, city, cityEquipments }) => {
     <MainLayout isMobile={isMobile}>
       <Helmet>
         <title>
-          Services et équipements : {_.capitalize(city.nom_comm)} ({city.code_dept}) | Mobiville
+          Services et équipements : {_.capitalize(city.nom_comm)} (
+          {city.code_dept}) | Mobiville
         </title>
         <meta
           name="description"
-          content={`Découvrez les services et équipements disponibles à ${_.capitalize(city.nom_comm)} : transports, santé, culture et loisirs, éducation, environnement`}
+          content={`Découvrez les services et équipements disponibles à ${_.capitalize(
+            city.nom_comm
+          )} : transports, santé, culture et loisirs, éducation, environnement`}
         />
       </Helmet>
       <SubHeader

@@ -45,8 +45,9 @@ const DesktopContainer = styled.div`
 `
 
 const CitiesList = styled.div`
-  max-width: ${({ isMobile }) => (isMobile ? 'auto' : '620px')};
+  max-width: ${({ isMobile }) => (isMobile ? '100%' : '620px')};
   padding: ${({ isMobile }) => (isMobile ? '10 16px' : '0 8px 0 8px')};
+  ${({ isMobile }) => isMobile && 'overflow-x: hidden;'}
 
   a {
     margin: 8px -4px;
@@ -169,10 +170,17 @@ const Cities = () => {
   const [metierLabel, setMetierLabel] = useState('')
 
   const computedHelmet = useCallback(() => {
-    if (!!params?.codeRegion && !!cities && !!cities[0] && !!cities[0]['newRegion.name']) {
+    if (
+      !!params?.codeRegion &&
+      !!cities &&
+      !!cities[0] &&
+      !!cities[0]['newRegion.name']
+    ) {
       return (
         <Helmet>
-          <title>Où travailler en { cities[0]['newRegion.name'] } | Mobiville</title>
+          <title>
+            Où travailler en {cities[0]['newRegion.name']} | Mobiville
+          </title>
           <meta
             name="description"
             content={`Découvrez les villes qui correspondent le mieux à votre recherche d'emploi dans la région ${cities[0]['newRegion.name']} et la liste des villes les plus attractives pour votre métier`}
@@ -189,16 +197,16 @@ const Cities = () => {
         />
       </Helmet>
     )
-  }, [ cities, params ])
+  }, [cities, params])
 
   useEffect(() => {
-      if (!!params?.codeRegion && !!criterions?.regions ) {
-        const region = criterions.regions.find(
+    if (!!params?.codeRegion && !!criterions?.regions) {
+      const region = criterions.regions.find(
         (region) => params.codeRegion === region.id
-        )
-        setRegionLabel(region.label)
-      }
-      if (!!params?.codeRome && !!criterions?.codeRomes) {
+      )
+      setRegionLabel(region.label)
+    }
+    if (!!params?.codeRome && !!criterions?.codeRomes) {
       const metier = criterions.codeRomes.find(
         (codeRome) => params.codeRome === codeRome.key
       )
@@ -326,7 +334,7 @@ const Cities = () => {
 
   const citiesList = (
     <CitiesList isMobile={isMobile} ref={citiesListRef}>
-      <TitleContainer isMobile={isMobile} >
+      <TitleContainer isMobile={isMobile}>
         <Title>
           {totalCities} {!!metierLabel ? `villes pour ${metierLabel}` : ''}{' '}
           {!!regionLabel ? `en ${regionLabel}` : ''}
@@ -389,8 +397,8 @@ const Cities = () => {
 
   return (
     <>
-      { computedHelmet() }
-      
+      {computedHelmet()}
+
       <MainLayout
         style={{
           overflow: isMobile ? 'inherit' : '',
@@ -417,58 +425,58 @@ const Cities = () => {
           <DesktopContainer>
             {citiesList}
 
-          {!isLoading && cities.length ? (
-            <StyledMapContainer
-              center={cities.length > 1 ? null : firstCityCoordinates}
-              zoom={cities.length > 1 ? null : 6}
-              bounds={
-                cities.length > 1
-                  ? [
-                      [mapBounds.minX, mapBounds.minY],
-                      [mapBounds.maxX, mapBounds.maxY],
-                    ]
-                  : null
-              }
-              scrollWheelZoom
-            >
-              <TileLayer
-                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {cities.map((city, key) => (
-                <Marker
-                  key={city.id}
-                  position={[city.geo_point_2d_x, city.geo_point_2d_y]}
-                  icon={getLeafletIcon(
-                    city.id === selectedCityId
-                      ? selectedMarker
-                      : city.id === hoveredCityId
-                      ? hoverMarker
-                      : blueMarker
-                  )}
-                  eventHandlers={{
-                    popupopen: () => {
-                      setSelectedCityId(city.id)
-                    },
-                    popupclose: () => setSelectedCityId(null),
-                  }}
-                >
-                  <Popup>
-                    <PopupLink to={getCityUrl(city)}>
-                      <b>{city.nom_comm}</b> (
-                      {formatNumber(city.population * 1000)} habitants)
-                    </PopupLink>
-                  </Popup>
-                </Marker>
-              ))}
-            </StyledMapContainer>
-          ) : (
-            <div style={{ width: 424 }} />
-          )}
-        </DesktopContainer>
-      )}
-    </MainLayout>
-  </>
+            {!isLoading && cities.length ? (
+              <StyledMapContainer
+                center={cities.length > 1 ? null : firstCityCoordinates}
+                zoom={cities.length > 1 ? null : 6}
+                bounds={
+                  cities.length > 1
+                    ? [
+                        [mapBounds.minX, mapBounds.minY],
+                        [mapBounds.maxX, mapBounds.maxY],
+                      ]
+                    : null
+                }
+                scrollWheelZoom
+              >
+                <TileLayer
+                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                {cities.map((city, key) => (
+                  <Marker
+                    key={city.id}
+                    position={[city.geo_point_2d_x, city.geo_point_2d_y]}
+                    icon={getLeafletIcon(
+                      city.id === selectedCityId
+                        ? selectedMarker
+                        : city.id === hoveredCityId
+                        ? hoverMarker
+                        : blueMarker
+                    )}
+                    eventHandlers={{
+                      popupopen: () => {
+                        setSelectedCityId(city.id)
+                      },
+                      popupclose: () => setSelectedCityId(null),
+                    }}
+                  >
+                    <Popup>
+                      <PopupLink to={getCityUrl(city)}>
+                        <b>{city.nom_comm}</b> (
+                        {formatNumber(city.population * 1000)} habitants)
+                      </PopupLink>
+                    </Popup>
+                  </Marker>
+                ))}
+              </StyledMapContainer>
+            ) : (
+              <div style={{ width: 424 }} />
+            )}
+          </DesktopContainer>
+        )}
+      </MainLayout>
+    </>
   )
 }
 
