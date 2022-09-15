@@ -18,6 +18,8 @@ import {
   COLOR_TEXT_SECONDARY,
   COLOR_WHITE,
 } from '../../constants/colors'
+import { isMobileView } from '../../constants/mobile'
+import { useWindowSize } from '../../common/hooks/window-size'
 
 const AppAutocomplete = styled(Autocomplete)`
   flex: 1;
@@ -55,7 +57,7 @@ const AppAutocomplete = styled(Autocomplete)`
     color: ${COLOR_TEXT_PRIMARY} !important;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
-    font-size: 14px;
+    font-size: ${({ $isMobile }) => ($isMobile ? '16px' : '14px')};
     font-weight: 400;
   }
 
@@ -98,6 +100,8 @@ const TextSearchInput = ({
   const [open, setOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
 
+  const isMobile = isMobileView(useWindowSize())
+
   const handleInputChange = (event, value) => {
     onInputChange(event, value)
     setInputValue(value)
@@ -125,6 +129,7 @@ const TextSearchInput = ({
 
   return (
     <AppAutocomplete
+      $isMobile={isMobile}
       // states and basics
       id={`autocomplete-${_.kebabCase(label)}`}
       disablePortal
