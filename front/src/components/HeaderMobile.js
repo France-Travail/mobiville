@@ -20,7 +20,23 @@ const HeaderMobile = () => (
   <Header>
     <Link to="/" style={{ display: 'flex', alignItems: 'center' }}>
       <img src={LOGO_FR} alt="" style={{ height: 70, marginRight: 16 }} />
-      <img src={LOGO} alt="logo" style={{ height: 80 }} />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <img
+          src={LOGO}
+          alt="logo"
+          style={{
+            width: '100%',
+            maxHeight: '100%',
+            objectFit: 'cover',
+          }}
+        />
+      </div>
     </Link>
   </Header>
 )

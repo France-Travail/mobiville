@@ -51,8 +51,16 @@ const GoToMainContent = styled.a`
   }
 `
 
-const MainLayout = ({ children, menu, topMobileMenu, style = {} }) => {
-  const size = useWindowSize()
+const MainLayout = ({
+  children,
+  menu = {
+    visible: true,
+  },
+  topMobileMenu = false,
+  style = {},
+  displaySearch = true,
+}) => {
+  const ismobile = isMobileView(useWindowSize())
   const location = useLocation()
 
   useEffect(() => {
@@ -62,14 +70,16 @@ const MainLayout = ({ children, menu, topMobileMenu, style = {} }) => {
   return (
     <Container>
       <GoToMainContent href="#main">Aller au contenu</GoToMainContent>
-      {isMobileView(size) && topMobileMenu && <HeaderMobile />}
-      {isMobileView(size) && menu.visible && <MenuMobile {...menu} />}
-      {!isMobileView(size) && menu.visible && <HeaderDesktop {...menu} />}
+      {ismobile && topMobileMenu && <HeaderMobile />}
+      {ismobile && menu.visible && <MenuMobile {...menu} />}
+      {!ismobile && menu.visible && (
+        <HeaderDesktop displaySearch={displaySearch} {...menu} />
+      )}
       <Main
         id="main"
         tabIndex="-1"
         style={{
-          paddingBottom: isMobileView(size) ? 30 : 60,
+          paddingBottom: ismobile ? 30 : 60,
           ...style,
         }}
       >
@@ -86,18 +96,9 @@ MainLayout.propTypes = {
     PropTypes.node,
   ]).isRequired,
   menu: PropTypes.oneOfType([PropTypes.object]),
-  isMobile: PropTypes.bool,
   topMobileMenu: PropTypes.bool,
   style: PropTypes.object,
-}
-
-MainLayout.defaultProps = {
-  menu: {
-    visible: true,
-  },
-  isMobile: false,
-  topMobileMenu: false,
-  style: {},
+  displaySearch: PropTypes.bool
 }
 
 export default MainLayout

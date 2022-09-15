@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import { Link, useNavigate, useLocation, useParams } from 'react-router-dom'
+import _ from 'lodash'
 import queryString from 'query-string'
-import { Link, useHistory, useParams } from 'react-router-dom'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
+import styled from 'styled-components'
 import { CircularProgress } from '@mui/material'
 
-import { useCities } from '../../common/contexts/citiesContext'
-import MainLayout from '../../components/MainLayout'
+import { ActionButton, MainLayout } from '../../components'
 import CityHeader from './CityHeader'
 import CityJobs from './CityJobs'
 import CityLife from './CityLife'
 import CityHousing from './CityHousing'
+import CitySubHeader from './CitySubHeader'
+
+import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
-import { ucFirstOnly } from '../../utils/utils'
 import { useProfessions } from '../../common/contexts/professionsContext'
 import { COLOR_GRAY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
 
@@ -31,8 +32,6 @@ import medalSilver from '../../assets/images/icons/medal_silver.svg'
 import redEllipse from '../../assets/images/icons/red_ellipse.svg'
 import greenEllipse from '../../assets/images/icons/green_ellipse.svg'
 import restaurantsIcon from '../../assets/images/icons/restaurants.svg'
-import CitySubHeader from './CitySubHeader'
-import ActionButton from '../../components/ActionButton'
 import pastille from '../../assets/images/icons/pastille.svg'
 
 const ElementContainer = styled.div`
@@ -133,7 +132,7 @@ const BlockLinkSyle = `
   
   div {
     margin:auto;
-    width: 232px;
+    min-width: 232px;
   }
 `
 
@@ -202,7 +201,7 @@ const CityName = styled.h1`
   margin-bottom: 0;
 `
 
-const RegionName = styled.h2`
+const RegionName = styled.p`
   font-size: ${({ isMobile }) => (isMobile ? '14px' : '12px')};
   margin: 0;
   padding: 0;
@@ -225,7 +224,7 @@ const JOB = 'job'
 const LIFE = 'life'
 const HOUSING = 'housing'
 
-const CityPage = ({ location: { pathname, search } }) => {
+const CityPage = () => {
   const {
     onLoadCity,
     isLoadingCity,
@@ -244,14 +243,17 @@ const CityPage = ({ location: { pathname, search } }) => {
     onSearch: onSearchProfessions,
     onSearchInfosTravail,
     professions,
+    totalOffres,
   } = useProfessions()
 
   const { insee, section } = useParams()
   const [inseeCode] = insee.split('-')
-  const params = queryString.parse(search)
   const size = useWindowSize()
-  const history = useHistory()
+  const navigate = useNavigate()
   const [infosTravail, setInfosTravail] = useState(null)
+
+  const location = useLocation()
+  const params = queryString.parse(location.search)
 
   const [jobSearchValue, setJobSearchValue] = useState(
     decodeURIComponent(params.jobSearch || '')
@@ -272,11 +274,14 @@ const CityPage = ({ location: { pathname, search } }) => {
     if (!jobSearchValue) return
     if (jobSearchValue === decodeURIComponent(params.jobSearch)) return
 
-    history.replace({
-      pathname,
-      search: queryString.stringify({ ...params, jobSearch: jobSearchValue }),
-    })
-  }, [history, jobSearchValue, params, pathname])
+    navigate(
+      {
+        pathname: location.pathname,
+        search: queryString.stringify({ ...params, jobSearch: jobSearchValue }),
+      },
+      { replace: true }
+    )
+  }, [navigate, jobSearchValue, params, location.pathname])
 
   useEffect(() => {
     if (city && codeRome) {
@@ -378,32 +383,34 @@ const CityPage = ({ location: { pathname, search } }) => {
   const titlesNode = (
     <TitlesContainer isMobile={isMobile}>
       <RegionName isMobile={isMobile}>
-        {ucFirstOnly(city.nom_region)} <img src={pastille} alt="" />{' '}
-        {ucFirstOnly(city.nom_dept)}
+        {_.capitalize(city.nom_region)} <img src={pastille} alt="" />{' '}
+        {_.capitalize(city.nom_dept)}
       </RegionName>
       {!isMobile && (
         <CityName isMobile={isMobile}>
-          {ucFirstOnly(city.nom_comm)}{' '}
+          {_.capitalize(city.nom_comm)}{' '}
           <CityJob>pour le métier {romeLabel} </CityJob>{' '}
         </CityName>
       )}
       {isMobile && (
         <CityName isMobile={isMobile}>
-          {ucFirstOnly(city.nom_comm)} <br /> pour le métier {romeLabel}
+          {_.capitalize(city.nom_comm)} <br /> pour le métier {romeLabel}
         </CityName>
       )}
     </TitlesContainer>
   )
 
   return (
-    <MainLayout isMobile={isMobile} menu={{ visible: !isMobile }}>
+    <MainLayout menu={{ visible: !isMobile }}>
       <Helmet>
-        <title>Pourquoi vivre à {ucFirstOnly(city.nom_comm)} - Mobiville</title>
+        <title>
+          {_.upperFirst(romeLabel)} à {_.capitalize(city.nom_comm)} | Mobiville
+        </title>
         <meta
           name="description"
-          content={`Toutes les informations clés sur la ville de ${ucFirstOnly(
+          content={`Explorez le marché de l'emploi de ${_.capitalize(
             city.nom_comm
-          )} : Cadre de vie, emploi, logement et bien plus.`}
+          )} pour le métier de ${romeLabel} ainsi que les informations sur l’immobilier, les services et les équipements.`}
         />
       </Helmet>
 
@@ -460,9 +467,7 @@ const CityPage = ({ location: { pathname, search } }) => {
               <BlockContentLi>
                 <BlockContentLiImg src={briefcase} />
                 <BlockContentLiDesc>
-                  <BlockContentLiValue>
-                    {professions?.length}{' '}
-                  </BlockContentLiValue>
+                  <BlockContentLiValue>{totalOffres} </BlockContentLiValue>
                   Offres d’emploi
                 </BlockContentLiDesc>
               </BlockContentLi>
@@ -633,7 +638,7 @@ const CityPage = ({ location: { pathname, search } }) => {
                             <b>XXX offres</b>
                           </BlockContentLi>*/}
                       <BlockContentLi isPaddingReduced={true}>
-                        <b>{ucFirstOnly(similarCity.nom_comm)}</b>
+                        <b>{_.capitalize(similarCity.nom_comm)}</b>
                         <br /> ({similarCity['newRegion.name']})
                       </BlockContentLi>
                     </BlockContentUl>
@@ -691,7 +696,7 @@ const CityPage = ({ location: { pathname, search } }) => {
                             <b>XXX Km</b>
                           </BlockContentLi>*/}
                       <BlockContentLi isPaddingReduced={true}>
-                        <b>{ucFirstOnly(closeCity.nom_comm)}</b>
+                        <b>{_.capitalize(closeCity.nom_comm)}</b>
                         <br /> ({closeCity['newRegion.name']})
                       </BlockContentLi>
                     </BlockContentUl>
@@ -720,7 +725,6 @@ const CityPage = ({ location: { pathname, search } }) => {
             isMobile={isMobile}
             isBlue={false}
             isWhite={true}
-            buttonWidth={370}
           />
         </ElementContainer>
       )}
@@ -728,12 +732,10 @@ const CityPage = ({ location: { pathname, search } }) => {
         <ElementContainer isMobile={isMobile}>
           <ActionButton
             path={'/mobility-guide'}
-            libelle={`Consultez nos conseils`}
-            libelleSecondaire={'pour votre projet'}
+            libelle={`Consultez nos conseils pour votre projet`}
             isMobile={isMobile}
             isBlue={false}
             isWhite={true}
-            buttonWidth={292}
           />
         </ElementContainer>
       )}
@@ -741,16 +743,6 @@ const CityPage = ({ location: { pathname, search } }) => {
   )
 }
 
-CityPage.propTypes = {
-  location: PropTypes.shape({
-    search: PropTypes.string.isRequired,
-  }),
-}
-
-CityPage.defaultProps = {
-  location: {
-    search: '',
-  },
-}
+CityPage.propTypes = {}
 
 export default CityPage

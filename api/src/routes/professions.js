@@ -2,7 +2,12 @@ import Router from '@koa/router'
 
 const router = new Router({ prefix: '/professions' })
 
-import { searchJob, infosTravail, infosTensionTravail } from '../utils/pe-api'
+import {
+  searchJob,
+  infosTravail,
+  infosTensionTravail,
+  searchJobCount,
+} from '../utils/pe-api'
 import { meanBy } from 'lodash'
 
 const CODE_INSEE_LYON_FIRST_DISTRICT = '69381'
@@ -17,13 +22,17 @@ const CODE_INSEE_MARSEILLE = '13055'
 // and need to input the insee code of a special district
 const getInseeCodesForSearch = (inseeCodes) =>
   inseeCodes.map((inseeCode) => {
-    if (inseeCode === CODE_INSEE_LYON) return CODE_INSEE_LYON_FIRST_DISTRICT
-    if (inseeCode === CODE_INSEE_PARIS) return CODE_INSEE_PARIS_FIRST_DISTRICT
-    if (inseeCode === CODE_INSEE_MARSEILLE)
-      return CODE_INSEE_MARSEILLE_FIRST_DISTRICT
-
-    return inseeCode
+    return getInseeCodeUniqueForSearch(inseeCode)
   })
+
+const getInseeCodeUniqueForSearch = (inseeCode) => {
+  if (inseeCode === CODE_INSEE_LYON) return CODE_INSEE_LYON_FIRST_DISTRICT
+  if (inseeCode === CODE_INSEE_PARIS) return CODE_INSEE_PARIS_FIRST_DISTRICT
+  if (inseeCode === CODE_INSEE_MARSEILLE)
+    return CODE_INSEE_MARSEILLE_FIRST_DISTRICT
+
+  return inseeCode
+}
 
 router.post(
   '/search',
@@ -38,13 +47,114 @@ router.post(
       insee: getInseeCodesForSearch(insee),
       distance: 30,
     })
+    response.body = {
+      resultats: result ? result.resultats : [],
+      totalOffres: result ? getTotalOffres(result) : undefined,
+    }
+  }
+)
+
+const getTotalOffres = function (result) {
+  let totalOffres = 0
+  if (result && result.filtresPossibles) {
+    const filtresPossibles = result.filtresPossibles
+    const typesContrats = filtresPossibles.find(
+      (filtrePossibles) => filtrePossibles.filtre === 'typeContrat'
+    )
+    typesContrats.agregation.forEach((agregat) => {
+      totalOffres += agregat.nbResultats
+    })
+  }
+  return totalOffres
+}
+
+router.post(
+  '/searchCountList',
+  async ({
+    request: {
+      body: { codeRome, inseeList },
+    },
+    response,
+  }) => {
+    async function callToSearchJobCount(insee) {
+      return {
+        insee: insee,
+        total: getTotalOffres(
+          await searchJobCount({
+            codeRome,
+            insee: getInseeCodesForSearch(insee),
+            distance: 30,
+          })
+        ),
+      }
+    }
+
+    let responseArray = []
+    if (inseeList.length > 10) {
+      // on divise par deux la taille de la liste si elle est trop grande pour limiter le nombre d'appels asynchrones
+      const half = Math.ceil(inseeList.length / 2)
+      responseArray.push(
+        ...(await Promise.all(
+          inseeList.slice(0, half).map((insee) => callToSearchJobCount(insee))
+        )),
+        ...(await Promise.all(
+          inseeList.slice(half).map((insee) => callToSearchJobCount(insee))
+        ))
+      )
+    } else {
+      responseArray.push(
+        ...(await Promise.all(
+          inseeList.map((insee) => callToSearchJobCount(insee))
+        ))
+      )
+    }
+
+    response.body = JSON.stringify(responseArray)
+  }
+)
+
+router.post(
+  '/searchInseeonly',
+  async ({
+    request: {
+      body: { insee },
+    },
+    response,
+  }) => {
+    const result = await searchJob({
+      insee: getInseeCodesForSearch(insee),
+      distance: 30,
+    })
     if (result) {
-      response.body = result.resultats
+      const total = result.resultats.length
+      response.body = '{total:' + total + '}'
     } else {
       response.body = []
     }
   }
 )
+
+router.post(
+  '/searchRomeonly',
+  async ({
+    request: {
+      body: { codeRome },
+    },
+    response,
+  }) => {
+    const result = await searchJob({
+      codeRome,
+      distance: 30,
+    })
+    if (result) {
+      const total = result.resultats.length
+      response.body = '{total:' + total + '}'
+    } else {
+      response.body = []
+    }
+  }
+)
+
 router.post(
   '/infos-travail',
   async ({

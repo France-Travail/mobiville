@@ -29,4 +29,5 @@ module.exports = {
     secure: false, /** (boolean) secure cookie*/
     sameSite: null, /** (string) session cookie sameSite options (default null, don't set it) */
   },
+  proxyPeOverrides: {}
 }

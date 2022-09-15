@@ -18,7 +18,8 @@ module.exports = {
     })
     await queryInterface.removeColumn('regions', 'deleted_at')
     await queryInterface.removeColumn('cities', 'deleted_at')
-    await queryInterface.renameTable('regions', 'old_regions')
+    // await queryInterface.renameTable('regions', 'old_regions')
+    // ^ le renommage de la table regions plante la migration , elle est supprimé par la suite a partir du 20220616152600
 
     await queryInterface.createTable(
       'new_regions',

@@ -24,13 +24,12 @@ router.post(
     let order
     switch (sortBy) {
       case 'mer':
-        order = [['distance_from_sea', 'asc']]
+        order = [['distance_from_sea', 'ASC']]
         break
       case 'montagne':
-        order = [['z_moyen', 'desc']]
+        order = [['z_moyen', 'DESC']]
         break
       default:
-        order = [['population', 'desc']]
         break
     }
 

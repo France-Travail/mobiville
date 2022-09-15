@@ -3,6 +3,7 @@
 module.exports = {
   up: async (queryInterface) => {
     await queryInterface.dropTable('old_regions')
+    await queryInterface.dropTable('regions')
     await queryInterface.removeColumn('cities', 'code_reg')
   },
 

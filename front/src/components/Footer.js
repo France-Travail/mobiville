@@ -7,6 +7,7 @@ import { MOBILE_WIDTH } from '../constants/mobile'
 const MainSpace = styled.div`
   background: white;
   border-top: 1px solid #e4e9ed;
+
   .footer {
     margin: auto;
     display: flex;
@@ -150,7 +151,7 @@ const Footer = () => {
           </Item>
           <Item>
             <a
-              href="https://nextcloud.beta.pole-emploi.fr/s/Dsmn2peD6fgPMTX"
+              href="https://nextcloud.beta.pole-emploi.fr/s/stats-mobiville"
               target="_blank"
               rel="noreferrer"
             >
@@ -209,7 +210,7 @@ const Footer = () => {
             </a>
           </div>
           <CopyRight>
-            Un site crée par Pole Emploi 2020-2022 -tous droits réservés
+            Un site créé par Pole Emploi 2020-2022 -tous droits réservés
           </CopyRight>
         </WrapperLogos>
       </div>

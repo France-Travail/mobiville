@@ -15,11 +15,11 @@ Mobiville est un outil d’aide à la décision pour orienter les candidats à l
 Pré-requis: [docker, docker-compose](https://www.docker.com/get-started) et [yarn](https://yarnpkg.com/getting-started/install)
 
 ### Version de nodeJS
-Il faut s'assurer d'etre sous **node 12.18.4**
+Il faut s'assurer d'etre sous **node 16.16.0**
 Avec [nvm](https://github.com/nvm-sh/nvm) pour Windows et un poste PE il faut ouvrir un cmd en self élévation:
 ```bash
-nvm install 12.18.4
-nvm use 12.18.4
+nvm install 16.16.0
+nvm use 16.16.0
 ``` 
 
 ### Construire et démarrer les conteneurs
@@ -246,15 +246,23 @@ Sur son poste ensuite :
 - `scp $USER@$IP_DU_SERVEUR_DISTANT:/tmp/mobivillerecette_dimanche.sql.bz2 ./`
 
 ##### Procedure de restore
-Pour un environnement de production (sinon le prefixe du fichier sera mobivillerecette_*):
-On récupere le backup de la veille: `export BACKUP_FILE_NAME=mobivilleproduction_$(date -d 'yesterday' +'%d')`
+Pour un environnement de recette (sinon le prefixe du fichier sera mobivilleproduction_*):
+On récupere le backup de la veille: `export BACKUP_FILE_NAME=mobivillerecette_$(LC_ALL="fr_FR.utf8" date -d 'yesterday' +'%A')`
 ```bash
 cp /home/docker/mobiville/backups/$BACKUP_FILE_NAME.sql.bz2 ~/
 bzip2 -d $BACKUP_FILE_NAME.sql.bz2
 docker cp ./BACKUP_FILE_NAME.sql mobiville_db_1:/
 
-docker exec -it mobiville_db_1 mariadb -u $MOBIVILLE_USER -p$MOBIVILLE_PASS mobiville -e "DROP DATABASE mobiville"
-docker exec -it mobiville_db_1 mariadb -u $MOBIVILLE_USER -p$MOBIVILLE_PASS -e "CREATE DATABASE mobiville"
-docker exec -it mobiville_db_1 bash -c "mysql -u $MOBIVILLE_USER -p$MOBIVILLE_PASS mobiville < "$BACKUP_FILE_NAME".sql"
+docker exec -it mobiville_db_1 mariadb -u $MYSQL_USER -p$MYSQL_PASSWORD mobiville -e "DROP DATABASE mobiville"
+docker exec -it mobiville_db_1 mariadb -u $MYSQL_USER -p$MYSQL_PASSWORD -e "CREATE DATABASE mobiville"
+docker exec -it mobiville_db_1 bash -c "mysql -u $MYSQL_USER -p$MYSQL_PASSWORD mobiville < "$BACKUP_FILE_NAME".sql"
 ```
 TADA !
+
+##### Test E2E
+
+:warning: pour executer la tache yarn/npm cypress:run sans erreur et avoir les resultats de test, il faut installer un (formatteur)[https://github.com/cucumber/json-formatter] dans le PATH de sa machine
+
+Sous Windows : `mkdir %USERPROFILE%\Bin & curl https://github.com/cucumber/json-formatter/releases/download/v19.0.0/cucumber-json-formatter-windows-amd64 >  %USERPROFILE%\Bin\cucumber-json-formatter.exe `
+
+Sous Linux : `curl https://github.com/cucumber/json-formatter/releases/download/v19.0.0/cucumber-json-formatter-linux-amd64 > ~/bin/cucumber-json-formatter`

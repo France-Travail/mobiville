@@ -174,7 +174,7 @@ export default (sequelizeInstance, Model) => {
     codeCriterion = [],
     codeRome = [],
     onlySearchInTension = true,
-    order = [['population', 'desc']],
+    order,
     offset = 0,
   }) => {
     /*
@@ -262,7 +262,7 @@ export default (sequelizeInstance, Model) => {
 
     if (onlySearchInTension) {
       bassinsToInclude.push({
-        attributes: [],
+        attributes: ['ind_t'],
         model: Model.models.tensions,
         required: true,
         where: {
@@ -273,8 +273,7 @@ export default (sequelizeInstance, Model) => {
 
     const result = await Model.findAll({
       where: { [Op.and]: whereAnd },
-      logging: true,
-      order,
+      logging: process.env.ENABLE_DB_LOGGING ? console.log : false,
       include: [
         {
           attributes: [],
@@ -296,6 +295,12 @@ export default (sequelizeInstance, Model) => {
             rome_id: codeRome,
           },
         },
+      ],
+      // order : 1 - tension sur le métier > 2 - custom order (montagne, mer...) > 3 - population
+      order: [
+        [sequelizeInstance.models.bassins, sequelizeInstance.models.tensions, 'ind_t', 'ASC'],
+        ...(!!order ? order : []),
+        ['population', 'DESC']
       ],
       raw: true,
     })
@@ -454,32 +459,34 @@ export default (sequelizeInstance, Model) => {
     }
 
     try {
-      console.log(`load station file => id: ${stationId}`)
-      const file = await loadWeatherFile(stationId)
-      const findLineIndex = file.findIndex(
-        (l) => l.indexOf('Température moyenne') !== -1
-      )
-      let temperatureLine = file[findLineIndex + 1]
-      if (temperatureLine.indexOf('Statistiques') !== -1) {
-        // escape information line
-        temperatureLine = file[findLineIndex + 2]
-      }
+      if (stationId) {
+        console.log(`load station file => id: ${stationId}`)
+        const file = await loadWeatherFile(stationId)
+        const findLineIndex = file.findIndex(
+          (l) => l.indexOf('Température moyenne') !== -1
+        )
+        let temperatureLine = file[findLineIndex + 1]
+        if (temperatureLine.indexOf('Statistiques') !== -1) {
+          // escape information line
+          temperatureLine = file[findLineIndex + 2]
+        }
 
-      const allTemps = []
-      temperatureLine
-        .replace(/(\r\n|\n|\r)/gm, '')
-        .split(';')
-        .map((temp) => {
-          if (+temp) {
-            allTemps.push(+temp)
-          }
-        })
-      const meanCalc = mean(allTemps)
-      Model.averageTemperatureCache[stationId] = meanCalc
-      if ((meanCalc || null) === null) {
-        throw 'File not found'
-      } else {
-        return meanCalc
+        const allTemps = []
+        temperatureLine
+          .replace(/(\r\n|\n|\r)/gm, '')
+          .split(';')
+          .map((temp) => {
+            if (+temp) {
+              allTemps.push(+temp)
+            }
+          })
+        const meanCalc = mean(allTemps)
+        Model.averageTemperatureCache[stationId] = meanCalc
+        if ((meanCalc || null) === null) {
+          throw 'File not found'
+        } else {
+          return meanCalc
+        }
       }
     } catch (err) {
       // if file is broken or not exist

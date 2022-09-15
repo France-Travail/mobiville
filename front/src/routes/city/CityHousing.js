@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import _ from "lodash"
 import styled from 'styled-components'
-import { Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet-async'
+
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import { COLOR_RED, COLOR_GREEN, COLOR_GRAY } from '../../constants/colors'
 import MainLayout from '../../components/MainLayout'
-import { formatNumber, ucFirstOnly } from '../../utils/utils'
+import { formatNumber } from '../../utils/utils'
 
 import building from '../../assets/images/icons/building.svg'
 import house from '../../assets/images/icons/house.svg'
@@ -242,10 +244,10 @@ const CityHousing = ({ backLink, city, nbSocialHousing }) => {
   return (
     <MainLayout>
       <Helmet>
-        <title>Logement à {ucFirstOnly(city.nom_comm)} - Mobiville</title>
+        <title>Logement à {_.capitalize(city.nom_comm)} - Mobiville</title>
         <meta
           name="description"
-          content={`Toutes les informations clés de logement sur la ville de ${ucFirstOnly(
+          content={`Toutes les informations clés de logement sur la ville de ${_.capitalize(
             city.nom_comm
           )}`}
         />
@@ -254,7 +256,7 @@ const CityHousing = ({ backLink, city, nbSocialHousing }) => {
         notFixed={!isMobile}
         backLink={backLink}
         isMobile={isMobile}
-        title={`Information sur le logement à ${ucFirstOnly(city.nom_comm)}`}
+        title={`Information sur le logement à ${_.capitalize(city.nom_comm)}`}
       />
       {isMobile ? (
         <Container>

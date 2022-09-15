@@ -12,6 +12,10 @@ body {
   font-size: 14px;
 }
 
+body.white {
+  background-color: #FFF !important;
+}
+
 button {
   font-family: 'Roboto', sans-serif;
 }
@@ -83,9 +87,12 @@ input[type='color'] {
     li:last-child {
       margin-bottom: 10px !important;
     }
+    li.desktop:hover {
+      background-color: #C3E9E9 !important;
+      cursor: pointer;
+    }
   }
 }
-
 
 #project-multiple-checkbox>em, #situation-simple-checkbox>em, #age-simple-checkbox>em {
   font-family: 'Roboto', sans-serif;
@@ -112,4 +119,14 @@ input[type='color'] {
   top: 0;
   left: 0;
   width: 100%;
+}
+
+.stickyFilterMobile {
+  position: sticky;
+  top: calc(100vh - 100px);
+}
+
+// input select menu dropdown
+div.MuiPaper-root {
+  margin-top: 5px !important;
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { ToastContainer } from 'react-toastify'
 import { ThemeProvider, createTheme } from '@mui/material'
 import * as Sentry from '@sentry/react'
@@ -8,6 +8,7 @@ import { Integrations } from '@sentry/tracing'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import Providers from './common/contexts'
+import { HelmetProvider } from 'react-helmet-async'
 
 import './assets/styles/main.scss'
 import 'react-toastify/dist/ReactToastify.css'
@@ -40,17 +41,17 @@ const theme = createTheme({
     },
   },
 })
-
-ReactDOM.render(
+createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <Providers>
-        <App />
-        <ToastContainer />
-      </Providers>
+      <HelmetProvider>
+        <Providers>
+          <App />
+          <ToastContainer />
+        </Providers>
+      </HelmetProvider>
     </ThemeProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 )
 
 // If you want to start measuring performance in your app, pass a function
