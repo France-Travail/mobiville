@@ -151,6 +151,7 @@ const CityItem = ({
       onMouseLeave={onMouseLeave}
       to={to}
       $isMobile={isMobile}
+      data-automation-id={`cityItem-${city.nom_comm}`}
     >
       <Image
         style={{ backgroundImage: `url(${city.photo})` }}
