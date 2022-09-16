@@ -40,14 +40,15 @@ export default (sequelizeInstance, Model) => {
       .replace(/[+-<>()~"@]/gi, ' ') // filter special characters
       .replace(/\*/gi, '') // remove instances of * (which will crash it all)
 
-    const labelForQuery = `*${workLabel}*`
-
     const queryResult = await sequelizeInstance.query(
       `
-      SELECT code_rome, ogr_label, match(ogr_label) against(? IN BOOLEAN MODE) as relevance FROM romeogrs
-      WHERE match(ogr_label) against(? IN BOOLEAN MODE) ORDER BY relevance DESC LIMIT 10`,
+      SELECT code_rome, ogr_label, match(ogr_label) against(? IN BOOLEAN MODE) as relevance
+      FROM romeogrs
+      WHERE match(ogr_label) against(? IN BOOLEAN MODE)
+      ORDER BY relevance DESC, ogr_label LIKE '?' DESC, ogr_label ASC
+      LIMIT 10`,
       {
-        replacements: [labelForQuery, labelForQuery],
+        replacements: [`${workLabel}*`, `${workLabel}*`, `${workLabel}%`],
         type: QueryTypes.SELECT,
         model: Model,
         mapToModel: true,
