@@ -84,7 +84,7 @@ e2e:
     - yarn cypress:run-vanilla
     - yarn generate-multiple-cucumber-html-report
   artifacts:
-    when: always
+    when: on_success
     expose_as: 'E2E Reports'
     paths: ['/tests/cypress/reports/cucumber-html-report/']
   rules:

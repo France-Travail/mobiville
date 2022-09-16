@@ -333,7 +333,11 @@ const Cities = () => {
   }
 
   const citiesList = (
-    <CitiesList isMobile={isMobile} ref={citiesListRef}>
+    <CitiesList
+      isMobile={isMobile}
+      ref={citiesListRef}
+      data-automation-id="cities-list"
+    >
       <TitleContainer isMobile={isMobile}>
         <Title>
           {totalCities} {!!metierLabel ? `villes pour ${metierLabel}` : ''}{' '}
