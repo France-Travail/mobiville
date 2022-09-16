@@ -5,6 +5,7 @@ stages:
   - publish
   - config_staging
   - deploy_staging
+  - post_deploy_staging
   - config_production
   - deploy_production
 
@@ -67,8 +68,8 @@ test:lint:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $FORCE_DEPLOY == ""'
 
-test:e2e:
-  stage: test
+e2e:
+  stage: post_deploy_staging
   image: cypress/browsers:node16.14.2-slim-chrome103-ff102
   script:
     # TODO attendre la fin de déploiement en beta
@@ -79,8 +80,13 @@ test:e2e:
     - yarn install
     - curl "https://github.com/cucumber/json-formatter/releases/download/v19.0.0/cucumber-json-formatter-linux-amd64" > /usr/local/bin/cucumber-json-formatter
     - chmod +x /usr/local/bin/cucumber-json-formatter
+    - sleep 120
     - yarn cypress:run-vanilla
     - yarn generate-multiple-cucumber-html-report
+  artifacts:
+    when: always
+    expose_as: 'E2E Reports'
+    paths: ['/tests/cypress/reports/cucumber-html-report/']
   rules:
     - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == ""'
 
