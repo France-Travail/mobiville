@@ -47,7 +47,6 @@ const DesktopContainer = styled.div`
 const CitiesList = styled.div`
   max-width: ${({ isMobile }) => (isMobile ? '100%' : '620px')};
   padding: ${({ isMobile }) => (isMobile ? '10 16px' : '0 8px 0 8px')};
-  ${({ isMobile }) => isMobile && 'overflow-x: hidden;'}
 
   a {
     margin: 8px -4px;
@@ -104,11 +103,12 @@ const PaginationContainer = styled.div`
   }
 `
 const TitleContainer = styled.div`
+  width: 100%;
+
   font-family: 'Roboto';
   font-style: normal;
   color: #191970;
-  margin: 8px;
-  ${({ isMobile }) => (isMobile ? 'width: 360px;' : 'width: 600px;')}
+  padding: 8px;
 `
 
 const Title = styled.h1`

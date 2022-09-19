@@ -1,115 +1,105 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import styled, { css } from 'styled-components'
 import queryString from 'query-string'
 import { Helmet } from 'react-helmet-async'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import { useHelps } from '../../common/contexts/helpsContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import MainLayout from '../../components/MainLayout'
-import { COLOR_OTHER_GREEN, COLOR_PRIMARY } from '../../constants/colors'
+import {
+  COLOR_OTHER_GREEN,
+  COLOR_PRIMARY,
+  COLOR_WHITE,
+} from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
-import UseScrollingUp from './components/UseScrollingUp'
+import UseScroll from './components/UseScroll'
 
-import pictoHelpAccompagnement from '../../assets/images/icons/help-accompagnement.svg'
-import pictoHelpFinanciere from '../../assets/images/icons/help-financiere.svg'
-import pictoHelpLogement from '../../assets/images/icons/help-logement.svg'
-import pictoHelpTransport from '../../assets/images/icons/help-transport.svg'
-import pictoFilterMobile from '../../assets/images/icons/filter-mobille.svg'
+import { ReactComponent as FinanceIcon } from '../../assets/images/icons/help-financiere.svg'
+import { ReactComponent as AccompagnementIcon } from '../../assets/images/icons/help-accompagnement.svg'
+import { ReactComponent as LogementIcon } from '../../assets/images/icons/help-logement.svg'
+import { ReactComponent as TransportIcon } from '../../assets/images/icons/help-transport.svg'
+
 import { Grid } from '@mui/material'
 import MobileAppliedFilters from './components/MobileAppliedFilters'
 import HelpCard from './components/HelpCard'
 import { HelpForm } from '../../components'
 
-//import TypeHelpFilter from "./components/TypeHelpFilter";
+import EuroIcon from '@mui/icons-material/Euro'
+import HomeWorkIcon from '@mui/icons-material/HomeWork'
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
+import PeopleIcon from '@mui/icons-material/People'
+import {
+  AGE_SITUATIONS,
+  JOB_SITUATIONS,
+  PROJECTS,
+} from '../../constants/search'
 
 const TitleContainer = styled.div`
   padding: ${({ $isMobile }) => ($isMobile ? '5px 0px 0px 10px' : '0px')};
 `
 
 const Title = styled.h1`
-  font-size: 24px;
-  font-weight: 700;
+  max-width: 1036px;
+  height: 42px;
   margin: 20px auto;
   margin-bottom: 16px;
 
-  width: 1036px;
-  height: 42px;
+  display: ${({ $isMobile }) => ($isMobile ? 'contents' : 'flex')};
+  align-items: center;
 
-  font-family: 'Roboto';
-  font-style: normal;
   font-weight: 900;
   font-size: ${({ $isMobile }) => ($isMobile ? '24px' : '36px')};
   line-height: 42px;
-  display: ${({ $isMobile }) => ($isMobile ? 'contents' : 'flex')};
-  align-items: center;
 
   color: ${COLOR_PRIMARY};
 `
 
 const Header = styled.div`
-  height: 118px;
+  margin-top: ${({ $isMobile }) => ($isMobile ? '115px' : '0')};
 
   display: flex;
+  flex-direction: column;
   align-items: center;
 
   font-weight: bold;
-  background-color: ${COLOR_OTHER_GREEN};
+  background-color: ${({ $isMobile }) =>
+    $isMobile ? 'none' : COLOR_OTHER_GREEN};
 
-  ${({ $isMobile }) =>
-    $isMobile &&
-    `
-      display: block;
-      margin: 102px 0 0px 0;
-      padding: 0;
-      height:377px;
-      padding: 20px 0.5%;
-  `}
+  ${({ $isScrollingUp, $isMobile }) =>
+    !$isMobile &&
+    $isScrollingUp &&
+    css`
+      position: sticky;
+      top: 0;
+      left: 0;
+    `}
+`
+
+const HelpFormContainer = styled.div`
+  width: 100%;
+  margin: 23px 0;
 `
 
 const MySearchContainer = styled.div`
-  margin-top: 105px !important;
-`
-
-const BlocFilterMobile = styled(Link)`
-  display: flex;
-  align-items: center;
-  vertical-align: bottom;
-  width: ${({ $isResults }) => ($isResults ? '95px' : '224px')};
-  height: 32px;
-
-  margin: ${({ $isResults }) =>
-    $isResults ? '' : '120px auto 0px !important'};
-
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  color: #fff;
-  background: #191970;
-  border-radius: 22px;
-
-  img {
-    margin: 0px 4px;
-    height: 16px;
-    width: 16px;
-  }
+  margin-top: 5px;
+  align-self: start;
 `
 
 const Container = styled.div`
-  display: flex;
   width: 100%;
   max-width: 1040px;
   margin: 0 auto 64px auto;
+
+  display: flex;
   align-items: flex-start;
 
   ${({ $isMobile }) =>
     $isMobile &&
     `
-      padding: 0 16px;
-      display: block;
-      padding: 0;
+    padding: 0 16px;
+    display: block;
+    padding: 0;
   `}
 `
 
@@ -119,6 +109,11 @@ const HelpsPanel = styled.div`
 `
 
 const HelpTypeTitleContainer = styled.div`
+  height: 71px;
+  margin-top: ${({ isFirst }) => (isFirst ? '' : '40px')};
+  margin-bottom: 20px;
+  padding-left: 8px;
+
   flex: none;
   order: 0;
   flex-grow: 0;
@@ -128,28 +123,18 @@ const HelpTypeTitleContainer = styled.div`
   align-items: center;
   gap: 8px;
 
-  height: 71px;
-  margin-top: ${({ isFirst }) => (isFirst ? '' : '40px')};
-  margin-bottom: 20px;
-
   background: #c7c7f3;
   border-radius: 4px;
 
   h2 {
     width: ${({ $isMobile }) => ($isMobile ? '248px' : '410px')};
-    font-family: 'Roboto';
-    font-style: normal;
     font-weight: 900;
     font-size: 24px;
     line-height: 28px;
-    color: #191970;
+    color: ${COLOR_PRIMARY};
     flex: none;
     order: 1;
     flex-grow: 0;
-  }
-
-  img {
-    margin-left: 8px;
   }
 `
 
@@ -158,232 +143,352 @@ const CustomGridContainer = styled(Grid)`
   margin: auto;
 `
 
-const CATEGORIES = [
-  {
-    key: 'emploi',
-    icon: '/icons/emploi.svg',
-    text: 'Je recherche un emploi',
-    name: 'Je recherche un emploi',
-  },
-  {
-    key: 'logement',
-    icon: '/icons/logement.svg',
-    text: 'Je recherche un logement',
-    name: 'Je recherche un logement',
-  },
-  {
-    key: 'déménage',
-    icon: '/icons/demenagement.svg',
-    text: 'Je déménage prochainement',
-    name: 'Je déménage prochainement',
-  },
-]
+const Anchors = styled.div`
+  width: 100%;
+  padding: 13px;
 
-const SITUATIONS = [
-  {
-    key: "demandeur d'emploi",
-    text: "Demandeur d'emploi",
-    name: "Je suis demandeur d'emploi",
-  },
-  {
-    key: 'salarié',
-    text: 'Salarié',
-    name: 'Je suis salarié',
-  },
-  {
-    key: 'alternance',
-    text: 'Alternant',
-    name: 'Je suis alternant',
-  },
-  {
-    key: 'moins de 26 ans',
-    text: '- 26 ans',
-    name: "J'ai moins de 26 ans",
-  },
-  {
-    key: 'plus de 26 ans',
-    text: '+ 26 ans',
-    name: "J'ai plus de 26 ans",
-  },
-]
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  background: ${({ $isMobile }) => ($isMobile ? 'none' : COLOR_WHITE)};
+`
+
+const Anchor = styled.button`
+  padding: 8px;
+  border: 1px solid ${COLOR_OTHER_GREEN};
+  border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: ${({ $active }) => ($active ? COLOR_OTHER_GREEN : COLOR_WHITE)};
+
+  font-weight: 400;
+  font-size: 16px;
+  color: ${COLOR_PRIMARY};
+
+  &:hover {
+    background: ${COLOR_OTHER_GREEN};
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: none !important;
+    outline-offset: none !important;
+    background: ${({ $active }) => ($active ? COLOR_OTHER_GREEN : 'none')};
+  }
+`
+
+const StickyFooter = styled.div`
+  width: 100%;
+  visibility: ${({ $isScrollingUp }) => ($isScrollingUp ? 'show' : 'hidden')};
+  position: fixed;
+  bottom: 68px;
+
+  display: flex;
+  justify-content: center;
+`
+
+const FINANCIERE = 'financiere'
+const ACCOMPAGNEMENT = 'accompagnement'
+const LOGEMENT = 'logement'
+const TRANSPORT = 'transport'
 
 const Helps = () => {
+  // contexts
   const { previews, onLoadPreviews } = useHelps()
-
-  const location = useLocation()
-  const search = location.search
+  const { search, hash } = useLocation()
   const size = useWindowSize()
   const isMobile = isMobileView(size)
+  const { isScrollingUp, currentScroll } = UseScroll()
+
+  // scroll gesture
+  const [activeAnchor, setActiveAnchor] = useState()
+  const [initialScrollDone, setInitialScrollDone] = useState(false)
+  const financiereHeaderRef = useRef(null)
+  const accompagnementHeaderRef = useRef(null)
+  const logementHeaderRef = useRef(null)
+  const transportHeaderRef = useRef(null)
+
+  // helps data
+  const [filteredItems, setFilteredItems] = useState([])
+  const [allItems, setAllItems] = useState([])
+  const [financeItems, setFinanceItems] = useState([])
+  const [logementItems, setLogementItems] = useState([])
+  const [accompagnementItems, setAccompagnementItems] = useState([])
+  const [transportItems, setTransportItems] = useState([])
+
+  // filters
+  const [projects, setProjects] = useState([])
+  const [situations, setSituations] = useState([])
 
   useEffect(() => {
     onLoadPreviews()
   }, [])
 
-  const parsedQueryString = queryString.parse(search)
+  useEffect(() => {
+    const parsedQueryString = queryString.parse(search)
 
-  const parsedProjects = parsedQueryString.project
-    ? typeof parsedQueryString.project === 'string'
-      ? [parsedQueryString.project]
-      : parsedQueryString.project
-    : []
-  const parsedSituations = parsedQueryString.situation
-    ? typeof parsedQueryString.situation === 'string'
-      ? [parsedQueryString.situation]
-      : parsedQueryString.situation
-    : []
+    const parsedProjects = parsedQueryString.project
+      ? typeof parsedQueryString.project === 'string'
+        ? [parsedQueryString.project]
+        : parsedQueryString.project
+      : []
+    const parsedSituations = parsedQueryString.situation
+      ? typeof parsedQueryString.situation === 'string'
+        ? [parsedQueryString.situation]
+        : parsedQueryString.situation
+      : []
 
-  const projects = CATEGORIES.filter(({ key }) => parsedProjects.includes(key))
-  const situations = SITUATIONS.filter(({ key }) =>
-    parsedSituations.includes(key)
-  )
-
-  function filterListHelpBySituationAndProject(preview) {
-    if (situations.length) {
-      if (
-        !situations.every(({ key }) =>
-          preview.who.toLowerCase().includes(key.toLowerCase())
-        )
-      ) {
-        return false
-      }
-    }
-    if (projects.length) {
-      if (
-        !projects.some(({ key }) =>
-          preview.situation.toLowerCase().includes(key.toLowerCase())
-        )
-      ) {
-        return false
-      }
-    }
-    return true
-  }
-
-  previews.forEach((preview) => {
-    if (preview.type.includes(',')) {
-      preview.type = preview.type.substring(0, preview.type.indexOf(','))
-    }
-    if (preview.goal.includes('.')) {
-      preview.goal = preview.goal.substring(0, preview.goal.indexOf('.') + 1)
-    }
-    if (
-      preview.type.toLowerCase().includes('aide administrative') ||
-      preview.type.toLowerCase().includes('accompagnement du projet')
-    ) {
-      preview.type = 'Accompagnement'
-    }
-  })
-  const listHelpItem = previews.filter((preview) => {
-    return filterListHelpBySituationAndProject(preview)
-  })
-  const listHelpItemFinance = listHelpItem.filter((preview) => {
-    return preview.type.toLowerCase().includes('aide financière')
-  })
-  const listHelpItemLogement = listHelpItem.filter((preview) => {
-    return preview.type.toLowerCase().includes('accès au logement')
-  })
-  const listHelpItemAccompagnement = listHelpItem.filter((preview) => {
-    return preview.type.includes('Accompagnement')
-  })
-  const listHelpItemTransport = listHelpItem.filter((preview) => {
-    return preview.type.toLowerCase().includes('aide transport')
-  })
-  const listEveryHelpItems = [
-    ...listHelpItemFinance,
-    ...listHelpItemLogement,
-    ...listHelpItemAccompagnement,
-    ...listHelpItemTransport,
-  ]
-
-  const params = decodeURIComponent(window.location.search)
-  const [isFiltreRecherche, setFiltreRecherche] = useState(false)
+    setProjects(PROJECTS.filter(({ key }) => parsedProjects.includes(key)))
+    setSituations(
+      [...JOB_SITUATIONS, ...AGE_SITUATIONS].filter(({ key }) =>
+        parsedSituations.includes(key)
+      )
+    )
+  }, [search])
 
   useEffect(() => {
-    setFiltreRecherche(params && params.length > 0 ? true : false)
-  }, [params])
-
-  function getHelpsPanel(listHelpItems) {
-    return (
-      <CustomGridContainer
-        container
-        justifyContent={isMobile ? 'center' : 'start'}
-        columnSpacing={{
-          xs: 0,
-          md: 2,
-        }}
-        rowSpacing={2}
-      >
-        {listHelpItems.map((item) => (
-          <HelpCard key={item.id} help={item}></HelpCard>
-        ))}
-      </CustomGridContainer>
+    setFilteredItems(
+      allItems.filter((preview) => {
+        if (
+          situations.length &&
+          !situations.every(({ key }) =>
+            preview.who.toLowerCase().includes(key.toLowerCase())
+          )
+        ) {
+          return false
+        }
+        if (
+          projects.length &&
+          !projects.some(({ key }) =>
+            preview.situation.toLowerCase().includes(key.toLowerCase())
+          )
+        ) {
+          return false
+        }
+        return true
+      })
     )
-  }
+  }, [allItems, situations, projects])
 
-  function getFilteredHelpsPanel(listHelpItem, isFiltreRecherche) {
-    if (!isFiltreRecherche) return
-    return <>{getHelpsPanel(listEveryHelpItems)}</>
-  }
-
-  function getAllHelpsPanel(isFiltreRecherche) {
-    if (isFiltreRecherche) return
-    return (
-      <>
-        <HelpTypeTitleContainer isFirst={true} $isMobile={isMobile}>
-          <img alt={''} src={pictoHelpFinanciere} />{' '}
-          <h2>Les aides financières</h2>
-        </HelpTypeTitleContainer>
-        {getHelpsPanel(listHelpItemFinance)}
-
-        <HelpTypeTitleContainer $isMobile={isMobile}>
-          <img alt={''} src={pictoHelpAccompagnement} />{' '}
-          <h2>Les aides {isMobile ? <br /> : ''} d'accompagnement</h2>
-        </HelpTypeTitleContainer>
-        {getHelpsPanel(listHelpItemAccompagnement)}
-
-        <HelpTypeTitleContainer $isMobile={isMobile}>
-          <img alt={''} src={pictoHelpLogement} />{' '}
-          <h2>Les aides au logement</h2>
-        </HelpTypeTitleContainer>
-        {getHelpsPanel(listHelpItemLogement)}
-
-        <HelpTypeTitleContainer $isMobile={isMobile}>
-          <img alt={''} src={pictoHelpTransport} />
-          <h2>Les aides Transport</h2>
-        </HelpTypeTitleContainer>
-        {getHelpsPanel(listHelpItemTransport)}
-      </>
+  useEffect(() => {
+    setFinanceItems(
+      allItems.filter((preview) =>
+        preview.type.toLowerCase().includes('aide financière')
+      )
     )
+    setLogementItems(
+      allItems.filter((preview) =>
+        preview.type.toLowerCase().includes('accès au logement')
+      )
+    )
+    setAccompagnementItems(
+      allItems.filter((preview) =>
+        preview.type.toLowerCase().includes('accompagnement')
+      )
+    )
+    setTransportItems(
+      allItems.filter((preview) =>
+        preview.type.toLowerCase().includes('aide transport')
+      )
+    )
+  }, [allItems])
+
+  useEffect(() => {
+    previews.forEach((preview) => {
+      if (preview.type.includes(',')) {
+        preview.type = preview.type.substring(0, preview.type.indexOf(','))
+      }
+      if (preview.goal.includes('.')) {
+        preview.goal = preview.goal.substring(0, preview.goal.indexOf('.') + 1)
+      }
+      if (
+        preview.type.toLowerCase().includes('aide administrative') ||
+        preview.type.toLowerCase().includes('accompagnement du projet')
+      ) {
+        preview.type = 'Accompagnement'
+      }
+    })
+
+    setAllItems(previews)
+  }, [previews])
+
+  useEffect(() => {
+    if ((!!projects && projects.length) || (!!situations && situations.length))
+      return
+
+    const financiereHeaderPositionY =
+      financiereHeaderRef.current.getBoundingClientRect().y
+    const accompagnementHeaderPositionY =
+      accompagnementHeaderRef.current.getBoundingClientRect().y
+    const logementHeaderPositionY =
+      logementHeaderRef.current.getBoundingClientRect().y
+    const transportHeaderPositionY =
+      transportHeaderRef.current.getBoundingClientRect().y
+
+    const FOCUS_TRIGGER_AREA = 200
+
+    if (currentScroll < 20) {
+      setActiveAnchor(null)
+    } else if (
+      (!isScrollingUp && transportHeaderPositionY < FOCUS_TRIGGER_AREA + 50) ||
+      transportHeaderPositionY < size.height - (FOCUS_TRIGGER_AREA + 50)
+    ) {
+      setActiveAnchor(TRANSPORT)
+    } else if (
+      (!isScrollingUp && logementHeaderPositionY < FOCUS_TRIGGER_AREA) ||
+      logementHeaderPositionY < size.height - FOCUS_TRIGGER_AREA
+    ) {
+      setActiveAnchor(LOGEMENT)
+    } else if (
+      (!isScrollingUp && accompagnementHeaderPositionY < FOCUS_TRIGGER_AREA) ||
+      accompagnementHeaderPositionY < size.height - FOCUS_TRIGGER_AREA
+    ) {
+      setActiveAnchor(ACCOMPAGNEMENT)
+    } else if (
+      (!isScrollingUp && financiereHeaderPositionY < FOCUS_TRIGGER_AREA) ||
+      financiereHeaderPositionY < size.height - FOCUS_TRIGGER_AREA
+    ) {
+      setActiveAnchor(FINANCIERE)
+    }
+  }, [currentScroll, isScrollingUp, projects, situations])
+
+  useEffect(() => {
+    if (!!allItems && !initialScrollDone && !!hash && !search) {
+      const hashAnchor = hash.substring(1)
+
+      let ref = null
+      if (hashAnchor === FINANCIERE) {
+        ref = financiereHeaderRef
+      } else if (hashAnchor === ACCOMPAGNEMENT) {
+        ref = accompagnementHeaderRef
+      } else if (hashAnchor === LOGEMENT) {
+        ref = logementHeaderRef
+      } else if (hashAnchor === ACCOMPAGNEMENT) {
+        ref = transportHeaderRef
+      }
+
+      if (!!ref) {
+        setTimeout(() => {
+          scrollTo(ref)
+          setInitialScrollDone(true)
+        }, 500)
+      }
+    }
+  }, [hash, allItems, initialScrollDone])
+
+  const handleAnchorClick = (ref) => {
+    scrollTo(ref)
   }
 
-  function getTitle() {
-    if (isFiltreRecherche) {
-      return (
-        <TitleContainer $isMobile={isMobile}>
-          <Title $isMobile={isMobile}>
-            {' '}
-            {listEveryHelpItems.length} aide
-            {listEveryHelpItems.length > 1 ? 's ' : ' '}
-            disponible{listEveryHelpItems.length > 1 ? 's ' : ' '}
+  const scrollTo = (ref) => {
+    const BANNER_SIZE = 191
+    const scrollTop =
+      (window.scrollY > ref.current.offsetTop
+        ? ref.current.offsetTop - BANNER_SIZE
+        : ref.current.offsetTop) - 35
+    window.scroll({
+      top: scrollTop,
+      behavior: 'smooth',
+    })
+  }
+
+  const HelpList = ({ items }) => (
+    <CustomGridContainer
+      container
+      justifyContent={isMobile ? 'center' : 'start'}
+      columnSpacing={{
+        xs: 0,
+        md: 2,
+      }}
+      rowSpacing={2}
+    >
+      {items.map((item) => (
+        <HelpCard key={item.id} help={item}></HelpCard>
+      ))}
+    </CustomGridContainer>
+  )
+
+  const ResultTitle = () => (
+    <TitleContainer $isMobile={isMobile}>
+      <Title $isMobile={isMobile}>
+        {!(
+          (!!projects && projects.length) ||
+          (!!situations && situations.length)
+        ) ? (
+          'Toutes les aides à la mobilité professionnelle et résidentielle'
+        ) : (
+          <>
+            {filteredItems.length} aide
+            {filteredItems.length > 1 ? 's ' : ' '}
+            disponible{filteredItems.length > 1 ? 's ' : ' '}
             {isMobile ? <br /> : null}
             pour votre situation
-          </Title>
-        </TitleContainer>
-      )
-    }
+          </>
+        )}
+      </Title>
+    </TitleContainer>
+  )
 
-    return (
-      <TitleContainer $isMobile={isMobile}>
-        <Title $isMobile={isMobile}>
-          {' '}
-          Toutes les aides à la mobilité professionnelle et résidentielle{' '}
-        </Title>
-      </TitleContainer>
-    )
-  }
+  const GeneratedHelpsPanel = useCallback(
+    () => (
+      <>
+        {(!!projects && projects.length) ||
+        (!!situations && situations.length) ? (
+          <HelpList items={filteredItems} />
+        ) : (
+          <>
+            <HelpTypeTitleContainer isFirst={true} $isMobile={isMobile}>
+              <FinanceIcon />
+              <h2 id={FINANCIERE} ref={financiereHeaderRef}>
+                Les aides financières
+              </h2>
+            </HelpTypeTitleContainer>
+            <HelpList items={financeItems} />
 
-  const isScrollingUp = UseScrollingUp()
-  const isResults = projects.length > 0 || situations.length > 0
+            <HelpTypeTitleContainer $isMobile={isMobile}>
+              <AccompagnementIcon />
+              <h2 id={ACCOMPAGNEMENT} ref={accompagnementHeaderRef}>
+                Les aides {isMobile ? <br /> : ''} d'accompagnement
+              </h2>
+            </HelpTypeTitleContainer>
+            <HelpList items={accompagnementItems} />
+
+            <HelpTypeTitleContainer $isMobile={isMobile}>
+              <LogementIcon />
+              <h2 id={LOGEMENT} ref={logementHeaderRef}>
+                Les aides au logement
+              </h2>
+            </HelpTypeTitleContainer>
+            <HelpList items={logementItems} />
+
+            <HelpTypeTitleContainer $isMobile={isMobile}>
+              <TransportIcon />
+              <h2 id={TRANSPORT} ref={transportHeaderRef}>
+                Les aides Transport
+              </h2>
+            </HelpTypeTitleContainer>
+            <HelpList items={transportItems} />
+          </>
+        )}
+      </>
+    ),
+    [
+      projects,
+      situations,
+      filteredItems,
+      financeItems,
+      accompagnementItems,
+      logementItems,
+      transportItems,
+    ]
+  )
 
   return (
     <MainLayout topMobileMenu>
@@ -395,54 +500,84 @@ const Helps = () => {
         />
       </Helmet>
 
-      {isMobile && isResults && (
-        <>
-          <MySearchContainer>
-            <TitleContainer $isMobile={isMobile}>
-              <Title $isMobile={isMobile}>Ma recherche</Title>
-            </TitleContainer>
-          </MySearchContainer>
+      <Header $isMobile={isMobile} $isScrollingUp={isScrollingUp}>
+        {!isMobile && (
+          <HelpFormContainer>
+            <HelpForm />
+          </HelpFormContainer>
+        )}
 
-          <MobileAppliedFilters search={search} />
-        </>
-      )}
-      {isMobile && !isResults && (
-        <BlocFilterMobile
-          $isResults={isResults}
-          to={`/aides-filters` + window.location.search}
-          className={`${isScrollingUp ? 'stickyFilterMobile' : ''}`}
-        >
-          <img alt={''} src={pictoFilterMobile} />
-          <div>Filtrer selon votre situation</div>
-        </BlocFilterMobile>
-      )}
+        {isMobile && (
+          <div
+            style={{
+              alignSelf:
+                (!!projects && projects.length) ||
+                (!!situations && situations.length)
+                  ? 'start'
+                  : 'center',
+            }}
+          >
+            {!(
+              (!projects || !projects.length) &&
+              (!situations || !situations.length)
+            ) && (
+              <MySearchContainer>
+                <TitleContainer $isMobile={isMobile}>
+                  <Title $isMobile={isMobile}>Ma recherche</Title>
+                </TitleContainer>
+              </MySearchContainer>
+            )}
+            <MobileAppliedFilters search={search} />
+          </div>
+        )}
 
-      {!isMobile && (
-        <Header
-          $isMobile={isMobile}
-          className={`${!isMobile && isScrollingUp ? 'stickyHeader' : ''}`}
-        >
-          <HelpForm />
-        </Header>
-      )}
+        {!search && (
+          <Anchors $isMobile={isMobile}>
+            <Anchor
+              onClick={() => handleAnchorClick(financiereHeaderRef)}
+              $active={activeAnchor === FINANCIERE}
+            >
+              <EuroIcon /> Financier
+            </Anchor>
+            <Anchor
+              onClick={() => handleAnchorClick(accompagnementHeaderRef)}
+              $active={activeAnchor === ACCOMPAGNEMENT}
+            >
+              <PeopleIcon /> Accompagnement
+            </Anchor>
+            <Anchor
+              onClick={() => handleAnchorClick(logementHeaderRef)}
+              $active={activeAnchor === LOGEMENT}
+            >
+              <HomeWorkIcon /> Logement
+            </Anchor>
+            <Anchor
+              onClick={() => handleAnchorClick(transportHeaderRef)}
+              $active={activeAnchor === TRANSPORT}
+            >
+              <DirectionsCarIcon /> Transport
+            </Anchor>
+          </Anchors>
+        )}
+      </Header>
 
-      {getTitle()}
-
-      {/*EN ATTENTE MODICATIONS UX*/}
-      {/*<TypeHelpFilter />*/}
+      <ResultTitle />
 
       <Container $isMobile={isMobile}>
         <HelpsPanel $isMobile={isMobile}>
-          {getAllHelpsPanel(isFiltreRecherche)}
-
-          {getFilteredHelpsPanel(listHelpItem, isFiltreRecherche)}
+          <GeneratedHelpsPanel />
         </HelpsPanel>
       </Container>
+
+      {isMobile ? (
+        <StickyFooter $isScrollingUp={isScrollingUp}>
+          <MobileAppliedFilters search={search} />
+        </StickyFooter>
+      ) : null}
     </MainLayout>
   )
 }
 
 Helps.propTypes = {}
 
-Helps.defaultProps = {}
 export default Helps
