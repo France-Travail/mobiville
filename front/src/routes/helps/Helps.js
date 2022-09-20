@@ -370,7 +370,7 @@ const Helps = () => {
         ref = accompagnementHeaderRef
       } else if (hashAnchor === LOGEMENT) {
         ref = logementHeaderRef
-      } else if (hashAnchor === ACCOMPAGNEMENT) {
+      } else if (hashAnchor === TRANSPORT) {
         ref = transportHeaderRef
       }
 
