@@ -9,23 +9,29 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  ListItemText
+  ListItemText,
 } from '@mui/material'
-import { COLOR_LIGHT_GREY, COLOR_OTHER_GREEN, COLOR_PRIMARY, COLOR_TEXT_PRIMARY, COLOR_WHITE } from '../../constants/colors'
+import {
+  COLOR_LIGHT_GREY,
+  COLOR_OTHER_GREEN,
+  COLOR_PRIMARY,
+  COLOR_TEXT_PRIMARY,
+  COLOR_WHITE,
+} from '../../constants/colors'
 
 const AppFormControl = styled(FormControl)`
   width: 100%;
-  background: ${ COLOR_WHITE };
-  color: ${ COLOR_PRIMARY } !important;
+  background: ${COLOR_WHITE};
+  color: ${COLOR_PRIMARY} !important;
   border-radius: 20px;
-  border: 1px solid ${ COLOR_LIGHT_GREY } !important;
+  border: 1px solid ${COLOR_LIGHT_GREY} !important;
   margin: 0 !important;
 
   & div.MuiSelect-select {
     background: inherit !important;
     padding-top: 20px;
     padding-bottom: 13px;
-    color: ${ COLOR_PRIMARY } !important;
+    color: ${COLOR_PRIMARY} !important;
     font-weight: 700 !important;
   }
 
@@ -54,7 +60,7 @@ const AppFormControl = styled(FormControl)`
   }
 
   & ul.MuiList-root {
-    color: ${ COLOR_PRIMARY } !important;
+    color: ${COLOR_PRIMARY} !important;
     font-size: 16 !important;
     font-weight: 700 !important;
     margin-top: 9px !important;
@@ -62,45 +68,48 @@ const AppFormControl = styled(FormControl)`
 `
 
 const CustomInputLabel = styled(InputLabel)`
-  color: ${ COLOR_TEXT_PRIMARY } !important;
+  pointer-events: none !important;
+  color: ${COLOR_TEXT_PRIMARY} !important;
 `
 
 const Placeholder = styled(InputLabel)`
+  pointer-events: none !important;
   margin-top: 33px !important;
   font-size: 18px !important;
   font-weight: 400 !important;
-  color: ${ COLOR_TEXT_PRIMARY } !important; 
-  visibility: ${({ hidden }) => (hidden ? 'hidden' : 'visible') };
+  color: ${COLOR_TEXT_PRIMARY} !important;
+  visibility: ${({ hidden }) => (hidden ? 'hidden' : 'visible')};
 `
 
 const AppMenuItem = styled(MenuItem)`
   height: 54px;
 
   margin: 15px !important;
-  border: 1px solid ${ COLOR_LIGHT_GREY } !important;
-  color: ${ COLOR_PRIMARY } !important;
+  border: 1px solid ${COLOR_LIGHT_GREY} !important;
+  color: ${COLOR_PRIMARY} !important;
   border-radius: 8px !important;
-  
+
   span {
     font-weight: 700 !important;
   }
 
-  &:hover, &:checked, &.Mui-selected {
-    background-color: ${ COLOR_OTHER_GREEN } !important;
+  &:hover,
+  &:checked,
+  &.Mui-selected {
+    background-color: ${COLOR_OTHER_GREEN} !important;
   }
 `
 
 const AppSelect = ({
   options,
-  value = "",
-  label = "",
-  placeholder = "",
+  value = '',
+  label = '',
+  placeholder = '',
   onChange = () => {},
-  renderValue = (selected) => (_.capitalize(_.toLower(selected))),
+  renderValue = (selected) => _.capitalize(_.toLower(selected)),
   multiple = false,
-  style = {}
+  style = {},
 }) => {
-
   const isPlaceholderHidden = useCallback(() => {
     if (!multiple) {
       return !!value
@@ -122,33 +131,31 @@ const AppSelect = ({
         id={`${_.kebabCase(label)}-label`}
         variant="filled"
         shrink={true}
-      >{label}</CustomInputLabel>
+      >
+        {label}
+      </CustomInputLabel>
       <Placeholder
         id={`${_.kebabCase(label)}-placeholder`}
         variant="filled"
         shrink={true}
         hidden={isPlaceholderHidden()}
-      >{placeholder}</Placeholder>
+      >
+        {placeholder}
+      </Placeholder>
       <Select
         labelId={`${_.kebabCase(label)}-label`}
         id={`${_.kebabCase(label)}`}
         multiple={multiple}
-        value={(value ?? "")}
+        value={value ?? ''}
         onChange={handleChange}
         renderValue={renderValue}
       >
         {options.map((option) => (
-          <AppMenuItem
-            key={option.key}
-            value={option.option}
-          >
-            { multiple
-              ? <Checkbox checked={value.indexOf(option.option) > -1} />
-              : null
-            }
-            <ListItemText
-              primary={_.capitalize(_.toLower(option.option))}
-            />
+          <AppMenuItem key={option.key} value={option.option}>
+            {multiple ? (
+              <Checkbox checked={value.indexOf(option.option) > -1} />
+            ) : null}
+            <ListItemText primary={_.capitalize(_.toLower(option.option))} />
           </AppMenuItem>
         ))}
       </Select>

@@ -1,38 +1,38 @@
-/**
- * useScroll React custom hook
- * Usage:
- *    const { scrollX, scrollY, scrollDirection } = useScroll();
- */
+import { useEffect, useState } from 'react'
 
-import { useState, useEffect } from 'react'
+function on(obj, ...args) {
+  obj.addEventListener(...args)
+}
+
+function off(obj, ...args) {
+  obj.removeEventListener(...args)
+}
 
 export function useScroll() {
-  const [lastScrollTop, setLastScrollTop] = useState(0)
-  const [bodyOffset, setBodyOffset] = useState(
-    document.body.getBoundingClientRect()
-  )
-  const [scrollY, setScrollY] = useState(bodyOffset.top)
-  const [scrollX, setScrollX] = useState(bodyOffset.left)
-  const [scrollDirection, setScrollDirection] = useState()
+  let prevScroll = 0
 
-  const listener = () => {
-    setBodyOffset(document.body.getBoundingClientRect())
-    setScrollY(-bodyOffset.top)
-    setScrollX(bodyOffset.left)
-    setScrollDirection(lastScrollTop > -bodyOffset.top ? 'down' : 'up')
-    setLastScrollTop(-bodyOffset.top)
+  const [scrollingUp, setScrollingUp] = useState(false)
+  const [currentScroll, setCurrentScroll] = useState(null)
+
+  const handleScroll = () => {
+    const currScroll = window.pageYOffset
+
+    const isScrolled = currScroll > 100 && prevScroll > currScroll
+    prevScroll = currScroll
+
+    setScrollingUp(isScrolled)
+    setCurrentScroll(currScroll)
   }
 
   useEffect(() => {
-    window.addEventListener('scroll', listener)
+    on(window, 'scroll', handleScroll, { passive: true })
     return () => {
-      window.removeEventListener('scroll', listener)
+      off(window, 'scroll', handleScroll, { passive: true })
     }
-  })
+  }, [])
 
   return {
-    scrollY,
-    scrollX,
-    scrollDirection,
+    isScrollingUp: scrollingUp,
+    currentScroll: currentScroll,
   }
 }
