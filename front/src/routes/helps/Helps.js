@@ -13,7 +13,7 @@ import {
   COLOR_WHITE,
 } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
-import UseScroll from './components/UseScroll'
+import { useScroll } from '../../common/hooks/use-scroll'
 
 import { ReactComponent as FinanceIcon } from '../../assets/images/icons/help-financiere.svg'
 import { ReactComponent as AccompagnementIcon } from '../../assets/images/icons/help-accompagnement.svg'
@@ -205,7 +205,7 @@ const Helps = () => {
   const { search, hash } = useLocation()
   const size = useWindowSize()
   const isMobile = isMobileView(size)
-  const { isScrollingUp, currentScroll } = UseScroll()
+  const { isScrollingUp, currentScroll } = useScroll()
 
   // scroll gesture
   const [activeAnchor, setActiveAnchor] = useState()
