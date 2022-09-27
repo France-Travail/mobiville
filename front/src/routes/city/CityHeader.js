@@ -18,6 +18,7 @@ const Container = styled.div`
   z-index: 1;
   border-bottom: 1px ${COLOR_GRAY} solid;
   padding: ${({ isMobile }) => (isMobile ? 0 : 16)}px;
+  padding-top: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -27,12 +28,12 @@ const ContainerInfoStats = styled.div`
   display: flex;
   max-width: 1040px;
   width: 100%;
-  margin-top: ${({ isMobile }) => (isMobile ? '0px' : '20px')};
+  margin-top: ${({ isMobile }) => (isMobile ? '0px' : '21px')};
   margin-bottom: 0px;
 `
 
 const ContainerInfo = styled.div`
-  max-width: ${({ isMobile }) => (isMobile ? 'auto' : '336px')};
+  max-width: ${({ isMobile }) => (isMobile ? 'auto' : '1040px')};
   border-radius: ${({ isMobile }) => (isMobile ? '0' : '8')}px;
 `
 
@@ -63,7 +64,7 @@ const PicAndMapContainer = styled.div`
 `
 
 const CityPic = styled.img.attrs({ alt: '' })`
-  width: ${({ isMobile }) => (isMobile ? '100%' : '688px')};
+  width: ${({ isMobile }) => (isMobile ? '100%' : '1040px')};
   ${({ isMobile }) => (isMobile ? '' : 'height: 224px;')}
   border-radius: ${({ isMobile }) => (isMobile ? '0' : '8')}px;
   object-fit: cover;
@@ -133,47 +134,40 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
           <H1>Retour</H1>
         </HeaderArrowLink>
       )}
+
+      {!isMobile && (
+          <ContainerInfoStats isMobile={isMobile}>
+              <ContainerInfo>{!isMobile && titlesNode}</ContainerInfo>
+          </ContainerInfoStats>
+      )}
+
       <PicAndMapContainer isMobile={isMobile}>
         <CityPic
           isMobile={isMobile}
           src={city.photo || `/regions/region-${city.newRegion.code}.jpg`}
         />
-        {!isMobile && city && (
-          <StyledMapContainer
-            center={[city.geo_point_2d_x, city.geo_point_2d_y]}
-            zoom={8}
-            scrollWheelZoom
-          >
-            <TileLayer
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-
-            <Marker position={[city.geo_point_2d_x, city.geo_point_2d_y]} icon={getLeafletIcon(blueMarker)} />
-
-          </StyledMapContainer>
-        )}
       </PicAndMapContainer>
 
       {isMobile && titlesNode}
 
-      <ContainerInfoStats isMobile={isMobile}>
-        <ContainerInfo>{!isMobile && titlesNode}</ContainerInfo>
-        <StatsContainer isMobile={isMobile}>
-          <Stats>
-            <img src={crowd} alt="" />
-            Habitants <br />
-            <b>{formatNumber(city.population * 1000)}</b>
-          </Stats>
+      {isMobile && (
+          <ContainerInfoStats isMobile={isMobile}>
+              <StatsContainer isMobile={isMobile}>
+                  <Stats>
+                      <img src={crowd} alt="" />
+                      Habitants <br />
+                      <b>{formatNumber(city.population * 1000)}</b>
+                  </Stats>
 
-          <Stats>
-            <img src={weather} alt="" />
-            Température
-            <br />
-            <b>{Math.floor(city.average_temperature)}°</b>
-          </Stats>
-        </StatsContainer>
-      </ContainerInfoStats>
+                  <Stats>
+                      <img src={weather} alt="" />
+                      Température
+                      <br />
+                      <b>{Math.floor(city.average_temperature)}°</b>
+                  </Stats>
+              </StatsContainer>
+          </ContainerInfoStats>
+      )}
     </Container>
   )
 }

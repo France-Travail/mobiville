@@ -24,7 +24,7 @@ export function getAccessToken() {
                 grant_type: 'client_credentials',
                 client_id: config.EMPLOI_STORE_ID,
                 client_secret: config.EMPLOI_STORE_SECRET,
-                scope: `api_infotravailv1 api_offresdemploiv2 api_romev1 nomenclatureRome application_${config.EMPLOI_STORE_ID} o2dsoffre api_explorateurmetiersv1 explojob`,
+                scope: `api_infotravailv1 api_offresdemploiv2 api_romev1 nomenclatureRome application_${config.EMPLOI_STORE_ID} o2dsoffre api_explorateurmetiersv1 explojob api_labonneboitev1`,
             }),
             {
                 headers: {
@@ -195,4 +195,29 @@ export async function getSkillFromRome(codeRome) {
             }
         )
         .then((result) => result.data)
+}
+
+export async function companiesCount({ codeRome = '', insee = '', distance = 30 }) {
+    const token = await getAccessToken()
+    const callToCompaniesCount = function () {
+        return apiEmploiStore.get(
+            'https://api.emploi-store.fr/partenaire/labonneboite/v1/company/count',
+            {
+                params: {
+                    rome_codes: codeRome,
+                    commune_id: insee,
+                    distance,
+                },
+                headers: { Authorization: `Bearer ${token}` },
+                ...(config.PE_ENV && {proxy: false}),
+                ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
+            })
+            .then(async (result) => result)
+            .catch((error) => {
+                console.log("pe-api.js companiesCount() --> ERROR. Request : "+error.request.res.responseUrl+". Error status : "+error.response.status)
+                if(error.response.status !== 429) console.log(error)
+                return error.response
+            })
+    }
+    return fetchAndRetryIfNecessary(callToCompaniesCount)
 }

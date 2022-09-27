@@ -34,3 +34,11 @@ export const searchJobLabels = (body) =>
   axios
     .post('/api/cities/search-by-skill', body)
     .then((response) => response.data || [])
+
+export const searchCompaniesCount = (body) =>
+    axios
+        .post(`/api/cities/companies-count`, body)
+        .then((response) => response.data || null)
+
+export class companiesCount {
+}

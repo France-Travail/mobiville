@@ -1,6 +1,7 @@
 import { CRITERIONS } from '../constants/criterion'
 import { compact } from 'lodash'
 import Router from '@koa/router'
+import {companiesCount} from "../utils/pe-api";
 
 const router = new Router({ prefix: '/cities' })
 
@@ -136,5 +137,26 @@ router.get('/criterions', async ({ models, response }) => {
 router.get('/load/:insee', async ({ params: { insee }, models, response }) => {
   response.body = await models.cities.getCity({ insee })
 })
+
+router.post(
+    '/companies-count',
+    async ({
+               request: {
+                   body: { codeRome, insee },
+               },
+               response,
+           }) => {
+        const result = await companiesCount({
+            codeRome,
+            insee,
+            distance: 30,
+        })
+        if (result) {
+            response.body = result.companies_count
+        } else {
+            response.body = {}
+        }
+    }
+)
 
 export default router

@@ -1,13 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { isEqual } from 'lodash'
 import {
-  getCriterions,
-  loadCity,
-  searchCities as apiSearchCities,
-  searchCloseCities,
-  searchSimilarCities,
-  searchJobLabels,
-  fetchAutocompleteCities,
+    getCriterions,
+    loadCity,
+    searchCities as apiSearchCities,
+    searchCloseCities,
+    searchSimilarCities,
+    searchJobLabels,
+    fetchAutocompleteCities, searchCompaniesCount,
 } from '../../api/cities.api'
 
 const CitiesContext = React.createContext()
@@ -42,6 +42,8 @@ export function CitiesProvider(props) {
   const [regionCriterions, _setRegionCriterions] = useState([])
   const [autocompletedCities, setAutocompletedCities] = useState([])
   const [isLoadingAutocomplete, setIsLoadingAutocomplete] = useState(false)
+  const [companiesCount, _setCompaniesCount] = useState()
+  const [isLoadingCompaniesCount, _setIsLoadingCompaniesCount] = useState(false)
 
   const onSearch = (params, index = 0, oldCities = [], concateResults = true) => {
     if (isLoading && isEqual(lastSearchParams, params)) return
@@ -116,6 +118,13 @@ export function CitiesProvider(props) {
 
   const onSearchJobLabels = (label) => {
     setCityInput(label)
+  }
+
+  const onSearchCompaniesCount = (params) => {
+      _setIsLoadingCompaniesCount(true)
+      searchCompaniesCount(params)
+          .then((count) => _setCompaniesCount(count))
+          .then(() => _setIsLoadingCompaniesCount(false))
   }
 
   useEffect(() => {
@@ -216,6 +225,8 @@ export function CitiesProvider(props) {
         regionCriterions,
         autocompletedCities,
         isLoadingAutocomplete,
+        companiesCount,
+        isLoadingCompaniesCount,
         // function
         setCity,
         onSearch,
@@ -227,6 +238,7 @@ export function CitiesProvider(props) {
         onSearchJobLabels,
         onAutocomplete,
         initializeJobsAutocomplete,
+        onSearchCompaniesCount
       }}
     />
   )

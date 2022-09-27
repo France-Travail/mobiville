@@ -100,3 +100,10 @@ export const useElementOnScreen = (options) => {
 
   return [containerRef, isVisible]
 }
+
+export const formatCityTension = (tension) => {
+  if (tension < 4) {
+    return "Opportunités d'emploi"
+  }
+  return "Peu d'opportunités d'emploi"
+}

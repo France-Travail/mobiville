@@ -170,7 +170,21 @@ router.post(
       models.cities.findOne({
         where: { insee_com: insee },
         raw: true,
-        include: models.cities.models.bassins,
+        include: {
+          attributes: ['bassin_id'],
+          model: models.cities.models.bassins,
+          required: false,
+          include: [
+            {
+              attributes: ['ind_t'],
+              model: models.bassins.models.tensions,
+              required: false,
+              where: {
+                rome: codeRome,
+              },
+            },
+          ],
+        }
       }),
       models.cities.models.tensions.findOne({
         where: {
@@ -236,6 +250,7 @@ router.post(
     }
 
     response.body = {
+      bassinTensionIndT: city['bassin.tensions.ind_t'],
       min,
       max,
       bassinTension,
