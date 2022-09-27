@@ -7,6 +7,8 @@ import {
   COLOR_VERT_MOBIVILLE,
   COLOR_WHITE,
 } from '../../constants/colors'
+import { isMobileView } from '../../constants/mobile'
+import { useWindowSize } from '../../common/hooks/window-size'
 
 const computeButtonBorder = (index, lastIndex) => {
   if (index === 0) {
@@ -29,6 +31,14 @@ const Button = styled.button`
   font-weight: ${({ selected }) => (selected ? 'bold' : '')};
 
   ${({ index, lastIndex }) => computeButtonBorder(index, lastIndex)};
+
+  border: ${({ $isMobile }) =>
+    $isMobile ? `1px solid ${COLOR_PRIMARY}` : 'none'};
+
+  display: flex;
+  column-gap: 10px;
+  align-items: center;
+  padding: 10px;
 
   display: flex;
   column-gap: 10px;
@@ -55,6 +65,8 @@ const ButtonGroup = ({
     defaultSelected ?? children[0]?.props?.id ?? null
   )
 
+  const isMobile = isMobileView(useWindowSize())
+
   const handleButtonClick = (buttonId) => {
     setSelected(buttonId)
     onClick(buttonId)
@@ -76,6 +88,7 @@ const ButtonGroup = ({
             handleButtonClick(child.props.id)
           }}
           selected={selected === child.props.id}
+          $isMobile={isMobile}
         >
           {/* { child.props.children.map(child => ({
                         ...child,
