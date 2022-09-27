@@ -33,6 +33,7 @@ import redEllipse from '../../assets/images/icons/red_ellipse.svg'
 import greenEllipse from '../../assets/images/icons/green_ellipse.svg'
 import restaurantsIcon from '../../assets/images/icons/restaurants.svg'
 import pastille from '../../assets/images/icons/pastille.svg'
+import CityHousingSimulator from './CityHousingSimulator'
 
 const ElementContainer = styled.div`
   display: flex;
@@ -717,28 +718,22 @@ const CityPage = () => {
         </BlockContainer>
       )}
 
-      {!isMobile && (
-        <ElementContainer isMobile={isMobile}>
-          <ActionButton
-            path={'/mobility-guide'}
-            libelle={`Consultez nos conseils pour votre projet`}
-            isMobile={isMobile}
-            isBlue={false}
-            isWhite={true}
-          />
-        </ElementContainer>
-      )}
-      {isMobile && (
-        <ElementContainer isMobile={isMobile}>
-          <ActionButton
-            path={'/mobility-guide'}
-            libelle={`Consultez nos conseils pour votre projet`}
-            isMobile={isMobile}
-            isBlue={false}
-            isWhite={true}
-          />
-        </ElementContainer>
-      )}
+      <ElementContainer isMobile={isMobile}>
+        <CityHousingSimulator city={city}>
+          
+        </CityHousingSimulator>
+      </ElementContainer>
+
+
+      <ElementContainer isMobile={isMobile}>
+        <ActionButton
+          path={'/mobility-guide'}
+          libelle={`Consultez nos conseils pour votre projet`}
+          isMobile={isMobile}
+          isBlue={false}
+          isWhite={true}
+        />
+      </ElementContainer>
     </MainLayout>
   )
 }
