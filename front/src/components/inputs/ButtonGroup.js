@@ -26,9 +26,10 @@ const Button = styled.button`
   color: ${COLOR_PRIMARY};
   font-size: 18px;
 
-  background: ${({ selected }) =>
-    selected ? COLOR_VERT_MOBIVILLE : COLOR_WHITE};
-  font-weight: ${({ selected }) => (selected ? 'bold' : '')};
+  background: ${({ selected, $isMobile }) =>
+    selected && !$isMobile ? COLOR_VERT_MOBIVILLE : COLOR_WHITE};
+  font-weight: ${({ selected, $isMobile }) =>
+    selected && !$isMobile ? 'bold' : ''};
 
   ${({ index, lastIndex }) => computeButtonBorder(index, lastIndex)};
 
