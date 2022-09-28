@@ -229,7 +229,7 @@ const CityHousingSimulator = ({ city, nbSocialHousing }) => {
                 obtenir un numéro unique de demande de logement social (NUR/NUD)
               </HousingActorDescription>
             </div>
-            <HousingActorLink to="https://www.demande-logement-social.gouv.fr/index">
+            <HousingActorLink to="https://www.actionlogement.fr/le-logement-social">
               Créez ma demande de logement <ArrowForwardIcon />
             </HousingActorLink>
           </HousingActor>
