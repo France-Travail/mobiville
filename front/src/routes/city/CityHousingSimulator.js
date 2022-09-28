@@ -1,26 +1,25 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
-import { COLOR_RED, COLOR_GREEN, COLOR_GRAY } from '../../constants/colors'
+import {
+  COLOR_RED,
+  COLOR_GREEN,
+  COLOR_GRAY,
+  COLOR_WHITE,
+  COLOR_PRIMARY,
+} from '../../constants/colors'
 import { formatNumber } from '../../utils/utils'
 
+import logoLogementSocial from '../../assets/images/logo-logement-social.png'
+import logoALin from '../../assets/images/logo-ALin.png'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+
 import building from '../../assets/images/icons/building.svg'
-import house from '../../assets/images/icons/house.svg'
-// il faut supprimer les icones ?
-import houses from '../../assets/images/icons/houses.svg'
-import hourglass from '../../assets/images/icons/hourglass.svg'
-
-import { InputAdornment, TextField } from '@mui/material'
-import Euro from '@mui/icons-material/Euro'
-
-const BlocksContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
-`
+import HousingSimulator from './components/HousingSimulator'
+import { Link } from 'react-router-dom'
 
 const ItemLayout = styled.div`
   background: #ffffff;
@@ -49,20 +48,6 @@ const HousingMetrics = styled.div`
   }
 `
 
-const HousingSimulator = styled.div``
-
-const SimulatorElement = styled.div`
-  display: ${({ isMobile }) => (isMobile ? 'block' : 'flex')};
-  justify-content: space-around;
-
-  & > * {
-    width: 100%;
-    &:last-of-type {
-      margin-left: ${({ isMobile }) => (isMobile ? '0' : '16px')};
-    }
-  }
-`
-
 const ElementObject = styled.div`
   display: flex;
   flex-direction: column;
@@ -84,22 +69,75 @@ const Tag = styled.div`
   font-weight: 500;
 `
 
+const HousingSearchContainer = styled.div`
+  max-width: 888px;
+  margin: 0 8px;
+
+  display: flex;
+  flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row')};
+  gap: 16px;
+`
+
+const HousingActorsContainer = styled.div`
+  flex: 1;
+  max-width: 440px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  color: ${COLOR_PRIMARY};
+`
+
+const HousingActor = styled.div`
+  padding: 44px;
+  flex: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  border-radius: 4px;
+  background: ${COLOR_WHITE};
+`
+
+const HousingActorTitle = styled.div`
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 28px;
+`
+
+const HousingActorDescription = styled.div`
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+`
+
+const HousingActorLink = styled(Link)`
+  height: 19px;
+  align-self: center;
+
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+
+  text-decoration-line: underline;
+
+  color: ${COLOR_PRIMARY};
+
+  & > svg {
+    vertical-align: bottom;
+  }
+`
+
+const HousingActorImage = styled.img`
+  max-height: 70px;
+  align-self: center;
+`
+
 const CityHousingSimulator = ({ city, nbSocialHousing }) => {
   const size = useWindowSize()
   const isMobile = isMobileView(size)
-
-  const [squareMeters, setSquareMeters] = useState(0)
-  const [housingCost, setHousingCost] = useState(0)
-
-  const calculateSquareMeters = (value) => {
-    const result = parseInt(value, 10) / city.average_houserent
-    setSquareMeters(Number.isNaN(result) ? null : result.toFixed())
-  }
-  const calculateHousingCost = (value) => {
-    const result =
-      parseInt(value.replace(/ /g, ''), 10) * city.average_houseselled
-    setHousingCost(Number.isNaN(result) ? null : result.toFixed())
-  }
 
   // TODO a supprimer
   // const socialHousingNode = (
@@ -179,62 +217,42 @@ const CityHousingSimulator = ({ city, nbSocialHousing }) => {
         </ItemLayout>
       </HousingMetrics>
 
-      <HousingSimulator>
-        {(!!city.average_houserent || !!city.average_houseselled) && (
-          <BlocksContainer isMobile={isMobile}>
-            <ItemLayout isMobile={isMobile}>
-              <ItemTitleLayout>Simulateur de logement</ItemTitleLayout>
-              <SimulatorElement isMobile={isMobile}>
-                {!!city.average_houserent && (
-                  <div>
-                    <div>
-                      <b>Pour une location</b>
-                    </div>
-                    <TextField
-                      label="Votre budget"
-                      variant="filled"
-                      onChange={(event) =>
-                        calculateSquareMeters(event.target.value)
-                      }
-                      fullWidth
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <Euro />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                    <p>
-                      Vous pouvez occuper un logement de :<br />
-                      <b>{formatNumber(squareMeters) || '__'}m²</b>
-                    </p>
-                  </div>
-                )}
-                {!!city.average_houseselled && (
-                  <div>
-                    <div>
-                      <b>Pour un achat</b>
-                    </div>
-                    <TextField
-                      label="Nombre de m2"
-                      variant="filled"
-                      onChange={(event) =>
-                        calculateHousingCost(event.target.value)
-                      }
-                      fullWidth
-                    />
-                    <p>
-                      Votre logement va coûter :<br />
-                      <b>{formatNumber(housingCost) || '__'}€</b>
-                    </p>
-                  </div>
-                )}
-              </SimulatorElement>
-            </ItemLayout>
-          </BlocksContainer>
+      <HousingSearchContainer $isMobile={isMobile}>
+        <HousingActorsContainer>
+          <HousingActor>
+            <HousingActorImage src={logoLogementSocial} />
+            <div>
+              <HousingActorTitle>Demandez un logement social</HousingActorTitle>
+              <HousingActorDescription>
+                Pour obtenir un logement social (ou logement HLM), vous devez
+                faire votre demande en ligne ou sur place (au guichet) et
+                obtenir un numéro unique de demande de logement social (NUR/NUD)
+              </HousingActorDescription>
+            </div>
+            <HousingActorLink to="https://www.demande-logement-social.gouv.fr/index">
+              Créez ma demande de logement <ArrowForwardIcon />
+            </HousingActorLink>
+          </HousingActor>
+
+          <HousingActor>
+            <HousingActorImage src={logoALin} />
+            <div>
+              <HousingActorTitle>Offres de logement</HousingActorTitle>
+              <HousingActorDescription>
+                Salariés, consultez la plateforme d'offres de logements liées à
+                votre situation
+              </HousingActorDescription>
+            </div>
+            <HousingActorLink to="https://al-in.fr/">
+              Recherchez des logements <ArrowForwardIcon />
+            </HousingActorLink>
+          </HousingActor>
+        </HousingActorsContainer>
+
+        {(!!city?.average_houserent || !!city?.average_houseselled) && (
+          <HousingSimulator city={city} />
         )}
-      </HousingSimulator>
+      </HousingSearchContainer>
     </>
   )
 }
@@ -242,7 +260,5 @@ const CityHousingSimulator = ({ city, nbSocialHousing }) => {
 CityHousingSimulator.propTypes = {
   city: PropTypes.object.isRequired,
 }
-
-CityHousingSimulator.defaultProps = {}
 
 export default CityHousingSimulator

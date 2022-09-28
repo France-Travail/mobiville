@@ -37,7 +37,7 @@ import CityHousingSimulator from './CityHousingSimulator'
 
 const ElementContainer = styled.div`
   display: flex;
-  flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
+  flex-direction: column;
   justify-content: space-around;
   width: 100%;
   max-width: 1040px;
@@ -719,11 +719,8 @@ const CityPage = () => {
       )}
 
       <ElementContainer isMobile={isMobile}>
-        <CityHousingSimulator city={city}>
-          
-        </CityHousingSimulator>
+        <CityHousingSimulator city={city}></CityHousingSimulator>
       </ElementContainer>
-
 
       <ElementContainer isMobile={isMobile}>
         <ActionButton
