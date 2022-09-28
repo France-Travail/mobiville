@@ -719,7 +719,9 @@ const CityPage = () => {
       )}
 
       <ElementContainer isMobile={isMobile}>
-        <CityHousingSimulator city={city}></CityHousingSimulator>
+        <CityHousingSimulator city={city}>
+          
+        </CityHousingSimulator>
       </ElementContainer>
 
       <ElementContainer isMobile={isMobile}>
