@@ -9,24 +9,19 @@ import { CitySelect, JobSelect, ActionButton } from './'
 
 const Container = styled.div`
   width: 100%;
-
   display: flex;
   flex-direction: ${ ({ $isMobile }) => ($isMobile ? `column` : `row`) };
   justify-items: ${ ({ $isMobile }) => ($isMobile ? `start` : `center`) };
   gap: 8px;
-
   display: ${ ({ $hidden }) => ($hidden ? 'none' : 'visible') };
 `
-
 const CityForm = ({
-    hidden = false
+    hidden = false, job, region, useSession = false
 }) => {
-
     const isMobile = isMobileView(useWindowSize())
-
     const [ jobSelected, setJobSelected ] = useState('')
     const [ citySelected, setCitySelected ] = useState('')
-
+    
     const computeSearchPath = useCallback(() => {
         if (!!jobSelected) {
             if (!!citySelected) {
@@ -43,10 +38,12 @@ const CityForm = ({
 
     const onJobSelect = (job) => {
         setJobSelected(job)
+        sessionStorage.setItem("selectedJob", JSON.stringify(job))
     }
 
     const onCitySelect = (city) => {
         setCitySelected(city)
+        sessionStorage.setItem("selectedCity", JSON.stringify(city))
     }
 
     return (
@@ -57,14 +54,37 @@ const CityForm = ({
             
             <JobSelect
                 onSelect={(job) => onJobSelect(job)}
+                job={job}
+                useSession={useSession}
             ></JobSelect>
 
             <CitySelect
                 onSelect={(city) => onCitySelect(city)}
                 codeRome={!!jobSelected ? jobSelected.key : null}
+                region={region}
+                useSession={useSession}
             ></CitySelect>
 
-            <ActionButton
+            {useSession ? <button type="submit" style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '24px',
+                    gap: '8px',
+                    minHeight: '73px',
+                    boxShadow: 'rgb(0 0 0 / 30%) 0px 5px 10px',
+                    width: '184px',
+                    backgroundColor: '#191970',
+                    borderRadius: '20px',
+                    color: 'white',
+                    left: '856px',
+                    fontSize: '18px',
+                    fontWeight: '700',
+                    border: 'none',
+                    cursor: 'pointer'
+                }}>Rechercher</button>
+              : <ActionButton
                 isMainSearch={true}
                 style={{
                     minHeight: 73,
@@ -74,13 +94,16 @@ const CityForm = ({
                 path={computeSearchPath()}
                 isBlue
             ></ActionButton>
-
+        }
         </Container>
     )
 }
 
 CityForm.propTypes = {
     hidden: PropTypes.bool,
+    job:PropTypes.object, 
+    region: PropTypes.object, 
+    useSession: PropTypes.bool 
 }
 
 export default CityForm

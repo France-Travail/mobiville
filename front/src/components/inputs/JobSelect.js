@@ -5,7 +5,7 @@ import { throttle } from 'lodash'
 import { TextSearchInput } from '../../components'
 import { useCities } from '../../common/contexts/citiesContext'
 
-const JobSelect = ({ onSelect, defaultValue }) => {
+const JobSelect = ({ onSelect, defaultValue, job, useSession }) => {
 
     const {
         initializeJobsAutocomplete,
@@ -44,7 +44,7 @@ const JobSelect = ({ onSelect, defaultValue }) => {
             // loading={isLoadingJobsMatchingCriterion}
             onInputChange={onInputChange}
             onChange={onChange}
-            defaultValue={defaultValue}
+            defaultValue={useSession ? job : defaultValue}
             openThreshold={2}
             showEndAdornment={false}
         ></TextSearchInput>
@@ -54,6 +54,8 @@ const JobSelect = ({ onSelect, defaultValue }) => {
 JobSelect.propTypes = {
     defaultValue: PropTypes.any,
     onSelect: PropTypes.func.isRequired,
+    job: PropTypes.object, 
+    useSession: PropTypes.bool 
 }
 
 export default JobSelect

@@ -6,14 +6,13 @@ import { useCities } from "../../common/contexts/citiesContext"
 import { ALL_REGIONS_LABEL, ALL_REGION_TYPE, CITY_TYPE, REGION_TYPE } from "../../constants/search"
 import TextSearchInput from "./TextSearchInput"
 
-const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
+const CitySelect = ({ codeRome, onSelect, defaultValue, region, useSession }) => {
   const {
     criterions,
     autocompletedCities,
     onAutocomplete,
     // isLoadingAutocomplete
-  } = useCities()
-
+  } = useCities(useSession)
   const [ options, setOptions ] = useState([])
   const [ inputValue, setInputValue ] = useState('')
 
@@ -63,17 +62,16 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
   const onChange = (_, value) => {
     onSelect(value)
   }
-
   return (
     <TextSearchInput
       label="L'endroit qui vous fait envie"
       placeholder="Choisissez une région ou indiquez une ville"
       options={options ?? []}
       // loading={isLoadingAutocomplete}
-      disabled={(!codeRome || codeRome === '')}
+      disabled={!useSession && (!codeRome || codeRome === '')}
       onInputChange={onInputChange}
       onChange={onChange}
-      defaultValue={defaultValue}
+      defaultValue={useSession ? region : defaultValue}
       showEndAdornment={false}
     ></TextSearchInput>
   )
@@ -83,6 +81,8 @@ CitySelect.propTypes = {
   codeRome: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
   style: PropTypes.object,
+  region: PropTypes.object, 
+  useSession: PropTypes.bool 
 }
 
 export default CitySelect
