@@ -11,73 +11,79 @@ import { CitySelect, JobSelect, ActionButton } from './'
 const Container = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: ${ ({ $isMobile }) => ($isMobile ? `column` : `row`) };
-  justify-items: ${ ({ $isMobile }) => ($isMobile ? `start` : `center`) };
+  flex-direction: ${({ $isMobile }) => ($isMobile ? `column` : `row`)};
+  justify-items: ${({ $isMobile }) => ($isMobile ? `start` : `center`)};
   gap: 8px;
-  display: ${ ({ $hidden }) => ($hidden ? 'none' : 'visible') };
+  display: ${({ $hidden }) => ($hidden ? 'none' : 'visible')};
 `
 const CityForm = ({
-    hidden = false
+  hidden = false,
+  filters = { citySizeSelected: '', environmentSelected: '' },
 }) => {
-    const isMobile = isMobileView(useWindowSize())
+  const isMobile = isMobileView(useWindowSize())
 
-    const [ jobSelected, setJobSelected ] = useState('')
-    const [ citySelected, setCitySelected ] = useState('')
-    
-    const computeSearchPath = useCallback(() => {
-        if (!!jobSelected) {
-            if (!!citySelected) {
-                if (citySelected.type === CITY_TYPE) {
-                return `/city/${citySelected.id}-${citySelected.cityName}?codeRome=${jobSelected.key}`
-                } else if (citySelected.type === REGION_TYPE) {
-                return `/cities?codeRegion=${citySelected.id}&codeRome=${jobSelected.key}`
-                }
-            }
-            return `/cities?codeRome=${jobSelected.key}`
-        }
-        return ''
-    }, [jobSelected, citySelected])
+  const [jobSelected, setJobSelected] = useState('')
+  const [citySelected, setCitySelected] = useState('')
 
-    const onJobSelect = (job) => {
-        setJobSelected(job)
+  const computeSearchPath = useCallback(() => {
+    if (!!jobSelected && !!citySelected && citySelected.type === CITY_TYPE) {
+      // on va directement sur la page de la ville choisi
+      return `/city/${citySelected.id}-${citySelected.cityName}?codeRome=${jobSelected.key}`
     }
 
-    const onCitySelect = (city) => {
-        setCitySelected(city)
+    let url = '/cities'
+
+    if (!!citySelected && citySelected.type === REGION_TYPE) {
+      url += `?codeRegion=${citySelected.id}`
+    }
+    if (!!jobSelected) {
+      url += `&codeRome=${jobSelected.key}`
+    }
+    if (!!filters && !!filters.citySizeSelected) {
+      url += `&codeCity=${filters.citySizeSelected}`
+    }
+    if (!!filters && !!filters.environmentSelected) {
+      url += `&codeEnvironment=${filters.environmentSelected}`
     }
 
-    return (
-        <Container
-            $hidden={hidden}
-            $isMobile={isMobile}
-        >
-            
-            <JobSelect
-                onSelect={(job) => onJobSelect(job)}
-            ></JobSelect>
+    return url
+  }, [jobSelected, citySelected, filters])
 
-            <CitySelect
-                onSelect={(city) => onCitySelect(city)}
-                codeRome={!!jobSelected ? jobSelected.key : null}
-            ></CitySelect>
+  const onJobSelect = (job) => {
+    setJobSelected(job)
+  }
 
-            <ActionButton
-                isMainSearch={true}
-                style={{
-                    minHeight: 73,
-                    boxShadow: isMobile ? 'none' : '0px 5px 10px rgba(0, 0, 0, 0.3)',
-                    width: isMobile ? '100%' : 184,
-                }}
-                path={computeSearchPath()}
-                isBlue
-            ></ActionButton>
-        </Container>
-    )
+  const onCitySelect = (city) => {
+    setCitySelected(city)
+  }
+
+  return (
+    <Container $hidden={hidden} $isMobile={isMobile}>
+      <JobSelect onSelect={(job) => onJobSelect(job)}></JobSelect>
+
+      <CitySelect
+        onSelect={(city) => onCitySelect(city)}
+        codeRome={!!jobSelected ? jobSelected.key : null}
+      ></CitySelect>
+
+      <ActionButton
+        isMainSearch={true}
+        style={{
+          minHeight: 73,
+          boxShadow: isMobile ? 'none' : '0px 5px 10px rgba(0, 0, 0, 0.3)',
+          width: isMobile ? '100%' : 184,
+        }}
+        path={computeSearchPath()}
+        isBlue
+      ></ActionButton>
+    </Container>
+  )
 }
 
 CityForm.propTypes = {
-    hidden: PropTypes.bool,
-    job:PropTypes.object
+  hidden: PropTypes.bool,
+  job: PropTypes.object,
+  filters: PropTypes.object,
 }
 
 export default CityForm

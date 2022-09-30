@@ -5,7 +5,11 @@ import styled from 'styled-components'
 import { FormControl, MenuItem, Select, Button } from '@mui/material'
 
 import { useCities } from '../../../common/contexts/citiesContext'
-import { COLOR_WHITE, COLOR_PRIMARY, COLOR_OTHER_GREEN } from '../../../constants/colors'
+import {
+  COLOR_WHITE,
+  COLOR_PRIMARY,
+  COLOR_OTHER_GREEN,
+} from '../../../constants/colors'
 import CityForm from '../../../components/CityForm'
 import { ReactComponent as ResetFilterIcon } from '../../../assets/images/icons/reset.svg'
 
@@ -21,9 +25,9 @@ const SearchBar = styled.div`
     width: 150px;
   }
 
-  .gEkiVf{
+  .gEkiVf {
     padding: 0px;
-    border: 1px solid #F6F7FB;
+    border: 1px solid #f6f7fb;
   }
 
   position: relative;
@@ -95,13 +99,13 @@ const SelectBlock = styled(Select)`
       background-color: transparent !important;
       padding-right: 0 !important;
     }
-    
+
     fieldset {
       border: 1px solid ${COLOR_PRIMARY};
     }
 
-    svg{
-      color: ${COLOR_PRIMARY}
+    svg {
+      color: ${COLOR_PRIMARY};
     }
 
     width: 151px;
@@ -121,15 +125,16 @@ const SelectBlock = styled(Select)`
   }
 `
 const ResetFilterLabel = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    color: ${COLOR_PRIMARY};
-    margin-left: 8px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  color: ${COLOR_PRIMARY};
+  margin-left: 8px;
 `
 const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
   const { criterions, environmentCriterions, cityCriterions } = useCities()
+  // TODO a quoi sert le formulaire si la recherche se lance via cityForm ?
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       rome: '',
@@ -139,6 +144,8 @@ const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
     },
   })
   const [displayReset, setdisplayReset] = useState(false)
+  const [environmentSelected, setEnvironmentSelected] = useState('')
+  const [citySizeSelected, setCitySizeSelected] = useState('')
 
   useEffect(() => {
     if (!criterions?.criterions || !paramsUrl) {
@@ -177,17 +184,21 @@ const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
 
   const resetFilter = () => {
     setValue('environment', '')
+    setEnvironmentSelected('')
+    setCitySizeSelected('')
     setValue('city', '')
     setdisplayReset(false)
   }
 
-  const handleChangeEnv = event => {
+  const handleChangeEnv = (event) => {
     setValue('environment', event.target.value)
+    setEnvironmentSelected(event.target.value)
     setdisplayReset(true)
   }
 
-  const handleChangeCity = event => {
+  const handleChangeCity = (event) => {
     setValue('city', event.target.value)
+    setCitySizeSelected(event.target.value)
     setdisplayReset(true)
   }
 
@@ -196,72 +207,80 @@ const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
       <SearchPanel>
         <ContainerParent>
           <Container>
-            <CityForm />
+            <CityForm filters={{ environmentSelected, citySizeSelected }} />
           </Container>
         </ContainerParent>
         <Container>
-        <SearchBar className="wrapper">
-          <SearchFormControl sx={{ m: 1, width: 300}}>
-            <Controller
-              control={control}
-              name="environment"
-              defaultValue=""
-              render={({ field: { name, value} }) => (
-                <SelectBlock
-                  displayEmpty
-                  name={name}
-                  value={value}
-                  onChange={handleChangeEnv}
-                >
-                  <CustomMenuItem value="" style={{display:'none'}}>
-                    <ItemLabel>Cadre de vie</ItemLabel>
-                  </CustomMenuItem>
-                  {environmentCriterions.map((rome) => (
-                    <CustomMenuItem key={rome.key} value={rome.key}>
-                      <ItemLabel>{rome.label}</ItemLabel>
+          <SearchBar className="wrapper">
+            <SearchFormControl sx={{ m: 1, width: 300 }}>
+              <Controller
+                control={control}
+                name="environment"
+                defaultValue=""
+                render={({ field: { name, value } }) => (
+                  <SelectBlock
+                    displayEmpty
+                    name={name}
+                    value={value}
+                    onChange={handleChangeEnv}
+                  >
+                    <CustomMenuItem value="" style={{ display: 'none' }}>
+                      <ItemLabel>Cadre de vie</ItemLabel>
                     </CustomMenuItem>
-                  ))}
-                </SelectBlock>
-              )}
-            />
-          </SearchFormControl>
+                    {environmentCriterions.map((rome) => (
+                      <CustomMenuItem key={rome.key} value={rome.key}>
+                        <ItemLabel>{rome.label}</ItemLabel>
+                      </CustomMenuItem>
+                    ))}
+                  </SelectBlock>
+                )}
+              />
+            </SearchFormControl>
 
-          <SearchFormControl sx={{ m: 1, width: 300 }}>
-            <Controller
-              control={control}
-              name="city"
-              defaultValue=""
-              render={({ field: { name, value } }) => (
-                <SelectBlock
-                  name={name}
-                  value={value}
-                  onChange={handleChangeCity}
-                  displayEmpty
-                >
-                  <CustomMenuItem selected value="" style={{display:'none'}}>
-                    <ItemLabel>Taille de ville</ItemLabel>
-                  </CustomMenuItem>
-                  {cityCriterions.map((rome) => (
-                    <CustomMenuItem key={rome.key} value={rome.key}>
-                      <ItemLabel>{rome.label}</ItemLabel>
+            <SearchFormControl sx={{ m: 1, width: 300 }}>
+              <Controller
+                control={control}
+                name="city"
+                defaultValue=""
+                render={({ field: { name, value } }) => (
+                  <SelectBlock
+                    name={name}
+                    value={value}
+                    onChange={handleChangeCity}
+                    displayEmpty
+                  >
+                    <CustomMenuItem
+                      selected
+                      value=""
+                      style={{ display: 'none' }}
+                    >
+                      <ItemLabel>Taille de ville</ItemLabel>
                     </CustomMenuItem>
-                  ))}
-                </SelectBlock>
-              )}
-            />
-          </SearchFormControl>
-          { displayReset ? <Button onClick={resetFilter} style={{
-                    margin: 0,
-                    position: 'absolute',
-                    top: '50%',
-                    '-ms-transform': 'translateY(-50%)',
-                    transform: 'translateY(-50%)'}}>
-            <ResetFilterIcon />
-            <ResetFilterLabel>Réinitialiser</ResetFilterLabel> 
-          </Button> : null }      
-        </SearchBar>
+                    {cityCriterions.map((rome) => (
+                      <CustomMenuItem key={rome.key} value={rome.key}>
+                        <ItemLabel>{rome.label}</ItemLabel>
+                      </CustomMenuItem>
+                    ))}
+                  </SelectBlock>
+                )}
+              />
+            </SearchFormControl>
+            {displayReset ? (
+              <Button
+                onClick={resetFilter}
+                style={{
+                  margin: 0,
+                  position: 'absolute',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                }}
+              >
+                <ResetFilterIcon />
+                <ResetFilterLabel>Réinitialiser</ResetFilterLabel>
+              </Button>
+            ) : null}
+          </SearchBar>
         </Container>
-      
       </SearchPanel>
     </form>
   )
