@@ -109,11 +109,11 @@ export const formatCityTension = (tension) => {
 }
 
 export function getXDaysAgo(date) {
-  const daysAgo = moment().diff(date, "days");
+  const daysAgo = moment().diff(date, "days")
   if(daysAgo > 0) {
-    return daysAgo + ' jours';
+    return daysAgo + ' jours'
   } else {
-    let hoursAgo = moment().diff(date, "hours");
-    return hoursAgo + ' heures';
+    let hoursAgo = moment().diff(date, "hours")
+    return hoursAgo + ' heures'
   }
 }
