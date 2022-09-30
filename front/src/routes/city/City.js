@@ -20,7 +20,14 @@ import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import { useProfessions } from '../../common/contexts/professionsContext'
-import {COLOR_GRAY, COLOR_PRIMARY, COLOR_TAG_GREEN, COLOR_TAG_RED, COLOR_TEXT_PRIMARY} from '../../constants/colors'
+import {
+  COLOR_GRAY,
+  COLOR_PRIMARY,
+  COLOR_TAG_GREEN,
+  COLOR_TAG_RED,
+  COLOR_TEXT_PRIMARY,
+  COLOR_VERT_MOBIVILLE
+} from '../../constants/colors'
 
 import balance from '../../assets/images/icons/balance.svg'
 import bread from '../../assets/images/icons/bread.svg'
@@ -39,7 +46,7 @@ import pastille from '../../assets/images/icons/pastille.svg'
 import malette from '../../assets/images/icons/malette.svg'
 import profilEntreprise from '../../assets/images/icons/profil_entreprise.svg'
 import handshake from '../../assets/images/icons/handshake.svg'
-import {formatCityTension} from "../../utils/utils"
+import { formatCityTension, getXDaysAgo } from "../../utils/utils"
 
 const ElementContainer = styled.div`
   display: flex;
@@ -99,7 +106,7 @@ const BlockJobLabel = styled.div`
 const BlockContainer = styled.div`
   display: flex;
   flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
-  justify-content: space-around;
+  justify-content: ${({ isMobile }) => (isMobile ? 'space-around' : 'space-between')};;
   ${({ isMobile }) => (isMobile ? '' : 'width: 100%;')}
   max-width: 1040px;
   margin: ${({ isMobile }) => (isMobile ? '5px auto 8px auto ' : '0 auto')};
@@ -154,6 +161,7 @@ const BlockContentOffer = styled.div`
   border-radius: 8px;
   width: 336px;
   height: 170px;
+  padding: 16px;
 `
 
 const BlockOfferLabel = styled.div`
@@ -163,7 +171,7 @@ const BlockOfferLabel = styled.div`
   color: ${COLOR_PRIMARY};
 `
 
-const BlockOfferEnterprise = styled.div`
+const BlockOfferCompany = styled.div`
   font-weight: 700;
   font-size: 18px;
   line-height: 21px;
@@ -236,6 +244,51 @@ const BlockLinkSyle = `
     min-width: 232px;
   }
 `
+
+const BlockContentProximity = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 4px;
+  width: 500px;
+  height: 278px;
+  padding: 16px;
+`
+
+const BlockProximityTitle = styled.div`
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 28px;
+  color: ${COLOR_PRIMARY};
+`
+
+const BlockCompanyName = styled.span`
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  color: ${COLOR_PRIMARY};
+`
+
+const BlockCompanyCity = styled.span`
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: ${COLOR_PRIMARY};
+`
+
+const BlockCompanyDataFrom = styled.span`
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: ${COLOR_VERT_MOBIVILLE};
+  
+  > a {
+    color: ${COLOR_VERT_MOBIVILLE};
+    text-decoration: underline;
+  }
+`
+
 
 const BlockLinkDiv = styled.div`
   ${BlockLinkSyle}
@@ -354,8 +407,9 @@ const CityPage = () => {
     similarCitiesCriterionsQueryString,
     onSearchCloseCities,
     onSearchSimilarCities,
-    onSearchCompaniesCount,
-    companiesCount
+    onSearchCloseCompanies,
+    companiesCount,
+    closeCompanies
   } = useCities()
 
   const {
@@ -363,6 +417,7 @@ const CityPage = () => {
     onSearch: onSearchProfessions,
     onSearchInfosTravail,
     professions,
+    professionsCandidatsManquants,
     totalOffres,
     bassinTensionIndT,
   } = useProfessions()
@@ -407,6 +462,7 @@ const CityPage = () => {
   useEffect(() => {
     if (city && codeRome) {
       onSearchProfessions({ codeRome: [codeRome], insee: [city.insee_com] })
+      onSearchProfessions({ codeRome: [codeRome], insee: [city.insee_com], offresManqueCandidats: true })
       onSearchInfosTravail({ codeRome: codeRome, insee: city.insee_com }).then(
         setInfosTravail
       )
@@ -420,9 +476,10 @@ const CityPage = () => {
         codeRome,
         inseeCode: city.insee_com,
       })
-      onSearchCompaniesCount({
+      onSearchCloseCompanies({
         codeRome,
         insee: city.insee_com,
+        sort: 'distance'
       })
     }
   }, [city, codeRome])
@@ -580,11 +637,11 @@ const CityPage = () => {
               <BlockJobLabel>Entreprises</BlockJobLabel>
             </BlockJobInfos>
 
-            <BlockJobInfos>
+            {/*<BlockJobInfos>
               <BlockJobInfosImg src={handshake} />
               <BlockJobNumber>{totalOffres}</BlockJobNumber>
               <BlockJobLabel>Taux d'embauche</BlockJobLabel>
-            </BlockJobInfos>
+            </BlockJobInfos>*/}
           </BlockJobInfosContainer>
       )}
       {!isMobile && (
@@ -597,16 +654,16 @@ const CityPage = () => {
                     Offres de plus de 15 jours, comptant moins de 4 candidatures
                   </BlockHeaderP>
                 </BlockHeaderText>
-                <BlockHeaderRating></BlockHeaderRating>
               </BlockHeader>
               <BlockContainer isMobile={isMobile}>
-                {professions.slice(0,3).map((profession) => (
+                {professionsCandidatsManquants?.slice(0,3).map((profession) => (
                     <BlockContentOffer>
                       <BlockOfferLabel>{profession.appellationlibelle}</BlockOfferLabel>
-                      <BlockOfferEnterprise>{profession.entreprise.nom}</BlockOfferEnterprise>
+                      <BlockOfferCompany>{profession.entreprise.nom}</BlockOfferCompany>
                       <BlockOfferCity>{profession.lieuTravail.libelle}</BlockOfferCity>
-                      <BlockOfferContract><DescriptionIcon />{profession.typeContrat} {profession.dureeTravailLibelleConverti ? ' \u2022 ' + profession.dureeTravailLibelleConverti : ''}</BlockOfferContract>
-                      <BlockOfferDate><AccessTimeIcon />{profession.dateActualisation}</BlockOfferDate>
+                      <BlockOfferContract><DescriptionIcon/>{profession.typeContrat} {profession.dureeTravailLibelleConverti ? ' \u2022 ' + profession.dureeTravailLibelleConverti : ''}
+                      </BlockOfferContract>
+                      <BlockOfferDate><AccessTimeIcon/>Publié il y a {getXDaysAgo(profession.dateActualisation)}</BlockOfferDate>
                     </BlockContentOffer>
                 ))}
               </BlockContainer>
@@ -619,6 +676,36 @@ const CityPage = () => {
                     isBlue={true}
                 />
               </BlockLinkDiv>
+            </Block>
+          </BlockContainer>
+      )}
+
+      {!isMobile && (
+          <BlockContainer isMobile={isMobile}>
+            <Block isMobile={isMobile}>
+              <BlockHeader>
+                <BlockHeaderText isMobile={isMobile}>
+                  <BlockHeaderH2>À proximité</BlockHeaderH2>
+                </BlockHeaderText>
+              </BlockHeader>
+              <BlockContainer isMobile={isMobile}>
+                <BlockContentProximity>
+                  <BlockProximityTitle>Les entreprises qui recrutent</BlockProximityTitle>
+                  {closeCompanies?.slice(0,5).map((company) => (
+                      <div>
+                        <BlockCompanyName>{_.startCase(_.toLower(company.name))}</BlockCompanyName>{' '}
+                        <BlockCompanyCity>{_.capitalize(company.city)}</BlockCompanyCity>
+                      </div>
+                        ))}
+                  <BlockCompanyDataFrom>(Données issues de <a target="_blank" href="https://labonneboite.pole-emploi.fr/">La Bonne Boite</a>)</BlockCompanyDataFrom>
+                </BlockContentProximity>
+                {/*<BlockContentProximity>
+                  <BlockProximityTitle>Secteurs qui recrutent</BlockProximityTitle>
+                  {closeCompanies?.slice(0,5).map((company) => (
+                      <div>{company.name} {company.city}</div>
+                  ))}
+                </BlockContentProximity>*/}
+              </BlockContainer>
             </Block>
           </BlockContainer>
       )}

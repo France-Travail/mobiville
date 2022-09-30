@@ -49,7 +49,7 @@ const cache = setupCache({
 const apiEmploiStore = axios.create({
     adapter: cache.adapter
 })
-export async function searchJob({ codeRome = [], insee = [], distance = 10 }) {
+export async function searchJob({ codeRome = [], insee = [], distance = 10, offresManqueCandidats = false }) {
     const token = await getAccessToken()
     const callToOffres = function () {
         return apiEmploiStore.get(
@@ -59,6 +59,7 @@ export async function searchJob({ codeRome = [], insee = [], distance = 10 }) {
                     codeROME: codeRome.join(','),
                     commune: insee.join(','),
                     distance,
+                    offresManqueCandidats
                 },
                 headers: { Authorization: `Bearer ${token}` },
                 ...(config.PE_ENV && {proxy: false}),
@@ -66,7 +67,7 @@ export async function searchJob({ codeRome = [], insee = [], distance = 10 }) {
             })
             .then(async (result) => result)
             .catch((error) => {
-                console.log("pe-api.js searchJobCount() --> ERROR. Request : "+error.request.res.responseUrl+". Error status : "+error.response.status)
+                console.log("pe-api.js searchJob() --> ERROR. Request : " + error.request.res.responseUrl + ". Error status : " + error.response.status)
                 if(error.response.status !== 429) console.log(error)
                 return error.response
             })
@@ -83,7 +84,7 @@ async function fetchAndRetryIfNecessary (callAPIFn, tryNumber = 1) {
         return fetchAndRetryIfNecessary(callAPIFn, ++tryNumber)
     }
     if (tryNumber < MAX_RETRY_429 && response.status === 429)
-        console.log("pe-api.js fetchAndRetryIfNecessary() -->  ERROR : MAX Http 429 RETRY Reached : "+MAX_RETRY_429)
+        console.log("pe-api.js fetchAndRetryIfNecessary() -->  ERROR : MAX Http 429 RETRY Reached : " + MAX_RETRY_429)
     return response.data
 }
 
@@ -105,7 +106,7 @@ export async function searchJobCount({ codeRome = [], insee = [], distance = 10 
         })
        .then(async (result) => result)
        .catch((error) => {
-           console.log("pe-api.js searchJobCount() --> ERROR. Request : "+error.request.res.responseUrl+". Error status : "+error.response.status)
+           console.log("pe-api.js searchJobCount() --> ERROR. Request : " + error.request.res.responseUrl + ". Error status : " + error.response.status)
            if(error.response.status !== 429) console.log(error)
            return error.response
        })
@@ -197,16 +198,19 @@ export async function getSkillFromRome(codeRome) {
         .then((result) => result.data)
 }
 
-export async function companiesCount({ codeRome = '', insee = '', distance = 30 }) {
+export async function searchCloseCompanies({ codeRome = '', insee = '', distance = 30, page = 1, pageSize = 10, sort = 'score' }) {
     const token = await getAccessToken()
-    const callToCompaniesCount = function () {
+    const callToSearchCloseEnterprises = function () {
         return apiEmploiStore.get(
-            'https://api.emploi-store.fr/partenaire/labonneboite/v1/company/count',
+            'https://api.emploi-store.fr/partenaire/labonneboite/v1/company',
             {
                 params: {
                     rome_codes: codeRome,
                     commune_id: insee,
                     distance,
+                    page,
+                    page_size: pageSize,
+                    sort
                 },
                 headers: { Authorization: `Bearer ${token}` },
                 ...(config.PE_ENV && {proxy: false}),
@@ -214,10 +218,10 @@ export async function companiesCount({ codeRome = '', insee = '', distance = 30 
             })
             .then(async (result) => result)
             .catch((error) => {
-                console.log("pe-api.js companiesCount() --> ERROR. Request : "+error.request.res.responseUrl+". Error status : "+error.response.status)
+                console.log("pe-api.js searchCloseCompanies() --> ERROR. Request : " + error.request.res.responseUrl + ". Error status : " + error.response.status)
                 if(error.response.status !== 429) console.log(error)
                 return error.response
             })
     }
-    return fetchAndRetryIfNecessary(callToCompaniesCount)
+    return fetchAndRetryIfNecessary(callToSearchCloseEnterprises)
 }

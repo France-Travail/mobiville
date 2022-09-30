@@ -35,9 +35,9 @@ export const searchJobLabels = (body) =>
     .post('/api/cities/search-by-skill', body)
     .then((response) => response.data || [])
 
-export const searchCompaniesCount = (body) =>
+export const searchCloseCompanies = (body) =>
     axios
-        .post(`/api/cities/companies-count`, body)
+        .post(`/api/cities/search-close-companies`, body)
         .then((response) => response.data || null)
 
 export class companiesCount {

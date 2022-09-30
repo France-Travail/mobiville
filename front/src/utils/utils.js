@@ -107,3 +107,13 @@ export const formatCityTension = (tension) => {
   }
   return "Peu d'opportunités d'emploi"
 }
+
+export function getXDaysAgo(date) {
+  const daysAgo = moment().diff(date, "days");
+  if(daysAgo > 0) {
+    return daysAgo + ' jours';
+  } else {
+    let hoursAgo = moment().diff(date, "hours");
+    return hoursAgo + ' heures';
+  }
+}

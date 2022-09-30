@@ -38,7 +38,7 @@ router.post(
   '/search',
   async ({
     request: {
-      body: { codeRome, insee },
+      body: { codeRome, insee, offresManqueCandidats },
     },
     response,
   }) => {
@@ -46,6 +46,7 @@ router.post(
       codeRome,
       insee: getInseeCodesForSearch(insee),
       distance: 30,
+      offresManqueCandidats
     })
     response.body = {
       resultats: result ? result.resultats : [],
@@ -250,6 +251,7 @@ router.post(
     }
 
     response.body = {
+      bassinId: city['bassin.bassin_id'],
       bassinTensionIndT: city['bassin.tensions.ind_t'],
       min,
       max,
