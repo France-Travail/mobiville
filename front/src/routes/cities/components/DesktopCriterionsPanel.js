@@ -138,8 +138,6 @@ const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
       city: '',
     },
   })
-  const selectedJob = JSON.parse(sessionStorage.getItem("selectedJob")) || ''
-  const selectedCity = JSON.parse(sessionStorage.getItem("selectedCity")) || ''
   const [displayReset, setdisplayReset] = useState(false)
 
   useEffect(() => {
@@ -198,7 +196,7 @@ const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
       <SearchPanel>
         <ContainerParent>
           <Container>
-            <CityForm job={selectedJob} region={selectedCity} useSession={true}></CityForm>
+            <CityForm />
           </Container>
         </ContainerParent>
         <Container>

@@ -5,16 +5,42 @@ import _ from "lodash"
 import { useCities } from "../../common/contexts/citiesContext"
 import { ALL_REGIONS_LABEL, ALL_REGION_TYPE, CITY_TYPE, REGION_TYPE } from "../../constants/search"
 import TextSearchInput from "./TextSearchInput"
+import { useLocation } from "react-router-dom"
 
-const CitySelect = ({ codeRome, onSelect, defaultValue, region, useSession }) => {
+const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
   const {
     criterions,
     autocompletedCities,
     onAutocomplete,
     // isLoadingAutocomplete
-  } = useCities(useSession)
+  } = useCities()
+
+  const { search } = useLocation()
+
   const [ options, setOptions ] = useState([])
   const [ inputValue, setInputValue ] = useState('')
+  const [ value, setValue ] = useState(null)
+
+  useEffect(() => {
+    if (!!criterions && !!search) {
+      if (!!search.includes('codeRegion')) {
+        const entries = new URLSearchParams(search).entries()
+        for (let entry of entries) {
+            const [key, value] = entry
+            if (key === 'codeRegion') {
+                const foundRegion = criterions.regions.find(region => region.id === value)
+                if (!!foundRegion) {
+                  setValue(foundRegion)
+                } else {
+                  setValue({ label: ALL_REGIONS_LABEL, type: ALL_REGION_TYPE, style: 'primary' })
+                }
+            }
+        }
+      } else {
+        setValue({ label: ALL_REGIONS_LABEL, type: ALL_REGION_TYPE, style: 'primary' })
+      }
+    }
+  }, [search, criterions])
 
   useEffect(() => {
     // find best regions based on rome selected
@@ -58,20 +84,26 @@ const CitySelect = ({ codeRome, onSelect, defaultValue, region, useSession }) =>
     }
   }, [inputValue])
 
+  useEffect(() => {
+    onSelect(value)
+  }, [ value ])
+
   // trigger when an option is selected
   const onChange = (_, value) => {
-    onSelect(value)
+    setValue(value)
   }
+
   return (
     <TextSearchInput
       label="L'endroit qui vous fait envie"
       placeholder="Choisissez une région ou indiquez une ville"
+      value={value}
       options={options ?? []}
       // loading={isLoadingAutocomplete}
-      disabled={!useSession && (!codeRome || codeRome === '')}
+      disabled={(!codeRome || codeRome === '')}
       onInputChange={onInputChange}
       onChange={onChange}
-      defaultValue={useSession ? region : defaultValue}
+      defaultValue={defaultValue}
       showEndAdornment={false}
     ></TextSearchInput>
   )
@@ -80,9 +112,8 @@ const CitySelect = ({ codeRome, onSelect, defaultValue, region, useSession }) =>
 CitySelect.propTypes = {
   codeRome: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
-  style: PropTypes.object,
-  region: PropTypes.object, 
-  useSession: PropTypes.bool 
+  defaultValue: PropTypes.any,
+  style: PropTypes.object
 }
 
 export default CitySelect
