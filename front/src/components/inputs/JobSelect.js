@@ -70,6 +70,7 @@ const JobSelect = ({
             value={value}
             groupLabel="Métiers"
             options={jobsMatchingCriterions ?? []}
+            isOptionEqualToValue={(option, value) => option.label === value.label || (!value.label.includes('(') && option.key === value.key)}
             // loading={isLoadingJobsMatchingCriterion}
             onInputChange={onInputChange}
             onChange={onChange}
