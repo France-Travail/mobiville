@@ -13,7 +13,6 @@ import logoLogementSocial from '../../assets/images/logo-logement-social.png'
 
 import { Chip } from '@mui/material'
 
-import { Link } from 'react-router-dom'
 import HousingSimulator from './components/HousingSimulator'
 
 const HousingMetrics = styled.div`
