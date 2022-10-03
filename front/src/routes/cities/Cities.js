@@ -156,7 +156,6 @@ const Cities = () => {
   } = useCities()
   const [hoveredCityId, setHoveredCityId] = useState(null)
   const [selectedCityId, setSelectedCityId] = useState(null)
-  const citiesListRef = useRef(null)
   const citiesItemsRef = useRef([])
 
   const [formattedCities, setFormattedCities] = useState([])
@@ -200,11 +199,15 @@ const Cities = () => {
   }, [cities, params])
 
   useEffect(() => {
-    if (!!params?.codeRegion && !!criterions?.regions) {
-      const region = criterions.regions.find(
-        (region) => params.codeRegion === region.id
-      )
-      setRegionLabel(region.label)
+    if (!!params?.codeRegion) {
+      if (!!criterions?.regions) {
+        const region = criterions.regions.find(
+          (region) => params.codeRegion === region.id
+        )
+        setRegionLabel(region?.label ?? '')
+      }
+    } else {
+      setRegionLabel('')
     }
     if (!!params?.codeRome && !!criterions?.codeRomes) {
       const metier = criterions.codeRomes.find(
@@ -333,11 +336,7 @@ const Cities = () => {
   }
 
   const citiesList = (
-    <CitiesList
-      isMobile={isMobile}
-      ref={citiesListRef}
-      data-automation-id="cities-list"
-    >
+    <CitiesList isMobile={isMobile} data-automation-id="cities-list">
       <TitleContainer isMobile={isMobile}>
         <Title>
           {totalCities} {!!metierLabel ? `villes pour ${metierLabel}` : ''}{' '}
@@ -416,11 +415,7 @@ const Cities = () => {
             total={totalCities}
           />
         ) : (
-          <DesktopCriterionsPanel
-            paramsUrl={params}
-            total={totalCities}
-            onSubmit={onSubmit}
-          />
+          <DesktopCriterionsPanel paramsUrl={params} />
         )}
 
         {isMobile ? (

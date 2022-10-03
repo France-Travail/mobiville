@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Controller, useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { FormControl, MenuItem, Select, Button } from '@mui/material'
 
 import { useCities } from '../../../common/contexts/citiesContext'
-import { COLOR_WHITE, COLOR_PRIMARY, COLOR_OTHER_GREEN } from '../../../constants/colors'
+import {
+  COLOR_WHITE,
+  COLOR_PRIMARY,
+  COLOR_OTHER_GREEN,
+} from '../../../constants/colors'
 import CityForm from '../../../components/CityForm'
 import { ReactComponent as ResetFilterIcon } from '../../../assets/images/icons/reset.svg'
 
@@ -21,9 +24,9 @@ const SearchBar = styled.div`
     width: 150px;
   }
 
-  .gEkiVf{
+  .gEkiVf {
     padding: 0px;
-    border: 1px solid #F6F7FB;
+    border: 1px solid #f6f7fb;
   }
 
   position: relative;
@@ -95,13 +98,13 @@ const SelectBlock = styled(Select)`
       background-color: transparent !important;
       padding-right: 0 !important;
     }
-    
+
     fieldset {
       border: 1px solid ${COLOR_PRIMARY};
     }
 
-    svg{
-      color: ${COLOR_PRIMARY}
+    svg {
+      color: ${COLOR_PRIMARY};
     }
 
     width: 151px;
@@ -121,163 +124,117 @@ const SelectBlock = styled(Select)`
   }
 `
 const ResetFilterLabel = styled.span`
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    color: ${COLOR_PRIMARY};
-    margin-left: 8px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  color: ${COLOR_PRIMARY};
+  margin-left: 8px;
 `
-const DesktopCriterionsPanel = ({ paramsUrl, total, onSubmit }) => {
-  const { criterions, environmentCriterions, cityCriterions } = useCities()
-  const { control, handleSubmit, setValue } = useForm({
-    defaultValues: {
-      rome: '',
-      region: '',
-      environment: '',
-      city: '',
-    },
-  })
-  const selectedJob = JSON.parse(sessionStorage.getItem("selectedJob")) || ''
-  const selectedCity = JSON.parse(sessionStorage.getItem("selectedCity")) || ''
+const DesktopCriterionsPanel = ({ paramsUrl }) => {
+  const { environmentCriterions, cityCriterions } = useCities()
+
   const [displayReset, setdisplayReset] = useState(false)
-
-  useEffect(() => {
-    if (!criterions?.criterions || !paramsUrl) {
-      return
-    }
-
-    const rome = paramsUrl.codeRome || ''
-    const region = paramsUrl.codeRegion || ''
-
-    const values = []
-    values.push({ name: 'rome', value: rome })
-    values.push({ name: 'region', value: region })
-
-    if (paramsUrl.codeEnvironment) {
-      const environmentFound = environmentCriterions.find(
-        (c) => paramsUrl.codeEnvironment === c.key
-      )
-
-      if (environmentFound) {
-        values.push({ name: 'environment', value: environmentFound.key })
-      }
-    }
-
-    if (paramsUrl.codeCity) {
-      const cityFound = cityCriterions.find((c) => paramsUrl.codeCity === c.key)
-
-      if (cityFound) {
-        values.push({ name: 'city', value: cityFound.key })
-      }
-    }
-
-    values.forEach(({ name, value }) =>
-      setValue(name, value, { shouldDirty: true })
-    )
-  }, [paramsUrl, criterions, environmentCriterions, cityCriterions])
+  const [environmentSelected, setEnvironmentSelected] = useState('')
+  const [citySizeSelected, setCitySizeSelected] = useState('')
 
   const resetFilter = () => {
-    setValue('environment', '')
-    setValue('city', '')
+    setEnvironmentSelected('')
+    setCitySizeSelected('')
     setdisplayReset(false)
   }
 
-  const handleChangeEnv = event => {
-    setValue('environment', event.target.value)
+  const handleChangeEnv = (event) => {
+    setEnvironmentSelected(event.target.value)
     setdisplayReset(true)
   }
 
-  const handleChangeCity = event => {
-    setValue('city', event.target.value)
+  const handleChangeCity = (event) => {
+    setCitySizeSelected(event.target.value)
     setdisplayReset(true)
   }
+
+  useEffect(() => {
+    if (!!paramsUrl.codeCity) {
+      setCitySizeSelected(paramsUrl.codeCity)
+      setdisplayReset(true)
+    }
+    if (!!paramsUrl.codeEnvironment) {
+      setEnvironmentSelected(paramsUrl.codeEnvironment)
+      setdisplayReset(true)
+    }
+  }, [paramsUrl])
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <SearchPanel>
-        <ContainerParent>
-          <Container>
-            <CityForm job={selectedJob} region={selectedCity} useSession={true}></CityForm>
-          </Container>
-        </ContainerParent>
+    <SearchPanel>
+      <ContainerParent>
         <Container>
+          <CityForm filters={{ environmentSelected, citySizeSelected }} />
+        </Container>
+      </ContainerParent>
+      <Container>
         <SearchBar className="wrapper">
-          <SearchFormControl sx={{ m: 1, width: 300}}>
-            <Controller
-              control={control}
-              name="environment"
-              defaultValue=""
-              render={({ field: { name, value} }) => (
-                <SelectBlock
-                  displayEmpty
-                  name={name}
-                  value={value}
-                  onChange={handleChangeEnv}
-                >
-                  <CustomMenuItem value="" style={{display:'none'}}>
-                    <ItemLabel>Cadre de vie</ItemLabel>
-                  </CustomMenuItem>
-                  {environmentCriterions.map((rome) => (
-                    <CustomMenuItem key={rome.key} value={rome.key}>
-                      <ItemLabel>{rome.label}</ItemLabel>
-                    </CustomMenuItem>
-                  ))}
-                </SelectBlock>
-              )}
-            />
+          <SearchFormControl sx={{ m: 1, width: 300 }}>
+            <SelectBlock
+              displayEmpty
+              defaultValue={''}
+              onChange={handleChangeEnv}
+              value={environmentSelected}
+            >
+              <CustomMenuItem value="" style={{ display: 'none' }}>
+                <ItemLabel>Cadre de vie</ItemLabel>
+              </CustomMenuItem>
+              {environmentCriterions.map((rome) => (
+                <CustomMenuItem key={rome.key} value={rome.key}>
+                  <ItemLabel>{rome.label}</ItemLabel>
+                </CustomMenuItem>
+              ))}
+            </SelectBlock>
           </SearchFormControl>
 
           <SearchFormControl sx={{ m: 1, width: 300 }}>
-            <Controller
-              control={control}
-              name="city"
-              defaultValue=""
-              render={({ field: { name, value } }) => (
-                <SelectBlock
-                  name={name}
-                  value={value}
-                  onChange={handleChangeCity}
-                  displayEmpty
-                >
-                  <CustomMenuItem selected value="" style={{display:'none'}}>
-                    <ItemLabel>Taille de ville</ItemLabel>
-                  </CustomMenuItem>
-                  {cityCriterions.map((rome) => (
-                    <CustomMenuItem key={rome.key} value={rome.key}>
-                      <ItemLabel>{rome.label}</ItemLabel>
-                    </CustomMenuItem>
-                  ))}
-                </SelectBlock>
-              )}
-            />
+            <SelectBlock
+              displayEmpty
+              defaultValue={''}
+              onChange={handleChangeCity}
+              value={citySizeSelected}
+            >
+              <CustomMenuItem value="" style={{ display: 'none' }}>
+                <ItemLabel>Taille de ville</ItemLabel>
+              </CustomMenuItem>
+              {cityCriterions.map((rome) => (
+                <CustomMenuItem key={rome.key} value={rome.key}>
+                  <ItemLabel>{rome.label}</ItemLabel>
+                </CustomMenuItem>
+              ))}
+            </SelectBlock>
           </SearchFormControl>
-          { displayReset ? <Button onClick={resetFilter} style={{
-                    margin: 0,
-                    position: 'absolute',
-                    top: '50%',
-                    '-ms-transform': 'translateY(-50%)',
-                    transform: 'translateY(-50%)'}}>
-            <ResetFilterIcon />
-            <ResetFilterLabel>Réinitialiser</ResetFilterLabel> 
-          </Button> : null }      
+          {displayReset ? (
+            <Button
+              onClick={resetFilter}
+              style={{
+                margin: 0,
+                position: 'absolute',
+                top: '50%',
+                transform: 'translateY(-50%)',
+              }}
+            >
+              <ResetFilterIcon />
+              <ResetFilterLabel>Réinitialiser</ResetFilterLabel>
+            </Button>
+          ) : null}
         </SearchBar>
-        </Container>
-      
-      </SearchPanel>
-    </form>
+      </Container>
+    </SearchPanel>
   )
 }
 
 DesktopCriterionsPanel.propTypes = {
   paramsUrl: PropTypes.object,
-  total: PropTypes.number,
-  onSubmit: PropTypes.func.isRequired,
 }
 
 DesktopCriterionsPanel.defaultProps = {
   paramsUrl: [],
-  total: 0,
 }
 
-export default React.memo(DesktopCriterionsPanel)
+export default memo(DesktopCriterionsPanel)
