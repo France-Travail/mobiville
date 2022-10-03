@@ -1,5 +1,5 @@
 import { Op } from 'sequelize'
-import { compact, mean } from 'lodash'
+import { compact, mean, toLower, deburr, replace, words } from 'lodash'
 import {
   ALT_IS_MOUNTAIN,
   CRITERIONS,
@@ -18,15 +18,17 @@ import {
   SIDE_SEA,
 } from '../constants/criterion'
 import {
-  getAveragePricing,
   getFranceShape,
   getFrenchWeatherStation,
   loadWeatherFile,
   wikipediaDetails,
   getTensionsCities,
-  getAverageHouseRent,
   getCrawledImageCity,
   getAllRegions,
+  getHousePricing,
+  getAllBassins,
+  getAveragePricing,
+  getAverageHouseRent,
 } from '../utils/api'
 import { distanceBetweenToCoordinates, sleep } from '../utils/utils'
 import { NO_DESCRIPTION_MSG } from '../constants/messages'
@@ -58,11 +60,10 @@ export default (sequelizeInstance, Model) => {
       }),
       {}
     )
-    const data = []
 
-    for (let i = 0; i < cities.length; i++) {
-      const city = cities[i]
-      data.push({
+    const data = cities.map((city) => {
+
+      return {
         code_comm: city.code_commune,
         nom_dept: city.departement,
         statut: city.statut,
@@ -87,9 +88,9 @@ export default (sequelizeInstance, Model) => {
         population: city.population,
         total_social_housing: isNaN(parseInt(city.lgt_sociaux, 10))
           ? null
-          : parseInt(city.lgt_sociaux, 10),
-      })
-    }
+          : parseInt(city.lgt_sociaux, 10)
+      }
+    })
 
     await Model.bulkCreate(data, {
       updateOnDuplicate: ['total_social_housing'],
@@ -351,7 +352,7 @@ export default (sequelizeInstance, Model) => {
 
     for (let i = 0; i < cities.length; i++) {
       let city = cities[i]
-      const options = {}
+      let options = {}
       console.log(
         `[START] Sync city ${city.dataValues.id} - ${city.dataValues.nom_comm}`
       )
@@ -374,20 +375,27 @@ export default (sequelizeInstance, Model) => {
       options.photo = photo
       options.description = description
 
+      // données sur les logements
+      const houseRentF2F4 = await Model.getAverageHouseRentF2F4(city.insee_com)
+      options = {
+        ...options,
+        ...houseRentF2F4
+      }
+
       if (city.dataValues.average_houseselled === null) {
         options.average_houseselled = await Model.getAveragePricing(
           city.insee_com
         )
       }
 
-      if (city.dataValues.city_house_tension === null) {
-        options.city_house_tension = await Model.getCityHouseTension(
+      if (city.dataValues.average_houserent === null) {
+        options.average_houserent = await Model.getAverageHouseRent(
           city.insee_com
         )
       }
 
-      if (city.dataValues.average_houserent === null) {
-        options.average_houserent = await Model.getAverageHouseRent(
+      if (city.dataValues.city_house_tension === null) {
+        options.city_house_tension = await Model.getCityHouseTension(
           city.insee_com
         )
       }
@@ -632,6 +640,21 @@ export default (sequelizeInstance, Model) => {
     }
   }
 
+  Model.getCityHouseTension = async (cityInsee) => {
+    let allIntoFile = Model.cacheLoadAverageHouseTension
+    if (!allIntoFile) {
+      allIntoFile = await getTensionsCities()
+      Model.cacheLoadAverageHouseTension = allIntoFile
+    }
+
+    const find = allIntoFile.find((c) => c.codeInsee === cityInsee)
+    if (find) {
+      return find.frais
+    }
+
+    return 0
+  }
+
   Model.getAveragePricing = async (cityInsee) => {
     let allIntoFile = Model.cacheLoadAveragePricing
     if (!allIntoFile) {
@@ -647,19 +670,57 @@ export default (sequelizeInstance, Model) => {
     return 0
   }
 
-  Model.getCityHouseTension = async (cityInsee) => {
-    let allIntoFile = Model.cacheLoadAverageHouseTension
-    if (!allIntoFile) {
-      allIntoFile = await getTensionsCities()
-      Model.cacheLoadAverageHouseTension = allIntoFile
+  Model.getAverageHouseRentF2F4 = async (cityInsee) => {
+    // load file
+    let housePricings = Model.cacheLoadAverageHouseRent
+    if (!housePricings) {
+      housePricings = await getHousePricing()
+      Model.cacheLoadAverageHouseRent = housePricings
     }
 
-    const find = allIntoFile.find((c) => c.codeInsee === cityInsee)
-    if (find) {
-      return find.frais
+    // constants
+    const APPART_2P = "Appart 2P"
+    const APPART_4P = "Appart 4P+"
+
+    const bassins = await getAllBassins()
+
+    const cityBassin = bassins.find(bassin => {
+      return `${bassin.code_commune_insee}` === `${cityInsee}`
+    })
+
+    const cityHouseRent = housePricings
+      .filter(housePricing =>
+        !!housePricing
+        && !!housePricing.agglomeration
+        && !!cityBassin
+        && !!cityBassin.bassin_name
+        && words(toLower(deburr(housePricing.agglomeration)), /[^, ,']+/g).includes(toLower(deburr(cityBassin.bassin_name)).replaceAll(' ', '-')))
+    
+    let cityHouseRentF2 = null
+    let cityHouseRentF4 = null
+
+    if (!!cityHouseRent && cityHouseRent.length > 0) {
+      cityHouseRentF2 = Math.max(...cityHouseRent
+        .filter(houseRent => houseRent.nombre_pieces_homogene === APPART_2P)
+        .map(houseRent => houseRent.moyenne_loyer_mensuel))
+
+      cityHouseRentF4 = Math.max(...cityHouseRent
+        .filter(houseRent => houseRent.nombre_pieces_homogene === APPART_4P)
+        .map(houseRent => houseRent.moyenne_loyer_mensuel))
+      
+      // détenction d'incohérence -> pas de données pour les F4
+      if (cityHouseRentF4 <= cityHouseRentF2) {
+        cityHouseRentF4 = null
+      }
+    }
+    if (!!cityInsee && !!cityBassin && !!cityBassin.bassin_name) {
+      console.log(`City ${cityInsee} (bassin ${cityBassin.bassin_name}) | ${cityHouseRentF2} ${cityHouseRentF4}`)
     }
 
-    return 0
+    return {
+      average_houserent_f2: cityHouseRentF2,
+      average_houserent_f4: cityHouseRentF4
+    }
   }
 
   Model.getAverageHouseRent = async (cityInsee) => {

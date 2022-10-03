@@ -59,15 +59,14 @@ export function getAllBassins() {
         }
       }
     )
-  }).then((list) =>
-    list.map((c) => ({
+  }).then((list) => (list.map((c) => ({
       ...c,
       code_commune: c.ccommune,
       nom_com: c.nomcom,
       bassin_id: c.be19,
-      bassin_name: c.nombre19,
+      bassin_name: c.nombe19,
     }))
-  )
+  ))
 }
 
 export function getFranceShape() {
@@ -176,6 +175,21 @@ export function getAveragePricing() {
   return new Promise((resolve, reject) => {
     readFile(
       __dirname + '/../assets/datas/dvf-communes-2019.csv',
+      (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(csvToArrayJson(data))
+        }
+      }
+    )
+  })
+}
+
+export function getHousePricing() {
+  return new Promise((resolve, reject) => {
+    readFile(
+      __dirname + '/../assets/datas/house-pricing.csv',
       (err, data) => {
         if (err) {
           reject(err)
