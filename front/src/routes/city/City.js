@@ -5,6 +5,8 @@ import queryString from 'query-string'
 import { Helmet } from 'react-helmet-async'
 import styled from 'styled-components'
 import { CircularProgress } from '@mui/material'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import DescriptionIcon from '@mui/icons-material/Description'
 
 import { ActionButton, MainLayout } from '../../components'
 import CityHeader from './CityHeader'
@@ -12,12 +14,20 @@ import CityJobs from './CityJobs'
 import CityLife from './CityLife'
 import CityHousing from './CityHousing'
 import CitySubHeader from './CitySubHeader'
+import CityHousingSimulator from './CityHousingSimulator'
 
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import { useProfessions } from '../../common/contexts/professionsContext'
-import { COLOR_GRAY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
+import {
+  COLOR_GRAY,
+  COLOR_PRIMARY,
+  COLOR_TAG_GREEN,
+  COLOR_TAG_RED,
+  COLOR_TEXT_PRIMARY,
+  COLOR_VERT_MOBIVILLE
+} from '../../constants/colors'
 
 import balance from '../../assets/images/icons/balance.svg'
 import bread from '../../assets/images/icons/bread.svg'
@@ -33,7 +43,10 @@ import redEllipse from '../../assets/images/icons/red_ellipse.svg'
 import greenEllipse from '../../assets/images/icons/green_ellipse.svg'
 import restaurantsIcon from '../../assets/images/icons/restaurants.svg'
 import pastille from '../../assets/images/icons/pastille.svg'
-import CityHousingSimulator from './CityHousingSimulator'
+import malette from '../../assets/images/icons/malette.svg'
+import profilEntreprise from '../../assets/images/icons/profil_entreprise.svg'
+// import handshake from '../../assets/images/icons/handshake.svg'
+import { formatCityTension, getXDaysAgo } from "../../utils/utils"
 
 const ElementContainer = styled.div`
   display: flex;
@@ -47,10 +60,53 @@ const ElementContainer = styled.div`
   line-height: 24px;
 `
 
-const BlockContainer = styled.div`
+const BlockJobInfosContainer = styled.div`
   display: flex;
   flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
   justify-content: space-around;
+  ${({ isMobile }) => (isMobile ? '' : 'width: 100%;')}
+  max-width: 450px;
+  margin: ${({ isMobile }) => (isMobile ? '5px auto 8px auto ' : '0 auto')};
+  margin-bottom: 8px;
+`
+
+const BlockJobInfos = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: ${({ isMobile }) => (isMobile ? '20px' : '32px')};
+  color: ${COLOR_TEXT_PRIMARY};
+
+  &:not(:first-of-type) {
+    margin-left: ${({ isMobile }) => (isMobile ? 0 : '16px')};
+  }
+`
+
+const BlockJobInfosImg = styled.img.attrs({ alt: '' })`
+  height: 50px;
+  width: 50px;
+`
+
+const BlockJobNumber = styled.div`
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 28px;
+  color: ${COLOR_PRIMARY};
+`
+
+const BlockJobLabel = styled.div`
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  color: ${COLOR_PRIMARY};
+`
+
+const BlockContainer = styled.div`
+  display: flex;
+  flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
+  justify-content: ${({ isMobile }) => (isMobile ? 'space-around' : 'space-between')};;
   ${({ isMobile }) => (isMobile ? '' : 'width: 100%;')}
   max-width: 1040px;
   margin: ${({ isMobile }) => (isMobile ? '5px auto 8px auto ' : '0 auto')};
@@ -80,11 +136,13 @@ const BlockHeaderH2 = styled.h2`
   font-weight: 900;
   font-size: 24px;
   line-height: 28px;
+  color: ${COLOR_PRIMARY};
 `
 const BlockHeaderP = styled.p`
   margin: 8px 0px;
   font-size: 16px;
   line-height: 24px;
+  color: ${COLOR_PRIMARY};
 `
 const BlockContent = styled.div`
   height: 272px;
@@ -93,6 +151,56 @@ const BlockContent = styled.div`
   border: 1px ${COLOR_GRAY} solid;
   border-radius: 8px;
   ${({ isMobile }) => (isMobile ? 'width: 310px;' : '')}
+`
+
+const BlockContentOffer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  background-color: #fff;
+  border-radius: 8px;
+  width: 336px;
+  height: 170px;
+  padding: 16px;
+`
+
+const BlockOfferLabel = styled.div`
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 21px;
+  color: ${COLOR_PRIMARY};
+`
+
+const BlockOfferCompany = styled.div`
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 21px;
+  color: ${COLOR_PRIMARY};
+`
+
+const BlockOfferCity = styled.div`
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  color: ${COLOR_TEXT_PRIMARY};
+`
+
+const BlockOfferContract = styled.div`
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: ${COLOR_PRIMARY};
+  display: flex;
+  align-items: center;
+`
+
+const BlockOfferDate = styled.div`
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 14px;
+  color: ${COLOR_PRIMARY};
+  display: flex;
+  align-items: center;
 `
 
 const BlockContentCity = styled.div`
@@ -136,6 +244,51 @@ const BlockLinkSyle = `
     min-width: 232px;
   }
 `
+
+const BlockContentProximity = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #fff;
+  border-radius: 4px;
+  width: 500px;
+  height: 278px;
+  padding: 16px;
+`
+
+const BlockProximityTitle = styled.div`
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 28px;
+  color: ${COLOR_PRIMARY};
+`
+
+const BlockCompanyName = styled.span`
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 19px;
+  color: ${COLOR_PRIMARY};
+`
+
+const BlockCompanyCity = styled.span`
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: ${COLOR_PRIMARY};
+`
+
+const BlockCompanyDataFrom = styled.span`
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 24px;
+  color: ${COLOR_VERT_MOBIVILLE};
+  
+  > a {
+    color: ${COLOR_VERT_MOBIVILLE};
+    text-decoration: underline;
+  }
+`
+
 
 const BlockLinkDiv = styled.div`
   ${BlockLinkSyle}
@@ -184,22 +337,19 @@ const TitlesContainer = styled.div`
   flex-direction: column;
   text-align: ${({ isMobile }) => (isMobile ? 'center' : 'start')};
   padding: ${({ isMobile }) => (isMobile ? '8px 0' : '0')};
-  width: 840px;
+  width: 1040px;
   color: ${COLOR_TEXT_PRIMARY};
-`
-
-const CityJob = styled.span`
-  font-weight: 400;
 `
 
 const CityName = styled.h1`
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 900;
-  font-size: 24px;
-  line-height: 28px;
-  margin-top: 0;
-  margin-bottom: 0;
+  font-size: 36px;
+  line-height: 42px;
+  margin-top: 8px;
+  margin-bottom: 34px;
+  color: ${COLOR_PRIMARY};
 `
 
 const RegionName = styled.p`
@@ -211,10 +361,30 @@ const RegionName = styled.p`
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
+  color: ${COLOR_PRIMARY};
 
   img {
     margin: 2px 4px;
   }
+`
+
+const TagsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: auto;
+  margin-top: 28px;
+`
+
+const Tag = styled.div`
+  padding: 4px 6px;
+  border-radius: 8px;
+
+  font-size: 12px;
+  font-weight: 500;
+  color: ${COLOR_PRIMARY};
+  background: white;
+  background: ${({ $color }) => ($color ? $color : COLOR_GRAY)};
 `
 
 const BAKERY_CODE = 'B203'
@@ -237,6 +407,9 @@ const CityPage = () => {
     similarCitiesCriterionsQueryString,
     onSearchCloseCities,
     onSearchSimilarCities,
+    onSearchCloseCompanies,
+    companiesCount,
+    closeCompanies
   } = useCities()
 
   const {
@@ -244,7 +417,9 @@ const CityPage = () => {
     onSearch: onSearchProfessions,
     onSearchInfosTravail,
     professions,
+    professionsCandidatsManquants,
     totalOffres,
+    bassinTensionIndT,
   } = useProfessions()
 
   const { insee, section } = useParams()
@@ -287,6 +462,7 @@ const CityPage = () => {
   useEffect(() => {
     if (city && codeRome) {
       onSearchProfessions({ codeRome: [codeRome], insee: [city.insee_com] })
+      onSearchProfessions({ codeRome: [codeRome], insee: [city.insee_com], offresManqueCandidats: true })
       onSearchInfosTravail({ codeRome: codeRome, insee: city.insee_com }).then(
         setInfosTravail
       )
@@ -299,6 +475,11 @@ const CityPage = () => {
         longitude: city.geo_point_2d_y,
         codeRome,
         inseeCode: city.insee_com,
+      })
+      onSearchCloseCompanies({
+        codeRome,
+        insee: city.insee_com,
+        sort: 'distance'
       })
     }
   }, [city, codeRome])
@@ -389,8 +570,7 @@ const CityPage = () => {
       </RegionName>
       {!isMobile && (
         <CityName isMobile={isMobile}>
-          {_.capitalize(city.nom_comm)}{' '}
-          <CityJob>pour le métier {romeLabel} </CityJob>{' '}
+          {_.capitalize(city.nom_comm)}{' '}pour le métier {romeLabel}
         </CityName>
       )}
       {isMobile && (
@@ -430,175 +610,277 @@ const CityPage = () => {
         titlesNode={titlesNode}
       />
 
-      <BlockContainer isMobile={isMobile}>
-        <Block isMobile={isMobile}>
-          <BlockHeader>
-            <BlockHeaderText>
-              <BlockHeaderH2>Emploi</BlockHeaderH2>
-            </BlockHeaderText>
-            <BlockHeaderRating></BlockHeaderRating>
-          </BlockHeader>
-          <BlockContent isMobile={isMobile}>
-            <BlockContentUl>
-              <BlockContentLi>
-                <BlockContentLiImg src={balance} />
-                <BlockContentLiDesc>
-                  <BlockContentLiValue>
-                    {' '}
-                    {bassinTension || deptTension || 'À venir'}{' '}
-                  </BlockContentLiValue>
-                  Offres pour
-                  <BlockContentLiValue> 10 </BlockContentLiValue>
-                  demandeurs
-                </BlockContentLiDesc>
-              </BlockContentLi>
+      {!isMobile && (
+          <TagsContainer>
+            <Tag
+                $color={
+                  bassinTensionIndT < 4
+                      ? COLOR_TAG_GREEN
+                      : COLOR_TAG_RED
+                }
+            >
+              {formatCityTension(bassinTensionIndT)}
+            </Tag>
+          </TagsContainer>
+      )}
+      {!isMobile && (
+          <BlockJobInfosContainer isMobile={isMobile}>
+            <BlockJobInfos>
+              <BlockJobInfosImg src={malette} />
+              <BlockJobNumber>{totalOffres}</BlockJobNumber>
+              <BlockJobLabel>Offres d'emploi</BlockJobLabel>
+            </BlockJobInfos>
 
-              <BlockContentLi>
-                <BlockContentLiImg src={euro} />
-                <BlockContentLiDesc>
-                  <BlockContentLiValue>
-                    {infosTravail?.min > 0
-                      ? `${infosTravail.min}€ à ${infosTravail.max}€ `
-                      : `A venir `}
-                  </BlockContentLiValue>
-                  Salaire brut
-                </BlockContentLiDesc>
-              </BlockContentLi>
+            <BlockJobInfos>
+              <BlockJobInfosImg src={profilEntreprise} />
+              <BlockJobNumber>{companiesCount}</BlockJobNumber>
+              <BlockJobLabel>Entreprises</BlockJobLabel>
+            </BlockJobInfos>
 
-              <BlockContentLi>
-                <BlockContentLiImg src={briefcase} />
-                <BlockContentLiDesc>
-                  <BlockContentLiValue>{totalOffres} </BlockContentLiValue>
-                  Offres d’emploi
-                </BlockContentLiDesc>
-              </BlockContentLi>
+            {/*<BlockJobInfos>
+              <BlockJobInfosImg src={handshake} />
+              <BlockJobNumber>{totalOffres}</BlockJobNumber>
+              <BlockJobLabel>Taux d'embauche</BlockJobLabel>
+            </BlockJobInfos>*/}
+          </BlockJobInfosContainer>
+      )}
+      {!isMobile && (
+          <BlockContainer isMobile={isMobile}>
+            <Block isMobile={isMobile}>
+              <BlockHeader>
+                <BlockHeaderText isMobile={isMobile}>
+                  <BlockHeaderH2>Les offres d'emploi avec plus d'opportunités</BlockHeaderH2>
+                  <BlockHeaderP>
+                    Offres de plus de 15 jours, comptant moins de 4 candidatures
+                  </BlockHeaderP>
+                </BlockHeaderText>
+              </BlockHeader>
+              <BlockContainer isMobile={isMobile}>
+                {professionsCandidatsManquants?.slice(0,3).map((profession) => (
+                    <BlockContentOffer>
+                      <BlockOfferLabel>{profession.appellationlibelle}</BlockOfferLabel>
+                      <BlockOfferCompany>{profession.entreprise.nom}</BlockOfferCompany>
+                      <BlockOfferCity>{profession.lieuTravail.libelle}</BlockOfferCity>
+                      <BlockOfferContract><DescriptionIcon/>{profession.typeContrat} {profession.dureeTravailLibelleConverti ? ' \u2022 ' + profession.dureeTravailLibelleConverti : ''}
+                      </BlockOfferContract>
+                      <BlockOfferDate><AccessTimeIcon/>Publié il y a {getXDaysAgo(profession.dateActualisation)}</BlockOfferDate>
+                    </BlockContentOffer>
+                ))}
+              </BlockContainer>
 
-              <BlockLinkLi>
+              <BlockLinkDiv>
                 <ActionButton
-                  path={`/city/${insee}/job?codeRome=${codeRome}`}
-                  libelle={`Voir les offres d’emploi`}
-                  isMobile={isMobile}
-                  isBlue={true}
+                    path={`/city/${insee}/job?codeRome=${codeRome}`}
+                    libelle={`Voir toutes les offres d’emploi`}
+                    isMobile={isMobile}
+                    isBlue={true}
                 />
-              </BlockLinkLi>
-            </BlockContentUl>
-          </BlockContent>
-        </Block>
+              </BlockLinkDiv>
+            </Block>
+          </BlockContainer>
+      )}
 
-        <Block isMobile={isMobile}>
-          <BlockHeader>
-            <BlockHeaderText>
-              <BlockHeaderH2>Logement</BlockHeaderH2>
-            </BlockHeaderText>
-            <BlockHeaderRating></BlockHeaderRating>
-          </BlockHeader>
-          <BlockContent isMobile={isMobile}>
-            <BlockContentUl>
-              <BlockContentLi>
-                <BlockContentLiImg src={house} />
-                <BlockContentLiDesc>
-                  <BlockContentLiValue>
-                    {city && city.average_houseselled
-                      ? `${city.average_houseselled}€ `
-                      : 'A venir '}
-                  </BlockContentLiValue>
-                  Achat {isMobile && <br />}
-                  <span style={{ whiteSpace: 'nowrap' }}>(prix m² moyen)</span>
-                </BlockContentLiDesc>
-              </BlockContentLi>
+      {!isMobile && (
+          <BlockContainer isMobile={isMobile}>
+            <Block isMobile={isMobile}>
+              <BlockHeader>
+                <BlockHeaderText isMobile={isMobile}>
+                  <BlockHeaderH2>À proximité</BlockHeaderH2>
+                </BlockHeaderText>
+              </BlockHeader>
+              <BlockContainer isMobile={isMobile}>
+                <BlockContentProximity>
+                  <BlockProximityTitle>Les entreprises qui recrutent</BlockProximityTitle>
+                  {closeCompanies?.slice(0,5).map((company) => (
+                      <div>
+                        <BlockCompanyName>{_.startCase(_.toLower(company.name))}</BlockCompanyName>{' '}
+                        <BlockCompanyCity>{_.capitalize(company.city)}</BlockCompanyCity>
+                      </div>
+                        ))}
+                  <BlockCompanyDataFrom>(Données issues de <a target="_blank" href="https://labonneboite.pole-emploi.fr/">La Bonne Boite</a>)</BlockCompanyDataFrom>
+                </BlockContentProximity>
+                {/*<BlockContentProximity>
+                  <BlockProximityTitle>Secteurs qui recrutent</BlockProximityTitle>
+                  {closeCompanies?.slice(0,5).map((company) => (
+                      <div>{company.name} {company.city}</div>
+                  ))}
+                </BlockContentProximity>*/}
+              </BlockContainer>
+            </Block>
+          </BlockContainer>
+      )}
 
-              <BlockContentLi>
-                <BlockContentLiImg src={building} />
-                <BlockContentLiDesc>
-                  <BlockContentLiValue>
-                    {city && city.average_houserent
-                      ? `${city.average_houserent.toFixed(2)}€ `
-                      : 'A venir '}
-                  </BlockContentLiValue>
-                  Location {isMobile && <br />}
-                  <span style={{ whiteSpace: 'nowrap' }}>(prix m² moyen)</span>
-                </BlockContentLiDesc>
-              </BlockContentLi>
+      {isMobile && (
+          <BlockContainer isMobile={isMobile}>
+            <Block isMobile={isMobile}>
+              <BlockHeader>
+                <BlockHeaderText>
+                  <BlockHeaderH2>Emploi</BlockHeaderH2>
+                </BlockHeaderText>
+                <BlockHeaderRating></BlockHeaderRating>
+              </BlockHeader>
+              <BlockContent isMobile={isMobile}>
+                <BlockContentUl>
+                  <BlockContentLi>
+                    <BlockContentLiImg src={balance} />
+                    <BlockContentLiDesc>
+                      <BlockContentLiValue>
+                        {' '}
+                        {bassinTension || deptTension || 'À venir'}{' '}
+                      </BlockContentLiValue>
+                      Offres pour
+                      <BlockContentLiValue> 10 </BlockContentLiValue>
+                      demandeurs
+                    </BlockContentLiDesc>
+                  </BlockContentLi>
 
-              <BlockContentLi>
-                <BlockContentLiImg
-                  src={city?.city_house_tension ? redEllipse : greenEllipse}
-                  style={{ height: 15 }}
-                />
-                <BlockContentLiDesc>
-                  <b>
-                    {city?.city_house_tension
-                      ? 'Tension immobilière'
-                      : 'Pas de tension immobilière'}
-                  </b>
-                </BlockContentLiDesc>
-              </BlockContentLi>
+                  <BlockContentLi>
+                    <BlockContentLiImg src={euro} />
+                    <BlockContentLiDesc>
+                      <BlockContentLiValue>
+                        {infosTravail?.min > 0
+                            ? `${infosTravail.min}€ à ${infosTravail.max}€ `
+                            : `A venir `}
+                      </BlockContentLiValue>
+                      Salaire brut
+                    </BlockContentLiDesc>
+                  </BlockContentLi>
 
-              <BlockLinkLi>
-                <ActionButton
-                  path={`/city/${insee}/housing?codeRome=${codeRome}`}
-                  libelle={`En savoir plus`}
-                  isMobile={isMobile}
-                  isBlue={false}
-                />
-              </BlockLinkLi>
-            </BlockContentUl>
-          </BlockContent>
-        </Block>
+                  <BlockContentLi>
+                    <BlockContentLiImg src={briefcase} />
+                    <BlockContentLiDesc>
+                      <BlockContentLiValue>{totalOffres} </BlockContentLiValue>
+                      Offres d’emploi
+                    </BlockContentLiDesc>
+                  </BlockContentLi>
 
-        <Block isMobile={isMobile}>
-          <BlockHeader>
-            <BlockHeaderText>
-              <BlockHeaderH2>Cadre de vie</BlockHeaderH2>
-            </BlockHeaderText>
-            <BlockHeaderRating></BlockHeaderRating>
-          </BlockHeader>
-          <BlockContent isMobile={isMobile}>
-            <BlockContentUl>
-              <BlockContentLi>
-                <BlockContentLiImg src={bread} />
-                <BlockContentLiDesc>
-                  <BlockContentLiValue>
-                    {bakeriesNumber + ` ` || 'À venir'}
-                  </BlockContentLiValue>
-                  Boulangeries
-                </BlockContentLiDesc>
-              </BlockContentLi>
+                  <BlockLinkLi>
+                    <ActionButton
+                        path={`/city/${insee}/job?codeRome=${codeRome}`}
+                        libelle={`Voir les offres d’emploi`}
+                        isMobile={isMobile}
+                        isBlue={true}
+                    />
+                  </BlockLinkLi>
+                </BlockContentUl>
+              </BlockContent>
+            </Block>
 
-              <BlockContentLi>
-                <BlockContentLiImg src={doctors} />
-                <BlockContentLiDesc>
-                  <BlockContentLiValue>
-                    {doctorsNumber + ` ` || 'À venir'}
-                  </BlockContentLiValue>
-                  Médecins
-                </BlockContentLiDesc>
-              </BlockContentLi>
+            <Block isMobile={isMobile}>
+              <BlockHeader>
+                <BlockHeaderText>
+                  <BlockHeaderH2>Logement</BlockHeaderH2>
+                </BlockHeaderText>
+                <BlockHeaderRating></BlockHeaderRating>
+              </BlockHeader>
+              <BlockContent isMobile={isMobile}>
+                <BlockContentUl>
+                  <BlockContentLi>
+                    <BlockContentLiImg src={house} />
+                    <BlockContentLiDesc>
+                      <BlockContentLiValue>
+                        {city && city.average_houseselled
+                            ? `${city.average_houseselled}€ `
+                            : 'A venir '}
+                      </BlockContentLiValue>
+                      Achat {isMobile && <br />}
+                      <span style={{ whiteSpace: 'nowrap' }}>(prix m² moyen)</span>
+                    </BlockContentLiDesc>
+                  </BlockContentLi>
 
-              <BlockContentLi>
-                <BlockContentLiImg src={restaurantsIcon} />
-                <BlockContentLiDesc>
-                  <BlockContentLiValue>
-                    {restaurantsNumber + ` ` || 'À venir'}
-                  </BlockContentLiValue>
-                  Restaurants
-                </BlockContentLiDesc>
-              </BlockContentLi>
+                  <BlockContentLi>
+                    <BlockContentLiImg src={building} />
+                    <BlockContentLiDesc>
+                      <BlockContentLiValue>
+                        {city && city.average_houserent
+                            ? `${city.average_houserent.toFixed(2)}€ `
+                            : 'A venir '}
+                      </BlockContentLiValue>
+                      Location {isMobile && <br />}
+                      <span style={{ whiteSpace: 'nowrap' }}>(prix m² moyen)</span>
+                    </BlockContentLiDesc>
+                  </BlockContentLi>
 
-              <BlockLinkLi>
-                <ActionButton
-                  path={`/city/${insee}/life?codeRome=${codeRome}`}
-                  libelle={`Découvrir le cadre de vie`}
-                  isMobile={isMobile}
-                  isBlue={false}
-                />
-              </BlockLinkLi>
-            </BlockContentUl>
-          </BlockContent>
-        </Block>
-      </BlockContainer>
+                  <BlockContentLi>
+                    <BlockContentLiImg
+                        src={city?.city_house_tension ? redEllipse : greenEllipse}
+                        style={{ height: 15 }}
+                    />
+                    <BlockContentLiDesc>
+                      <b>
+                        {city?.city_house_tension
+                            ? 'Tension immobilière'
+                            : 'Pas de tension immobilière'}
+                      </b>
+                    </BlockContentLiDesc>
+                  </BlockContentLi>
 
-      {!!similarCities.length && (
+                  <BlockLinkLi>
+                    <ActionButton
+                        path={`/city/${insee}/housing?codeRome=${codeRome}`}
+                        libelle={`En savoir plus`}
+                        isMobile={isMobile}
+                        isBlue={false}
+                    />
+                  </BlockLinkLi>
+                </BlockContentUl>
+              </BlockContent>
+            </Block>
+
+            <Block isMobile={isMobile}>
+              <BlockHeader>
+                <BlockHeaderText>
+                  <BlockHeaderH2>Cadre de vie</BlockHeaderH2>
+                </BlockHeaderText>
+                <BlockHeaderRating></BlockHeaderRating>
+              </BlockHeader>
+              <BlockContent isMobile={isMobile}>
+                <BlockContentUl>
+                  <BlockContentLi>
+                    <BlockContentLiImg src={bread} />
+                    <BlockContentLiDesc>
+                      <BlockContentLiValue>
+                        {bakeriesNumber + ` ` || 'À venir'}
+                      </BlockContentLiValue>
+                      Boulangeries
+                    </BlockContentLiDesc>
+                  </BlockContentLi>
+
+                  <BlockContentLi>
+                    <BlockContentLiImg src={doctors} />
+                    <BlockContentLiDesc>
+                      <BlockContentLiValue>
+                        {doctorsNumber + ` ` || 'À venir'}
+                      </BlockContentLiValue>
+                      Médecins
+                    </BlockContentLiDesc>
+                  </BlockContentLi>
+
+                  <BlockContentLi>
+                    <BlockContentLiImg src={restaurantsIcon} />
+                    <BlockContentLiDesc>
+                      <BlockContentLiValue>
+                        {restaurantsNumber + ` ` || 'À venir'}
+                      </BlockContentLiValue>
+                      Restaurants
+                    </BlockContentLiDesc>
+                  </BlockContentLi>
+
+                  <BlockLinkLi>
+                    <ActionButton
+                        path={`/city/${insee}/life?codeRome=${codeRome}`}
+                        libelle={`Découvrir le cadre de vie`}
+                        isMobile={isMobile}
+                        isBlue={false}
+                    />
+                  </BlockLinkLi>
+                </BlockContentUl>
+              </BlockContent>
+            </Block>
+          </BlockContainer>
+      )}
+
+      {isMobile && !!similarCities.length && (
         <BlockContainer isMobile={isMobile}>
           <Block isMobile={isMobile}>
             <BlockHeader>
@@ -660,7 +942,7 @@ const CityPage = () => {
         </BlockContainer>
       )}
 
-      {!!closeCities.length && (
+      {isMobile && !!closeCities.length && (
         <BlockContainer isMobile={isMobile}>
           <Block isMobile={isMobile}>
             <BlockHeader>

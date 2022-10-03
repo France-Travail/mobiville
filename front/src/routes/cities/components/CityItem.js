@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import styled, { css } from 'styled-components'
 
-import { formatNumber } from '../../../utils/utils'
+import {formatCityTension, formatNumber} from '../../../utils/utils'
 import {
   COLOR_GRAY,
   COLOR_PRIMARY,
@@ -136,13 +136,6 @@ const CityItem = ({
     city.photo = city.photo.replace('/2000px', '/500px')
   } else {
     city.photo = `/regions/region-${city.newRegion?.code}.jpg`
-  }
-
-  const formatCityTension = (tension) => {
-    if (tension < 4) {
-      return "Opportunités d'emploi"
-    }
-    return "Peu d'opportunités d'emploi"
   }
 
   return (

@@ -1,13 +1,14 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { isEqual } from 'lodash'
 import {
-  getCriterions,
-  loadCity,
-  searchCities as apiSearchCities,
-  searchCloseCities,
-  searchSimilarCities,
-  searchJobLabels,
-  fetchAutocompleteCities,
+    getCriterions,
+    loadCity,
+    searchCities as apiSearchCities,
+    searchCloseCities,
+    searchSimilarCities,
+    searchJobLabels,
+    fetchAutocompleteCities,
+    searchCloseCompanies,
 } from '../../api/cities.api'
 
 const CitiesContext = React.createContext()
@@ -42,6 +43,9 @@ export function CitiesProvider(props) {
   const [regionCriterions, _setRegionCriterions] = useState([])
   const [autocompletedCities, setAutocompletedCities] = useState([])
   const [isLoadingAutocomplete, setIsLoadingAutocomplete] = useState(false)
+  const [companiesCount, _setCompaniesCount] = useState()
+  const [closeCompanies, _setCloseCompanies] = useState()
+  const [isLoadingCloseCompanies, _setIsLoadingCloseCompanies] = useState(false)
 
   const onSearch = (params, index = 0, oldCities = [], concateResults = true) => {
     if (isLoading && isEqual(lastSearchParams, params)) return
@@ -117,6 +121,16 @@ export function CitiesProvider(props) {
   const onSearchJobLabels = (label) => {
     setCityInput(label)
   }
+
+    const onSearchCloseCompanies = (params) => {
+        _setIsLoadingCloseCompanies(true)
+        searchCloseCompanies(params)
+            .then((res) => {
+                _setCloseCompanies(res.companies)
+                _setCompaniesCount(res.companies_count)
+            })
+            .then(() => _setIsLoadingCloseCompanies(false))
+    }
 
   useEffect(() => {
 
@@ -216,6 +230,9 @@ export function CitiesProvider(props) {
         regionCriterions,
         autocompletedCities,
         isLoadingAutocomplete,
+        companiesCount,
+        closeCompanies,
+        isLoadingCloseCompanies,
         // function
         setCity,
         onSearch,
@@ -227,6 +244,7 @@ export function CitiesProvider(props) {
         onSearchJobLabels,
         onAutocomplete,
         initializeJobsAutocomplete,
+        onSearchCloseCompanies
       }}
     />
   )

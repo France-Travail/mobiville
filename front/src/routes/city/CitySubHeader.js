@@ -37,7 +37,7 @@ const HeaderSubContainer = styled.div`
   width: 100%;
   margin: auto;
   padding: ${PADDING}px;
-  padding-bottom: ${PADDING - 10}px;
+  padding-bottom: 0;
 `
 
 const HeaderArrowLink = styled(Link)`

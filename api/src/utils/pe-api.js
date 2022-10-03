@@ -24,7 +24,7 @@ export function getAccessToken() {
                 grant_type: 'client_credentials',
                 client_id: config.EMPLOI_STORE_ID,
                 client_secret: config.EMPLOI_STORE_SECRET,
-                scope: `api_infotravailv1 api_offresdemploiv2 api_romev1 nomenclatureRome application_${config.EMPLOI_STORE_ID} o2dsoffre api_explorateurmetiersv1 explojob`,
+                scope: `api_infotravailv1 api_offresdemploiv2 api_romev1 nomenclatureRome application_${config.EMPLOI_STORE_ID} o2dsoffre api_explorateurmetiersv1 explojob api_labonneboitev1`,
             }),
             {
                 headers: {
@@ -49,7 +49,7 @@ const cache = setupCache({
 const apiEmploiStore = axios.create({
     adapter: cache.adapter
 })
-export async function searchJob({ codeRome = [], insee = [], distance = 10 }) {
+export async function searchJob({ codeRome = [], insee = [], distance = 10, offresManqueCandidats = false }) {
     const token = await getAccessToken()
     const callToOffres = function () {
         return apiEmploiStore.get(
@@ -59,6 +59,7 @@ export async function searchJob({ codeRome = [], insee = [], distance = 10 }) {
                     codeROME: codeRome.join(','),
                     commune: insee.join(','),
                     distance,
+                    offresManqueCandidats
                 },
                 headers: { Authorization: `Bearer ${token}` },
                 ...(config.PE_ENV && {proxy: false}),
@@ -66,7 +67,7 @@ export async function searchJob({ codeRome = [], insee = [], distance = 10 }) {
             })
             .then(async (result) => result)
             .catch((error) => {
-                console.log("pe-api.js searchJobCount() --> ERROR. Request : "+error.request.res.responseUrl+". Error status : "+error.response.status)
+                console.log("pe-api.js searchJob() --> ERROR. Request : " + error.request.res.responseUrl + ". Error status : " + error.response.status)
                 if(error.response.status !== 429) console.log(error)
                 return error.response
             })
@@ -83,7 +84,7 @@ async function fetchAndRetryIfNecessary (callAPIFn, tryNumber = 1) {
         return fetchAndRetryIfNecessary(callAPIFn, ++tryNumber)
     }
     if (tryNumber < MAX_RETRY_429 && response.status === 429)
-        console.log("pe-api.js fetchAndRetryIfNecessary() -->  ERROR : MAX Http 429 RETRY Reached : "+MAX_RETRY_429)
+        console.log("pe-api.js fetchAndRetryIfNecessary() -->  ERROR : MAX Http 429 RETRY Reached : " + MAX_RETRY_429)
     return response.data
 }
 
@@ -105,7 +106,7 @@ export async function searchJobCount({ codeRome = [], insee = [], distance = 10 
         })
        .then(async (result) => result)
        .catch((error) => {
-           console.log("pe-api.js searchJobCount() --> ERROR. Request : "+error.request.res.responseUrl+". Error status : "+error.response.status)
+           console.log("pe-api.js searchJobCount() --> ERROR. Request : " + error.request.res.responseUrl + ". Error status : " + error.response.status)
            if(error.response.status !== 429) console.log(error)
            return error.response
        })
@@ -195,4 +196,32 @@ export async function getSkillFromRome(codeRome) {
             }
         )
         .then((result) => result.data)
+}
+
+export async function searchCloseCompanies({ codeRome = '', insee = '', distance = 30, page = 1, pageSize = 10, sort = 'score' }) {
+    const token = await getAccessToken()
+    const callToSearchCloseEnterprises = function () {
+        return apiEmploiStore.get(
+            'https://api.emploi-store.fr/partenaire/labonneboite/v1/company',
+            {
+                params: {
+                    rome_codes: codeRome,
+                    commune_id: insee,
+                    distance,
+                    page,
+                    page_size: pageSize,
+                    sort
+                },
+                headers: { Authorization: `Bearer ${token}` },
+                ...(config.PE_ENV && {proxy: false}),
+                ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
+            })
+            .then(async (result) => result)
+            .catch((error) => {
+                console.log("pe-api.js searchCloseCompanies() --> ERROR. Request : " + error.request.res.responseUrl + ". Error status : " + error.response.status)
+                if(error.response.status !== 429) console.log(error)
+                return error.response
+            })
+    }
+    return fetchAndRetryIfNecessary(callToSearchCloseEnterprises)
 }
