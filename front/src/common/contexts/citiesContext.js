@@ -7,7 +7,8 @@ import {
     searchCloseCities,
     searchSimilarCities,
     searchJobLabels,
-    fetchAutocompleteCities, searchCloseCompanies,
+    fetchAutocompleteCities,
+    searchCloseCompanies,
 } from '../../api/cities.api'
 
 const CitiesContext = React.createContext()

@@ -45,7 +45,7 @@ import restaurantsIcon from '../../assets/images/icons/restaurants.svg'
 import pastille from '../../assets/images/icons/pastille.svg'
 import malette from '../../assets/images/icons/malette.svg'
 import profilEntreprise from '../../assets/images/icons/profil_entreprise.svg'
-import handshake from '../../assets/images/icons/handshake.svg'
+// import handshake from '../../assets/images/icons/handshake.svg'
 import { formatCityTension, getXDaysAgo } from "../../utils/utils"
 
 const ElementContainer = styled.div`

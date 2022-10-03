@@ -110,10 +110,13 @@ export const formatCityTension = (tension) => {
 
 export function getXDaysAgo(date) {
   const daysAgo = moment().diff(date, "days")
-  if(daysAgo > 0) {
-    return daysAgo + ' jours'
-  } else {
-    let hoursAgo = moment().diff(date, "hours")
-    return hoursAgo + ' heures'
+  if (daysAgo > 0) {
+    return `${daysAgo} jour${daysAgo > 1 ? 's' : ''}`
   }
+
+  let hoursAgo = moment().diff(date, "hours") + 1
+  if (hoursAgo < 1) {
+    return "moins d'une heure"
+  }
+  return `${hoursAgo} heure${hoursAgo > 1 ? 's' : ''}`
 }
