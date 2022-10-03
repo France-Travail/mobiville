@@ -22,7 +22,7 @@ const JobSelect = ({
     const [ value, setValue ] = useState(null)
 
     useEffect(() => {
-        if (!!search && !!jobsMatchingCriterions) {
+        if (!!search && !!jobsMatchingCriterions && !value) {
             const entries = new URLSearchParams(search).entries()
 
             for (let entry of entries) {
