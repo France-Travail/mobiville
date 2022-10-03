@@ -13,7 +13,6 @@ import logoLogementSocial from '../../assets/images/logo-logement-social.png'
 
 import { Chip } from '@mui/material'
 
-import { Link } from 'react-router-dom'
 import HousingSimulator from './components/HousingSimulator'
 
 const HousingMetrics = styled.div`
@@ -126,7 +125,7 @@ const HousingActorDescription = styled.div`
   line-height: 24px;
 `
 
-const HousingActorLink = styled(Link)`
+const HousingActorLink = styled.a`
   height: 19px;
   align-self: center;
 
@@ -224,7 +223,7 @@ const CityHousingSimulator = ({ city, nbSocialHousing }) => {
                 obtenir un numéro unique de demande de logement social (NUR/NUD)
               </HousingActorDescription>
             </div>
-            <HousingActorLink to="https://www.actionlogement.fr/le-logement-social">
+            <HousingActorLink href="https://www.actionlogement.fr/le-logement-social" target="_blank">
               Créez ma demande de logement <ArrowForwardIcon />
             </HousingActorLink>
           </HousingActor>
@@ -238,7 +237,7 @@ const CityHousingSimulator = ({ city, nbSocialHousing }) => {
                 votre situation
               </HousingActorDescription>
             </div>
-            <HousingActorLink to="https://al-in.fr/">
+            <HousingActorLink href="https://al-in.fr/" target="_blank">
               Recherchez des logements <ArrowForwardIcon />
             </HousingActorLink>
           </HousingActor>

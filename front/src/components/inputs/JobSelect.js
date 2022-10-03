@@ -22,7 +22,7 @@ const JobSelect = ({
     const [ value, setValue ] = useState(null)
 
     useEffect(() => {
-        if (!!search && !!jobsMatchingCriterions) {
+        if (!!search && !!jobsMatchingCriterions && !value) {
             const entries = new URLSearchParams(search).entries()
 
             for (let entry of entries) {
@@ -70,7 +70,7 @@ const JobSelect = ({
             value={value}
             groupLabel="Métiers"
             options={jobsMatchingCriterions ?? []}
-            isOptionEqualToValue={(option, value) => option.key === value.key}
+            isOptionEqualToValue={(option, value) => option.label === value.label || (!value.label.includes('(') && option.key === value.key)}
             // loading={isLoadingJobsMatchingCriterion}
             onInputChange={onInputChange}
             onChange={onChange}
