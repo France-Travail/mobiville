@@ -25,6 +25,9 @@ const CityForm = ({
   const [jobSelected, setJobSelected] = useState('')
   const [citySelected, setCitySelected] = useState('')
 
+  /** TODO Refacto pour avoir un seul lieu qui met a jour la recherche
+   * Voir onSubmit() Cities.js:287
+   */
   const computeSearchPath = useCallback(() => {
     if (!!jobSelected && !!citySelected && citySelected.type === CITY_TYPE) {
       // on va directement sur la page de la ville choisi
@@ -33,11 +36,11 @@ const CityForm = ({
 
     let url = '/cities'
 
-    if (!!citySelected && citySelected.type === REGION_TYPE) {
-      url += `?codeRegion=${citySelected.id}`
-    }
     if (!!jobSelected) {
-      url += `&codeRome=${jobSelected.key}`
+      url += `?codeRome=${jobSelected.key}`
+    }
+    if (!!citySelected && citySelected.type === REGION_TYPE) {
+      url += `&codeRegion=${citySelected.id}`
     }
     if (!!filters && !!filters.citySizeSelected) {
       url += `&codeCity=${filters.citySizeSelected}`

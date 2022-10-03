@@ -201,8 +201,9 @@ const Cities = () => {
   useEffect(() => {
     if (!!params?.codeRegion) {
       if (!!criterions?.regions) {
-        const region = criterions.regions
-          .find((region) => params.codeRegion === region.id)
+        const region = criterions.regions.find(
+          (region) => params.codeRegion === region.id
+        )
         setRegionLabel(region?.label ?? '')
       }
     } else {
@@ -335,10 +336,7 @@ const Cities = () => {
   }
 
   const citiesList = (
-    <CitiesList
-      isMobile={isMobile}
-      data-automation-id="cities-list"
-    >
+    <CitiesList isMobile={isMobile} data-automation-id="cities-list">
       <TitleContainer isMobile={isMobile}>
         <Title>
           {totalCities} {!!metierLabel ? `villes pour ${metierLabel}` : ''}{' '}
@@ -417,11 +415,7 @@ const Cities = () => {
             total={totalCities}
           />
         ) : (
-          <DesktopCriterionsPanel
-            paramsUrl={params}
-            total={totalCities}
-            onSubmit={onSubmit}
-          />
+          <DesktopCriterionsPanel paramsUrl={params} />
         )}
 
         {isMobile ? (

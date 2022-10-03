@@ -1,11 +1,16 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import _ from "lodash"
+import _ from 'lodash'
 
-import { useCities } from "../../common/contexts/citiesContext"
-import { ALL_REGIONS_LABEL, ALL_REGION_TYPE, CITY_TYPE, REGION_TYPE } from "../../constants/search"
-import TextSearchInput from "./TextSearchInput"
-import { useLocation } from "react-router-dom"
+import { useCities } from '../../common/contexts/citiesContext'
+import {
+  ALL_REGIONS_LABEL,
+  ALL_REGION_TYPE,
+  CITY_TYPE,
+  REGION_TYPE,
+} from '../../constants/search'
+import TextSearchInput from './TextSearchInput'
+import { useLocation } from 'react-router-dom'
 
 const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
   const {
@@ -17,27 +22,37 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
 
   const { search } = useLocation()
 
-  const [ options, setOptions ] = useState([])
-  const [ inputValue, setInputValue ] = useState('')
-  const [ value, setValue ] = useState(null)
+  const [options, setOptions] = useState([])
+  const [inputValue, setInputValue] = useState('')
+  const [value, setValue] = useState(null)
 
   useEffect(() => {
     if (!!criterions && !!search) {
       if (!!search.includes('codeRegion')) {
         const entries = new URLSearchParams(search).entries()
         for (let entry of entries) {
-            const [key, value] = entry
-            if (key === 'codeRegion') {
-                const foundRegion = criterions.regions.find(region => region.id === value)
-                if (!!foundRegion) {
-                  setValue(foundRegion)
-                } else {
-                  setValue({ label: ALL_REGIONS_LABEL, type: ALL_REGION_TYPE, style: 'primary' })
-                }
+          const [key, value] = entry
+          if (key === 'codeRegion') {
+            const foundRegion = criterions.regions.find(
+              (region) => region.id === value
+            )
+            if (!!foundRegion) {
+              setValue({ ...foundRegion, type: REGION_TYPE })
+            } else {
+              setValue({
+                label: ALL_REGIONS_LABEL,
+                type: ALL_REGION_TYPE,
+                style: 'primary',
+              })
             }
+          }
         }
       } else {
-        setValue({ label: ALL_REGIONS_LABEL, type: ALL_REGION_TYPE, style: 'primary' })
+        setValue({
+          label: ALL_REGIONS_LABEL,
+          type: ALL_REGION_TYPE,
+          style: 'primary',
+        })
       }
     }
   }, [search, criterions])
@@ -59,18 +74,22 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
     }
 
     // format autocompleted cities list item
-    setOptions([{ label: ALL_REGIONS_LABEL, type: ALL_REGION_TYPE, style: 'primary' }]
-      .concat(regionsForRome.map((region) => ({ ...region, type: REGION_TYPE })))
-      .concat(
-        !!inputValue &&
-          autocompletedCities.map((city) => ({
-            id: city.insee_com,
-            label: `${_.capitalize(city.nom_comm)} (${city.postal_code})`,
-            cityName: city.nom_comm,
-            type: CITY_TYPE,
-          }))
-      )
-      .filter(el => !!el))
+    setOptions(
+      [{ label: ALL_REGIONS_LABEL, type: ALL_REGION_TYPE, style: 'primary' }]
+        .concat(
+          regionsForRome.map((region) => ({ ...region, type: REGION_TYPE }))
+        )
+        .concat(
+          !!inputValue &&
+            autocompletedCities.map((city) => ({
+              id: city.insee_com,
+              label: `${_.capitalize(city.nom_comm)} (${city.postal_code})`,
+              cityName: city.nom_comm,
+              type: CITY_TYPE,
+            }))
+        )
+        .filter((el) => !!el)
+    )
   }, [autocompletedCities, criterions, codeRome])
 
   // trigger when text input has been updated
@@ -86,7 +105,7 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
 
   useEffect(() => {
     onSelect(value)
-  }, [ value ])
+  }, [value])
 
   // trigger when an option is selected
   const onChange = (_, value) => {
@@ -100,7 +119,7 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
       value={value}
       options={options ?? []}
       // loading={isLoadingAutocomplete}
-      disabled={(!codeRome || codeRome === '')}
+      disabled={!codeRome || codeRome === ''}
       onInputChange={onInputChange}
       onChange={onChange}
       defaultValue={defaultValue}
@@ -113,7 +132,7 @@ CitySelect.propTypes = {
   codeRome: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
   defaultValue: PropTypes.any,
-  style: PropTypes.object
+  style: PropTypes.object,
 }
 
 export default CitySelect
