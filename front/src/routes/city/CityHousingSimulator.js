@@ -185,8 +185,8 @@ const CityHousingSimulator = ({ city, nbSocialHousing }) => {
           </ElementObject>
 
           {[
-            { label: '2', rentValue: city.average_houserent },
-            { label: '4', rentValue: city.average_houserent },
+            { label: '2', rentValue: city.average_houserent_f2 },
+            { label: '4', rentValue: city.average_houserent_f4 },
           ].map(({ label, rentValue }) => {
             return (
               <ElementObject $isMobile={isMobile}>
@@ -201,7 +201,7 @@ const CityHousingSimulator = ({ city, nbSocialHousing }) => {
                     <span>{label}</span> pièces
                   </p>
                 </div>
-                <b>{rentValue ? `${rentValue.toFixed(2)}€` : 'A venir'}</b>
+                <b>{rentValue ? `${+rentValue}€` : 'A venir'}</b>
                 <p className="metrics-description">
                   Loyer moyen <br />
                   en location
