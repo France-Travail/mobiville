@@ -86,7 +86,7 @@ e2e:
   artifacts:
     when: on_success
     expose_as: 'E2E Reports'
-    paths: ['/tests/cypress/reports/cucumber-html-report/']
+    paths: ['tests/cypress/reports/cucumber-html-report/']
   rules:
     - if: '$CI_COMMIT_BRANCH == $DEV_BRANCH && $FORCE_DEPLOY == ""'
 
