@@ -19,6 +19,7 @@ const computeButtonBorder = (index, lastIndex) => {
 }
 
 const Button = styled.button`
+  flex: ${({ $isMobile }) => $isMobile ? 'auto' : 'none'};
   text-decoration: none;
   cursor: pointer;
   border: none;
@@ -40,11 +41,7 @@ const Button = styled.button`
   column-gap: 10px;
   align-items: center;
   padding: 10px;
-
-  display: flex;
-  column-gap: 10px;
-  align-items: center;
-  padding: 10px;
+  justify-content: ${({ $isMobile }) => $isMobile ? 'center' : 'start'};
 
   p {
     margin: 0;
@@ -52,6 +49,7 @@ const Button = styled.button`
 `
 
 const Container = styled.div`
+  width: 100%;
   display: flex;
   border-radius: 6px;
 `

@@ -60,7 +60,7 @@ const WelcomeSearchForm = () => {
 
   return (
     <Container $isMobile={isMobile}>
-      <div>
+      <div style={{ width: '100%' }}>
         <ButtonGroupLabel>Que recherchez-vous ?</ButtonGroupLabel>
         <ButtonGroup
           onChange={handleChange}
