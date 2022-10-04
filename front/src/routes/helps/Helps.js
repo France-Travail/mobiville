@@ -63,12 +63,10 @@ const Header = styled.div`
   align-items: center;
 
   font-weight: bold;
-  background-color: ${({ $isMobile }) =>
-    $isMobile ? 'none' : COLOR_OTHER_GREEN};
+  background-color: ${({ $isMobile }) => $isMobile ? 'none' : COLOR_OTHER_GREEN};
 
   ${({ $isScrollingUp, $isMobile }) =>
     !$isMobile &&
-    $isScrollingUp &&
     css`
       position: sticky;
       top: 0;
@@ -110,7 +108,7 @@ const HelpsPanel = styled.div`
 
 const HelpTypeTitleContainer = styled.div`
   height: 71px;
-  margin-top: ${({ isFirst }) => (isFirst ? '' : '40px')};
+  margin-top: ${({ isFirst }) => (isFirst ? '32px' : '48px')};
   margin-bottom: 20px;
   padding-left: 8px;
 
@@ -123,7 +121,6 @@ const HelpTypeTitleContainer = styled.div`
   align-items: center;
   gap: 8px;
 
-  background: #c7c7f3;
   border-radius: 4px;
 
   h2 {
@@ -150,7 +147,7 @@ const Anchors = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  gap: 16px;
+  gap: ${({ $isMobile }) => ($isMobile ? '8px' : '16px')};
   flex-wrap: wrap;
 
   background: ${({ $isMobile }) => ($isMobile ? 'none' : COLOR_WHITE)};
@@ -388,11 +385,8 @@ const Helps = () => {
   }
 
   const scrollTo = (ref) => {
-    const BANNER_SIZE = 191
-    const scrollTop =
-      (window.scrollY > ref.current.offsetTop
-        ? ref.current.offsetTop - BANNER_SIZE
-        : ref.current.offsetTop) - 35
+    const BANNER_SIZE = 216
+    const scrollTop = ref.current.offsetTop - BANNER_SIZE
     window.scroll({
       top: scrollTop,
       behavior: 'smooth',
