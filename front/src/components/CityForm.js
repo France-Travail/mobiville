@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { useNavigate } from "react-router-dom";
+
 
 import { useWindowSize } from '../common/hooks/window-size'
 import { isMobileView } from '../constants/mobile'
@@ -19,15 +21,17 @@ const Container = styled.div`
 const CityForm = ({
   hidden = false,
   filters = { citySizeSelected: '', environmentSelected: '' },
+  handleChangeEnv
 }) => {
   const isMobile = isMobileView(useWindowSize())
-
+  
   const [jobSelected, setJobSelected] = useState('')
   const [citySelected, setCitySelected] = useState('')
-
+  let navigate = useNavigate();
   /** TODO Refacto pour avoir un seul lieu qui met a jour la recherche
    * Voir onSubmit() Cities.js:287
    */
+
   const computeSearchPath = useCallback(() => {
     if (!!jobSelected && !!citySelected && citySelected.type === CITY_TYPE) {
       // on va directement sur la page de la ville choisi
@@ -48,7 +52,6 @@ const CityForm = ({
     if (!!filters && !!filters.environmentSelected) {
       url += `&codeEnvironment=${filters.environmentSelected}`
     }
-
     return url
   }, [jobSelected, citySelected, filters])
 
