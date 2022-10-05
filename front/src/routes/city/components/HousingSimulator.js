@@ -137,7 +137,10 @@ const HousingSimulator = ({ city }) => {
                   Votre pouvez occuper un logement de
                 </ResultText>
                 {squareMeters ? (
-                  <Result>{formatNumber(squareMeters)} m2</Result>
+                  <Result>
+                    <span data-automation-id="housing-square-meters">{formatNumber(squareMeters)}</span>
+                    m2
+                  </Result>
                 ) : null}
               </ResultContainer>
             </div>
@@ -163,7 +166,10 @@ const HousingSimulator = ({ city }) => {
                 </ResultText>
                 {housingCost ? (
                   <Result>
-                    {formatNumber(housingCost)} <Euro fontSize="large" />
+                    <span data-automation-id="housing-cost">
+                      {formatNumber(housingCost)}
+                    </span>
+                    <Euro fontSize="large" />
                   </Result>
                 ) : null}
               </ResultContainer>
