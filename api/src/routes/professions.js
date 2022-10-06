@@ -50,7 +50,7 @@ router.post(
     })
     response.body = {
       resultats: result ? result.resultats : [],
-      totalOffres: result ? getTotalOffres(result) : undefined,
+      totalOffres: result ? getTotalOffres(result) : 0,
     }
   }
 )
