@@ -11,6 +11,7 @@ Then("je vois le footer sur la page", function () {
 
 When("je clique sur {string}", function (lien) {
   cy.contains(lienACliquer, lien, {timeout: SHORT_WAIT_TIME}).click();
+  cy.wait(500);
 })
 
 Then("j'affiche la page {string}", function (url) {
