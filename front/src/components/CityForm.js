@@ -29,7 +29,7 @@ const CityForm = ({
   /** TODO Refacto pour avoir un seul lieu qui met a jour la recherche
    * Voir onSubmit() Cities.js:287
    */
-
+  
   const computeSearchPath = useCallback(() => {
     if (!!jobSelected && !!citySelected && citySelected.type === CITY_TYPE) {
       // on va directement sur la page de la ville choisi
@@ -53,10 +53,6 @@ const CityForm = ({
     return url
   }, [jobSelected, citySelected, filters])
 
-  useEffect(() => {
-    document.getElementById('search').click()
-  },[filters]);
-
   const onJobSelect = (job) => {
     setJobSelected(job)
   }
@@ -64,6 +60,10 @@ const CityForm = ({
   const onCitySelect = (city) => {
     setCitySelected(city)
   }
+
+  // useEffect(() => {
+
+  // }, [search])
 
   return (
     <Container $hidden={hidden} $isMobile={isMobile}>

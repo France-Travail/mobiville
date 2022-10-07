@@ -76,7 +76,6 @@ const ActionButton = ({
   return (
     <ActionButtonContainer isMobile={isMobile} style={{ ...style }}>
       <ActionButtonElement
-        id='search'
         data-automation-id={isMainSearch ? 'search-action' : undefined}
         to={path}
         $isBlue={isBlue}

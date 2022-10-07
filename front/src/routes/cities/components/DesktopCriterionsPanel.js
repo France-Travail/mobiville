@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { FormControl, MenuItem, Select, Button } from '@mui/material'
-
+import { useLocation } from 'react-router-dom'
 import { useCities } from '../../../common/contexts/citiesContext'
 import {
   COLOR_WHITE,
@@ -137,7 +137,7 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
   const [displayReset, setdisplayReset] = useState(false)
   const [environmentSelected, setEnvironmentSelected] = useState('')
   const [citySizeSelected, setCitySizeSelected] = useState('')
-
+  const { search } = useLocation()
   const resetFilter = () => {
     setEnvironmentSelected('')
     setCitySizeSelected('')
@@ -146,11 +146,13 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
 
   const handleChangeEnv = (event) => {
     setEnvironmentSelected(event.target.value)
+    //window.location.search = window.location.search + '&codeEnvironment=' + event.target.value
     setdisplayReset(true)
   }
 
   const handleChangeCity = (event) => {
     setCitySizeSelected(event.target.value)
+    //window.location.search = search + 'codeCity=' + event.target.value 
     setdisplayReset(true)
   }
 
