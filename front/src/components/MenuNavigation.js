@@ -4,11 +4,10 @@ import { COLOR_OTHER_GREEN, COLOR_TEXT_PRIMARY } from '../constants/colors'
 
 const Nav = styled.nav`
   background: ${COLOR_OTHER_GREEN};
-  position: inherit;
+  position: absolute;
   height: 50px;
   left: 0;
   right: 0;
-  bottom: 0;
   z-index: 100;
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.14), 0px 2px 2px rgba(0, 0, 0, 0.12),
     0px 1px 3px rgba(0, 0, 0, 0.2);

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { Typography } from '@mui/material'
-
+import MenuNavigation from './MenuNavigation'
 import {
   COLOR_HEADER_BACKGROUND,
   COLOR_PRIMARY,
@@ -99,7 +99,7 @@ const HeaderDesktop = ({
 
   const searchSelected = location.pathname.includes('rechercher')
   const helpSelected = location.pathname.includes('aides')
-
+  const cityPage = location.pathname.includes('city')
   const Navigation = () => (
     <>
       {displaySearch
@@ -117,6 +117,7 @@ const HeaderDesktop = ({
   )
 
   return (
+    <>
     <Container>
       <HomeLink
         to="/"
@@ -155,6 +156,10 @@ const HeaderDesktop = ({
           </PartnersLogoContainer>
         </PartnersContainer>
     </Container>
+    <Container>
+        { cityPage ? <MenuNavigation/> : null }
+    </Container>
+    </>
   )
 }
 
