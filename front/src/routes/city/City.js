@@ -12,6 +12,7 @@ import CityJobs from './CityJobs'
 import CityLife from './CityLife'
 import CityHousing from './CityHousing'
 import CitySubHeader from './CitySubHeader'
+import MenuNavigation from '../../components/MenuNavigation'
 
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
@@ -402,6 +403,7 @@ const CityPage = () => {
 
   return (
     <MainLayout menu={{ visible: !isMobile }}>
+      <MenuNavigation />
       <Helmet>
         <title>
           {_.upperFirst(romeLabel)} à {_.capitalize(city.nom_comm)} | Mobiville
