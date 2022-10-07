@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
+import queryString from 'query-string'
+
 import { COLOR_OTHER_GREEN, COLOR_TEXT_PRIMARY } from '../constants/colors'
 
 const Nav = styled.nav`
@@ -51,7 +53,8 @@ const MENU_LINK = [
 ]
 
 const MenuNavigation = () => {
-
+  const lastSearch = localStorage.getItem('lastSearch')
+  console.log(queryString.parse(lastSearch))
   useEffect(() => {
     })
 

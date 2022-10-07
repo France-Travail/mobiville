@@ -156,9 +156,10 @@ const HeaderDesktop = ({
           </PartnersLogoContainer>
         </PartnersContainer>
     </Container>
+    { cityPage ? 
     <Container>
-        { cityPage ? <MenuNavigation/> : null }
-    </Container>
+    <MenuNavigation />
+    </Container> : null }
     </>
   )
 }
