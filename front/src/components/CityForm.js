@@ -1,7 +1,8 @@
+import { debounce } from 'lodash'
 import PropTypes from 'prop-types'
-import { useCallback, useState, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
-
 
 import { useWindowSize } from '../common/hooks/window-size'
 import { isMobileView } from '../constants/mobile'
@@ -19,17 +20,15 @@ const Container = styled.div`
 `
 const CityForm = ({
   hidden = false,
-  filters = { citySizeSelected: '', environmentSelected: '' }
+  filters = { citySizeSelected: '', environmentSelected: '' },
 }) => {
   const isMobile = isMobileView(useWindowSize())
-  
+  const navigate = useNavigate()
+  const { search } = useLocation()
+
   const [jobSelected, setJobSelected] = useState('')
   const [citySelected, setCitySelected] = useState('')
 
-  /** TODO Refacto pour avoir un seul lieu qui met a jour la recherche
-   * Voir onSubmit() Cities.js:287
-   */
-  
   const computeSearchPath = useCallback(() => {
     if (!!jobSelected && !!citySelected && citySelected.type === CITY_TYPE) {
       // on va directement sur la page de la ville choisi
@@ -50,8 +49,31 @@ const CityForm = ({
     if (!!filters && !!filters.environmentSelected) {
       url += `&codeEnvironment=${filters.environmentSelected}`
     }
+
     return url
   }, [jobSelected, citySelected, filters])
+
+  const redirect = () => {
+    debounce(() => navigate(computeSearchPath()), 50)()
+  }
+
+  useEffect(() => {
+    // dans le cas où la valeur est déjà dans l'url, on vérifie qu'on a bien une modification
+    if (search.includes("codeCity") || search.includes("codeEnvironment")) {
+      const entries = new URLSearchParams(search).entries()
+      for (let entry of entries) {
+        const [key, value] = entry
+        if (key === 'codeCity' && value !== filters.citySizeSelected || key === 'codeEnvironment' && value !== filters.environmentSelected) {
+          redirect()
+        }
+      }
+    }
+
+    // on vérifie que l'ajout de nouveaux filtres
+    if (!!filters && ((!!filters.citySizeSelected && !search.includes("codeCity")) || (!!filters.environmentSelected && !search.includes("codeEnvironment")))) {
+      redirect()
+    }
+  }, [filters])
 
   const onJobSelect = (job) => {
     setJobSelected(job)
@@ -60,10 +82,6 @@ const CityForm = ({
   const onCitySelect = (city) => {
     setCitySelected(city)
   }
-
-  // useEffect(() => {
-
-  // }, [search])
 
   return (
     <Container $hidden={hidden} $isMobile={isMobile}>
