@@ -10,6 +10,7 @@ export { Section, SectionTitle } from './Section.js'
 export { default as SubHeader } from './SubHeader.js'
 export { default as Modale } from './Modale.js'
 export { default as KeyFigures } from './KeyFigures.js'
+export { default as Map } from './Map.js'
 
 // INPUTS
 export { default as Button } from './inputs/Button.js'

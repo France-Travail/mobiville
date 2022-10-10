@@ -49,6 +49,7 @@ const Label = styled.p`
   font-size: 16px;
   font-weight: 700;
   text-align: center;
+  max-width: 100px;
 `
 
 const KeyFigures = ({ figures }) => {
