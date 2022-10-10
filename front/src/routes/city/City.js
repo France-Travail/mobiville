@@ -334,8 +334,8 @@ const Tag = styled.div`
   padding: 4px 6px;
   border-radius: 8px;
 
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: bold;
   color: ${COLOR_PRIMARY};
   background: white;
   background: ${({ $color }) => ($color ? $color : COLOR_GRAY)};

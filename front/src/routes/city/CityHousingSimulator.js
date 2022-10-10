@@ -3,15 +3,13 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { useWindowSize } from '../../common/hooks/window-size'
-import { COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors'
+import { COLOR_PRIMARY, COLOR_TAG_GREEN, COLOR_TAG_RED, COLOR_WHITE } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { formatNumber } from '../../utils/utils'
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import logoALin from '../../assets/images/logo-ALin.png'
 import logoLogementSocial from '../../assets/images/logo-logement-social.png'
-
-import { Chip } from '@mui/material'
 
 import HousingSimulator from './components/HousingSimulator'
 
@@ -69,16 +67,19 @@ const ElementObject = styled.div`
   }
 `
 
-const Tag = styled(Chip)`
-  height: 25px;
+const Tag = styled.div`
+  /* height: 25px; */
   margin: auto;
-  text-align: center;
-  background-color: ${(props) =>
-    props.isRed ? '#F1B3B7' : '#DCF8EA'} !important;
-  color: ${COLOR_PRIMARY};
-  font-weight: 700;
+  /* text-align: center; */
+  width: fit-content;
+  padding: 4px 6px;
   margin-bottom: 20px;
-  font-size: 14px;
+  border-radius: 8px;
+
+  background-color: ${({ isRed }) => isRed ? COLOR_TAG_RED : COLOR_TAG_GREEN};
+  color: ${COLOR_PRIMARY};
+  font-size: 16px;
+  font-weight: bold;
 `
 
 const HousingSearchContainer = styled.div`
@@ -156,12 +157,11 @@ const CityHousingSimulator = ({ city, nbSocialHousing }) => {
       <HousingMetrics $isMobile={isMobile}>
         <Tag
           isRed={city && city.city_house_tension}
-          label={
-            city && city.city_house_tension
-              ? "Tension immobilière a l'achat"
-              : "Pas de tension immobilière a l'achat"
-          }
-        ></Tag>
+        >{
+          city && city.city_house_tension
+          ? "Tension immobilière a l'achat"
+          : "Pas de tension immobilière a l'achat"
+        }</Tag>
         <div className="metrics-container">
           <ElementObject $isMobile={isMobile}>
             <div>
