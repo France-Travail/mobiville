@@ -17,7 +17,7 @@ function calculPrixAchat(surface) {
     const text = div.text().split('€')[0].replace(' ', '');
     const number = parseInt(text);
     const produit = number*surface;
-    cy.get(ResultatPrixAchat, {timeout: SHORT_WAIT_TIME}).should('have.text', produit.toLocaleString());
+    cy.get(ResultatPrixAchat, {timeout: SHORT_WAIT_TIME}).should('have.text', produit.toLocaleString('fr-FR'));
   })
 }
 

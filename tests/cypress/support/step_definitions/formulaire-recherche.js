@@ -49,7 +49,7 @@ And('je clique sur rechercher', function () {
 })
 
 When("je saisis {string} dans le métier", function (metier) {
-  cy.get(champSaisieMetier, {timeout: SHORT_WAIT_TIME}).type(metier, { delay: 50 });
+  cy.get(champSaisieMetier, {timeout: SHORT_WAIT_TIME}).type(metier, { delay: 200 });
   cy.wait(1000);
 })
 
@@ -59,7 +59,7 @@ And("je choisis {string} dans la liste des métiers", function (propositionmetie
 })
 
 And("je saisis {string} dans la région/ville", function (endroit) {
-  cy.get(champSaisieEndroit, {timeout: SHORT_WAIT_TIME}).type(endroit, { delay: 50 });
+  cy.get(champSaisieEndroit, {timeout: SHORT_WAIT_TIME}).type(endroit, { delay: 200 });
   cy.wait(1000);
 })
 
