@@ -9,6 +9,7 @@ Given("Je/je suis sur (l'accueil) mobiville/Mobiville", () => {
 
 And("j'accepte tous les cookies", () => {
     acceptRgpd();
+    cy.wait(500);
 })
 
 function acceptRgpd() {

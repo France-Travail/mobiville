@@ -12,18 +12,6 @@ import {
   boutoncritere3,
 } from '../../../support/step_definitions/formulaire-recherche'
 
-// const lienEndroit = 'a[data-automation-id=search-ville][href$=rechercher]';
-// const lienAide = 'a[data-automation-id=search-aide][href$=aides]';
-
-// function lienSelectionEndroitAide(lienEndroitAide) {
-//     switch (lienEndroitAide) {
-//       case 'Rechercher des aides':
-//         return lienAide;
-//       case 'Rechercher une ville':
-//         return lienEndroit;
-//     }
-// }
-
 // And("j'attend le chargement de la page de résultat des villes", function () {
 //   cy.intercept('POST', '/api/cities/search').as('searchCities')
 //   cy.wait('@searchCities')
