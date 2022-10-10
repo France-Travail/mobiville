@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 
@@ -93,15 +93,20 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
   }, [autocompletedCities, criterions, codeRome])
 
   // trigger when text input has been updated
-  const onInputChange = (_, value) => {
-    setInputValue(value)
+  const onInputChange = (_, inputValue) => {
+    setInputValue(inputValue)
   }
+
+  const debounceOnSearchCityLabels = useMemo(
+    () => _.debounce((inputValue) => (onAutocomplete(inputValue)), 250),
+    []
+  )
 
   useEffect(() => {
     if (!!inputValue) {
-      onAutocomplete(inputValue.trim())
+      debounceOnSearchCityLabels(inputValue)
     }
-  }, [inputValue])
+  }, [ inputValue ])
 
   useEffect(() => {
     onSelect(value)

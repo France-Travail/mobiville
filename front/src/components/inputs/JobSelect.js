@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import { throttle } from 'lodash'
+import { debounce } from 'lodash'
 
 import { TextSearchInput } from '../../components'
 import { useCities } from '../../common/contexts/citiesContext'
@@ -20,6 +20,7 @@ const JobSelect = ({
     } = useCities()
 
     const [ value, setValue ] = useState(null)
+    const [ inputValue, setInputValue ] = useState(null)
 
     useEffect(() => {
         if (!!search && !!jobsMatchingCriterions && !value) {
@@ -41,20 +42,26 @@ const JobSelect = ({
     useEffect(() => {
         onSelect(value)
     }, [ value ])
+
+    useEffect(() => {
+        if (!!inputValue) {
+            debounceOnSearchJobLabels(inputValue)
+        }
+    }, [ inputValue ])
     
     useEffect(() => {
         initializeJobsAutocomplete()
     }, [])
 
-    const throttledOnSearchJobLabels = useMemo(
-        () => throttle((value) => (onSearchJobLabels(value)), 200),
+    const debounceOnSearchJobLabels = useMemo(
+        () => debounce((inputValue) => (onSearchJobLabels(inputValue)), 250),
         []
     )
 
     // trigger when text input has been updated
-    const onInputChange = (_, value) => {
-        if (!!value) {
-            throttledOnSearchJobLabels(value)
+    const onInputChange = (_, inputValue) => {
+        if (!!inputValue) {
+            setInputValue(inputValue)
         }
     }
 
