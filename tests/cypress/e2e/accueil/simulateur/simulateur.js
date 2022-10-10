@@ -3,11 +3,11 @@ import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "../common/com
 
 const titreSimulateur = "main[id=main] * > p";
 
-const champSaisieBudgetLocation = "input[placeholder=\"Pour un loyer en location\"]";
+const champSaisieBudgetLocation = "input[placeholder=\"Renseigner un budget\"]";
 const ResultatSurfaceLocation = "span[data-automation-id=housing-square-meters]";
 
 const donneePrixSurfaceAchat = "div[class=metrics-container] > div:nth-child(1) > b";
-const champSaisieSurfaceAchat =  "input[placeholder=\"Pour un achat de logement\"]";
+const champSaisieSurfaceAchat =  "input[placeholder=\"Renseigner la surface en m2\"]";
 const ResultatPrixAchat = "span[data-automation-id=housing-cost]";
 
 let SURFACE = 0;
