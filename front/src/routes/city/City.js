@@ -8,7 +8,7 @@ import { CircularProgress } from '@mui/material'
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import DescriptionIcon from '@mui/icons-material/Description'
 
-import { ActionButton, MainLayout } from '../../components'
+import { ActionButton, KeyFigures, MainLayout } from '../../components'
 import CityHeader from './CityHeader'
 import CityJobs from './CityJobs'
 import CityLife from './CityLife'
@@ -43,9 +43,11 @@ import redEllipse from '../../assets/images/icons/red_ellipse.svg'
 import greenEllipse from '../../assets/images/icons/green_ellipse.svg'
 import restaurantsIcon from '../../assets/images/icons/restaurants.svg'
 import pastille from '../../assets/images/icons/pastille.svg'
-import malette from '../../assets/images/icons/malette.svg'
-import profilEntreprise from '../../assets/images/icons/profil_entreprise.svg'
-// import handshake from '../../assets/images/icons/handshake.svg'
+
+import { ReactComponent as MaletteIcon } from '../../assets/images/icons/malette.svg'
+import { ReactComponent as ProfilEntrepriseIcon } from '../../assets/images/icons/profil_entreprise.svg'
+// import { ReactComponent as HandshakeIcon } from '../../assets/images/icons/handshake.svg'
+
 import { formatCityTension, getXDaysAgo } from "../../utils/utils"
 
 const ElementContainer = styled.div`
@@ -58,49 +60,6 @@ const ElementContainer = styled.div`
   align-items: center;
   font-size: 16px;
   line-height: 24px;
-`
-
-const BlockJobInfosContainer = styled.div`
-  display: flex;
-  flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
-  justify-content: space-around;
-  ${({ isMobile }) => (isMobile ? '' : 'width: 100%;')}
-  max-width: 450px;
-  margin: ${({ isMobile }) => (isMobile ? '5px auto 8px auto ' : '0 auto')};
-  margin-bottom: 8px;
-`
-
-const BlockJobInfos = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: ${({ isMobile }) => (isMobile ? '20px' : '32px')};
-  color: ${COLOR_TEXT_PRIMARY};
-
-  &:not(:first-of-type) {
-    margin-left: ${({ isMobile }) => (isMobile ? 0 : '16px')};
-  }
-`
-
-const BlockJobInfosImg = styled.img.attrs({ alt: '' })`
-  height: 50px;
-  width: 50px;
-`
-
-const BlockJobNumber = styled.div`
-  font-weight: 900;
-  font-size: 24px;
-  line-height: 28px;
-  color: ${COLOR_PRIMARY};
-`
-
-const BlockJobLabel = styled.div`
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
-  color: ${COLOR_PRIMARY};
 `
 
 const BlockContainer = styled.div`
@@ -246,21 +205,16 @@ const BlockLinkSyle = `
 `
 
 const BlockContentProximity = styled.div`
+  width: 500px;
+  padding: 24px 16px;
+  border-radius: 4px;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #fff;
-  border-radius: 4px;
-  width: 500px;
-  height: 278px;
-  padding: 16px;
-`
+  gap: 14px;
 
-const BlockProximityTitle = styled.div`
-  font-weight: 900;
-  font-size: 24px;
-  line-height: 28px;
-  color: ${COLOR_PRIMARY};
+  background-color: #fff;
 `
 
 const BlockCompanyName = styled.span`
@@ -380,8 +334,8 @@ const Tag = styled.div`
   padding: 4px 6px;
   border-radius: 8px;
 
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: bold;
   color: ${COLOR_PRIMARY};
   background: white;
   background: ${({ $color }) => ($color ? $color : COLOR_GRAY)};
@@ -624,25 +578,11 @@ const CityPage = () => {
           </TagsContainer>
       )}
       {!isMobile && (
-          <BlockJobInfosContainer isMobile={isMobile}>
-            <BlockJobInfos>
-              <BlockJobInfosImg src={malette} />
-              <BlockJobNumber>{totalOffres}</BlockJobNumber>
-              <BlockJobLabel>Offres d'emploi</BlockJobLabel>
-            </BlockJobInfos>
-
-            <BlockJobInfos>
-              <BlockJobInfosImg src={profilEntreprise} />
-              <BlockJobNumber>{companiesCount}</BlockJobNumber>
-              <BlockJobLabel>Entreprises</BlockJobLabel>
-            </BlockJobInfos>
-
-            {/*<BlockJobInfos>
-              <BlockJobInfosImg src={handshake} />
-              <BlockJobNumber>{totalOffres}</BlockJobNumber>
-              <BlockJobLabel>Taux d'embauche</BlockJobLabel>
-            </BlockJobInfos>*/}
-          </BlockJobInfosContainer>
+          <KeyFigures figures={[
+            { label: "Offres d'emploi", data: totalOffres, icon: <MaletteIcon /> },
+            { label: "Entreprises", data: companiesCount, icon: <ProfilEntrepriseIcon /> },
+            // { label: "Taux d'embauche", data: totalOffres, icon: <BlockJobInfosImg src={handshake} /> },
+          ]} />
       )}
       {!isMobile && (
           <BlockContainer isMobile={isMobile}>
@@ -685,26 +625,19 @@ const CityPage = () => {
             <Block isMobile={isMobile}>
               <BlockHeader>
                 <BlockHeaderText isMobile={isMobile}>
-                  <BlockHeaderH2>À proximité</BlockHeaderH2>
+                  <BlockHeaderH2>Les entreprises qui recrutent à proximité</BlockHeaderH2>
                 </BlockHeaderText>
               </BlockHeader>
               <BlockContainer isMobile={isMobile}>
                 <BlockContentProximity>
-                  <BlockProximityTitle>Les entreprises qui recrutent</BlockProximityTitle>
-                  {closeCompanies?.slice(0,5).map((company) => (
-                      <div>
-                        <BlockCompanyName>{_.startCase(_.toLower(company.name))}</BlockCompanyName>{' '}
-                        <BlockCompanyCity>{_.capitalize(company.city)}</BlockCompanyCity>
-                      </div>
-                        ))}
+                  {closeCompanies?.slice(0,5).map((company, index) => (
+                    <a key={index} href={company.url} target="_blank">
+                      <BlockCompanyName>{_.startCase(_.toLower(company.name))}</BlockCompanyName>{' '}
+                      <BlockCompanyCity>{_.capitalize(company.city)}</BlockCompanyCity>
+                    </a>
+                  ))}
                   <BlockCompanyDataFrom>(Données issues de <a target="_blank" href="https://labonneboite.pole-emploi.fr/">La Bonne Boite</a>)</BlockCompanyDataFrom>
                 </BlockContentProximity>
-                {/*<BlockContentProximity>
-                  <BlockProximityTitle>Secteurs qui recrutent</BlockProximityTitle>
-                  {closeCompanies?.slice(0,5).map((company) => (
-                      <div>{company.name} {company.city}</div>
-                  ))}
-                </BlockContentProximity>*/}
               </BlockContainer>
             </Block>
           </BlockContainer>

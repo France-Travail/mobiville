@@ -34,7 +34,7 @@ const CustomTextFiled = styled(TextField)`
   }
 
   & .MuiInputBase-root {
-    padding: 42px 0 17px 4px;
+    padding: 25px 0 25px 4px;
     border-radius: 20px;
     background: ${COLOR_WHITE} !important;
   }
@@ -57,6 +57,18 @@ const CustomTextFiled = styled(TextField)`
     font-size: 16px;
     font-weight: 400;
     color: ${COLOR_TEXT_PRIMARY};
+  }
+
+  /* REMOVE ARROWS ON INPUT NUMBER */
+  /* Chrome, Safari, Edge, Opera */
+  & input::-webkit-outer-spin-button,
+  & input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  /* Firefox */
+  & input[type=number] {
+    -moz-appearance: textfield;
   }
 `
 

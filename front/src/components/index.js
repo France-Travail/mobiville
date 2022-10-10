@@ -9,6 +9,7 @@ export { SearchInput, SearchOptions } from './SearchComponents.js'
 export { Section, SectionTitle } from './Section.js'
 export { default as SubHeader } from './SubHeader.js'
 export { default as Modale } from './Modale.js'
+export { default as KeyFigures } from './KeyFigures.js'
 
 // INPUTS
 export { default as Button } from './inputs/Button.js'

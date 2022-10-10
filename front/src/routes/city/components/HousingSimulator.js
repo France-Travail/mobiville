@@ -120,11 +120,10 @@ const HousingSimulator = ({ city }) => {
 
           {!!city?.average_houserent && (
             <div>
-              <InputLabel>Pour une location</InputLabel>
+              <InputLabel>Pour un loyer en location</InputLabel>
               <InputGroup>
                 <TextInput
-                  label="Renseigner un budget"
-                  placeholder="Pour un loyer en location"
+                  placeholder="Renseigner un budget"
                   type="number"
                   onChange={(event) =>
                     calculateSquareMeters(event.target.value)
@@ -150,11 +149,10 @@ const HousingSimulator = ({ city }) => {
 
           {!!city?.average_houseselled && (
             <div>
-              <InputLabel>Pour un achat</InputLabel>
+              <InputLabel>Pour un achat de logement</InputLabel>
               <InputGroup>
                 <TextInput
-                  label="Renseigner la surface en m2"
-                  placeholder="Pour un achat de logement"
+                  placeholder="Renseigner la surface en m2"
                   type="number"
                   onChange={(event) => calculateHousingCost(event.target.value)}
                 ></TextInput>
