@@ -7,8 +7,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { useCities } from '../../common/contexts/citiesContext'
 import { COLOR_GRAY, COLOR_TEXT_PRIMARY } from '../../constants/colors'
 import { formatNumber } from '../../utils/utils'
-import crowd from '../../assets/images/icons/crowd.svg'
-import weather from '../../assets/images/icons/weather.svg'
+import { ReactComponent as CrowdIcon } from '../../assets/images/icons/crowd.svg'
+import { ReactComponent as WeatherIcon } from '../../assets/images/icons/weather.svg'
 
 const Container = styled.div`
   background-color: #fff;
@@ -131,13 +131,13 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
           <ContainerInfoStats isMobile={isMobile}>
               <StatsContainer isMobile={isMobile}>
                   <Stats>
-                      <img src={crowd} alt="" />
+                      <CrowdIcon />
                       Habitants <br />
                       <b>{formatNumber(city.population * 1000)}</b>
                   </Stats>
 
                   <Stats>
-                      <img src={weather} alt="" />
+                      <WeatherIcon />
                       Température
                       <br />
                       <b>{Math.floor(city.average_temperature)}°</b>
