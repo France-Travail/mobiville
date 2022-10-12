@@ -11,10 +11,10 @@ import DescriptionIcon from '@mui/icons-material/Description'
 import { ActionButton, KeyFigures, MainLayout } from '../../components'
 import CityHeader from './CityHeader'
 import CityJobs from './CityJobs'
-import CityLife from './CityLife'
 import CityHousing from './CityHousing'
 import CitySubHeader from './CitySubHeader'
 import CityHousingSimulator from './CityHousingSimulator'
+import CityServices from './cityServices/CityServices'
 
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
@@ -507,10 +507,9 @@ const CityPage = () => {
 
   if (section === LIFE)
     return (
-      <CityLife
+      <CityServices
         city={city}
         backLink={childrenComponentsBacklink}
-        cityEquipments={city.equipments}
       />
     )
 

@@ -1,6 +1,7 @@
 // This script allows us to create a smaller file from the gigantic BPE csv data (~600mb)
 // it was used to create a smaller json file which was then gzipped.
 // It stays in history because it could be useful to create other files the next years
+// source pour les correspondances : https://www.insee.fr/fr/metadonnees/source/operation/s2027/bases-donnees-ligne
 
 const { createReadStream, writeFileSync } = require('fs')
 const parse = require('csv-parse')

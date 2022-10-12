@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState, memo, useCallback } from 'react'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import styled from 'styled-components'
 import queryString from 'query-string'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
-import L from 'leaflet'
 
 import { useCities } from '../../common/contexts/citiesContext'
-import { MainLayout } from '../../components'
+import { MainLayout, Map } from '../../components'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import { COLOR_BUTTON_HOVER, COLOR_PRIMARY } from '../../constants/colors'
@@ -18,10 +16,6 @@ import DesktopCriterionsPanel from './components/DesktopCriterionsPanel'
 import MobileCriterionsSelection from './components/MobileCriterionsSelection'
 
 import noResultsPic from '../../assets/images/no_results.svg'
-import blueMarker from '../../assets/images/marker-blue.svg'
-import hoverMarker from '../../assets/images/marker-hover.svg'
-import selectedMarker from '../../assets/images/marker-selected.svg'
-import { formatNumber } from '../../utils/utils'
 
 import Pagination from '@mui/material/Pagination'
 import { useProfessions } from '../../common/contexts/professionsContext'
@@ -52,15 +46,6 @@ const CitiesList = styled.div`
     margin: 8px -4px;
     ${({ isMobile }) => (isMobile ? '' : 'width: 612px;')}
   }
-`
-
-const StyledMapContainer = styled(MapContainer)`
-  height: 424px;
-  width: 424px;
-  max-width: 100%;
-  margin-left: 8px;
-  margin-right: 8px;
-  border-radius: 16px;
 `
 
 const PaginationContainer = styled.div`
@@ -121,14 +106,6 @@ const SubTitle = styled.h2`
   font-weight: 400;
   font-size: 22px;
   line-height: 27px;
-`
-
-const PopupLink = styled(Link)`
-  color: #191970 !important;
-
-  &:hover {
-    color: #4e4ec9 !important;
-  }
 `
 
 const Cities = () => {
@@ -310,18 +287,6 @@ const Cities = () => {
     setPage(value)
   }
 
-  const getLeafletIcon = (requiredFile) =>
-    new L.Icon({
-      iconUrl: requiredFile,
-      iconRetinaUrl: requiredFile,
-      iconAnchor: [12, 41],
-      popupAnchor: [0, -41],
-      shadowUrl: null,
-      shadowSize: null,
-      shadowAnchor: null,
-      className: 'leaflet-marker-icon',
-    })
-
   if (showMobilePanel) {
     return (
       <MainLayout menu={{ visible: !showMobileCriterionsSelection }}>
@@ -378,26 +343,6 @@ const Cities = () => {
     </CitiesList>
   )
 
-  let firstCityCoordinates
-  let mapBounds
-  if (cities.length > 0) {
-    firstCityCoordinates = [cities[0].geo_point_2d_x, cities[0].geo_point_2d_y]
-    mapBounds = cities.reduce(
-      (prev, city) => ({
-        minX: prev.minX > city.geo_point_2d_x ? city.geo_point_2d_x : prev.minX,
-        maxX: prev.maxX < city.geo_point_2d_x ? city.geo_point_2d_x : prev.maxX,
-        minY: prev.minY > city.geo_point_2d_y ? city.geo_point_2d_y : prev.minY,
-        maxY: prev.maxY < city.geo_point_2d_y ? city.geo_point_2d_y : prev.maxY,
-      }),
-      {
-        minX: Number.POSITIVE_INFINITY,
-        maxX: Number.NEGATIVE_INFINITY,
-        minY: Number.POSITIVE_INFINITY,
-        maxY: Number.NEGATIVE_INFINITY,
-      }
-    )
-  }
-
   return (
     <>
       {computedHelmet()}
@@ -425,50 +370,23 @@ const Cities = () => {
             {citiesList}
 
             {!isLoading && cities.length ? (
-              <StyledMapContainer
-                center={cities.length > 1 ? null : firstCityCoordinates}
-                zoom={cities.length > 1 ? null : 6}
-                bounds={
-                  cities.length > 1
-                    ? [
-                        [mapBounds.minX, mapBounds.minY],
-                        [mapBounds.maxX, mapBounds.maxY],
-                      ]
-                    : null
-                }
-                scrollWheelZoom
-              >
-                <TileLayer
-                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              <div style={{ height: 424, width: 424 }}>
+                <Map
+                  cities={cities.map((city) => ({
+                    ...city,
+                    x: city.geo_point_2d_x ?? 0,
+                    y: city.geo_point_2d_y ?? 0,
+                    url: getCityUrl(city),
+                  }))}
+                  style={{ height: '100%', width: '100%', margin: 0 }}
+                  zoom={7}
+                  popupopen={(city) => setSelectedCityId(city.id)}
+                  popupclose={() => setSelectedCityId(null)}
+                  showPopUp
+                  selectedCityId={selectedCityId}
+                  hoveredCityId={hoveredCityId}
                 />
-                {cities.map((city, key) => (
-                  <Marker
-                    key={city.id}
-                    position={[city.geo_point_2d_x, city.geo_point_2d_y]}
-                    icon={getLeafletIcon(
-                      city.id === selectedCityId
-                        ? selectedMarker
-                        : city.id === hoveredCityId
-                        ? hoverMarker
-                        : blueMarker
-                    )}
-                    eventHandlers={{
-                      popupopen: () => {
-                        setSelectedCityId(city.id)
-                      },
-                      popupclose: () => setSelectedCityId(null),
-                    }}
-                  >
-                    <Popup>
-                      <PopupLink to={getCityUrl(city)}>
-                        <b>{city.nom_comm}</b> (
-                        {formatNumber(city.population * 1000)} habitants)
-                      </PopupLink>
-                    </Popup>
-                  </Marker>
-                ))}
-              </StyledMapContainer>
+              </div>
             ) : (
               <div style={{ width: 424 }} />
             )}
