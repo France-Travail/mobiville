@@ -84,7 +84,7 @@ const Tag = styled.div`
 
 const HousingSearchContainer = styled.div`
   max-width: 888px;
-  margin: 0 8px;
+  margin: ${({ $isMobile }) => ($isMobile ? '0 21px' : '0 8px')};
 
   display: flex;
   flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row')};
@@ -103,7 +103,7 @@ const HousingActorsContainer = styled.div`
 `
 
 const HousingActor = styled.div`
-  padding: 44px;
+  padding: ${({ $isMobile }) => ($isMobile ? '37px' : '44px')};
   flex: auto;
 
   display: flex;
@@ -213,7 +213,7 @@ const CityHousingSimulator = ({ city, nbSocialHousing }) => {
 
       <HousingSearchContainer $isMobile={isMobile}>
         <HousingActorsContainer>
-          <HousingActor>
+          <HousingActor $isMobile={isMobile}>
             <HousingActorImage src={logoLogementSocial} />
             <div>
               <HousingActorTitle>Demandez un logement social</HousingActorTitle>
