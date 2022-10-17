@@ -7,7 +7,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {
   COLOR_PRIMARY,
   COLOR_TEXT_PRIMARY
-} from '../../constants/colors'
+} from '../../../constants/colors'
 
 const BackContainer = styled.div`
   height: 60px;

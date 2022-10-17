@@ -19,7 +19,7 @@ import { ReactComponent as WeatherIcon } from '../../../assets/images/icons/weat
 import { ReactComponent as CalculatorIcon } from '../../../assets/images/icons/calculator.svg'
 import { formatNumber } from '../../../utils/utils'
 import CityServiceInfoCards from './components/CityServiceInfoCards'
-import BackResultsButton from "../BackResultsButton"
+import BackResultsButton from "../components/BackResultsButton"
 
 const WelcomeContainer = styled.div`
   background: ${({ $isMobile }) => ($isMobile ? 'none' : 'white')};

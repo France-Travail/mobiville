@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { useCities } from '../../common/contexts/citiesContext'
 import {COLOR_GRAY} from '../../constants/colors'
-import BackResultsButton from "./BackResultsButton"
+import BackResultsButton from "./components/BackResultsButton"
 
 const Container = styled.div`
   background-color: #fff;
