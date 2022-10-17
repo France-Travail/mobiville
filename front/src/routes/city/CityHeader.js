@@ -1,12 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 import { useCities } from '../../common/contexts/citiesContext'
 import {COLOR_GRAY} from '../../constants/colors'
-import BackResultsButton from "./BackResultsButton";
+import BackResultsButton from "./BackResultsButton"
 
 const Container = styled.div`
   background-color: #fff;

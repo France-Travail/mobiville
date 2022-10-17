@@ -8,7 +8,6 @@ import { KeyFigures, MainLayout, Map } from '../../../components'
 import ElectedContact from './components/ElectedContact'
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
-import { Link } from 'react-router-dom'
 import {
     COLOR_GRAY,
     COLOR_PRIMARY, COLOR_WHITE,
@@ -20,7 +19,7 @@ import { ReactComponent as WeatherIcon } from '../../../assets/images/icons/weat
 import { ReactComponent as CalculatorIcon } from '../../../assets/images/icons/calculator.svg'
 import { formatNumber } from '../../../utils/utils'
 import CityServiceInfoCards from './components/CityServiceInfoCards'
-import BackResultsButton from "../BackResultsButton";
+import BackResultsButton from "../BackResultsButton"
 
 const WelcomeContainer = styled.div`
   background: ${({ $isMobile }) => ($isMobile ? 'none' : 'white')};
