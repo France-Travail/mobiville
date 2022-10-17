@@ -4,17 +4,13 @@ import { Helmet } from 'react-helmet-async'
 import _ from 'lodash'
 import styled, { css } from 'styled-components'
 
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-
 import { KeyFigures, MainLayout, Map } from '../../../components'
 import ElectedContact from './components/ElectedContact'
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
-import { Link } from 'react-router-dom'
 import {
-  COLOR_GRAY,
-  COLOR_PRIMARY,
-  COLOR_WHITE,
+    COLOR_GRAY,
+    COLOR_PRIMARY, COLOR_WHITE,
 } from '../../../constants/colors'
 
 import { ReactComponent as RightChevronIcon } from '../../../assets/images/icons/right_chevron.svg'
@@ -23,6 +19,7 @@ import { ReactComponent as WeatherIcon } from '../../../assets/images/icons/weat
 import { ReactComponent as CalculatorIcon } from '../../../assets/images/icons/calculator.svg'
 import { formatNumber } from '../../../utils/utils'
 import CityServiceInfoCards from './components/CityServiceInfoCards'
+import BackResultsButton from "../components/BackResultsButton"
 
 const WelcomeContainer = styled.div`
   background: ${({ $isMobile }) => ($isMobile ? 'none' : 'white')};
@@ -33,7 +30,7 @@ const WelcomeWrapper = styled.div`
   max-width: 1036px;
   margin: ${({ $isMobile }) =>
     $isMobile ? '50px auto 0 auto' : '14px auto 50px auto'};
-  padding: 16px;
+  ${({ $isMobile }) => ($isMobile ? 'padding: 16px' : '')};
   color: ${COLOR_PRIMARY};
 `
 
@@ -115,12 +112,11 @@ const CityServices = ({ backLink, city }) => {
       </Helmet>
 
       <WelcomeContainer $isMobile={isMobile}>
+        <BackResultsButton
+            backLink={backLink}
+            isMobile={isMobile}
+        />
         <WelcomeWrapper $isMobile={isMobile}>
-          <Link to={backLink ? backLink : '/'}>
-            <ArrowBackIcon style={{ verticalAlign: 'bottom' }} /> Retour aux
-            résultats
-          </Link>
-
           <Title>Vivre à {_.capitalize(city.nom_comm)}</Title>
 
           <InfoContainer $isMobile={isMobile}>

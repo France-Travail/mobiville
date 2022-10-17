@@ -12,7 +12,6 @@ import { ActionButton, KeyFigures, MainLayout } from '../../components'
 import CityHeader from './CityHeader'
 import CityJobs from './CityJobs'
 import CityHousing from './CityHousing'
-import CitySubHeader from './CitySubHeader'
 import CityHousingSimulator from './CityHousingSimulator'
 import CityServices from './cityServices/CityServices'
 
@@ -547,15 +546,6 @@ const CityPage = () => {
           )} pour le métier de ${romeLabel} ainsi que les informations sur l’immobilier, les services et les équipements.`}
         />
       </Helmet>
-
-      {!isMobile && (
-        // A custom header is used for the mobile version in the CityHeader component
-        <CitySubHeader
-          backLink={backLink}
-          node={titlesNode}
-          isMobile={isMobile}
-        />
-      )}
 
       <CityHeader
         backLink={backLink}
