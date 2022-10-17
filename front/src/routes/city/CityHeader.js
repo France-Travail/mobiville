@@ -21,7 +21,7 @@ const ContainerInfoStats = styled.div`
   display: flex;
   max-width: 1040px;
   width: 100%;
-  margin-top: ${({ isMobile }) => (isMobile ? '0px' : '21px')};
+  margin-top: 21px;
   margin-bottom: 0px;
 `
 
@@ -54,9 +54,9 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
       />
 
       {!isMobile && (
-          <ContainerInfoStats isMobile={isMobile}>
-              <ContainerInfo>{!isMobile && titlesNode}</ContainerInfo>
-          </ContainerInfoStats>
+        <ContainerInfoStats>
+          <ContainerInfo>{!isMobile && titlesNode}</ContainerInfo>
+        </ContainerInfoStats>
       )}
 
       <PicAndMapContainer isMobile={isMobile}>
@@ -71,12 +71,10 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
   )
 }
 
-export default CityHeader
-
 CityHeader.propTypes = {
   backLink: PropTypes.string,
   isMobile: PropTypes.bool.isRequired,
   titlesNodes: PropTypes.string,
 }
 
-CityHeader.defaultProps = {}
+export default CityHeader

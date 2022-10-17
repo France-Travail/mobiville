@@ -186,28 +186,26 @@ const CityHousingSimulator = ({ city, nbSocialHousing }) => {
           {[
             { label: '2', rentValue: city.average_houserent_f2 },
             { label: '4', rentValue: city.average_houserent_f4 },
-          ].map(({ label, rentValue }) => {
-            return (
-              <ElementObject $isMobile={isMobile}>
-                <div
-                  style={{
-                    height: '48px',
-                    display: 'flex',
-                    alignItems: 'flex-end',
-                  }}
-                >
-                  <p className="metrics-title">
-                    <span>{label}</span> pièces
-                  </p>
-                </div>
-                <b>{rentValue ? `${+rentValue}€` : 'A venir'}</b>
-                <p className="metrics-description">
-                  Loyer moyen <br />
-                  en location
+          ].map(({ label, rentValue }) => (
+            <ElementObject $isMobile={isMobile} key={label}>
+              <div
+                style={{
+                  height: '48px',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                }}
+              >
+                <p className="metrics-title">
+                  <span>{label}</span> pièces
                 </p>
-              </ElementObject>
-            )
-          })}
+              </div>
+              <b>{rentValue ? `${+rentValue}€` : 'A venir'}</b>
+              <p className="metrics-description">
+                Loyer moyen <br />
+                en location
+              </p>
+            </ElementObject>
+          ))}
         </div>
       </HousingMetrics>
 

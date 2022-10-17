@@ -413,16 +413,9 @@ const CityPage = () => {
         {_.capitalize(city.nom_region)} <img src={pastille} alt="" />{' '}
         {_.capitalize(city.nom_dept)}
       </RegionName>
-      {!isMobile && (
-        <CityName isMobile={isMobile}>
-          {_.capitalize(city.nom_comm)}{' '}pour le métier {romeLabel}
-        </CityName>
-      )}
-      {isMobile && (
-        <CityName isMobile={isMobile}>
-          {_.capitalize(city.nom_comm)} <br /> pour le métier {romeLabel}
-        </CityName>
-      )}
+      <CityName isMobile={isMobile}>
+        {_.capitalize(city.nom_comm)}{isMobile ? <br /> : ' '}pour le métier {romeLabel}
+      </CityName>
     </TitlesContainer>
   )
 
@@ -475,15 +468,15 @@ const CityPage = () => {
       </BlockTitle>
       <BlockContainerOffers isMobile={isMobile}>
         <BlockContentOffers isMobile={isMobile}>
-          {professionsCandidatsManquants?.slice(0,3).map((profession) => (
-              <BlockCardOffer isMobile={isMobile}>
-                <BlockOfferLabel>{profession.appellationlibelle}</BlockOfferLabel>
-                <BlockOfferCompany>{profession.entreprise.nom}</BlockOfferCompany>
-                <BlockOfferCity>{profession.lieuTravail.libelle}</BlockOfferCity>
-                <BlockOfferContract><DescriptionIcon/>{profession.typeContrat} {profession.dureeTravailLibelleConverti ? ' \u2022 ' + profession.dureeTravailLibelleConverti : ''}
-                </BlockOfferContract>
-                <BlockOfferDate><AccessTimeIcon/>Publié il y a {getXDaysAgo(profession.dateActualisation)}</BlockOfferDate>
-              </BlockCardOffer>
+          {professionsCandidatsManquants?.slice(0,3).map((profession, index) => (
+            <BlockCardOffer isMobile={isMobile} key={index}>
+              <BlockOfferLabel>{profession.appellationlibelle}</BlockOfferLabel>
+              <BlockOfferCompany>{profession.entreprise.nom}</BlockOfferCompany>
+              <BlockOfferCity>{profession.lieuTravail.libelle}</BlockOfferCity>
+              <BlockOfferContract><DescriptionIcon/>{profession.typeContrat} {profession.dureeTravailLibelleConverti ? ' \u2022 ' + profession.dureeTravailLibelleConverti : ''}
+              </BlockOfferContract>
+              <BlockOfferDate><AccessTimeIcon/>Publié il y a {getXDaysAgo(profession.dateActualisation)}</BlockOfferDate>
+            </BlockCardOffer>
           ))}
         </BlockContentOffers>
       </BlockContainerOffers>
