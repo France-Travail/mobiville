@@ -126,7 +126,7 @@ router.get('/criterions', async ({ models, response }) => {
 
   response.body = {
     criterions: CRITERIONS,
-    regions: regionsTensionsCriterions,
+    regions: JSON.parse(regionsTensionsCriterions),
     codeRomes: jobList.map((job) => ({
       key: job.rome,
       label: job.label,
