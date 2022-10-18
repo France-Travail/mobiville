@@ -532,8 +532,8 @@ const CityPage = () => {
         </BlockContentOffers>
       </BlockContainerOffers>
       <BlockLinkDiv>
-        <ActionButton
-          path={`/city/${insee}/job?codeRome=${codeRome}`}
+        <ActionButton 
+          path={`/city/${insee}/${JOB}?codeRome=${codeRome}`}
           libelle={`Voir toutes les offres d’emploi`}
           isMobile={isMobile}
           isBlue={true}
@@ -590,7 +590,7 @@ const CityPage = () => {
           </ServicesStandOutDescription>
           <ActionButton
             style={{ marginTop: 16, width: 'fit-content' }}
-            path={'/mobility-guide'}
+            path={`/city/${insee}/${LIFE}?codeRome=${codeRome}`}
             libelle={`Voir tous les services`}
             isMobile={isMobile}
             isBlue={false}
