@@ -7,7 +7,7 @@ const champSaisieBudgetLocation = "input[placeholder=\"Renseigner un budget\"]";
 const ResultatSurfaceLocation = "span[data-automation-id=housing-square-meters]";
 
 const donneePrixSurfaceAchat = "div[class=metrics-container] > div:nth-child(1) > b";
-const champSaisieSurfaceAchat =  "input[placeholder=\"Renseigner la surface en m2\"]";
+const champSaisieSurfaceAchat =  "input[placeholder=\"Renseigner la surface\"]";
 const ResultatPrixAchat = "span[data-automation-id=housing-cost]";
 
 let SURFACE = 0;
