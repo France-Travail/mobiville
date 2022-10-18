@@ -4,18 +4,14 @@ import _ from 'lodash'
 import styled, { css } from 'styled-components'
 
 import {formatCityTension, formatNumber} from '../../../utils/utils'
-import {
-  COLOR_GRAY,
-  COLOR_PRIMARY,
-  COLOR_TAG_GREEN,
-  COLOR_TAG_RED,
-} from '../../../constants/colors'
+import { COLOR_PRIMARY } from '../../../constants/colors'
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
 import selectedMarker from '../../../assets/images/marker-selected.svg'
 import { ReactComponent as RightChevronIcon } from '../../../assets/images/icons/right_chevron.svg'
 
 import { CircularProgress } from '@mui/material'
+import { Tag } from '../../../components'
 
 const CityLink = styled(Link)`
   margin-top: 16px;
@@ -79,17 +75,6 @@ const TagsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-`
-
-const Tag = styled.div`
-  padding: 4px 6px;
-  border-radius: 8px;
-
-  font-size: 12px;
-  font-weight: 500;
-  color: ${COLOR_PRIMARY};
-  background: white;
-  background: ${({ $color }) => ($color ? $color : COLOR_GRAY)};
 `
 
 const InformationsContainer = styled.div`
@@ -159,13 +144,7 @@ const CityItem = ({
         <Department>{_.capitalize(city.nom_dept)}</Department>
 
         <TagsContainer>
-          <Tag
-            $color={
-              city['bassin.tensions.ind_t'] < 4
-                ? COLOR_TAG_GREEN
-                : COLOR_TAG_RED
-            }
-          >
+          <Tag green={city['bassin.tensions.ind_t'] < 4}>
             {formatCityTension(city['bassin.tensions.ind_t'])}
           </Tag>
           <Tag>{formatNumber(city.population * 1000)} habitants</Tag>

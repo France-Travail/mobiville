@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 import { useWindowSize } from '../../common/hooks/window-size'
-import { COLOR_PRIMARY, COLOR_TAG_GREEN, COLOR_TAG_RED, COLOR_WHITE } from '../../constants/colors'
+import { COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
 import { formatNumber } from '../../utils/utils'
 
@@ -12,6 +12,7 @@ import logoALin from '../../assets/images/logo-ALin.png'
 import logoLogementSocial from '../../assets/images/logo-logement-social.png'
 
 import HousingSimulator from './components/HousingSimulator'
+import { Tag } from '../../components'
 
 const HousingMetrics = styled.div`
   display: flex;
@@ -22,7 +23,6 @@ const HousingMetrics = styled.div`
   .metrics-container {
     display: flex;
     justify-content: space-between;
-    /* width: 400px; */
     width: ${({ $isMobile }) => ($isMobile ? '328px' : '400px')};
     margin: 0px auto;
   }
@@ -67,19 +67,8 @@ const ElementObject = styled.div`
   }
 `
 
-const Tag = styled.div`
-  /* height: 25px; */
-  margin: auto;
-  /* text-align: center; */
-  width: fit-content;
-  padding: 4px 6px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-
-  background-color: ${({ isRed }) => isRed ? COLOR_TAG_RED : COLOR_TAG_GREEN};
-  color: ${COLOR_PRIMARY};
-  font-size: 16px;
-  font-weight: bold;
+const TagsContainer = styled.div`
+  margin: 28px auto;
 `
 
 const HousingSearchContainer = styled.div`
@@ -148,20 +137,22 @@ const HousingActorImage = styled.img`
   align-self: center;
 `
 
-const CityHousingSimulator = ({ city, nbSocialHousing }) => {
+const CityHousingSimulator = ({ city }) => {
   const size = useWindowSize()
   const isMobile = isMobileView(size)
 
   return (
     <>
       <HousingMetrics $isMobile={isMobile}>
-        <Tag
-          isRed={city && city.city_house_tension}
-        >{
+        
+      <TagsContainer>
+        <Tag green={!city.city_house_tension} tall>{
           city && city.city_house_tension
           ? "Tension immobilière a l'achat"
           : "Pas de tension immobilière a l'achat"
         }</Tag>
+      </TagsContainer>
+
         <div className="metrics-container">
           <ElementObject $isMobile={isMobile}>
             <div>
