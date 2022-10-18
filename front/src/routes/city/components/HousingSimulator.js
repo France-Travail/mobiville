@@ -7,6 +7,8 @@ import { COLOR_OTHER_GREEN, COLOR_PRIMARY } from '../../../constants/colors'
 import Euro from '@mui/icons-material/Euro'
 import { TextInput } from '../../../components'
 import { formatNumber } from '../../../utils/utils'
+import {isMobileView} from "../../../constants/mobile";
+import {useWindowSize} from "../../../common/hooks/window-size";
 
 const Container = styled.div`
   max-width: 440px;
@@ -15,6 +17,7 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
+  justify-content: center;
 
   background: ${COLOR_OTHER_GREEN};
   color: ${COLOR_PRIMARY};
@@ -34,6 +37,7 @@ const SubTitle = styled.p`
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
+  padding-right: ${({ $isMobile }) => ($isMobile ? '0' : '65px')};
 `
 
 const InputGroup = styled.div`
@@ -61,7 +65,7 @@ const ResultContainer = styled.div`
   line-height: ${({ $isVisible }) => ($isVisible ? '36px' : '0')};
 `
 
-const ResultText = styled.p`
+const ResultText = styled.div`
   margin: 0;
 
   visibility: ${({ $isVisible }) => ($isVisible ? 'visible' : 'hidden')};
@@ -70,11 +74,11 @@ const ResultText = styled.p`
   font-weight: 700;
 `
 
-const Result = styled.p`
+const Result = styled.span`
   margin: 0;
 
-  font-size: 36px;
-  font-weight: bold;
+  font-size: ${({ $isMobile }) => ($isMobile ? '30px' : '36px')};
+  font-weight: 900;
 `
 
 const HR = styled.hr`
@@ -84,6 +88,7 @@ const HR = styled.hr`
 `
 
 const HousingSimulator = ({ city }) => {
+  const isMobile = isMobileView(useWindowSize())
   const [squareMeters, setSquareMeters] = useState(0)
   const [housingCost, setHousingCost] = useState(0)
 
@@ -110,9 +115,8 @@ const HousingSimulator = ({ city }) => {
         <Container>
           <div>
             <Title>Simulateur de logement</Title>
-            <SubTitle>
+            <SubTitle $isMobile={isMobile}>
               Calculer votre budget pour un achat
-              <br />
               ou une location
             </SubTitle>
           </div>
@@ -133,13 +137,13 @@ const HousingSimulator = ({ city }) => {
               <ResultContainer $isVisible={!!squareMeters}>
                 <ResultText $isVisible={!!squareMeters}>
                   Votre pouvez occuper un logement de
+                  {squareMeters ? (
+                      <Result $isMobile={isMobile}>
+                        <span data-automation-id="housing-square-meters">{' ' + formatNumber(squareMeters)}</span>
+                        m2
+                      </Result>
+                  ) : null}
                 </ResultText>
-                {squareMeters ? (
-                  <Result>
-                    <span data-automation-id="housing-square-meters">{formatNumber(squareMeters)}</span>
-                    m2
-                  </Result>
-                ) : null}
               </ResultContainer>
             </div>
           )}
@@ -160,15 +164,15 @@ const HousingSimulator = ({ city }) => {
               <ResultContainer $isVisible={!!housingCost}>
                 <ResultText $isVisible={!!housingCost}>
                   Votre logement va vous coûter
-                </ResultText>
-                {housingCost ? (
-                  <Result>
+                  {housingCost ? (
+                      <Result $isMobile={isMobile}>
                     <span data-automation-id="housing-cost">
-                      {formatNumber(housingCost)}
+                      {' ' + formatNumber(housingCost)}
                     </span>
-                    <Euro fontSize="large" />
-                  </Result>
-                ) : null}
+                        <Euro fontSize="large" />
+                      </Result>
+                  ) : null}
+                </ResultText>
               </ResultContainer>
             </div>
           )}
