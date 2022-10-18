@@ -7,8 +7,8 @@ import { COLOR_OTHER_GREEN, COLOR_PRIMARY } from '../../../constants/colors'
 import Euro from '@mui/icons-material/Euro'
 import { TextInput } from '../../../components'
 import { formatNumber } from '../../../utils/utils'
-import {isMobileView} from "../../../constants/mobile";
-import {useWindowSize} from "../../../common/hooks/window-size";
+import {isMobileView} from "../../../constants/mobile"
+import {useWindowSize} from "../../../common/hooks/window-size"
 
 const Container = styled.div`
   max-width: 440px;
