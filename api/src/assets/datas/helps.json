@@ -224,22 +224,6 @@
       "partner": "Alternôme"
     },
     {
-      "title": "Mon job Mon logement",
-      "goal": "Vous êtes nouveau locataire ou vous déménagez pour vous rapprocher de votre travail? Bénéficiez d'une aide de 1 000 €",
-      "description": "Aide de 1000 € sous forme de subvention pour aider à s’installer près de son emploi ou de son lieu de formation",
-      "when": "Maximum 3 mois après la signature du bail",
-      "conditions": "Être locataire depuis moins de 3 mois, d’un logement situé sur le territoire français et qui constitue sa résidence principale.<br/><br/>Pour les salariés qui démarrent une activité professionnelle, le délai entre la date <br/>d’entrée dans le logement et la date de début du contrat de travail ne doit pas <br/>excéder 3 mois. <br/><br/><i><small>Aide soumise à conditions (notamment de ressources), disponible dans la limite du montant maximal de l’enveloppe fixée par la réglementation en vigueur, et octroyée sous réserve de l’accord d’Action Logement Services.</i></small>",
-      "cumulable": "• Non cumulable avec avec l’aide à la mobilité et l’aide jeunes actifs précédemment proposées par Action Logement<br/>• Cumulable, sous conditions, avec d'autres aides Action Logement :<br/>L'AVANCE LOCA-PASS® : une aide pour avancer le montant de votre dépôt de garantie,<br/>La garantie VISALE : une caution gratuite accordée par Action Logement pour faciliter votre accès au logement<br/>L'AIDE MOBILI-JEUNE® : une subvention jusqu'à 100 € par mois pour alléger le loyer des alternants",
-      "link": "https://www.actionlogement.fr/aide-mon-job-mon-logement",
-      "who": "<span style=\"display:none\">salarié^ moins de 26 ans^ plus de 26 ans</span><br/>^ Salariés d’entreprises du secteur privé (y compris agricole) :<br/>- en reprise d’emploi, alternance ou 1er emploi<br/>- ou qui justifient un rapprochement domicile/ travail<br/>Et dont les revenus ne dépassent pas 1.5 fois le Smic<br/><br/>^ Jeunes actifs* de moins de 25 ans (hors alternants) avec un contrat de travail de moins de 6 mois et un revenu compris entre 30 % et 100 % du Smic<br/><br/><i><small>* salariés d’entreprises du secteur privé (y compris agricole)</i></small>",
-      "section": "logement",
-      "situation": "Je déménage",
-      "slug": "mon-job-mon-logement",
-      "logo": "action-logement-2.png",
-      "type": "Aide financière",
-      "partner": "Action logement"
-    },
-    {
       "title": "Keeseek",
       "goal": "Accédez à des locations de courte durée ou longue durée, sans garant, pour votre déplacement professionnel ou votre embauche",
       "description": "Tout juste recruté ? Salarié muté, en déplacement professionnel ou en voyage d'affaires? Réservez en 1 clic un hébergement sans garant: location courte, moyenne et longue durée, meublé, gîte, hôtel & appart-hôtel",
