@@ -11,7 +11,6 @@ import { formatNumber } from '../../../utils/utils'
 const Container = styled.div`
   max-width: 440px;
   padding: 56px;
-  padding-bottom: 0;
   border-radius: 4px;
 
   display: flex;
@@ -59,7 +58,7 @@ const ResultContainer = styled.div`
   min-height: 1px;
 
   margin: ${({ $isVisible }) => ($isVisible ? '16px 0' : '0')};
-  line-height: 36px;
+  line-height: ${({ $isVisible }) => ($isVisible ? '36px' : '0')};
 `
 
 const ResultText = styled.p`
@@ -152,7 +151,7 @@ const HousingSimulator = ({ city }) => {
               <InputLabel>Pour un achat de logement</InputLabel>
               <InputGroup>
                 <TextInput
-                  placeholder="Renseigner la surface en m2"
+                  placeholder="Renseigner la surface"
                   type="number"
                   onChange={(event) => calculateHousingCost(event.target.value)}
                 ></TextInput>

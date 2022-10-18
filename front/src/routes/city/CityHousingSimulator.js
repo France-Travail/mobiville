@@ -84,7 +84,7 @@ const Tag = styled.div`
 
 const HousingSearchContainer = styled.div`
   max-width: 888px;
-  margin: 0 8px;
+  margin: ${({ $isMobile }) => ($isMobile ? '0 21px' : '0 8px')};
 
   display: flex;
   flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row')};
@@ -103,7 +103,7 @@ const HousingActorsContainer = styled.div`
 `
 
 const HousingActor = styled.div`
-  padding: 44px;
+  padding: ${({ $isMobile }) => ($isMobile ? '37px' : '44px')};
   flex: auto;
 
   display: flex;
@@ -186,34 +186,32 @@ const CityHousingSimulator = ({ city, nbSocialHousing }) => {
           {[
             { label: '2', rentValue: city.average_houserent_f2 },
             { label: '4', rentValue: city.average_houserent_f4 },
-          ].map(({ label, rentValue }) => {
-            return (
-              <ElementObject $isMobile={isMobile}>
-                <div
-                  style={{
-                    height: '48px',
-                    display: 'flex',
-                    alignItems: 'flex-end',
-                  }}
-                >
-                  <p className="metrics-title">
-                    <span>{label}</span> pièces
-                  </p>
-                </div>
-                <b>{rentValue ? `${+rentValue}€` : 'A venir'}</b>
-                <p className="metrics-description">
-                  Loyer moyen <br />
-                  en location
+          ].map(({ label, rentValue }) => (
+            <ElementObject $isMobile={isMobile} key={label}>
+              <div
+                style={{
+                  height: '48px',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                }}
+              >
+                <p className="metrics-title">
+                  <span>{label}</span> pièces
                 </p>
-              </ElementObject>
-            )
-          })}
+              </div>
+              <b>{rentValue ? `${+rentValue}€` : 'A venir'}</b>
+              <p className="metrics-description">
+                Loyer moyen <br />
+                en location
+              </p>
+            </ElementObject>
+          ))}
         </div>
       </HousingMetrics>
 
       <HousingSearchContainer $isMobile={isMobile}>
         <HousingActorsContainer>
-          <HousingActor>
+          <HousingActor $isMobile={isMobile}>
             <HousingActorImage src={logoLogementSocial} />
             <div>
               <HousingActorTitle>Demandez un logement social</HousingActorTitle>

@@ -9,9 +9,8 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: row;
-  gap: ${({ $isMobile }) => ($isMobile ? '0' : '40px')};
-  justify-content: ${({ $isMobile }) =>
-    $isMobile ? 'space-around' : 'center'};
+  gap: ${({ $isMobile }) => ($isMobile ? '30px' : '40px')};
+  justify-content: center;
   flex-wrap: wrap;
 
   color: ${COLOR_PRIMARY};
