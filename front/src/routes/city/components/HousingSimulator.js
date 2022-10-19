@@ -136,10 +136,10 @@ const HousingSimulator = ({ city }) => {
               </InputGroup>
               <ResultContainer $isVisible={!!squareMeters}>
                 <ResultText $isVisible={!!squareMeters}>
-                  Votre pouvez occuper un logement de
+                  Votre pouvez occuper un logement de{' '}
                   {squareMeters ? (
                       <Result $isMobile={isMobile}>
-                        <span data-automation-id="housing-square-meters">{' ' + formatNumber(squareMeters)}</span>
+                        <span data-automation-id="housing-square-meters">{formatNumber(squareMeters)}</span>
                         m2
                       </Result>
                   ) : null}
@@ -163,11 +163,11 @@ const HousingSimulator = ({ city }) => {
               </InputGroup>
               <ResultContainer $isVisible={!!housingCost}>
                 <ResultText $isVisible={!!housingCost}>
-                  Votre logement va vous coûter
+                  Votre logement va vous coûter{' '}
                   {housingCost ? (
                       <Result $isMobile={isMobile}>
                     <span data-automation-id="housing-cost">
-                      {' ' + formatNumber(housingCost)}
+                      {formatNumber(housingCost)}
                     </span>
                         <Euro fontSize="large" />
                       </Result>
