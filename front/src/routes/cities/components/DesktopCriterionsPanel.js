@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { FormControl, MenuItem, Select, Button } from '@mui/material'
@@ -134,34 +134,32 @@ const ResetFilterLabel = styled.span`
 const DesktopCriterionsPanel = ({ paramsUrl }) => {
   const { environmentCriterions, cityCriterions } = useCities()
 
-  const [displayReset, setdisplayReset] = useState(false)
-  const [environmentSelected, setEnvironmentSelected] = useState('')
-  const [citySizeSelected, setCitySizeSelected] = useState('')
+  const [environmentSelected, setEnvironmentSelected] = useState("")
+  const [citySizeSelected, setCitySizeSelected] = useState("")
+
+  const showReset = useCallback(() => (
+    !!environmentSelected || !!citySizeSelected
+  ), [environmentSelected, citySizeSelected])
 
   const resetFilter = () => {
     setEnvironmentSelected('')
     setCitySizeSelected('')
-    setdisplayReset(false)
   }
 
   const handleChangeEnv = (event) => {
     setEnvironmentSelected(event.target.value)
-    setdisplayReset(true)
   }
 
   const handleChangeCity = (event) => {
     setCitySizeSelected(event.target.value)
-    setdisplayReset(true)
   }
 
   useEffect(() => {
-    if (!!paramsUrl.codeCity) {
+    if (!!paramsUrl.codeCity && paramsUrl.codeCity !== citySizeSelected) {
       setCitySizeSelected(paramsUrl.codeCity)
-      setdisplayReset(true)
     }
-    if (!!paramsUrl.codeEnvironment) {
+    if (!!paramsUrl.codeEnvironment && paramsUrl.codeEnvironment !== environmentSelected) {
       setEnvironmentSelected(paramsUrl.codeEnvironment)
-      setdisplayReset(true)
     }
   }, [paramsUrl])
 
@@ -209,7 +207,7 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
               ))}
             </SelectBlock>
           </SearchFormControl>
-          {displayReset ? (
+          {showReset() ? (
             <Button
               onClick={resetFilter}
               style={{
