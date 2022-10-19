@@ -247,6 +247,7 @@ const CityPage = () => {
   } = useProfessions()
 
   const { insee, section } = useParams()
+  localStorage.setItem('lastInsee', insee)
   const [inseeCode] = insee.split('-')
   const size = useWindowSize()
   const navigate = useNavigate()
