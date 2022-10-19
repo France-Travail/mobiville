@@ -41,7 +41,7 @@ const Data = styled.p`
 
   color: ${COLOR_PRIMARY};
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 900;
 `
 
 const Label = styled.p`

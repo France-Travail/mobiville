@@ -10,8 +10,7 @@ const Container = styled.div`
   background-color: #fff;
   z-index: 1;
   border-bottom: 1px ${COLOR_GRAY} solid;
-  padding: ${({ isMobile }) => (isMobile ? 0 : 16)}px;
-  padding-top: 0px;
+  padding: ${({ isMobile }) => (isMobile ? 0 : '0 16px 45px 16px')};
   display: flex;
   flex-direction: column;
   align-items: center;

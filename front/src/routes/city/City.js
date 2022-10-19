@@ -168,6 +168,10 @@ const BlockCompanyName = styled.span`
   font-size: 16px;
   line-height: 19px;
   color: ${COLOR_PRIMARY};
+  
+  &:hover {
+    text-decoration-line: underline;
+  }
 `
 
 const BlockCompanyCity = styled.span`
