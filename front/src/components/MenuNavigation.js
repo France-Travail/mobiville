@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import { COLOR_OTHER_GREEN, COLOR_PRIMARY } from '../constants/colors'
 
@@ -23,7 +23,7 @@ const Container = styled.div`
   justify-items: center;
   gap: 8px;
 `
-const MenuItem = styled.a`
+const MenuItem = styled(Link)`
 font-family: 'Roboto';
 font-style: normal;
 font-weight: ${({ $selected }) => $selected ? 700 : 400 };
@@ -35,16 +35,12 @@ pointer-events: ${({ $disabled }) => $disabled ? 'none' : 'inherit' };
 `
 
 const MenuNavigation = () => {
-  const insee = localStorage.getItem('lastInsee')
-  let codeRome = ''
-  const params = new URLSearchParams(localStorage.getItem('lastSearch'))
-  for (let entry of params) {
-    if(entry[0] === 'codeRome')
-    {
-      codeRome = entry[1]
-    }
-  }
   const location = useLocation()
+  const params = new URLSearchParams(location.search)
+
+  const codeRome = params.get("codeRome")
+  const insee = location.pathname.split("/")[2]
+
   const MENU_LINK = [
     {
       path: `/city/${insee}?codeRome=${codeRome}`,
@@ -77,7 +73,7 @@ const MenuNavigation = () => {
         <Container>
         {
             MENU_LINK.map((menu, key) =>
-              <MenuItem $disabled={menu.disabled} $selected={menu.selected} key={key} href={menu.path}>{menu.label}</MenuItem>
+              <MenuItem $disabled={menu.disabled} $selected={menu.selected} key={key} to={menu.path}>{menu.label}</MenuItem>
             )  
         }
         </Container>
