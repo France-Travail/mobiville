@@ -8,7 +8,6 @@ import HeaderDesktop from './HeaderDesktop'
 import { isMobileView } from '../constants/mobile'
 import { useWindowSize } from '../common/hooks/window-size'
 import Footer from './Footer'
-
 const Container = styled.div`
   height: 100%;
   display: flex;
