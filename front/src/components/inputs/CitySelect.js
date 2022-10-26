@@ -63,13 +63,14 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
     if (!!criterions) {
       regionsForRome = criterions.regions.filter(
         (region) =>
-          region?.criterions?.[codeRome] &&
-          region.label.toLowerCase().match(
-            inputValue
-              .trim()
-              .toLowerCase()
-              .replace(/[^a-z_-]/g, '')
-          )
+          (!!value && inputValue === value?.label) ||
+          (region?.criterions?.[codeRome] &&
+            region.label.toLowerCase().match(
+              inputValue
+                .trim()
+                .toLowerCase()
+                .replace(/[^a-z_-]/g, '')
+            ))
       )
     }
 
@@ -90,7 +91,7 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
         )
         .filter((el) => !!el)
     )
-  }, [autocompletedCities, criterions, codeRome])
+  }, [autocompletedCities, criterions, codeRome, inputValue, value])
 
   // trigger when text input has been updated
   const onInputChange = (_, inputValue) => {
@@ -98,7 +99,7 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
   }
 
   const debounceOnSearchCityLabels = useMemo(
-    () => _.debounce((inputValue) => (onAutocomplete(inputValue)), 250),
+    () => _.debounce((inputValue) => onAutocomplete(inputValue), 250),
     []
   )
 
@@ -106,7 +107,7 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
     if (!!inputValue) {
       debounceOnSearchCityLabels(inputValue)
     }
-  }, [ inputValue ])
+  }, [inputValue])
 
   useEffect(() => {
     onSelect(value)

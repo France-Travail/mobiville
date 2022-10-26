@@ -177,6 +177,7 @@ const TextSearchInput = ({
       getOptionLabel={(option) => option?.label ?? ''}
       renderOption={(props, option) => (
         <CustomBox
+          key={props.id ?? props.label}
           $primary={option.style === 'primary'}
           component="li"
           {...props}

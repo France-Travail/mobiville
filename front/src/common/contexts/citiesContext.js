@@ -148,10 +148,13 @@ export function CitiesProvider(props) {
                 const romeFound = criterions.codeRomes
                   .filter((obj) => Object.keys(obj).includes('key'))
                   .find(({ key }) => result.codeRome === key)
-                return prev.concat({
-                  key: romeFound?.key,
-                  label: romeFound?.label.concat(` (${result.label}, …)`),
-                })
+                if (!!romeFound) {
+                  return prev.concat({
+                    key: romeFound?.key,
+                    label: romeFound?.label.concat(` (${result.label}, …)`),
+                  })
+                }
+                return prev
               }, [])
             )
             setIsLoadingJobsMatchingCriterion(false)
