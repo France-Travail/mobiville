@@ -42,7 +42,7 @@ const CityPic = styled.img.attrs({ alt: '' })`
   object-fit: cover;
 `
 
-const CityHeader = ({ backLink, isMobile, titlesNode }) => {
+const CityHeader = ({ backLink, isMobile, children }) => {
   const { city } = useCities()
 
   return (
@@ -54,7 +54,7 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
 
       {!isMobile && (
         <ContainerInfoStats>
-          <ContainerInfo>{!isMobile && titlesNode}</ContainerInfo>
+          <ContainerInfo>{!isMobile && children}</ContainerInfo>
         </ContainerInfoStats>
       )}
 
@@ -65,7 +65,7 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
         />
       </PicAndMapContainer>
 
-      {isMobile && titlesNode}
+      {isMobile && children}
     </Container>
   )
 }
@@ -73,7 +73,7 @@ const CityHeader = ({ backLink, isMobile, titlesNode }) => {
 CityHeader.propTypes = {
   backLink: PropTypes.string,
   isMobile: PropTypes.bool.isRequired,
-  titlesNodes: PropTypes.string,
+  children: PropTypes.element,
 }
 
 export default CityHeader
