@@ -16,6 +16,7 @@ const JobSelect = ({
         initializeJobsAutocomplete,
         jobsMatchingCriterions,
         onSearchJobLabels,
+        criterions
         // isLoadingJobsMatchingCriterion
     } = useCities()
 
@@ -23,21 +24,21 @@ const JobSelect = ({
     const [ inputValue, setInputValue ] = useState(null)
 
     useEffect(() => {
-        if (!!search && !!jobsMatchingCriterions && !value) {
+        if (!!search && !!criterions?.codeRomes && !value) {
             const entries = new URLSearchParams(search).entries()
 
             for (let entry of entries) {
                 const [key, value] = entry
-
+                
                 if (key === 'codeRome') {
-                    const foundJob = jobsMatchingCriterions.find(job => job.key === value)
+                    const foundJob = criterions.codeRomes.find(job => job.key === value)
                     if (!!foundJob) {
                         setValue(foundJob)
                     }
                 }
             }
         }
-    }, [search, jobsMatchingCriterions])
+    }, [search, criterions.codeRomes])
 
     useEffect(() => {
         onSelect(value)

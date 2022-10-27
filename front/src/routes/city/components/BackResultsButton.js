@@ -10,47 +10,37 @@ import {
 } from '../../../constants/colors'
 
 const BackContainer = styled.div`
-  height: 60px;
-
   width: 100%;
+  max-width: 1040px;
+  max-height: 60px;
+  padding: 16px 0 0 0;
+  margin: 0 0 0 -4px;
+
   display: flex;
   align-items: center;
-  width: 100%;
   justify-content: flex-start;
-  
-  max-width: 1100px;
-  width: 100%;
-  margin: auto;
-  padding: 16px;
-  padding-bottom: 0;
 `
 
 const HeaderArrowLink = styled(Link)`
+  padding: ${({$isMobile}) => ($isMobile ? '14px' : '6px 0 2px 0')};
+
   display: flex;
   align-items: center;
   justify-content: center;
-  width: ${({isMobile}) => (isMobile ? '95px' : '160px')};
-  height: 32px;
-  margin-right: 40px;
-  ${({isMobile}) => (isMobile ? '' : 'margin-top: 5px')};
-  ${({isMobile}) => (isMobile ? '' : 'margin-left: 16px')};
+  gap: 4px;
   
   &,
   &:hover {
     color: ${COLOR_TEXT_PRIMARY};
   }
-
-  position: absolute;
-  ${({ isMobile }) => (isMobile ? 'left: 16px' : '')};
-  ${({ isMobile }) => (isMobile ? 'top: 16px' : '')};
 `
 
 const BackText = styled.p`
-  font-weight: ${({ isMobile }) => (isMobile ? '400' : '500')};
-  font-size: ${({ isMobile }) => (isMobile ? '16px' : '12px')};
-  line-height: ${({ isMobile }) => (isMobile ? '24px' : '14px')};
+  font-weight: ${({ $isMobile }) => ($isMobile ? '400' : '500')};
+  font-size: ${({ $isMobile }) => ($isMobile ? '16px' : '12px')};
+  line-height: ${({ $isMobile }) => ($isMobile ? '24px' : '14px')};
   color: ${ COLOR_PRIMARY };
-  padding: 4px 12px 4px 4px;
+  padding-top: 2px;
 `
 
 const BackResultsButton = ({
@@ -58,9 +48,9 @@ const BackResultsButton = ({
   isMobile
 }) => (
     <BackContainer>
-        <HeaderArrowLink to={backLink} title="Retour" isMobile={isMobile}>
+        <HeaderArrowLink to={backLink} title="Retour" $isMobile={isMobile}>
             <ArrowBackIcon color="primary" />
-            <BackText isMobile={isMobile}>{isMobile ? "Retour" : "Retour aux résultats"}</BackText>
+            <BackText $isMobile={isMobile}>{isMobile ? "Retour" : "Retour aux résultats"}</BackText>
         </HeaderArrowLink>
     </BackContainer>
 )
