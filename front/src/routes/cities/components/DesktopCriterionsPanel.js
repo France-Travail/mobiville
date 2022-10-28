@@ -13,7 +13,6 @@ import CityForm from '../../../components/CityForm'
 import { ReactComponent as ResetFilterIcon } from '../../../assets/images/icons/reset.svg'
 
 const SearchPanel = styled.div`
-  background-color: ${COLOR_WHITE};
 `
 const SearchBar = styled.div`
   > *:not(input) {
@@ -22,6 +21,7 @@ const SearchBar = styled.div`
 
   .MuiFormControl-root {
     width: 150px;
+    margin: 20px 0;
   }
 
   .gEkiVf {
@@ -37,19 +37,17 @@ const SearchFormControl = styled(FormControl)`
 `
 
 const CustomMenuItem = styled(MenuItem)`
-  padding: 12px !important;
   height: 54px;
   width: 155px;
-  color: ${COLOR_PRIMARY};
+  color: ${({ value }) => (value ? COLOR_WHITE : COLOR_PRIMARY)};
   display: flex;
   justify-content: center !important;
   align-items: center !important;
   order: 0;
   flex-grow: 0;
   background-color: transparent !important;
-  margin: auto !important;
+  margin: 10px 10px 0 10px !important;
   &:hover {
-    padding: 12px !important;
     background: #c7c7f3 !important;
     border-radius: 8px;
   }
@@ -59,7 +57,6 @@ const ItemLabel = styled.span`
   font-style: normal;
   font-weight: 700;
   line-height: 19px;
-  color: ${COLOR_PRIMARY};
   margin: auto !important;
 `
 const Container = styled.div`
@@ -69,7 +66,7 @@ const Container = styled.div`
   gap: 8px;
   align-items: stretch;
   max-width: 1040px;
-  margin: 8px auto 0 auto;
+  margin: 0 auto;
   padding: 0 20px;
   width: 100%;
 `
@@ -104,7 +101,7 @@ const SelectBlock = styled(Select)`
     }
 
     svg {
-      color: ${COLOR_PRIMARY};
+      color: ${({ value }) => (value ? COLOR_WHITE : COLOR_PRIMARY)};
     }
 
     width: 151px;
@@ -119,7 +116,8 @@ const SelectBlock = styled(Select)`
     right: 0%;
     top: 0%;
     bottom: 0%;
-    background: ${COLOR_WHITE};
+    background: ${({ value }) => (value ? COLOR_PRIMARY : COLOR_WHITE)};
+    color: ${({ value }) => (value ? COLOR_WHITE : COLOR_PRIMARY)};
     border-radius: 20px !important;
   }
 `
@@ -130,6 +128,7 @@ const ResetFilterLabel = styled.span`
   font-size: 14px;
   color: ${COLOR_PRIMARY};
   margin-left: 8px;
+  text-transform: none;
 `
 const DesktopCriterionsPanel = ({ paramsUrl }) => {
   const { environmentCriterions, cityCriterions } = useCities()
