@@ -226,7 +226,7 @@ export function getAverageHouseRent() {
 export function getEquipmentsDatas() {
   return new Promise((resolve, reject) => {
     readFile(
-      __dirname + '/../assets/datas/bpe-2020-light.json.gz',
+      __dirname + '/../assets/datas/BPE2021-tweaked.json.gz',
       (err, bufferData) => {
         if (err) return reject(err)
 

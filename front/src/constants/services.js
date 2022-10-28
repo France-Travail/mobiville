@@ -5,9 +5,9 @@ export const TRANSPORT_SERVICES = [
   },
   {
     label: 'Gares',
+    // 'E107' - national / 'E108' - régional / 'E109' - local
     code: ['E107', 'E108', 'E109'],
   },
-  // todo
   // {
   //   label: 'Lignes de bus',
   //   code: 'E102',
@@ -48,7 +48,7 @@ export const HEALTH_SERVICES = [
   },
   {
     label: 'Hôpitaux',
-    code: ['D101', 'D102', 'D103'],
+    code: 'D101',
   },
   {
     label: 'Pharmacies',
