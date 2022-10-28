@@ -201,21 +201,6 @@ const BlockCompanyDataFrom = styled.span`
   }
 `
 
-const BlockLinkDiv = styled.div`
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-  font-size: 16px;
-  line-height: 24px;
-
-  div {
-    margin: auto;
-    min-width: 232px;
-    ${({ isMobile }) => (isMobile ? 'max-width: 306px' : '')};
-    height: 50px;
-  }
-`
-
 const TitlesContainer = styled.div`
   width: 100%;
   padding: ${({ isMobile }) => (isMobile ? '0 14px' : '0')};
@@ -530,14 +515,13 @@ const CityPage = () => {
             ))}
         </BlockContentOffers>
       </BlockContainerOffers>
-      <BlockLinkDiv>
-        <ActionButton 
-          path={`/city/${insee}/${JOB}?codeRome=${codeRome}`}
-          libelle={`Voir toutes les offres d’emploi`}
-          isMobile={isMobile}
-          isBlue={true}
-        />
-      </BlockLinkDiv>
+      <ActionButton 
+        path={`/city/${insee}/${JOB}?codeRome=${codeRome}`}
+        libelle={`Voir toutes les offres d’emploi`}
+        isMobile={isMobile}
+        isBlue={true}
+        centered
+      />
 
       <BlockTitle isMobile={isMobile}>
         <BlockTitleText isMobile={isMobile}>
@@ -591,15 +575,14 @@ const CityPage = () => {
         </ServicesStandOutImageContainer>
       </ServicesStandOut>
 
-      <BlockLinkDiv isMobile={isMobile}>
-        <ActionButton
-          path={'/mobility-guide'}
-          libelle={`Consultez nos conseils pour votre projet`}
-          isMobile={isMobile}
-          isBlue={false}
-          isWhite={true}
-        />
-      </BlockLinkDiv>
+      <ActionButton
+        path={'/mobility-guide'}
+        libelle={`Consultez nos conseils pour votre projet`}
+        isMobile={isMobile}
+        isBlue={false}
+        isWhite={true}
+        centered
+      />
     </MainLayout>
   )
 }

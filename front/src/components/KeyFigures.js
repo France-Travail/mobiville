@@ -45,10 +45,12 @@ const Data = styled.p`
 `
 
 const Label = styled.p`
+  width: min-content;
+  max-width: 120px;
+  
   font-size: 16px;
   font-weight: 700;
   text-align: center;
-  max-width: 100px;
 `
 
 const KeyFigures = ({ figures }) => {

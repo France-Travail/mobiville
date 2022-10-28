@@ -1,14 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
 import { COLOR_PRIMARY } from '../../constants/colors'
 
 const ActionButtonContainer = styled.div`
   display: flex;
-  justify-content: ${({ isMobile }) => (isMobile ? 'center' : 'flex-start')};
+  justify-content: ${({ $isMobile }) => ($isMobile ? 'center' : 'flex-start')};
 
   border-radius: 20px;
+
+  ${({ $isMobile }) => $isMobile && css`
+    max-width: 80vw;
+  `}
+  
+  ${({ $centered }) => $centered && css`
+    margin: auto;
+  `}
 `
 
 const ActionButtonElement = styled(Link)`
@@ -25,6 +33,7 @@ const ActionButtonElement = styled(Link)`
   font-weight: 700;
   text-decoration: none;
   text-align: center;
+  line-height: 18px;
 
   cursor: pointer;
 
@@ -62,6 +71,7 @@ const ActionButton = ({
   isMobile = false,
   isBlue = true,
   isWhite = false,
+  centered = false,
   style = {},
 }) => {
   const isHttpMatched = (str) =>
@@ -74,7 +84,11 @@ const ActionButton = ({
     isHttpMatched(path.pathname)
 
   return (
-    <ActionButtonContainer isMobile={isMobile} style={{ ...style }}>
+    <ActionButtonContainer
+      $isMobile={isMobile}
+      $centered={centered}
+      style={{ ...style }}
+    >
       <ActionButtonElement
         data-automation-id={isMainSearch ? 'search-action' : undefined}
         to={path}
@@ -95,6 +109,7 @@ ActionButton.propTypes = {
   isMainSearch: PropTypes.bool,
   isBlue: PropTypes.bool,
   isWhite: PropTypes.bool,
+  centered: PropTypes.bool,
   style: PropTypes.object,
 }
 
