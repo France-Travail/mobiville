@@ -38,7 +38,7 @@ const JobSelect = ({
                 }
             }
         }
-    }, [search, criterions.codeRomes])
+    }, [search, criterions?.codeRomes])
 
     useEffect(() => {
         onSelect(value)
