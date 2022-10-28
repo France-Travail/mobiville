@@ -17,6 +17,7 @@ Fonctionnalité: Homepage - Moteur de recherche
       | commis de cuisine | Personnel de cuisine (Commis de cuisine tournant / Commise de cuisine tournante, …) | Occitanie           |
       | coach             | Éducation en activités sportives (Coach sportif, …)                                 | Grand Est           |
       | minérallurgiste   | Études géologiques (Minérallurgiste, …)                                             | Nouvelle-Aquitaine  |
+      | bouquiniste       | Achat vente d'objets d'art, anciens ou d'occasion (Bouquiniste, …)                  | Ile-de-France       |
 
   Scénario: Recherche du métier dans une ville
     Lorsque je saisis "marin-pêcheur" dans le métier
