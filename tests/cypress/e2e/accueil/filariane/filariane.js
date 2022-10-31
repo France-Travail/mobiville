@@ -15,7 +15,7 @@ function quelleUrl() {
   }
 }
 Then("je vois le fil d'ariane sur la page", function () {
-  cy.contains(filAriane, "Présentation", {timeout: SHORT_WAIT_TIME}).should('exist');
+  cy.contains(filAriane, "Emploi et logement", {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.contains(filAriane, "Offres d’emploi", {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.contains(filAriane, "Services de la ville", {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.contains(filAriane, "Villes similaires ou à proximité", {timeout: SHORT_WAIT_TIME}).should('exist');
