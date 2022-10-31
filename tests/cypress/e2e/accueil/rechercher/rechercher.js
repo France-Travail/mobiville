@@ -21,7 +21,7 @@ import {
 And('je clique sur {string} dans le header', function (lienEndroitAide) {
     cy.get('header')
     .should('be.visible')
-    .wait(1000)
+    .wait(2000)
     .contains(lienEndroitAide, { timeout: MIDDLE_WAIT_TIME })
     .click({force: true})
 })
