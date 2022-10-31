@@ -17,7 +17,7 @@ Fonctionnalité: Rechercher villes - Affichage fil d'ariane
     Lorsque je clique sur "<lien>" dans le fil d'ariane
     Alors j'affiche la page sélectionnée
     Et je vois le fil d'ariane sur la page
-    Lorsque je clique sur "Présentation" dans le fil d'ariane
+    Lorsque je clique sur "Emploi et logement" dans le fil d'ariane
     Alors j'affiche la page de la ville pour le métier
 
   Exemples:
