@@ -4,7 +4,7 @@ import { COLOR_PRIMARY } from '../constants/colors'
 import { isMobileView } from '../constants/mobile'
 
 const Container = styled.div`
-  margin: 20px auto;
+  margin: 20px auto 0 auto;
   width: 100%;
 
   display: flex;

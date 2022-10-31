@@ -158,7 +158,7 @@ const HeaderDesktop = ({
     </Container>
     { cityPage ? 
     <Container>
-    <MenuNavigation />
+    <MenuNavigation isMobile={false}/>
     </Container> : null }
     </>
   )

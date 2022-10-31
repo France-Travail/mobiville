@@ -11,7 +11,6 @@ import DescriptionIcon from '@mui/icons-material/Description'
 import { ActionButton, KeyFigures, MainLayout, Tag } from '../../components'
 import CityHeader from './CityHeader'
 import CityJobs from './CityJobs'
-import CityHousing from './CityHousing'
 import CityHousingSimulator from './CityHousingSimulator'
 import CityServices from './cityServices/CityServices'
 
@@ -26,8 +25,6 @@ import {
   COLOR_WHITE,
 } from '../../constants/colors'
 
-import pastille from '../../assets/images/icons/pastille.svg'
-
 import { ReactComponent as MaletteIcon } from '../../assets/images/icons/malette.svg'
 import { ReactComponent as ProfilEntrepriseIcon } from '../../assets/images/icons/profil_entreprise.svg'
 // import { ReactComponent as HandshakeIcon } from '../../assets/images/icons/handshake.svg'
@@ -41,58 +38,69 @@ const ElementContainer = styled.div`
   justify-content: space-around;
   width: 100%;
   max-width: 1040px;
-  margin: ${({ isMobile }) => (isMobile ? '5px auto' : '60px auto')};
+  margin: ${({ isMobile }) => (isMobile ? '5px auto' : '60px auto 20px auto')};
   align-items: center;
   font-size: 16px;
   line-height: 24px;
 `
 
 const BlockContainerOffers = styled.div`
+  max-width: 1040px;
+  margin: ${({ isMobile }) => (isMobile ? '16px 0' : '16px auto')};
+
   display: flex;
   flex-direction: column;
-  ${({ isMobile }) => (isMobile ? '' : 'width: 100%;')}
-  max-width: 1040px;
-  margin: ${({ isMobile }) => (isMobile ? '0 21px' : '0 auto')};
+
   ${({ isMobile }) => (isMobile ? 'overflow-x: scroll' : '')};
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 `
 
 const BlockContentOffers = styled.div`
+  width: fit-content;
+  ${({ isMobile }) => isMobile ? 'padding: 0 16px;' : ''}
+  margin: auto;
+
   display: flex;
   flex-direction: row;
-  width: fit-content;
+  gap: 16px;
 `
 
 const BlockCardOffer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  background-color: #fff;
-  border-radius: 8px;
   width: ${({ isMobile }) => (isMobile ? '279px' : '336px')};
   height: 170px;
   padding: 16px;
-  margin-right: 16px;
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  background-color: #fff;
 `
 
 const BlockContainerProximity = styled.div`
-  display: flex;
-  flex-direction: ${({ isMobile }) => (isMobile ? 'column' : 'row')};
-  justify-content: ${({ isMobile }) =>
-    isMobile ? 'space-around' : 'space-between'};
-  ${({ isMobile }) => (isMobile ? '' : 'width: 100%;')}
   max-width: 1040px;
+  ${({ isMobile }) => (isMobile ? '' : 'width: 100%;')}
   margin: ${({ isMobile }) => (isMobile ? '0 0 24px 0' : '0 auto')};
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 `
 
 const BlockTitle = styled.div`
-  margin: ${({ isMobile }) =>
-    isMobile ? '24px auto 16px auto' : '48px auto 16px auto'};
+  margin: ${({ isMobile }) => isMobile ? '20px auto 0 auto' : 'auto'};
   width: 100%;
   max-width: 1040px;
 `
 
 const BlockTitleText = styled.div`
-  ${({ isMobile }) => (isMobile ? 'margin: 0 21px;' : '')}
+  margin: ${({ isMobile }) => (isMobile ? '0 21px' : '48px 0 0 0')};
 `
 
 const BlockTitleH2 = styled.h2`
@@ -103,7 +111,7 @@ const BlockTitleH2 = styled.h2`
   color: ${COLOR_PRIMARY};
 `
 const BlockTitleP = styled.p`
-  margin: 8px 0px;
+  margin: 0;
   font-size: 16px;
   line-height: 24px;
   color: ${COLOR_PRIMARY};
@@ -196,8 +204,6 @@ const BlockCompanyDataFrom = styled.span`
 const BlockLinkDiv = styled.div`
   display: flex;
   align-items: center;
-  padding: 16px;
-  padding-bottom: 0;
   border-radius: 4px;
   font-size: 16px;
   line-height: 24px;
@@ -211,46 +217,46 @@ const BlockLinkDiv = styled.div`
 `
 
 const TitlesContainer = styled.div`
+  width: 100%;
+  padding: ${({ isMobile }) => (isMobile ? '0 14px' : '0')};
+
   display: flex;
   flex-direction: column;
   text-align: start;
-  padding: ${({ isMobile }) => (isMobile ? '0 14px' : '0')};
-  width: ${({ isMobile }) => (isMobile ? '100%' : '1040px')};
+
   color: ${COLOR_TEXT_PRIMARY};
 `
 
 const CityName = styled.h1`
-  font-family: 'Roboto';
-  font-style: normal;
+  margin: 8px 0 22px 0;
+
   font-weight: 900;
-  font-size: 36px;
-  line-height: 42px;
-  margin-top: 8px;
-  margin-bottom: 34px;
+  font-size: ${({ isMobile }) => isMobile ? '24px' : '36px'};
+  line-height: ${({ isMobile }) => isMobile ? '36px' : '42px'};
   color: ${COLOR_PRIMARY};
 `
 
 const RegionName = styled.div`
   margin: 0;
   padding: 0;
-  font-family: 'Roboto';
-  font-style: normal;
+
+  color: ${COLOR_PRIMARY};
   font-weight: 400;
   font-size: 16px;
   line-height: 24px;
-  color: ${COLOR_PRIMARY};
+`
 
-  img {
-    margin: 2px 4px;
-  }
+const RoundSeparator = styled.span`
+  font-size: 24px;
+  vertical-align: bottom;
 `
 
 const TagsContainer = styled.div`
+  margin: 28px auto 0 auto;
+
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin: auto;
-  margin-top: 28px;
 `
 
 const ServicesStandOut = styled.div`
@@ -295,7 +301,6 @@ const ServicesStandOutImageContainer = styled.div`
 
 const JOB = 'job'
 const LIFE = 'life'
-const HOUSING = 'housing'
 
 const CityPage = () => {
   const {
@@ -426,32 +431,10 @@ const CityPage = () => {
       />
     )
 
-  if (section === HOUSING)
-    return (
-      <CityHousing
-        nbSocialHousing={city.total_social_housing}
-        city={city}
-        backLink={childrenComponentsBacklink}
-      />
-    )
-
   if (section === LIFE)
-    return <CityServices city={city} backLink={childrenComponentsBacklink} />
+    return <CityServices city={city} backLink={backLink} />
 
   const isMobile = isMobileView(size)
-
-  const titlesNode = (
-    <TitlesContainer isMobile={isMobile}>
-      <RegionName isMobile={isMobile}>
-        {_.capitalize(city.nom_region)} <img src={pastille} alt="" />{' '}
-        {_.capitalize(city.nom_dept)}
-      </RegionName>
-      <CityName isMobile={isMobile}>
-        {_.capitalize(city.nom_comm)}
-        {isMobile ? <br /> : ' '}pour le métier {romeLabel}
-      </CityName>
-    </TitlesContainer>
-  )
 
   return (
     <MainLayout menu={{ visible: !isMobile }}>
@@ -470,8 +453,19 @@ const CityPage = () => {
       <CityHeader
         backLink={backLink}
         isMobile={isMobile}
-        titlesNode={titlesNode}
-      />
+      >
+        <TitlesContainer isMobile={isMobile}>
+          <RegionName isMobile={isMobile}>
+            {_.capitalize(city.nom_region)}
+            <RoundSeparator> • </RoundSeparator>
+            {_.capitalize(city.nom_dept)}
+          </RegionName>
+          <CityName isMobile={isMobile}>
+            {_.capitalize(city.nom_comm)}
+            {isMobile ? <br /> : ' '}pour le métier {romeLabel}
+          </CityName>
+        </TitlesContainer>
+      </CityHeader>
 
       <TagsContainer>
         <Tag green={bassinTensionIndT < 4} tall>
@@ -505,6 +499,7 @@ const CityPage = () => {
           </BlockTitleP>
         </BlockTitleText>
       </BlockTitle>
+
       <BlockContainerOffers isMobile={isMobile}>
         <BlockContentOffers isMobile={isMobile}>
           {professionsCandidatsManquants
@@ -573,16 +568,6 @@ const CityPage = () => {
         <CityHousingSimulator city={city}></CityHousingSimulator>
       </ElementContainer>
 
-      <BlockLinkDiv isMobile={isMobile}>
-        <ActionButton
-          path={'/mobility-guide'}
-          libelle={`Consultez nos conseils pour votre projet`}
-          isMobile={isMobile}
-          isBlue={false}
-          isWhite={true}
-        />
-      </BlockLinkDiv>
-
       <ServicesStandOut $isMobile={isMobile}>
         <ServicesStandOutContent>
           <ServicesStandOutTitle>
@@ -605,6 +590,16 @@ const CityPage = () => {
           <img src={cityServicesStandOut} alt="" />
         </ServicesStandOutImageContainer>
       </ServicesStandOut>
+
+      <BlockLinkDiv isMobile={isMobile}>
+        <ActionButton
+          path={'/mobility-guide'}
+          libelle={`Consultez nos conseils pour votre projet`}
+          isMobile={isMobile}
+          isBlue={false}
+          isWhite={true}
+        />
+      </BlockLinkDiv>
     </MainLayout>
   )
 }

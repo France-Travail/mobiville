@@ -1,16 +1,15 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet-async'
 import _ from 'lodash'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { KeyFigures, MainLayout, Map } from '../../../components'
 import ElectedContact from './components/ElectedContact'
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
 import {
-    COLOR_GRAY,
-    COLOR_PRIMARY, COLOR_WHITE,
+    COLOR_PRIMARY
 } from '../../../constants/colors'
 
 import { ReactComponent as RightChevronIcon } from '../../../assets/images/icons/right_chevron.svg'
@@ -19,27 +18,27 @@ import { ReactComponent as WeatherIcon } from '../../../assets/images/icons/weat
 import { ReactComponent as CalculatorIcon } from '../../../assets/images/icons/calculator.svg'
 import { formatNumber } from '../../../utils/utils'
 import CityServiceInfoCards from './components/CityServiceInfoCards'
-import BackResultsButton from "../components/BackResultsButton"
+import CityMenuBack from "../components/CityMenuBack"
 
 const WelcomeContainer = styled.div`
-  background: ${({ $isMobile }) => ($isMobile ? 'none' : 'white')};
+  background: white;
   margin-bottom: 10px;
 `
 
 const WelcomeWrapper = styled.div`
-  max-width: 1036px;
-  margin: ${({ $isMobile }) =>
-    $isMobile ? '50px auto 0 auto' : '14px auto 50px auto'};
-  ${({ $isMobile }) => ($isMobile ? 'padding: 16px' : '')};
+  max-width: 1040px;
+  ${({ $isMobile }) => ($isMobile ? '' : 'margin: 0 auto 50px auto')};
   color: ${COLOR_PRIMARY};
 `
 
 const Title = styled.h1`
   margin-bottom: 12px;
   font-weight: 900;
+  ${({ $isMobile }) => ($isMobile ? 'padding: 1px 16px 16px 16px' : '')};
 `
 
 const InfoContainer = styled.div`
+  ${({ $isMobile }) => ($isMobile ? 'padding: 1px 16px 16px 16px' : '')};
   display: flex;
   flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row')};
   gap: 24px;
@@ -48,7 +47,7 @@ const InfoContainer = styled.div`
 const TextContainer = styled.div`
   position: relative;
 
-  max-height: ${({ $isTextExpended }) => ($isTextExpended ? 'none' : '255px')};
+  max-height: ${({ $showFullText }) => ($showFullText ? 'none' : '255px')};
   flex: 1;
 
   display: flex;
@@ -73,14 +72,6 @@ const ReadMore = styled.p`
   font-size: 24px;
   font-weight: 900;
   text-decoration: underline;
-
-  ${({ $isMobile, $isTextExpended }) =>
-    !$isTextExpended &&
-    css`
-      box-shadow: 0px -8px 18px 17px ${$isMobile ? COLOR_GRAY : COLOR_WHITE};
-      -webkit-box-shadow: 0px -8px 18px 17px ${$isMobile ? COLOR_GRAY : COLOR_WHITE};
-      -moz-box-shadow: 0px -8px 18px 17px ${$isMobile ? COLOR_GRAY : COLOR_WHITE};
-    `}
 `
 
 const ReadMoreText = styled.span`
@@ -95,6 +86,8 @@ const CityServices = ({ backLink, city }) => {
   const isMobile = isMobileView(useWindowSize())
 
   const [isTextExpended, setIsTextExpended] = useState(false)
+
+  const showFullText = useCallback(() => (isTextExpended || city.description.length < 521), [isTextExpended, city.description])
 
   return (
     <MainLayout isMobile={isMobile}>
@@ -112,32 +105,31 @@ const CityServices = ({ backLink, city }) => {
       </Helmet>
 
       <WelcomeContainer $isMobile={isMobile}>
-        <BackResultsButton
-            backLink={backLink}
-            isMobile={isMobile}
-        />
         <WelcomeWrapper $isMobile={isMobile}>
-          <Title>Vivre à {_.capitalize(city.nom_comm)}</Title>
+          <CityMenuBack isMobile={isMobile}/>
+
+          <Title $isMobile={isMobile}>Vivre à {_.capitalize(city.nom_comm)}</Title>
 
           <InfoContainer $isMobile={isMobile}>
             {city.description ? (
-              <TextContainer $isTextExpended={isTextExpended}>
+              <TextContainer $showFullText={showFullText()}>
                 <Description>{city.description}</Description>
                 <ReadMore
                   $isMobile={isMobile}
-                  $isTextExpended={isTextExpended}
                   onClick={() => setIsTextExpended(!isTextExpended)}
                 >
-                  {isTextExpended ? (
-                    <>
-                      <RightChevronIcon />
-                      <ReadMoreText>Réduire le texte</ReadMoreText>
-                    </>
-                  ) : (
-                    <>
-                      <RightChevronIcon />
-                      <ReadMoreText>Lire la suite</ReadMoreText>
-                    </>
+                  {city.description.length > 521 && (
+                    isTextExpended ? (
+                      <>
+                        <RightChevronIcon />
+                        <ReadMoreText>Réduire le texte</ReadMoreText>
+                      </>
+                    ) : (
+                      <>
+                        <RightChevronIcon />
+                        <ReadMoreText>Lire la suite</ReadMoreText>
+                      </>
+                    )
                   )}
                 </ReadMore>
               </TextContainer>
@@ -163,7 +155,7 @@ const CityServices = ({ backLink, city }) => {
       <KeyFigures
         figures={[
           { label: "Habitants", data: formatNumber(city.population * 1000), icon: <CrowdIcon /> },
-          { label: "Superficie", data: formatNumber(city.superficie / 100), icon: <CalculatorIcon /> },
+          { label: "Superficie", data: `${formatNumber(city.superficie / 100)} km²`, icon: <CalculatorIcon /> },
           { label: "Température moyenne", data: `${formatNumber(city.average_temperature)}°`, icon: <WeatherIcon /> },
         ]}
       />

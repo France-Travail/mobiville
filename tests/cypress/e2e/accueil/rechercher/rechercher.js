@@ -3,8 +3,11 @@ import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "../common/com
 import { champSaisieMetier, champSaisieEndroit, boutoncritere1, boutoncritere2, boutoncritere3 } from '../../../support/step_definitions/formulaire-recherche'
 
 And('je clique sur {string} dans le header', function (lienEndroitAide) {
-    cy.get('header').should('be.visible').wait(1000)
-    .contains(lienEndroitAide, { timeout: MIDDLE_WAIT_TIME }).click({force: true})
+    cy.get('header')
+    .should('be.visible')
+    .wait(2000)
+    .contains(lienEndroitAide, { timeout: MIDDLE_WAIT_TIME })
+    .click({force: true})
 })
 
 Then("j'affiche la page de recherche de ville avec le moteur de recherche", function () {
