@@ -18,27 +18,27 @@ import { ReactComponent as WeatherIcon } from '../../../assets/images/icons/weat
 import { ReactComponent as CalculatorIcon } from '../../../assets/images/icons/calculator.svg'
 import { formatNumber } from '../../../utils/utils'
 import CityServiceInfoCards from './components/CityServiceInfoCards'
-import BackResultsButton from "../components/BackResultsButton"
+import CityMenuBack from "../components/CityMenuBack"
 
 const WelcomeContainer = styled.div`
-  background: ${({ $isMobile }) => ($isMobile ? 'none' : 'white')};
+  background: white;
   margin-bottom: 10px;
 `
 
 const WelcomeWrapper = styled.div`
   max-width: 1040px;
-  margin: ${({ $isMobile }) =>
-    $isMobile ? '50px auto 0 auto' : '0 auto 50px auto'};
-  ${({ $isMobile }) => ($isMobile ? 'padding: 16px' : '')};
+  ${({ $isMobile }) => ($isMobile ? '' : 'margin: 0 auto 50px auto')};
   color: ${COLOR_PRIMARY};
 `
 
 const Title = styled.h1`
   margin-bottom: 12px;
   font-weight: 900;
+  ${({ $isMobile }) => ($isMobile ? 'padding: 1px 16px 16px 16px' : '')};
 `
 
 const InfoContainer = styled.div`
+  ${({ $isMobile }) => ($isMobile ? 'padding: 1px 16px 16px 16px' : '')};
   display: flex;
   flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row')};
   gap: 24px;
@@ -106,12 +106,9 @@ const CityServices = ({ backLink, city }) => {
 
       <WelcomeContainer $isMobile={isMobile}>
         <WelcomeWrapper $isMobile={isMobile}>
-          <BackResultsButton
-              backLink={backLink}
-              isMobile={isMobile}
-          />
+          <CityMenuBack isMobile={isMobile}/>
 
-          <Title>Vivre à {_.capitalize(city.nom_comm)}</Title>
+          <Title $isMobile={isMobile}>Vivre à {_.capitalize(city.nom_comm)}</Title>
 
           <InfoContainer $isMobile={isMobile}>
             {city.description ? (

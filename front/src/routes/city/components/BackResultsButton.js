@@ -5,11 +5,12 @@ import { Link } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 import {
-  COLOR_PRIMARY,
-  COLOR_TEXT_PRIMARY
+    COLOR_PRIMARY,
+    COLOR_TEXT_PRIMARY, COLOR_WHITE
 } from '../../../constants/colors'
 
 const BackContainer = styled.div`
+  background-color: ${COLOR_WHITE};
   width: 100%;
   max-width: 1040px;
   max-height: 60px;
