@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { useCities } from '../../common/contexts/citiesContext'
 import {COLOR_GRAY} from '../../constants/colors'
-import BackResultsButton from "./components/BackResultsButton"
+import CityMenuBack from "./components/CityMenuBack"
 
 const Container = styled.div`
   background-color: #fff;
@@ -47,10 +47,7 @@ const CityHeader = ({ backLink, isMobile, children }) => {
 
   return (
     <Container isMobile={isMobile}>
-      <BackResultsButton
-          backLink={backLink}
-          isMobile={isMobile}
-      />
+      <CityMenuBack isMobile={isMobile}/>
 
       {!isMobile && (
         <ContainerInfoStats>
