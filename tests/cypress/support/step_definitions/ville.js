@@ -10,7 +10,7 @@ const infoEntreprises = "main[id=main] * > div > p";
 // const infoTauxEmbauche = "main[id=main] * > div > p";
 const resultatOffre = "main[id=main] * > div > h2";
 const nombreOffres = "main[id=main] > div:nth-child(5) > div";
-const boutonVoirToutesOffres =  "main[id=main] * > div > a";
+const boutonVoirToutesOffres =  "main[id=main] > div > a";
 const resultatEntreprise = "main[id=main] * > div > h2";
 const servicesVille = "main[id=main] * > div > p";
 const boutonVoirTousServices  =  "main[id=main] * > div > a";
