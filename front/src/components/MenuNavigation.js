@@ -33,7 +33,7 @@ const Container = styled.div`
 `
 const MenuItem = styled(Link)`
   font-weight: ${({ $selected }) => ($selected ? 700 : 400)};
-  font-size: 18px;
+  font-size: 16px;
   line-height: 24px;
 
   color: ${({ $disabled, $selected }) =>

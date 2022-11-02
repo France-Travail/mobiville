@@ -9,6 +9,7 @@ const MenuBackContainer = styled.div`
   background-color: ${COLOR_WHITE};
   width: 100%;
   max-width: 1040px;
+  margin: auto;
 `
 
 const CityMenuBack = ({
