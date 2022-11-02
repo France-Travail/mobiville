@@ -32,7 +32,7 @@ const ContainerInfo = styled.div`
 const PicAndMapContainer = styled.div`
   display: flex;
   ${({ isMobile }) => (isMobile ? '' : 'max-width: 1040px;width: 100%;')}
-  margin: ${({ isMobile }) => (isMobile ? '14px' : '0px')};
+  margin: ${({ isMobile }) => (isMobile ? '16px' : '0px')};
 `
 
 const CityPic = styled.img.attrs({ alt: '' })`

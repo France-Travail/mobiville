@@ -36,11 +36,9 @@ const WelcomeWrapper = styled.div`
 const Title = styled.h1`
   margin-bottom: 12px;
   font-weight: 900;
-  ${({ $isMobile }) => ($isMobile ? 'padding: 1px 16px 16px 16px' : '')};
 `
 
 const InfoContainer = styled.div`
-  ${({ $isMobile }) => ($isMobile ? 'padding: 1px 16px 16px 16px' : '')};
   display: flex;
   flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row')};
   gap: 24px;
@@ -107,9 +105,9 @@ const CityServices = ({ backLink, city }) => {
       </Helmet>
 
       <WelcomeContainer $isMobile={isMobile}>
+        <CityMenuBack backLink={backLink} isMobile={isMobile}/>
 
         <WelcomeWrapper $isMobile={isMobile}>
-          <CityMenuBack backLink={backLink} isMobile={isMobile}/>
           <Title>Vivre à {_.capitalize(city.nom_comm)}</Title>
 
           <InfoContainer $isMobile={isMobile}>

@@ -9,7 +9,7 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: row;
-  gap: ${({ $isMobile }) => ($isMobile ? '30px' : '40px')};
+  gap: ${({ $isMobile }) => ($isMobile ? '30px' : '34px')};
   justify-content: center;
   flex-wrap: wrap;
 
@@ -47,6 +47,7 @@ const Data = styled.p`
 const Label = styled.p`
   width: min-content;
   max-width: 120px;
+  min-width: 112px;
   
   font-size: 16px;
   font-weight: 700;
