@@ -439,7 +439,7 @@ const CityJobs = ({
       </Helmet>
 
       {isMobile && (
-        <CityMenuBack isMobile={isMobile}/>
+        <CityMenuBack backLink={backLink} isMobile={isMobile}/>
       )}
       <SubHeader backLink={backLink} node={subHeaderNode} isMobile={isMobile} />
 

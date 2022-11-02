@@ -109,7 +109,7 @@ const CityServices = ({ backLink, city }) => {
       <WelcomeContainer $isMobile={isMobile}>
 
         <WelcomeWrapper $isMobile={isMobile}>
-          <CityMenuBack isMobile={isMobile}/>
+          <CityMenuBack backLink={backLink} isMobile={isMobile}/>
           <Title>Vivre à {_.capitalize(city.nom_comm)}</Title>
 
           <InfoContainer $isMobile={isMobile}>

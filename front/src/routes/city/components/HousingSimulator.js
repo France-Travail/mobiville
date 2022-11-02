@@ -61,7 +61,7 @@ const InputAdornment = styled.p`
 const ResultContainer = styled.div`
   min-height: 1px;
 
-  margin: ${({ $isVisible }) => ($isVisible ? '16px 0' : '0')};
+  margin: ${({ $isVisible }) => ($isVisible ? '16px 0' : '0 0 8px 0')};
   line-height: ${({ $isVisible }) => ($isVisible ? '36px' : '0')};
 `
 

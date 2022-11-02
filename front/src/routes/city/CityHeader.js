@@ -47,7 +47,7 @@ const CityHeader = ({ backLink, isMobile, children }) => {
 
   return (
     <Container isMobile={isMobile}>
-      <CityMenuBack isMobile={isMobile}/>
+      <CityMenuBack backLink={backLink} isMobile={isMobile}/>
 
       {!isMobile && (
         <ContainerInfoStats>
