@@ -39,7 +39,7 @@ const SearchFormControl = styled(FormControl)`
 const CustomMenuItem = styled(MenuItem)`
   height: 54px;
   width: 155px;
-  color: ${({ value }) => (value ? COLOR_WHITE : COLOR_PRIMARY)};
+  color: ${({ value }) => (!!value ? COLOR_WHITE : `${COLOR_PRIMARY} !important`)};
   display: flex;
   justify-content: center !important;
   align-items: center !important;
