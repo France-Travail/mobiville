@@ -27,7 +27,9 @@ const WelcomeContainer = styled.div`
 
 const WelcomeWrapper = styled.div`
   max-width: 1040px;
-  ${({ $isMobile }) => ($isMobile ? '' : 'margin: 0 auto 50px auto')};
+  margin: ${({ $isMobile }) =>
+    $isMobile ? 'auto' : '0 auto 50px auto'};
+  ${({ $isMobile }) => ($isMobile ? 'padding: 0 16px 16px 16px' : '')};
   color: ${COLOR_PRIMARY};
 `
 
@@ -105,10 +107,10 @@ const CityServices = ({ backLink, city }) => {
       </Helmet>
 
       <WelcomeContainer $isMobile={isMobile}>
+
         <WelcomeWrapper $isMobile={isMobile}>
           <CityMenuBack isMobile={isMobile}/>
-
-          <Title $isMobile={isMobile}>Vivre à {_.capitalize(city.nom_comm)}</Title>
+          <Title>Vivre à {_.capitalize(city.nom_comm)}</Title>
 
           <InfoContainer $isMobile={isMobile}>
             {city.description ? (

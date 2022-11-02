@@ -26,14 +26,13 @@ import {
 
 const Container = styled.div`
   max-width: 1036px;
+  width: 100vw;
   margin: auto;
 `
 
 const CardsSectionTitle = styled.h2`
-  width: 100%;
-  max-width: 334px;
+  width: fit-content;
   margin: ${({ $isMobile }) => ($isMobile ? '0 auto 16px auto' : '0 0 16px 0')};
-
 
   color: ${COLOR_PRIMARY};
   font-size: 24px;
@@ -42,11 +41,12 @@ const CardsSectionTitle = styled.h2`
 
 const CardsContainer = styled.div`
   max-width: 1034px;
+  width: 100%;
 
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: ${({ $isMobile }) => ($isMobile ? 'center' : 'start')};
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 334px);
+  justify-content: center;
+  grid-gap: 16px;
 
   color: ${COLOR_PRIMARY};
 `
@@ -56,9 +56,6 @@ const CardContainer = styled.div`
   border-radius: 8px;
 
   background: ${COLOR_WHITE};
-
-  max-width: 334px;
-  width: 100%;
 `
 
 const CardHeader = styled.div`
@@ -78,18 +75,17 @@ const CardIconContainer = styled.div`
   height: 80px;
   border-radius: 4px;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-items: center;
 
   background: ${COLOR_PURPLE};
 `
 
 const CardItemsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
   margin-top: 16px;
 
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 `
 
@@ -100,10 +96,10 @@ const CardItem = styled.div`
 
 const CardItemData = styled.p`
   min-width: 42px;
-  text-align: center;
   margin: 0;
   margin-right: 8px;
-
+  
+  text-align: center;
   font-size: 24px;
   font-weight: 900;
 `
@@ -111,7 +107,7 @@ const CardItemData = styled.p`
 const CardItemLabel = styled.p`
   margin: 0;
 
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 400;
 `
 
@@ -215,7 +211,7 @@ const CityServiceInfoCards = ({ cityEquipments }) => {
   return (
     <Container>
       <CardsSectionTitle $isMobile={isMobile}>Les services</CardsSectionTitle>
-      <CardsContainer $isMobile={isMobile}>
+      <CardsContainer>
         { tranportCard }
         { educationCard }
         { healthCard }
