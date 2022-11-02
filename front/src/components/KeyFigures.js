@@ -9,7 +9,7 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: row;
-  gap: ${({ $isMobile }) => ($isMobile ? '30px' : '34px')};
+  gap: ${({ $isMobile }) => ($isMobile ? '30px 0' : '34px')};
   justify-content: center;
   flex-wrap: wrap;
 

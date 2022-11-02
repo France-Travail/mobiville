@@ -32,7 +32,7 @@ const Container = styled.div`
 
 const CardsSectionTitle = styled.h2`
   width: fit-content;
-  margin: ${({ $isMobile }) => ($isMobile ? '0 auto 16px auto' : '0 0 16px 0')};
+  margin: ${({ $isMobile }) => ($isMobile ? '16px auto 16px auto' : '0 0 16px 0')};
 
   color: ${COLOR_PRIMARY};
   font-size: 24px;

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -15,7 +16,7 @@ const Nav = styled.nav`
   right: 0;
   min-height: 50px;
   z-index: 100;
-  margin: 25px 0;
+  margin-top: 12px;
 
   background: ${({ $isMobile }) =>
     $isMobile ? COLOR_WHITE : COLOR_OTHER_GREEN};
@@ -43,7 +44,7 @@ const MenuItem = styled(Link)`
   pointer-events: ${({ $disabled }) => ($disabled ? 'none' : 'inherit')};
 `
 
-const MenuNavigation = ({ isMobile }) => {
+const MenuNavigation = ({ isMobile = false }) => {
   const location = useLocation()
   const params = new URLSearchParams(location.search)
 
@@ -100,6 +101,8 @@ const MenuNavigation = ({ isMobile }) => {
   )
 }
 
-MenuNavigation.propTypes = {}
+MenuNavigation.propTypes = {
+  isMobile: PropTypes.bool
+}
 
 export default MenuNavigation
