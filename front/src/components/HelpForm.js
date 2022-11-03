@@ -87,6 +87,12 @@ const HelpForm = ({
         return `/aides?${paramsURLFormatted}`
       }, [ projectsSelected, jobSituationSelected, ageSelected ])
     
+    const isDirty = useCallback(() => {
+        return projectsSelected?.length > 0
+            || !!jobSituationSelected
+            || !!ageSelected
+    }, [ projectsSelected, jobSituationSelected, ageSelected ])
+
     const resetInputs = () => {
         setProjectsSelected([])
         setJobSituationSelected('')
@@ -125,7 +131,7 @@ const HelpForm = ({
             ></ActionButton>
 
             {
-                isMobile
+                (isMobile && isDirty())
                     ? (<Button
                         primary={false}
                         light={true}

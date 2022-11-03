@@ -9,6 +9,7 @@ export const COLOR_LIGHT_GREY = '#E4E9ED'
 export const COLOR_GRAY = '#F6F7FB'
 export const COLOR_SALMON = '#FCA890'
 export const COLOR_WHITE = '#FFFFFF'
+export const COLOR_PURPLE = '#C7C7F3'
 
 // TEXT
 export const COLOR_TEXT_PRIMARY = '#23333E'

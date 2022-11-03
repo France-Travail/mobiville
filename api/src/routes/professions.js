@@ -38,7 +38,7 @@ router.post(
   '/search',
   async ({
     request: {
-      body: { codeRome, insee },
+      body: { codeRome, insee, offresManqueCandidats },
     },
     response,
   }) => {
@@ -46,10 +46,11 @@ router.post(
       codeRome,
       insee: getInseeCodesForSearch(insee),
       distance: 30,
+      offresManqueCandidats
     })
     response.body = {
       resultats: result ? result.resultats : [],
-      totalOffres: result ? getTotalOffres(result) : undefined,
+      totalOffres: result ? getTotalOffres(result) : 0,
     }
   }
 )
@@ -170,7 +171,21 @@ router.post(
       models.cities.findOne({
         where: { insee_com: insee },
         raw: true,
-        include: models.cities.models.bassins,
+        include: {
+          attributes: ['bassin_id'],
+          model: models.cities.models.bassins,
+          required: false,
+          include: [
+            {
+              attributes: ['ind_t'],
+              model: models.bassins.models.tensions,
+              required: false,
+              where: {
+                rome: codeRome,
+              },
+            },
+          ],
+        }
       }),
       models.cities.models.tensions.findOne({
         where: {
@@ -236,6 +251,8 @@ router.post(
     }
 
     response.body = {
+      bassinId: city['bassin.bassin_id'],
+      bassinTensionIndT: city['bassin.tensions.ind_t'],
       min,
       max,
       bassinTension,

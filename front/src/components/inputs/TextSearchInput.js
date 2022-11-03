@@ -87,6 +87,7 @@ const TextSearchInput = ({
   onChange,
   label = '',
   placeholder = '',
+  value,
   noOptionsText = 'Aucun résultat trouvé...',
   groupLabel = null,
   loading = false,
@@ -137,6 +138,7 @@ const TextSearchInput = ({
       options={options}
       loading={loading}
       defaultValue={defaultValue}
+      value={value}
       noOptionsText={noOptionsText}
       // interactions logic
       filterOptions={(input) => input}
@@ -175,6 +177,7 @@ const TextSearchInput = ({
       getOptionLabel={(option) => option?.label ?? ''}
       renderOption={(props, option) => (
         <CustomBox
+          key={props.id ?? props.label}
           $primary={option.style === 'primary'}
           component="li"
           {...props}
@@ -218,6 +221,7 @@ TextSearchInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
   placeholder: PropTypes.string,
+  value: PropTypes.any,
   noOptionsText: PropTypes.string,
   groupLabel: PropTypes.string,
   loading: PropTypes.bool,

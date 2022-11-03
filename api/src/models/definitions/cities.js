@@ -23,6 +23,8 @@ import Sequelize from 'sequelize'
 - average_houseselled: Prix moyen du m2 des logements (Valeur à null puis un cron demande au fichier `dvf-communes-2019.csv` issue de data.gouv.fr),
 - city_house_tension: Definition du niveau de tension (Valeur à null puis un cron demande au fichier `dvf-communes-2019.csv` issue de data.gouv.fr),
 - average_houserent: Prix moyen du loyer des appartement au m2 (Value à null puis un demande au fichier `indicateurs-loyers-appartements.csv` issue de data.gouv.fr),
+- average_houserent_f2: Prix moyen du loyer des appartement F2 du bassin rattaché (Value à null puis un demande au fichier `house-pricing.csv`),
+- average_houserent_f4: Prix moyen du loyer des appartement F4 du bassin rattaché (Value à null puis un demande au fichier `house-pricing.csv`),
 - photo: Url de photo de la ville. (Valeur à null puis un cron demande à l'api wikipedia la photo),
 
 */
@@ -128,6 +130,14 @@ export default (sequelizeInstance) => {
         allowNull: true,
       },
       average_houserent: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      average_houserent_f2: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
+      average_houserent_f4: {
         type: Sequelize.FLOAT,
         allowNull: true,
       },

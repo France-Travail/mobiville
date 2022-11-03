@@ -59,15 +59,14 @@ export function getAllBassins() {
         }
       }
     )
-  }).then((list) =>
-    list.map((c) => ({
+  }).then((list) => (list.map((c) => ({
       ...c,
       code_commune: c.ccommune,
       nom_com: c.nomcom,
       bassin_id: c.be19,
-      bassin_name: c.nombre19,
+      bassin_name: c.nombe19,
     }))
-  )
+  ))
 }
 
 export function getFranceShape() {
@@ -187,6 +186,21 @@ export function getAveragePricing() {
   })
 }
 
+export function getHousePricing() {
+  return new Promise((resolve, reject) => {
+    readFile(
+      __dirname + '/../assets/datas/house-pricing.csv',
+      (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(csvToArrayJson(data))
+        }
+      }
+    )
+  })
+}
+
 export const getTensionsCities = () => {
   let rawdata = readFileSync(
     __dirname + '/../assets/datas/donnees-de-reference_zonage-commune.json'
@@ -212,7 +226,7 @@ export function getAverageHouseRent() {
 export function getEquipmentsDatas() {
   return new Promise((resolve, reject) => {
     readFile(
-      __dirname + '/../assets/datas/bpe-2020-light.json.gz',
+      __dirname + '/../assets/datas/BPE2021-tweaked.json.gz',
       (err, bufferData) => {
         if (err) return reject(err)
 

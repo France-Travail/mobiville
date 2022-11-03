@@ -9,7 +9,6 @@ import { ReactComponent as FinancialHelpIcon } from '../../../assets/images/icon
 import { isMobileView } from '../../../constants/mobile'
 import { useWindowSize } from '../../../common/hooks/window-size'
 import styled from 'styled-components'
-import { COLOR_PRIMARY } from '../../../constants/colors'
 
 // === SEARCH BLOCK ===
 
@@ -61,10 +60,18 @@ const WelcomeSearchForm = () => {
 
   return (
     <Container $isMobile={isMobile}>
-      <div>
+      <div style={{ width: '100%' }}>
         <ButtonGroupLabel>Que recherchez-vous ?</ButtonGroupLabel>
-        <ButtonGroup onChange={handleChange} onClick={handleClick}>
-          <button data-automation-id="search-ville" type="button" id={CITIES_BUTTON_ID}>
+        <ButtonGroup
+          onChange={handleChange}
+          onClick={handleClick}
+          defaultSelected={CITIES_BUTTON_ID}
+        >
+          <button
+            data-automation-id="search-ville"
+            type="button"
+            id={CITIES_BUTTON_ID}
+          >
             <HouseOutlineIcon />
             <p>Une ville</p>
           </button>
@@ -73,9 +80,6 @@ const WelcomeSearchForm = () => {
             type="button"
             data-automation-id="search-aide"
             id={HELPS_BUTTON_ID}
-            style={{
-              border: isMobile ? `1px solid ${COLOR_PRIMARY}` : 'none',
-            }}
           >
             <FinancialHelpIcon />
             <p>Une aide</p>

@@ -9,12 +9,16 @@ export { SearchInput, SearchOptions } from './SearchComponents.js'
 export { Section, SectionTitle } from './Section.js'
 export { default as SubHeader } from './SubHeader.js'
 export { default as Modale } from './Modale.js'
+export { default as KeyFigures } from './KeyFigures.js'
+export { default as Map } from './Map.js'
+export { default as Tag } from './Tag.js'
 
 // INPUTS
 export { default as Button } from './inputs/Button.js'
 export { default as ButtonGroup } from './inputs/ButtonGroup.js'
 export { default as ActionButton } from './inputs/ActionButton.js'
-export { default as Select }  from './inputs/Select.js'
+export { default as Select } from './inputs/Select.js'
+export { default as TextInput } from './inputs/TextInput.js'
 export { default as TextSearchInput } from './inputs/TextSearchInput.js'
 
 // helps inputs

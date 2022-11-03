@@ -1,6 +1,9 @@
+import { debounce } from 'lodash'
 import PropTypes from 'prop-types'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
+
 import { useWindowSize } from '../common/hooks/window-size'
 import { isMobileView } from '../constants/mobile'
 import { CITY_TYPE, REGION_TYPE } from '../constants/search'
@@ -9,78 +12,104 @@ import { CitySelect, JobSelect, ActionButton } from './'
 
 const Container = styled.div`
   width: 100%;
-
   display: flex;
-  flex-direction: ${ ({ $isMobile }) => ($isMobile ? `column` : `row`) };
-  justify-items: ${ ({ $isMobile }) => ($isMobile ? `start` : `center`) };
+  flex-direction: ${({ $isMobile }) => ($isMobile ? `column` : `row`)};
+  justify-items: ${({ $isMobile }) => ($isMobile ? `start` : `center`)};
   gap: 8px;
-
-  display: ${ ({ $hidden }) => ($hidden ? 'none' : 'visible') };
+  display: ${({ $hidden }) => ($hidden ? 'none' : 'visible')};
 `
-
 const CityForm = ({
-    hidden = false
+  hidden = false,
+  filters = { citySizeSelected: '', environmentSelected: '' },
 }) => {
+  const isMobile = isMobileView(useWindowSize())
+  const navigate = useNavigate()
+  const { search } = useLocation()
 
-    const isMobile = isMobileView(useWindowSize())
+  const [jobSelected, setJobSelected] = useState('')
+  const [citySelected, setCitySelected] = useState('')
 
-    const [ jobSelected, setJobSelected ] = useState('')
-    const [ citySelected, setCitySelected ] = useState('')
+  const computeSearchPath = useCallback(() => {
+    if (!!jobSelected && !!citySelected && citySelected.type === CITY_TYPE) {
+      // on va directement sur la page de la ville choisi
+      return `/city/${citySelected.id}-${citySelected.cityName}?codeRome=${jobSelected.key}`
+    }
 
-    const computeSearchPath = useCallback(() => {
-        if (!!jobSelected) {
-            if (!!citySelected) {
-                if (citySelected.type === CITY_TYPE) {
-                return `/city/${citySelected.id}-${citySelected.cityName}?codeRome=${jobSelected.key}`
-                } else if (citySelected.type === REGION_TYPE) {
-                return `/cities?codeRegion=${citySelected.id}&codeRome=${jobSelected.key}`
-                }
-            }
-            return `/cities?codeRome=${jobSelected.key}`
+    let url = '/cities'
+
+    if (!!jobSelected) {
+      url += `?codeRome=${jobSelected.key}`
+    }
+    if (!!citySelected && citySelected.type === REGION_TYPE) {
+      url += `&codeRegion=${citySelected.id}`
+    }
+    if (!!filters && !!filters.citySizeSelected) {
+      url += `&codeCity=${filters.citySizeSelected}`
+    }
+    if (!!filters && !!filters.environmentSelected) {
+      url += `&codeEnvironment=${filters.environmentSelected}`
+    }
+
+    return url
+  }, [jobSelected, citySelected, filters])
+
+  const redirect = () => {
+    debounce(() => navigate(computeSearchPath()), 50)()
+  }
+
+  useEffect(() => {
+    // dans le cas où la valeur est déjà dans l'url, on vérifie qu'on a bien une modification
+    if (search.includes("codeCity") || search.includes("codeEnvironment")) {
+      const entries = new URLSearchParams(search).entries()
+      for (let entry of entries) {
+        const [key, value] = entry
+        if (key === 'codeCity' && value !== filters.citySizeSelected || key === 'codeEnvironment' && value !== filters.environmentSelected) {
+          redirect()
         }
-        return ''
-    }, [jobSelected, citySelected])
-
-    const onJobSelect = (job) => {
-        setJobSelected(job)
+      }
     }
 
-    const onCitySelect = (city) => {
-        setCitySelected(city)
+    // on vérifie que l'ajout de nouveaux filtres
+    if (!!filters && ((!!filters.citySizeSelected && !search.includes("codeCity")) || (!!filters.environmentSelected && !search.includes("codeEnvironment")))) {
+      redirect()
     }
+  }, [filters])
 
-    return (
-        <Container
-            $hidden={hidden}
-            $isMobile={isMobile}
-        >
-            
-            <JobSelect
-                onSelect={(job) => onJobSelect(job)}
-            ></JobSelect>
+  const onJobSelect = (job) => {
+    setJobSelected(job)
+  }
 
-            <CitySelect
-                onSelect={(city) => onCitySelect(city)}
-                codeRome={!!jobSelected ? jobSelected.key : null}
-            ></CitySelect>
+  const onCitySelect = (city) => {
+    setCitySelected(city)
+  }
 
-            <ActionButton
-                isMainSearch={true}
-                style={{
-                    minHeight: 73,
-                    boxShadow: isMobile ? 'none' : '0px 5px 10px rgba(0, 0, 0, 0.3)',
-                    width: isMobile ? '100%' : 184,
-                }}
-                path={computeSearchPath()}
-                isBlue
-            ></ActionButton>
+  return (
+    <Container $hidden={hidden} $isMobile={isMobile}>
+      <JobSelect onSelect={(job) => onJobSelect(job)}></JobSelect>
 
-        </Container>
-    )
+      <CitySelect
+        onSelect={(city) => onCitySelect(city)}
+        codeRome={!!jobSelected ? jobSelected.key : null}
+      ></CitySelect>
+
+      <ActionButton
+        isMainSearch={true}
+        style={{
+          minHeight: 73,
+          boxShadow: isMobile ? 'none' : '0px 5px 10px rgba(0, 0, 0, 0.3)',
+          width: isMobile ? '100%' : 184,
+        }}
+        path={computeSearchPath()}
+        isBlue
+      ></ActionButton>
+    </Container>
+  )
 }
 
 CityForm.propTypes = {
-    hidden: PropTypes.bool,
+  hidden: PropTypes.bool,
+  job: PropTypes.object,
+  filters: PropTypes.object,
 }
 
 export default CityForm

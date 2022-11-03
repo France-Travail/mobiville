@@ -31,6 +31,7 @@ import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 import MainLayout from '../../components/MainLayout'
 import SubHeader from '../../components/SubHeader'
+import CityMenuBack from "./components/CityMenuBack"
 
 const JobLoading = styled.div`
   margin: auto;
@@ -38,6 +39,7 @@ const JobLoading = styled.div`
 `
 
 const JobLayout = styled.div`
+  background-color: ${COLOR_GRAY};
   flex: 1;
   margin-top: ${({ isMobile }) => (isMobile ? '8px' : '0')};
 `
@@ -435,7 +437,12 @@ const CityJobs = ({
           content={`Accédez à l’ensemble des offres d’emploi de ${_.capitalize(city.nom_comm)} (${city.code_dept}) pour le métier de ${romeLabel}`}
         />
       </Helmet>
+
+      {isMobile && (
+        <CityMenuBack backLink={backLink} isMobile={isMobile}/>
+      )}
       <SubHeader backLink={backLink} node={subHeaderNode} isMobile={isMobile} />
+
       {isLoading ? (
         <JobLoading>Chargement des offres...</JobLoading>
       ) : (

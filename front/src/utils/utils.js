@@ -100,3 +100,23 @@ export const useElementOnScreen = (options) => {
 
   return [containerRef, isVisible]
 }
+
+export const formatCityTension = (tension) => {
+  if (tension < 4) {
+    return "Opportunités d'emploi"
+  }
+  return "Peu d'opportunités d'emploi"
+}
+
+export function getXDaysAgo(date) {
+  const daysAgo = moment().diff(date, "days")
+  if (daysAgo > 0) {
+    return `${daysAgo} jour${daysAgo > 1 ? 's' : ''}`
+  }
+
+  let hoursAgo = moment().diff(date, "hours") + 1
+  if (hoursAgo < 1) {
+    return "moins d'une heure"
+  }
+  return `${hoursAgo} heure${hoursAgo > 1 ? 's' : ''}`
+}

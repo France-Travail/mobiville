@@ -5,20 +5,20 @@ import { Link } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { COLOR_GRAY, COLOR_TEXT_PRIMARY } from '../constants/colors'
 
-const HEIGHT = 112
 const PADDING = 16
 
 const HeaderContainer = styled.div`
   position: static;
   left: 0;
   right: 0;
-  background-color: white;
+  background-color: ${COLOR_GRAY};
   top: 76;
   width: 100%;
   display: flex;
   align-items: center;
   width: 100%;
   z-index: 10;
+  height: ${({ title }) => (title ? '112px' : '60px')};
 `
 
 const HeaderSubContainer = styled.div`
@@ -57,7 +57,7 @@ const H1 = styled.h1`
 
 const SubHeader = ({ backLink, desktopTitleWidth, isMobile, node, title }) => (
   <>
-    <HeaderContainer isMobile={isMobile} style={{ height: HEIGHT }}>
+    <HeaderContainer title={title}>
       <HeaderSubContainer
         isMobile={isMobile}
         style={{
@@ -66,9 +66,11 @@ const SubHeader = ({ backLink, desktopTitleWidth, isMobile, node, title }) => (
             : null,
         }}
       >
-        <HeaderArrowLink to={backLink} title="Retour">
-          <ArrowBackIcon color="primary" fontSize="large" />
-        </HeaderArrowLink>
+        {(!isMobile || title) && (
+            <HeaderArrowLink to={backLink} title="Retour">
+              <ArrowBackIcon color="primary" fontSize="large" />
+            </HeaderArrowLink>
+        )}
         {node ? node : <H1>{title}</H1>}
       </HeaderSubContainer>
     </HeaderContainer>
