@@ -120,3 +120,12 @@ export function getXDaysAgo(date) {
   }
   return `${hoursAgo} heure${hoursAgo > 1 ? 's' : ''}`
 }
+
+export const formatCityUrl = (city, codeRome) => {
+  let url = `/city/${city.insee_com}-${city.nom_comm}`
+  if (!!codeRome) {
+    url += `?codeRome=${codeRome}`
+  }
+
+  return url
+}
