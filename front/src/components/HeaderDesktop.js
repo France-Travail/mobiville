@@ -76,6 +76,8 @@ const NavContainer = styled.div`
 `
 
 const NavItem = styled(Link)`
+  font-size: 16px;
+
   && {
     position: relative;
     

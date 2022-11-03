@@ -86,10 +86,7 @@ const Cities = () => {
 
   useEffect(() => {
     if (cities.length > 0) {
-      let listCitiesInsee = []
-      cities.map((city) => {
-        return listCitiesInsee.push([city.insee_com])
-      })
+      let listCitiesInsee = cities.map((city) => [city.insee_com])
       onSearchCountList({
         codeRome: [params.codeRome],
         inseeList: listCitiesInsee,

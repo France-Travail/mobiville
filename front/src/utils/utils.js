@@ -73,6 +73,8 @@ export const ucFirst = (s) => {
   return s.charAt(0).toUpperCase() + s.slice(1)
 }
 
+export const capitalize = (string) => ucFirst(string.toLowerCase())
+
 export const thereAre = (date) => moment(date).fromNow()
 
 export const formatDate = (date) => date.toLocaleDateString("fr-FR")

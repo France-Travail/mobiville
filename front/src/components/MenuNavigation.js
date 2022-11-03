@@ -37,7 +37,7 @@ const MenuItem = styled(Link)`
   font-size: 16px;
   line-height: 24px;
 
-  color: ${({ $disabled, $selected }) =>
+  color: ${({ $disabled = false, $selected }) =>
     $disabled ? 'grey' : $selected ? COLOR_PRIMARY : COLOR_TEXT_PRIMARY};
   text-decoration: ${({ $selected }) => ($selected ? 'underline' : 'none')};
 
@@ -57,28 +57,25 @@ const MenuNavigation = ({ isMobile = false }) => {
       label: 'Emploi et logement',
       selected:
         !location.pathname.includes('job') &&
-        !location.pathname.includes('life'),
-      disabled: false,
+        !location.pathname.includes('life') &&
+        !location.pathname.includes('villes-proches'),
     },
     {
       path: `/city/${insee}/job?codeRome=${codeRome}`,
       label: 'Offres d’emploi',
       selected: location.pathname.includes('job'),
-      disabled: false,
     },
     {
       path: `/city/${insee}/life?codeRome=${codeRome}`,
       label: 'Services de la ville',
       selected: location.pathname.includes('life'),
-      disabled: false,
     },
     {
-      path: '/city',
+      path: `/city/${insee}/villes-proches?codeRome=${codeRome}`,
       label: isMobile
         ? 'Villes similaires'
         : 'Villes similaires ou à proximité',
-      selected: false,
-      disabled: true,
+      selected: location.pathname.includes('villes-proches'),
     },
   ]
 

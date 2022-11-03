@@ -31,6 +31,7 @@ import { ReactComponent as ProfilEntrepriseIcon } from '../../assets/images/icon
 import cityServicesStandOut from '../../assets/images/cityServicesStandOut.png'
 
 import { formatCityTension, getXDaysAgo } from '../../utils/utils'
+import CityCloseCities from './cityCloseCities/CityCloseCities'
 
 const ElementContainer = styled.div`
   display: flex;
@@ -52,17 +53,17 @@ const BlockContainerOffers = styled.div`
   flex-direction: column;
 
   ${({ isMobile }) => (isMobile ? 'overflow-x: scroll' : '')};
-  
+
   &::-webkit-scrollbar {
     display: none;
   }
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `
 
 const BlockContentOffers = styled.div`
   width: fit-content;
-  ${({ isMobile }) => isMobile ? 'padding: 0 16px;' : ''}
+  ${({ isMobile }) => (isMobile ? 'padding: 0 16px;' : '')}
   margin: auto;
 
   display: flex;
@@ -94,7 +95,7 @@ const BlockContainerProximity = styled.div`
 `
 
 const BlockTitle = styled.div`
-  margin: ${({ isMobile }) => isMobile ? '20px auto 0 auto' : 'auto'};
+  margin: ${({ isMobile }) => (isMobile ? '20px auto 0 auto' : 'auto')};
   width: 100%;
   max-width: 1040px;
 `
@@ -176,7 +177,7 @@ const BlockCompanyName = styled.span`
   font-size: 16px;
   line-height: 19px;
   color: ${COLOR_PRIMARY};
-  
+
   &:hover {
     text-decoration-line: underline;
   }
@@ -216,8 +217,8 @@ const CityName = styled.h1`
   margin: 8px 0 22px 0;
 
   font-weight: 900;
-  font-size: ${({ isMobile }) => isMobile ? '24px' : '36px'};
-  line-height: ${({ isMobile }) => isMobile ? '36px' : '42px'};
+  font-size: ${({ isMobile }) => (isMobile ? '24px' : '36px')};
+  line-height: ${({ isMobile }) => (isMobile ? '36px' : '42px')};
   color: ${COLOR_PRIMARY};
 `
 
@@ -286,6 +287,7 @@ const ServicesStandOutImageContainer = styled.div`
 
 const JOB = 'job'
 const LIFE = 'life'
+const CLOSE_CITIES = 'villes-proches'
 
 const CityPage = () => {
   const {
@@ -294,8 +296,6 @@ const CityPage = () => {
     city,
     criterions,
     unloadCity,
-    onSearchCloseCities,
-    onSearchSimilarCities,
     onSearchCloseCompanies,
     companiesCount,
     closeCompanies,
@@ -354,16 +354,6 @@ const CityPage = () => {
         offresManqueCandidats: true,
       })
       onSearchInfosTravail({ codeRome: codeRome, insee: city.insee_com })
-      onSearchSimilarCities({
-        codeRome,
-        city,
-      })
-      onSearchCloseCities({
-        latitude: city.geo_point_2d_x,
-        longitude: city.geo_point_2d_y,
-        codeRome,
-        inseeCode: city.insee_com,
-      })
       onSearchCloseCompanies({
         codeRome,
         insee: city.insee_com,
@@ -416,8 +406,13 @@ const CityPage = () => {
       />
     )
 
-  if (section === LIFE)
-    return <CityServices city={city} backLink={backLink} />
+  if (section === LIFE) return <CityServices city={city} backLink={backLink} />
+
+  // if (section === CLOSE_CITIES)
+  //   return <CityCloseCities
+  //     backLink={backLink}
+  //     codeRome={codeRome}
+  //   />
 
   const isMobile = isMobileView(size)
 
@@ -435,154 +430,161 @@ const CityPage = () => {
         />
       </Helmet>
 
-      <CityHeader
-        backLink={backLink}
-        isMobile={isMobile}
-      >
-        <TitlesContainer isMobile={isMobile}>
-          <RegionName isMobile={isMobile}>
-            {_.capitalize(city.nom_region)}
-            <RoundSeparator> • </RoundSeparator>
-            {_.capitalize(city.nom_dept)}
-          </RegionName>
-          <CityName isMobile={isMobile}>
-            {_.capitalize(city.nom_comm)}
-            {isMobile ? <br /> : ' '}pour le métier {romeLabel}
-          </CityName>
-        </TitlesContainer>
-      </CityHeader>
+      {section === CLOSE_CITIES ? (
+        <CityCloseCities backLink={backLink} codeRome={codeRome} />
+      ) : (
+        <>
+          <CityHeader backLink={backLink} isMobile={isMobile}>
+            <TitlesContainer isMobile={isMobile}>
+              <RegionName isMobile={isMobile}>
+                {_.capitalize(city.nom_region)}
+                <RoundSeparator> • </RoundSeparator>
+                {_.capitalize(city.nom_dept)}
+              </RegionName>
+              <CityName isMobile={isMobile}>
+                {_.capitalize(city.nom_comm)}
+                {isMobile ? <br /> : ' '}pour le métier {romeLabel}
+              </CityName>
+            </TitlesContainer>
+          </CityHeader>
 
-      <TagsContainer>
-        <Tag green={bassinTensionIndT < 4} tall>
-          {formatCityTension(bassinTensionIndT)}
-        </Tag>
-      </TagsContainer>
+          <TagsContainer>
+            <Tag green={bassinTensionIndT < 4} tall>
+              {formatCityTension(bassinTensionIndT)}
+            </Tag>
+          </TagsContainer>
 
-      <KeyFigures
-        figures={[
-          {
-            label: "Offres d'emploi",
-            data: totalOffres,
-            icon: <MaletteIcon />,
-          },
-          {
-            label: 'Entreprises',
-            data: companiesCount,
-            icon: <ProfilEntrepriseIcon />,
-          },
-          // { label: "Taux d'embauche", data: totalOffres, icon: <BlockJobInfosImg src={handshake} /> },
-        ]}
-      />
+          <KeyFigures
+            figures={[
+              {
+                label: "Offres d'emploi",
+                data: totalOffres,
+                icon: <MaletteIcon />,
+              },
+              {
+                label: 'Entreprises',
+                data: companiesCount,
+                icon: <ProfilEntrepriseIcon />,
+              },
+              // { label: "Taux d'embauche", data: totalOffres, icon: <BlockJobInfosImg src={handshake} /> },
+            ]}
+          />
 
-      <BlockTitle isMobile={isMobile}>
-        <BlockTitleText isMobile={isMobile}>
-          <BlockTitleH2>
-            Les offres d'emploi avec plus d'opportunités
-          </BlockTitleH2>
-          <BlockTitleP>
-            Offres de plus de 15 jours, comptant moins de 4 candidatures
-          </BlockTitleP>
-        </BlockTitleText>
-      </BlockTitle>
+          <BlockTitle isMobile={isMobile}>
+            <BlockTitleText isMobile={isMobile}>
+              <BlockTitleH2>
+                Les offres d'emploi avec plus d'opportunités
+              </BlockTitleH2>
+              <BlockTitleP>
+                Offres de plus de 15 jours, comptant moins de 4 candidatures
+              </BlockTitleP>
+            </BlockTitleText>
+          </BlockTitle>
 
-      <BlockContainerOffers isMobile={isMobile}>
-        <BlockContentOffers isMobile={isMobile}>
-          {professionsCandidatsManquants
-            ?.slice(0, 3)
-            .map((profession, index) => (
-              <BlockCardOffer isMobile={isMobile} key={index}>
-                <BlockOfferLabel>
-                  {profession.appellationlibelle}
-                </BlockOfferLabel>
-                <BlockOfferCompany>
-                  {profession.entreprise.nom}
-                </BlockOfferCompany>
-                <BlockOfferCity>
-                  {profession.lieuTravail.libelle}
-                </BlockOfferCity>
-                <BlockOfferContract>
-                  <DescriptionIcon />
-                  {profession.typeContrat}{' '}
-                  {profession.dureeTravailLibelleConverti
-                    ? ' \u2022 ' + profession.dureeTravailLibelleConverti
-                    : ''}
-                </BlockOfferContract>
-                <BlockOfferDate>
-                  <AccessTimeIcon />
-                  Publié il y a {getXDaysAgo(profession.dateActualisation)}
-                </BlockOfferDate>
-              </BlockCardOffer>
-            ))}
-        </BlockContentOffers>
-      </BlockContainerOffers>
-      <ActionButton 
-        path={`/city/${insee}/${JOB}?codeRome=${codeRome}`}
-        libelle={`Voir toutes les offres d’emploi`}
-        isMobile={isMobile}
-        isBlue={true}
-        centered
-      />
-
-      <BlockTitle isMobile={isMobile}>
-        <BlockTitleText isMobile={isMobile}>
-          <BlockTitleH2>Les entreprises qui recrutent à proximité</BlockTitleH2>
-        </BlockTitleText>
-      </BlockTitle>
-      <BlockContainerProximity isMobile={isMobile}>
-        <BlockContentProximity isMobile={isMobile}>
-          {closeCompanies?.slice(0, 5).map((company, index) => (
-            <a key={index} href={company.url} target="_blank">
-              <BlockCompanyName>
-                {_.startCase(_.toLower(company.name))}
-              </BlockCompanyName>{' '}
-              <BlockCompanyCity>{_.capitalize(company.city)}</BlockCompanyCity>
-            </a>
-          ))}
-          <BlockCompanyDataFrom>
-            (Données issues de{' '}
-            <a target="_blank" href="https://labonneboite.pole-emploi.fr/">
-              La Bonne Boite
-            </a>
-            )
-          </BlockCompanyDataFrom>
-        </BlockContentProximity>
-      </BlockContainerProximity>
-
-      <ElementContainer isMobile={isMobile}>
-        <CityHousingSimulator city={city}></CityHousingSimulator>
-      </ElementContainer>
-
-      <ServicesStandOut $isMobile={isMobile}>
-        <ServicesStandOutContent>
-          <ServicesStandOutTitle>
-            Découvrez les services de la ville
-          </ServicesStandOutTitle>
-          <ServicesStandOutDescription>
-            Tout savoir sur les transports, la santé, l’éducation, la culture et
-            les loisirs
-          </ServicesStandOutDescription>
+          <BlockContainerOffers isMobile={isMobile}>
+            <BlockContentOffers isMobile={isMobile}>
+              {professionsCandidatsManquants
+                ?.slice(0, 3)
+                .map((profession, index) => (
+                  <BlockCardOffer isMobile={isMobile} key={index}>
+                    <BlockOfferLabel>
+                      {profession.appellationlibelle}
+                    </BlockOfferLabel>
+                    <BlockOfferCompany>
+                      {profession.entreprise.nom}
+                    </BlockOfferCompany>
+                    <BlockOfferCity>
+                      {profession.lieuTravail.libelle}
+                    </BlockOfferCity>
+                    <BlockOfferContract>
+                      <DescriptionIcon />
+                      {profession.typeContrat}{' '}
+                      {profession.dureeTravailLibelleConverti
+                        ? ' \u2022 ' + profession.dureeTravailLibelleConverti
+                        : ''}
+                    </BlockOfferContract>
+                    <BlockOfferDate>
+                      <AccessTimeIcon />
+                      Publié il y a {getXDaysAgo(profession.dateActualisation)}
+                    </BlockOfferDate>
+                  </BlockCardOffer>
+                ))}
+            </BlockContentOffers>
+          </BlockContainerOffers>
           <ActionButton
-            style={{ marginTop: 16, width: 'fit-content' }}
-            path={`/city/${insee}/${LIFE}?codeRome=${codeRome}`}
-            libelle={`Voir tous les services`}
+            path={`/city/${insee}/${JOB}?codeRome=${codeRome}`}
+            libelle={`Voir toutes les offres d’emploi`}
+            isMobile={isMobile}
+            isBlue={true}
+            centered
+          />
+
+          <BlockTitle isMobile={isMobile}>
+            <BlockTitleText isMobile={isMobile}>
+              <BlockTitleH2>
+                Les entreprises qui recrutent à proximité
+              </BlockTitleH2>
+            </BlockTitleText>
+          </BlockTitle>
+          <BlockContainerProximity isMobile={isMobile}>
+            <BlockContentProximity isMobile={isMobile}>
+              {closeCompanies?.slice(0, 5).map((company, index) => (
+                <a key={index} href={company.url} target="_blank">
+                  <BlockCompanyName>
+                    {_.startCase(_.toLower(company.name))}
+                  </BlockCompanyName>{' '}
+                  <BlockCompanyCity>
+                    {_.capitalize(company.city)}
+                  </BlockCompanyCity>
+                </a>
+              ))}
+              <BlockCompanyDataFrom>
+                (Données issues de{' '}
+                <a target="_blank" href="https://labonneboite.pole-emploi.fr/">
+                  La Bonne Boite
+                </a>
+                )
+              </BlockCompanyDataFrom>
+            </BlockContentProximity>
+          </BlockContainerProximity>
+
+          <ElementContainer isMobile={isMobile}>
+            <CityHousingSimulator city={city}></CityHousingSimulator>
+          </ElementContainer>
+
+          <ServicesStandOut $isMobile={isMobile}>
+            <ServicesStandOutContent>
+              <ServicesStandOutTitle>
+                Découvrez les services de la ville
+              </ServicesStandOutTitle>
+              <ServicesStandOutDescription>
+                Tout savoir sur les transports, la santé, l’éducation, la
+                culture et les loisirs
+              </ServicesStandOutDescription>
+              <ActionButton
+                style={{ marginTop: 16, width: 'fit-content' }}
+                path={`/city/${insee}/${LIFE}?codeRome=${codeRome}`}
+                libelle={`Voir tous les services`}
+                isMobile={isMobile}
+                isBlue={false}
+                isWhite={true}
+              />
+            </ServicesStandOutContent>
+            <ServicesStandOutImageContainer>
+              <img src={cityServicesStandOut} alt="" />
+            </ServicesStandOutImageContainer>
+          </ServicesStandOut>
+
+          <ActionButton
+            path={'/mobility-guide'}
+            libelle={`Consultez nos conseils pour votre projet`}
             isMobile={isMobile}
             isBlue={false}
             isWhite={true}
+            centered
           />
-        </ServicesStandOutContent>
-        <ServicesStandOutImageContainer>
-          <img src={cityServicesStandOut} alt="" />
-        </ServicesStandOutImageContainer>
-      </ServicesStandOut>
-
-      <ActionButton
-        path={'/mobility-guide'}
-        libelle={`Consultez nos conseils pour votre projet`}
-        isMobile={isMobile}
-        isBlue={false}
-        isWhite={true}
-        centered
-      />
+        </>
+      )}
     </MainLayout>
   )
 }
