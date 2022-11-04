@@ -1,5 +1,5 @@
 import {orderBy} from 'lodash'
-import React, {useState, useCallback, useDebugValue, useEffect} from 'react'
+import React, {useState, useCallback} from 'react'
 import {
     searchProfessions,
     searchInfosTravail,

@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react'
-import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet-async'
 import _ from 'lodash'
 import styled from 'styled-components'

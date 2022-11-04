@@ -14,7 +14,6 @@ const Nav = styled.nav`
   position: ${({ $isMobile }) => ($isMobile ? 'sticky' : 'absolute')};
   left: 0;
   right: 0;
-  min-height: 50px;
   z-index: 100;
   margin-top: 12px;
 
@@ -24,7 +23,7 @@ const Nav = styled.nav`
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  min-height: 50px;
+  padding: ${({ $isMobile }) => $isMobile ? '0 0 13px 0' : '13px 0'};
 
   display: flex;
   align-items: center;
