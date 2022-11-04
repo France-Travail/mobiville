@@ -54,10 +54,6 @@ export function ProfessionsProvider(props) {
             .then(() => _setIsLoading(false))
     }, [])
 
-    useEffect(() => {
-        console.log(professionsCountList)
-    }, [professionsCountList])
-
     return (
         <ProfessionsContext.Provider
             {...props}

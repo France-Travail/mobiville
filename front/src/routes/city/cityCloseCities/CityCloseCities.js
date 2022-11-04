@@ -71,7 +71,6 @@ const ButtonContainer = styled.div`
 `
 
 const CityCloseCities = ({
-  // city,
   codeRome,
   backLink,
 }) => {
@@ -188,6 +187,7 @@ const CityCloseCities = ({
 }
 
 CityCloseCities.propTypes = {
+  codeRome: PropTypes.string,
   backLink: PropTypes.string,
 }
 
