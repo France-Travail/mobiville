@@ -229,6 +229,10 @@ const Helps = () => {
   }, [])
 
   useEffect(() => {
+    setAllItems(previews)
+  }, [previews])
+
+  useEffect(() => {
     const parsedQueryString = queryString.parse(search)
 
     const parsedProjects = parsedQueryString.project
@@ -296,25 +300,6 @@ const Helps = () => {
       )
     )
   }, [allItems])
-
-  useEffect(() => {
-    previews.forEach((preview) => {
-      if (preview.type.includes(',')) {
-        preview.type = preview.type.substring(0, preview.type.indexOf(','))
-      }
-      if (preview.goal.includes('.')) {
-        preview.goal = preview.goal.substring(0, preview.goal.indexOf('.') + 1)
-      }
-      if (
-        preview.type.toLowerCase().includes('aide administrative') ||
-        preview.type.toLowerCase().includes('accompagnement du projet')
-      ) {
-        preview.type = 'Accompagnement'
-      }
-    })
-
-    setAllItems(previews)
-  }, [previews])
 
   useEffect(() => {
     if ((!!projects && projects.length) || (!!situations && situations.length))

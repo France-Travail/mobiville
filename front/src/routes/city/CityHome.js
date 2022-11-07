@@ -26,6 +26,8 @@ import { useCities } from '../../common/contexts/citiesContext'
 import CityHousingSimulator from './CityHousingSimulator'
 import { isMobileView } from '../../constants/mobile'
 import { useWindowSize } from '../../common/hooks/window-size'
+import HelpsStandOut from './components/HelpsStandOut'
+import HorizontalScrollableSection from '../../components/HorizontalScrollableSection'
 
 const ElementContainer = styled.div`
   display: flex;
@@ -37,32 +39,6 @@ const ElementContainer = styled.div`
   align-items: center;
   font-size: 16px;
   line-height: 24px;
-`
-
-const BlockContainerOffers = styled.div`
-  max-width: 1040px;
-  margin: ${({ isMobile }) => (isMobile ? '16px 0' : '16px auto')};
-
-  display: flex;
-  flex-direction: column;
-
-  ${({ isMobile }) => (isMobile ? 'overflow-x: scroll' : '')};
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-`
-
-const BlockContentOffers = styled.div`
-  width: fit-content;
-  ${({ isMobile }) => (isMobile ? 'padding: 0 16px;' : '')}
-  margin: auto;
-
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
 `
 
 const BlockCardOffer = styled.div`
@@ -349,36 +325,35 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
         </BlockTitleText>
       </BlockTitle>
 
-      <BlockContainerOffers isMobile={isMobile}>
-        <BlockContentOffers isMobile={isMobile}>
-          {professionsCandidatsManquants
-            ?.slice(0, 3)
-            .map((profession, index) => (
-              <BlockCardOffer isMobile={isMobile} key={index}>
-                <BlockOfferLabel>
-                  {profession.appellationlibelle}
-                </BlockOfferLabel>
-                <BlockOfferCompany>
-                  {profession.entreprise.nom}
-                </BlockOfferCompany>
-                <BlockOfferCity>
-                  {profession.lieuTravail.libelle}
-                </BlockOfferCity>
-                <BlockOfferContract>
-                  <DescriptionIcon />
-                  {profession.typeContrat}{' '}
-                  {profession.dureeTravailLibelleConverti
-                    ? ' \u2022 ' + profession.dureeTravailLibelleConverti
-                    : ''}
-                </BlockOfferContract>
-                <BlockOfferDate>
-                  <AccessTimeIcon />
-                  Publié il y a {getXDaysAgo(profession.dateActualisation)}
-                </BlockOfferDate>
-              </BlockCardOffer>
-            ))}
-        </BlockContentOffers>
-      </BlockContainerOffers>
+      <HorizontalScrollableSection>
+        {professionsCandidatsManquants
+          ?.slice(0, 3)
+          .map((profession, index) => (
+            <BlockCardOffer isMobile={isMobile} key={index}>
+              <BlockOfferLabel>
+                {profession.appellationlibelle}
+              </BlockOfferLabel>
+              <BlockOfferCompany>
+                {profession.entreprise.nom}
+              </BlockOfferCompany>
+              <BlockOfferCity>
+                {profession.lieuTravail.libelle}
+              </BlockOfferCity>
+              <BlockOfferContract>
+                <DescriptionIcon />
+                {profession.typeContrat}{' '}
+                {profession.dureeTravailLibelleConverti
+                  ? ' \u2022 ' + profession.dureeTravailLibelleConverti
+                  : ''}
+              </BlockOfferContract>
+              <BlockOfferDate>
+                <AccessTimeIcon />
+                Publié il y a {getXDaysAgo(profession.dateActualisation)}
+              </BlockOfferDate>
+            </BlockCardOffer>
+          ))}
+      </HorizontalScrollableSection>
+
       <ActionButton
         path={`/city/${insee}/job?codeRome=${codeRome}`}
         libelle={`Voir toutes les offres d’emploi`}
@@ -415,6 +390,8 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
       <ElementContainer isMobile={isMobile}>
         <CityHousingSimulator city={city}></CityHousingSimulator>
       </ElementContainer>
+
+      <HelpsStandOut />
 
       <ServicesStandOut $isMobile={isMobile}>
         <ServicesStandOutContent>

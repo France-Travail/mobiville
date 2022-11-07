@@ -1,17 +1,12 @@
-import { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import _ from 'lodash'
 
 import { Grid } from '@mui/material'
 
-import EuroIcon from '@mui/icons-material/Euro'
-import HomeWorkIcon from '@mui/icons-material/HomeWork'
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong'
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
-import PeopleIcon from '@mui/icons-material/People'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
+import { Tag } from '../../../components'
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
 import {
@@ -30,7 +25,6 @@ const Container = styled(Link)`
   padding: 18px;
   gap: 33px;
 
-  // width: ${({ $isMobile }) => ($isMobile ? '340px' : '511px')};
   height: ${({ $isMobile }) => ($isMobile ? '' : '231px')};
   border: ${({ $isMobile }) => ($isMobile ? 'none' : '2px solid #fff')};
 
@@ -99,23 +93,6 @@ const TypeTagContainer = styled.div`
   align-items: center;
   padding: 2px;
   gap: 4px;
-`
-
-const TypeText = styled.div`
-  margin-left: 8px;
-  font-weight: 700;
-  font-size: 12px;
-  display: inline;
-  line-height: 14px;
-`
-
-const TypeTag = styled.div`
-  background: #c3e9e9;
-  color: ${COLOR_PRIMARY};
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-  padding: 1px 3px;
 `
 
 // FILTERS
@@ -188,24 +165,11 @@ const filterHelpItemWho = function (who) {
 
     return whoItems
 }
+
 const HelpCard = ({
     help
 }) => {
     const isMobile = isMobileView(useWindowSize())
-
-    const helpIcon = useCallback(() => (
-        help.type.includes('admin') ? (
-            <ReceiptLongIcon />
-        ) : help.type.includes('logement') ? (
-            <HomeWorkIcon />
-        ) : help.type.includes('financière') ? (
-            <EuroIcon />
-        ) : help.type.includes('transport') ? (
-            <DirectionsCarIcon />
-        ) : (
-            <PeopleIcon />
-        )
-    ), [ help ])
 
     return (
         <Grid
@@ -227,10 +191,10 @@ const HelpCard = ({
                             <Title $isMobile={isMobile}>{ help.title }</Title>
 
                             <TypeTagContainer>
-                                <TypeTag>
-                                    { helpIcon() }
-                                    <TypeText>{ help.type }</TypeText>
-                                </TypeTag>
+                                <Tag green bold>
+                                    { help.icon }
+                                    { help.type }
+                                </Tag>
                             </TypeTagContainer>
 
                         </HeaderTextContainer>
