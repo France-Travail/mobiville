@@ -1,32 +1,19 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
-import { useHelps } from '../../../common/contexts/helpsContext'
-import { useWindowSize } from '../../../common/hooks/window-size'
-import { ActionButton, Tag } from '../../../components'
-import { COLOR_PRIMARY } from '../../../constants/colors'
-import { isMobileView } from '../../../constants/mobile'
-import { formatHelpUrl } from '../../../utils/utils'
-import HorizontalScrollableSection from '../../../components/HorizontalScrollableSection'
+import { useHelps } from '../../../../common/contexts/helpsContext'
+import { ActionButton, Tag } from '../../../../components'
+import { COLOR_PRIMARY } from '../../../../constants/colors'
+import { formatHelpUrl } from '../../../../utils/utils'
+import HorizontalScrollableSection from '../../../../components/HorizontalScrollableSection'
 
 const Container = styled.div`
   max-width: 1040px;
   width: 100%;
-  margin: 24px auto 0 auto;
-
+  margin: 0 auto;
   color: ${COLOR_PRIMARY};
-`
-
-const Title = styled.p`
-  font-weight: 900;
-  font-size: 24px;
-  ${({ $isMobile }) =>
-    $isMobile &&
-    css`
-      margin-left: 16px;
-    `}
 `
 
 const Card = styled(Link)`
@@ -43,9 +30,9 @@ const Card = styled(Link)`
   background: white;
 
   &:hover {
-    box-shadow: 0px 0px 0px 1px ${COLOR_PRIMARY};
-    -webkit-box-shadow: 0px 0px 0px 1px ${COLOR_PRIMARY};
-    -moz-box-shadow: 0px 0px 0px 1px ${COLOR_PRIMARY};
+    box-shadow: inset 0px 0px 0px 1px ${COLOR_PRIMARY};
+    -webkit-box-shadow: inset 0px 0px 0px 1px ${COLOR_PRIMARY};
+    -moz-box-shadow: inset 0px 0px 0px 1px ${COLOR_PRIMARY};
   }
 `
 
@@ -82,8 +69,6 @@ const DiscoverText = styled.p`
 `
 
 const HelpsStandOut = () => {
-  const isMobile = isMobileView(useWindowSize())
-
   const { previews, onLoadPreviews } = useHelps()
 
   useEffect(() => {
@@ -111,9 +96,6 @@ const HelpsStandOut = () => {
 
   return (
     <Container>
-      <Title $isMobile={isMobile}>
-        Les aides pour vous accompagner dans votre projet
-      </Title>
       <HorizontalScrollableSection>
         {previews
           .sort((a, b) => !b?.visibility_boost ? -1 : b?.visibility_boost - a?.visibility_boost)
@@ -122,6 +104,7 @@ const HelpsStandOut = () => {
             <HelpCard key={help.id} help={help} />
           ))}
       </HorizontalScrollableSection>
+
       <ActionButton
         path='/aides'
         libelle='Voir toutes les aides'

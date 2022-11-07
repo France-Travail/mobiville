@@ -2,17 +2,17 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import styled from 'styled-components'
 
-import { useWindowSize } from '../../common/hooks/window-size'
-import { COLOR_PRIMARY, COLOR_WHITE } from '../../constants/colors'
-import { isMobileView } from '../../constants/mobile'
-import { formatNumber } from '../../utils/utils'
+import { useWindowSize } from '../../../../common/hooks/window-size'
+import { COLOR_PRIMARY, COLOR_WHITE } from '../../../../constants/colors'
+import { isMobileView } from '../../../../constants/mobile'
+import { formatNumber } from '../../../../utils/utils'
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import logoALin from '../../assets/images/logo-ALin.png'
-import logoLogementSocial from '../../assets/images/logo-logement-social.png'
+import logoALin from '../../../../assets/images/logo-ALin.png'
+import logoLogementSocial from '../../../../assets/images/logo-logement-social.png'
 
-import HousingSimulator from './components/HousingSimulator'
-import { Tag } from '../../components'
+import HousingSimulator from '../../components/HousingSimulator'
+import { Tag } from '../../../../components'
 
 const HousingMetrics = styled.div`
   display: flex;

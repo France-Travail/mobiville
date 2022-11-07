@@ -13,6 +13,7 @@ const MainSpace = styled.div`
     display: flex;
     width: 98%;
     max-width: 1040px;
+    overflow: hidden;
 
     padding-bottom: 42px;
     padding-top: 42px;
@@ -20,7 +21,6 @@ const MainSpace = styled.div`
       padding-top: 20px;
       flex-wrap: wrap;
       justify-content: start;
-      overflow-x: hidden; // le texte européen dépasse sur certains mobile
     }
   }
 `

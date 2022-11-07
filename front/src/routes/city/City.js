@@ -5,19 +5,20 @@ import queryString from 'query-string'
 import { Helmet } from 'react-helmet-async'
 import { CircularProgress } from '@mui/material'
 
-import { MainLayout } from '../../components'
+import CityHome from './cityHome/CityHome'
 import CityJobs from './CityJobs'
 import CityServices from './cityServices/CityServices'
+import CityCloseCities from './cityCloseCities/CityCloseCities'
+import CityMenuBack from './components/CityMenuBack'
+import { MainLayout } from '../../components'
 
 import { useCities } from '../../common/contexts/citiesContext'
 import { useWindowSize } from '../../common/hooks/window-size'
-import { isMobileView } from '../../constants/mobile'
 import { useProfessions } from '../../common/contexts/professionsContext'
-
-import CityCloseCities from './cityCloseCities/CityCloseCities'
-import CityHome from './CityHome'
-import CityMenuBack from './components/CityMenuBack'
+import { isMobileView } from '../../constants/mobile'
 import { COLOR_WHITE } from '../../constants/colors'
+
+
 
 const JOB = 'job'
 const LIFE = 'life'
