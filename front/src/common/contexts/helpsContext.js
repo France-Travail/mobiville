@@ -21,7 +21,7 @@ export function HelpsProvider(props) {
       apiLoadHelpPreviews()
         .then((fetchedPreviews) => {
           if(!!fetchedPreviews) {
-            fetchedPreviews.map((preview) => {
+            fetchedPreviews = fetchedPreviews.map((preview) => {
               let type = (preview.type.includes(',')) ? preview.type.substring(0, preview.type.indexOf(',')) : preview.type
               if (
                 type.toLowerCase().includes('aide administrative') ||
