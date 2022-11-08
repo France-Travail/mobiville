@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import LOGO from '../assets/images/LogoMobiville_gros.svg'
+import { COLOR_VERT_MOBIVILLE } from '../constants/colors'
 import { MOBILE_WIDTH } from '../constants/mobile'
 
 const MainSpace = styled.div`
@@ -49,7 +50,7 @@ const Wrapper = styled.div`
 
 const WrapperLinks = styled.div`
   max-width: 700px;
-  border-left: 2px solid #37b4b4;
+  border-left: 2px solid ${COLOR_VERT_MOBIVILLE};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -147,7 +148,7 @@ const Footer = () => {
             <CustomLink to="/legal">Mentions légales</CustomLink>
           </Item>
           <Item>
-            <CustomLink to="/accessibility">Accessibilité</CustomLink>
+            <CustomLink to="/accessibility">Accessibilité : non conforme</CustomLink>
           </Item>
           <Item>
             <a
