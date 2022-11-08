@@ -16,6 +16,7 @@ import {
   IS_SMALL_CITY,
   IS_SUNNY,
   SIDE_SEA,
+  IndiceTension
 } from '../constants/criterion'
 import {
   getFranceShape,
@@ -177,6 +178,7 @@ export default (sequelizeInstance, Model) => {
     onlySearchInTension = true,
     order,
     offset = 0,
+    opportunity = undefined,
   }) => {
     /*
       https://github.com/sequelize/sequelize/issues/9869
@@ -268,13 +270,14 @@ export default (sequelizeInstance, Model) => {
         required: true,
         where: {
           rome: codeRome,
+          ...(!!opportunity && {ind_t: opportunity == IndiceTension.HighOpportunity ? ({[Op.lt]: 4}) : ({[Op.gte]: 4}) })
         },
       })
     }
 
     const result = await Model.findAll({
       where: { [Op.and]: whereAnd },
-      logging: process.env.ENABLE_DB_LOGGING ? console.log : false,
+      logging: true,
       include: [
         {
           attributes: [],
