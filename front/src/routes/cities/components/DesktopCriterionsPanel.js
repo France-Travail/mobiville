@@ -38,7 +38,7 @@ const SearchFormControl = styled(FormControl)`
 
 const CustomMenuItem = styled(MenuItem)`
   height: 54px;
-  width: 155px;
+  width: -webkit-fill-available;
   color: ${({ value }) =>
     !!value ? COLOR_WHITE : `${COLOR_PRIMARY} !important`};
   display: flex;
@@ -48,6 +48,8 @@ const CustomMenuItem = styled(MenuItem)`
   flex-grow: 0;
   background-color: transparent !important;
   margin: 10px 10px 0 10px !important;
+  overflow: hidden;
+  white-space: nowrap;
   &:hover {
     background: #c7c7f3 !important;
     border-radius: 8px;
