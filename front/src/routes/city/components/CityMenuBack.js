@@ -6,17 +6,16 @@ import styled from "styled-components"
 import {COLOR_WHITE} from "../../../constants/colors"
 
 const MenuBackContainer = styled.div`
-  background-color: ${COLOR_WHITE};
+  background: ${({ background }) => background};
   width: 100%;
-  max-width: 1040px;
-  margin: auto;
 `
 
 const CityMenuBack = ({
   backLink,
-  isMobile
+  isMobile,
+  background = COLOR_WHITE
 }) => (
-    <MenuBackContainer>
+    <MenuBackContainer background={background}>
         <BackResultsButton
             backLink={backLink}
             isMobile={isMobile}
@@ -29,8 +28,8 @@ const CityMenuBack = ({
 
 CityMenuBack.props = {
     backLink: PropTypes.string,
-    desktopTitleWidth: PropTypes.number,
     isMobile: PropTypes.bool,
+    background: PropTypes.string
 }
 
 export default CityMenuBack

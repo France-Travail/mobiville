@@ -1,10 +1,9 @@
 import { useCallback, useState } from 'react'
-import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet-async'
 import _ from 'lodash'
 import styled from 'styled-components'
 
-import { KeyFigures, MainLayout, Map } from '../../../components'
+import { KeyFigures, Map } from '../../../components'
 import ElectedContact from './components/ElectedContact'
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
@@ -18,7 +17,7 @@ import { ReactComponent as WeatherIcon } from '../../../assets/images/icons/weat
 import { ReactComponent as CalculatorIcon } from '../../../assets/images/icons/calculator.svg'
 import { formatNumber } from '../../../utils/utils'
 import CityServiceInfoCards from './components/CityServiceInfoCards'
-import CityMenuBack from "../components/CityMenuBack"
+import { useCities } from '../../../common/contexts/citiesContext'
 
 const WelcomeContainer = styled.div`
   background: white;
@@ -82,15 +81,16 @@ const MapContainer = styled.div`
   flex: 1;
 `
 
-const CityServices = ({ backLink, city }) => {
+const CityServices = () => {
   const isMobile = isMobileView(useWindowSize())
 
   const [isTextExpended, setIsTextExpended] = useState(false)
+  const { city } = useCities()
 
   const showFullText = useCallback(() => (isTextExpended || city.description.length < 521), [isTextExpended, city.description])
 
   return (
-    <MainLayout isMobile={isMobile}>
+    <>
       <Helmet>
         <title>
           Services et équipements : {_.capitalize(city.nom_comm)} (
@@ -105,8 +105,6 @@ const CityServices = ({ backLink, city }) => {
       </Helmet>
 
       <WelcomeContainer $isMobile={isMobile}>
-        <CityMenuBack backLink={backLink} isMobile={isMobile}/>
-
         <WelcomeWrapper $isMobile={isMobile}>
           <Title>Vivre à {_.capitalize(city.nom_comm)}</Title>
 
@@ -163,13 +161,10 @@ const CityServices = ({ backLink, city }) => {
       <CityServiceInfoCards cityEquipments={city.equipments} />
 
       <ElectedContact />
-    </MainLayout>
+    </>
   )
 }
 
-CityServices.propTypes = {
-  city: PropTypes.object.isRequired,
-  backLink: PropTypes.string,
-}
+CityServices.propTypes = {}
 
 export default CityServices

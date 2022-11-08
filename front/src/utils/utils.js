@@ -70,8 +70,10 @@ moment.locale('fr')
 
 export const ucFirst = (s) => {
   if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
+  return s?.charAt(0)?.toUpperCase() + s?.slice(1)
 }
+
+export const capitalize = (string) => ucFirst(string?.toLowerCase())
 
 export const thereAre = (date) => moment(date).fromNow()
 

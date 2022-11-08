@@ -29,9 +29,9 @@ import {
 import { formatDate, thereAre } from '../../utils/utils'
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
-import MainLayout from '../../components/MainLayout'
 import SubHeader from '../../components/SubHeader'
-import CityMenuBack from "./components/CityMenuBack"
+import { useCities } from '../../common/contexts/citiesContext'
+import { useProfessions } from '../../common/contexts/professionsContext'
 
 const JobLoading = styled.div`
   margin: auto;
@@ -186,14 +186,16 @@ const DURATION_TYPES = ['Temps plein', 'Temps partiel', OTHER_DURATIONS]
 
 const CityJobs = ({
   backLink,
-  city,
   romeLabel,
   isLoading,
-  jobs,
   searchValue,
   setSearchValue,
 }) => {
   const size = useWindowSize()
+
+  const { city } = useCities()
+  const { professions: jobs } = useProfessions()
+
   const [dateFilter, setDateFilter] = useState('')
   const [contractFilters, setContractFilters] = useState([])
   const [durationFilters, setDurationFilters] = useState([])
@@ -427,7 +429,7 @@ const CityJobs = ({
   )
 
   return (
-    <MainLayout>
+    <>
       <Helmet>
         <title>
           Emplois : {_.capitalize(city.nom_comm)} ({city.code_dept}) - {formatDate(new Date())} | Mobiville
@@ -438,9 +440,6 @@ const CityJobs = ({
         />
       </Helmet>
 
-      {isMobile && (
-        <CityMenuBack backLink={backLink} isMobile={isMobile}/>
-      )}
       <SubHeader backLink={backLink} node={subHeaderNode} isMobile={isMobile} />
 
       {isLoading ? (
@@ -581,16 +580,14 @@ const CityJobs = ({
           </JobContentLayout>
         </JobLayout>
       )}
-    </MainLayout>
+    </>
   )
 }
 
 CityJobs.propTypes = {
   backLink: PropTypes.string.isRequired,
-  city: PropTypes.object.isRequired,
   romeLabel: PropTypes.string.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  jobs: PropTypes.arrayOf(PropTypes.object).isRequired,
   searchValue: PropTypes.string.isRequired,
   setSearchValue: PropTypes.func.isRequired,
 }

@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 import { useCities } from '../../common/contexts/citiesContext'
 import {COLOR_GRAY} from '../../constants/colors'
-import CityMenuBack from "./components/CityMenuBack"
 
 const Container = styled.div`
   background-color: #fff;
@@ -42,13 +41,11 @@ const CityPic = styled.img.attrs({ alt: '' })`
   object-fit: cover;
 `
 
-const CityHeader = ({ backLink, isMobile, children }) => {
+const CityHeader = ({ isMobile, children }) => {
   const { city } = useCities()
 
   return (
     <Container isMobile={isMobile}>
-      <CityMenuBack backLink={backLink} isMobile={isMobile}/>
-
       {!isMobile && (
         <ContainerInfoStats>
           <ContainerInfo>{!isMobile && children}</ContainerInfo>
@@ -68,7 +65,6 @@ const CityHeader = ({ backLink, isMobile, children }) => {
 }
 
 CityHeader.propTypes = {
-  backLink: PropTypes.string,
   isMobile: PropTypes.bool.isRequired,
   children: PropTypes.element,
 }

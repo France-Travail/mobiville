@@ -582,7 +582,7 @@ export default (sequelizeInstance, Model) => {
       prevents us from using limit / offset correctly in this query, so we truncate manually in the js
       once the issue is fixed, adding the parameters to the query will improve performance
     */
-    return cities.slice(0, 3).map((city) => {
+    return cities.slice(0, 6).map((city) => {
       let distance = distanceBetweenToCoordinates(
         city.geo_point_2d_x,
         city.geo_point_2d_y,
@@ -633,9 +633,9 @@ export default (sequelizeInstance, Model) => {
     return {
       // Ignoring base city in case it was returned
       result: result
-        .slice(0, 4)
-        .filter((similarCity) => similarCity !== city.id)
-        .slice(0, 3),
+        .slice(0, 7)
+        .filter((similarCity) => similarCity.id !== city.id)
+        .slice(0, 6),
       criterions,
     }
   }

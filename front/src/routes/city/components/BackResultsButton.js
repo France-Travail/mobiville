@@ -6,16 +6,15 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 import {
     COLOR_PRIMARY,
-    COLOR_TEXT_PRIMARY, COLOR_WHITE
+    COLOR_TEXT_PRIMARY
 } from '../../../constants/colors'
 
 const BackContainer = styled.div`
-  background-color: ${COLOR_WHITE};
   width: 100%;
   max-width: 1040px;
   max-height: 60px;
   padding: 16px 0 0 0;
-  margin: 0 0 0 -4px;
+  margin: auto;
 
   display: flex;
   align-items: center;
@@ -24,6 +23,7 @@ const BackContainer = styled.div`
 
 const HeaderArrowLink = styled(Link)`
   padding: ${({$isMobile}) => ($isMobile ? '14px' : '6px 0 2px 0')};
+  margin-left: -4px;
 
   display: flex;
   align-items: center;
