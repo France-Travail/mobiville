@@ -4,18 +4,13 @@ import PropTypes from 'prop-types'
 import { useWindowSize } from '../common/hooks/window-size'
 import { isMobileView } from '../constants/mobile'
 
-const BlockContainerOffers = styled.div`
+const Container = styled.div`
   max-width: 1040px;
   margin: ${({ $isMobile }) => ($isMobile ? '16px 0' : '16px auto')};
 
   display: flex;
   flex-direction: column;
-
-  ${({ $isMobile }) =>
-    $isMobile &&
-    css`
-      overflow-x: scroll;
-    `};
+  overflow-x: scroll;
 
   /* disable horizontal scroll bar */
   &::-webkit-scrollbar {
@@ -25,7 +20,7 @@ const BlockContainerOffers = styled.div`
   scrollbar-width: none; /* Firefox */
 `
 
-const BlockContentOffers = styled.div`
+const ScrollingWrapper = styled.div`
   min-width: 100%;
   margin: auto;
 
@@ -45,9 +40,11 @@ const HorizontalScrollableSection = ({ children }) => {
   const isMobile = isMobileView(useWindowSize())
 
   return (
-    <BlockContainerOffers $isMobile={isMobile}>
-      <BlockContentOffers $isMobile={isMobile}>{children}</BlockContentOffers>
-    </BlockContainerOffers>
+    <Container $isMobile={isMobile}>
+      <ScrollingWrapper $isMobile={isMobile}>
+        {children}
+      </ScrollingWrapper>
+    </Container>
   )
 }
 

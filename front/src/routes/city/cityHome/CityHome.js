@@ -1,33 +1,32 @@
 import { useEffect } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import _ from 'lodash'
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import DescriptionIcon from '@mui/icons-material/Description'
 
-import { ActionButton, KeyFigures, Tag } from '../../components'
+import CityHousingSimulator from './components/CityHousingSimulator'
+import CloseCompanies from './components/CloseCompanies'
+import HelpsStandOut from './components/HelpsStandOut'
+import SectionHeader from '../components/SectionHeader'
+import { ActionButton, HorizontalScrollableSection, KeyFigures, Tag } from '../../../components'
 
-import { ReactComponent as MaletteIcon } from '../../assets/images/icons/malette.svg'
-import { ReactComponent as ProfilEntrepriseIcon } from '../../assets/images/icons/profil_entreprise.svg'
+import { ReactComponent as MaletteIcon } from '../../../assets/images/icons/malette.svg'
+import { ReactComponent as ProfilEntrepriseIcon } from '../../../assets/images/icons/profil_entreprise.svg'
 // import { ReactComponent as HandshakeIcon } from '../../assets/images/icons/handshake.svg'
-import cityServicesStandOut from '../../assets/images/cityServicesStandOut.png'
+import cityServicesStandOut from '../../../assets/images/cityServicesStandOut.png'
 
-import { capitalize, formatCityTension, getXDaysAgo } from '../../utils/utils'
+import { capitalize, formatCityTension, getXDaysAgo } from '../../../utils/utils'
 import {
   COLOR_PRIMARY,
   COLOR_TEXT_PRIMARY,
-  COLOR_VERT_MOBIVILLE,
   COLOR_WHITE,
-} from '../../constants/colors'
-import CityHeader from './CityHeader'
-import { useProfessions } from '../../common/contexts/professionsContext'
-import { useCities } from '../../common/contexts/citiesContext'
-import CityHousingSimulator from './CityHousingSimulator'
-import { isMobileView } from '../../constants/mobile'
-import { useWindowSize } from '../../common/hooks/window-size'
-import HelpsStandOut from './components/HelpsStandOut'
-import HorizontalScrollableSection from '../../components/HorizontalScrollableSection'
+} from '../../../constants/colors'
+import CityHeader from '../CityHeader'
+import { useProfessions } from '../../../common/contexts/professionsContext'
+import { useCities } from '../../../common/contexts/citiesContext'
+import { isMobileView } from '../../../constants/mobile'
+import { useWindowSize } from '../../../common/hooks/window-size'
 
 const ElementContainer = styled.div`
   display: flex;
@@ -52,40 +51,6 @@ const BlockCardOffer = styled.div`
   justify-content: space-evenly;
 
   background-color: #fff;
-`
-
-const BlockContainerProximity = styled.div`
-  max-width: 1040px;
-  ${({ isMobile }) => (isMobile ? '' : 'width: 100%;')}
-  margin: ${({ isMobile }) => (isMobile ? '0 0 24px 0' : '0 auto')};
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`
-
-const BlockTitle = styled.div`
-  margin: ${({ isMobile }) => (isMobile ? '20px auto 0 auto' : 'auto')};
-  width: 100%;
-  max-width: 1040px;
-`
-
-const BlockTitleText = styled.div`
-  margin: ${({ isMobile }) => (isMobile ? '0 21px' : '48px 0 0 0')};
-`
-
-const BlockTitleH2 = styled.h2`
-  margin: 8px 0px;
-  font-weight: 900;
-  font-size: 24px;
-  line-height: 28px;
-  color: ${COLOR_PRIMARY};
-`
-const BlockTitleP = styled.p`
-  margin: 0;
-  font-size: 16px;
-  line-height: 24px;
-  color: ${COLOR_PRIMARY};
 `
 
 const BlockOfferLabel = styled.div`
@@ -125,51 +90,6 @@ const BlockOfferDate = styled.div`
   color: ${COLOR_PRIMARY};
   display: flex;
   align-items: center;
-`
-
-const BlockContentProximity = styled.div`
-  width: ${({ isMobile }) => (isMobile ? '342px' : '500px')};
-  padding: 24px 16px;
-  border-radius: 4px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 14px;
-
-  background-color: #fff;
-
-  ${({ isMobile }) => (isMobile ? 'margin: 0 21px;' : '')};
-`
-
-const BlockCompanyName = styled.span`
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
-  color: ${COLOR_PRIMARY};
-
-  &:hover {
-    text-decoration-line: underline;
-  }
-`
-
-const BlockCompanyCity = styled.span`
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 24px;
-  color: ${COLOR_PRIMARY};
-`
-
-const BlockCompanyDataFrom = styled.span`
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 24px;
-  color: ${COLOR_VERT_MOBIVILLE};
-
-  > a {
-    color: ${COLOR_VERT_MOBIVILLE};
-    text-decoration: underline;
-  }
 `
 
 const TitlesContainer = styled.div`
@@ -258,7 +178,7 @@ const ServicesStandOutImageContainer = styled.div`
 const CityHome = ({ romeLabel, insee, codeRome }) => {
   const isMobile = isMobileView(useWindowSize())
 
-  const { companiesCount, closeCompanies, onSearchCloseCompanies, city } = useCities()
+  const { companiesCount, onSearchCloseCompanies, city } = useCities()
   const { professionsCandidatsManquants, totalOffres, bassinTensionIndT, onSearchInfosTravail } =
     useProfessions()
   
@@ -314,16 +234,10 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
         ]}
       />
 
-      <BlockTitle isMobile={isMobile}>
-        <BlockTitleText isMobile={isMobile}>
-          <BlockTitleH2>
-            Les offres d'emploi avec plus d'opportunités
-          </BlockTitleH2>
-          <BlockTitleP>
-            Offres de plus de 15 jours, comptant moins de 4 candidatures
-          </BlockTitleP>
-        </BlockTitleText>
-      </BlockTitle>
+      <SectionHeader
+        title="Les offres d'emploi avec plus d'opportunités"
+        subTitle="Offres de plus de 15 jours, comptant moins de 4 candidatures"
+      />
 
       <HorizontalScrollableSection>
         {professionsCandidatsManquants
@@ -362,35 +276,14 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
         centered
       />
 
-      <BlockTitle isMobile={isMobile}>
-        <BlockTitleText isMobile={isMobile}>
-          <BlockTitleH2>Les entreprises qui recrutent à proximité</BlockTitleH2>
-        </BlockTitleText>
-      </BlockTitle>
-      <BlockContainerProximity isMobile={isMobile}>
-        <BlockContentProximity isMobile={isMobile}>
-          {closeCompanies?.slice(0, 5).map((company, index) => (
-            <a key={index} href={company.url} target="_blank">
-              <BlockCompanyName>
-                {_.startCase(company.name.toLowerCase())}
-              </BlockCompanyName>{' '}
-              <BlockCompanyCity>{capitalize(company.city)}</BlockCompanyCity>
-            </a>
-          ))}
-          <BlockCompanyDataFrom>
-            (Données issues de{' '}
-            <a target="_blank" href="https://labonneboite.pole-emploi.fr/">
-              La Bonne Boite
-            </a>
-            )
-          </BlockCompanyDataFrom>
-        </BlockContentProximity>
-      </BlockContainerProximity>
+      <SectionHeader title="Les entreprises qui recrutent à proximité" />
+      <CloseCompanies />
 
       <ElementContainer isMobile={isMobile}>
         <CityHousingSimulator city={city}></CityHousingSimulator>
       </ElementContainer>
 
+      <SectionHeader title="Les aides pour vous accompagner dans votre projet" />
       <HelpsStandOut />
 
       <ServicesStandOut $isMobile={isMobile}>
