@@ -123,6 +123,9 @@ export function getXDaysAgo(date) {
   return `${hoursAgo} heure${hoursAgo > 1 ? 's' : ''}`
 }
 
+// trie selon le boost de visibilité : 5 > 3 > 2 > null > null ...
+export const visibilityBoostSorter = (a, b) => (!b?.visibility_boost ? -1 : b?.visibility_boost - a?.visibility_boost)
+
 export const formatCityUrl = (city, codeRome) => {
   let url = `/city/${city.insee_com}-${city.nom_comm}`
   if (!!codeRome) {
@@ -131,3 +134,5 @@ export const formatCityUrl = (city, codeRome) => {
 
   return url
 }
+
+export const formatHelpUrl = (help) => `/aides/${help.slug}`

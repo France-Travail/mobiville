@@ -16,6 +16,7 @@ router.get('/get-previews', async ({ models, response }) => {
       'logo',
       'type',
       'partner',
+      'visibility_boost'
     ],
     raw: true,
   })
