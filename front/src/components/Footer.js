@@ -73,13 +73,13 @@ const Item = styled.div`
   @media (max-width: ${MOBILE_WIDTH}px) {
     margin: 0px 0px 24px 0px;
   }
+
   > a {
     color: black;
+    &:hover {
+      text-decoration: underline;
+    }
   }
-`
-
-const CustomLink = styled(Link)`
-  color: black;
 `
 
 const WrapperLogos = styled(Wrapper)`
@@ -142,13 +142,13 @@ const Footer = () => {
         </Wrapper>
         <WrapperLinks>
           <Item>
-            <CustomLink to="/faq">Questions fréquentes</CustomLink>
+            <Link to="/faq">Questions fréquentes</Link>
           </Item>
           <Item>
-            <CustomLink to="/legal">Mentions légales</CustomLink>
+            <Link to="/legal">Mentions légales</Link>
           </Item>
           <Item>
-            <CustomLink to="/accessibility">Accessibilité : non conforme</CustomLink>
+            <Link to="/accessibility">Accessibilité : non conforme</Link>
           </Item>
           <Item>
             <a

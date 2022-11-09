@@ -1,9 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import MenuNavigation from "../../../components/MenuNavigation"
-import BackResultsButton from "./BackResultsButton"
 import styled from "styled-components"
 import {COLOR_WHITE} from "../../../constants/colors"
+import { BackButton, MenuNavigation } from '../../../components'
 
 const MenuBackContainer = styled.div`
   background: ${({ background }) => background};
@@ -16,9 +15,9 @@ const CityMenuBack = ({
   background = COLOR_WHITE
 }) => (
     <MenuBackContainer background={background}>
-        <BackResultsButton
+        <BackButton
+            libelle={!isMobile ? "Retour aux résultats" : "Retour"}
             backLink={backLink}
-            isMobile={isMobile}
         />
         {isMobile && (
             <MenuNavigation isMobile={isMobile}/>

@@ -7,7 +7,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {
     COLOR_PRIMARY,
     COLOR_TEXT_PRIMARY
-} from '../../../constants/colors'
+} from '../constants/colors'
+import { isMobileView } from '../constants/mobile'
+import { useWindowSize } from '../common/hooks/window-size'
 
 const BackContainer = styled.div`
   width: 100%;
@@ -44,22 +46,25 @@ const BackText = styled.p`
   padding-top: 2px;
 `
 
-const BackResultsButton = ({
-  backLink,
-  isMobile
-}) => (
+const BackButton = ({
+  libelle = "Retour",
+  backLink = '/'
+}) => {
+  const isMobile = isMobileView(useWindowSize())
+
+  return (
     <BackContainer>
         <HeaderArrowLink to={backLink} title="Retour" $isMobile={isMobile}>
             <ArrowBackIcon color="primary" />
-            <BackText $isMobile={isMobile}>{isMobile ? "Retour" : "Retour aux résultats"}</BackText>
+            <BackText $isMobile={isMobile}>{libelle}</BackText>
         </HeaderArrowLink>
     </BackContainer>
-)
-
-BackResultsButton.props = {
-    backLink: PropTypes.string,
-    desktopTitleWidth: PropTypes.number,
-    isMobile: PropTypes.bool,
+  )
 }
 
-export default BackResultsButton
+BackButton.props = {
+  libelle: PropTypes.string,
+  backLink: PropTypes.string
+}
+
+export default BackButton

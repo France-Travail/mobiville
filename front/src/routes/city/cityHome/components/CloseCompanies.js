@@ -8,7 +8,7 @@ import {
   COLOR_WHITE,
 } from '../../../../constants/colors'
 import { isMobileView } from '../../../../constants/mobile'
-import { capitalize, ucFirst } from '../../../../utils/utils'
+import { capitalize, wordsCapitalize } from '../../../../utils/utils'
 
 const Container = styled.div`
   max-width: 1040px;
@@ -20,7 +20,7 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   margin: auto;
-  width: fit-content;
+  width: ${({ $isMobile }) => $isMobile ? '100%' : 'fit-content'};
 `
 
 const CardsContainer = styled.div`
@@ -58,10 +58,7 @@ const BlockCompanyName = styled.span`
   font-weight: 700;
   font-size: 16px;
   line-height: 19px;
-
-  &:hover {
-    text-decoration-line: underline;
-  }
+  text-decoration-line: underline;
 `
 
 const BlockCompanyCity = styled.span`
@@ -72,11 +69,11 @@ const BlockCompanyCity = styled.span`
 
 const BlockCompanyDataFrom = styled.div`
   width: fit-content;
-  margin-left: auto;
+  margin: 10px 0 0 auto;
 
   color: ${COLOR_VERT_MOBIVILLE};
   font-weight: 400;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 24px;
 
   > a {
@@ -91,12 +88,12 @@ const CloseCompanies = () => {
 
   return (
     <Container $isMobile={isMobile}>
-      <Wrapper>
+      <Wrapper $isMobile={isMobile}>
         <CardsContainer $isMobile={isMobile}>
           <Card $isMobile={isMobile}>
             {closeCompanies?.slice(0, 5).map((company, index) => (
               <a key={index} href={company.url} target="_blank">
-                <BlockCompanyName>{ucFirst(company.name)}</BlockCompanyName>{' '}
+                <BlockCompanyName>{wordsCapitalize(company.name)}</BlockCompanyName>{' '}
                 <BlockCompanyCity>{capitalize(company.city)}</BlockCompanyCity>
               </a>
             ))}
@@ -106,7 +103,7 @@ const CloseCompanies = () => {
             <Card $isMobile={isMobile}>
               {closeCompanies?.slice(5, 10).map((company, index) => (
                   <a key={index} href={company.url} target="_blank">
-                    <BlockCompanyName>{ucFirst(company.name)}</BlockCompanyName>{' '}
+                    <BlockCompanyName>{wordsCapitalize(company.name)}</BlockCompanyName>{' '}
                     <BlockCompanyCity>{capitalize(company.city)}</BlockCompanyCity>
                   </a>
                 ))}
