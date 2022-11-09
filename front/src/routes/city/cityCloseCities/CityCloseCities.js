@@ -186,7 +186,7 @@ const CityCloseCities = ({ codeRome, backLink }) => {
         <ButtonContainer $isMobile={isMobile}>
           <ActionButton
             path={backLink}
-            libelle="Voir toutes les villes"
+            libelle="Voir toutes les villes similaires"
             isBlue={false}
             isWhite
           />
@@ -219,7 +219,7 @@ const CityCloseCities = ({ codeRome, backLink }) => {
         <ButtonContainer $isMobile={isMobile}>
           <ActionButton
             path={backLink}
-            libelle="Voir toutes les villes"
+            libelle="Voir toutes les villes à proximité"
             isBlue={false}
             isWhite
           />

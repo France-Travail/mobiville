@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
 import { useHelps } from '../../../../common/contexts/helpsContext'
@@ -8,6 +8,8 @@ import { ActionButton, Tag } from '../../../../components'
 import { COLOR_PRIMARY } from '../../../../constants/colors'
 import { formatHelpUrl } from '../../../../utils/utils'
 import HorizontalScrollableSection from '../../../../components/HorizontalScrollableSection'
+import { isMobileView } from '../../../../constants/mobile'
+import { useWindowSize } from '../../../../common/hooks/window-size'
 
 const Container = styled.div`
   max-width: 1040px;
@@ -29,11 +31,13 @@ const Card = styled(Link)`
 
   background: white;
 
-  &:hover {
-    box-shadow: inset 0px 0px 0px 1px ${COLOR_PRIMARY};
-    -webkit-box-shadow: inset 0px 0px 0px 1px ${COLOR_PRIMARY};
-    -moz-box-shadow: inset 0px 0px 0px 1px ${COLOR_PRIMARY};
-  }
+  ${({ $isMobile }) => !$isMobile && css`
+    &:hover {
+      box-shadow: inset 0px 0px 0px 1px ${COLOR_PRIMARY};
+      -webkit-box-shadow: inset 0px 0px 0px 1px ${COLOR_PRIMARY};
+      -moz-box-shadow: inset 0px 0px 0px 1px ${COLOR_PRIMARY};
+    }
+  `}
 `
 
 const Content = styled.div`
@@ -69,14 +73,15 @@ const DiscoverText = styled.p`
 `
 
 const HelpsStandOut = () => {
+  const isMobile = isMobileView(useWindowSize())
   const { previews, onLoadPreviews } = useHelps()
 
   useEffect(() => {
     onLoadPreviews()
   }, [])
 
-  const HelpCard = ({ help }) => (
-    <Card to={formatHelpUrl(help)}>
+  const HelpCard = ({ help, isMobile }) => (
+    <Card to={formatHelpUrl(help)} $isMobile={isMobile}>
       <Content>
         <Left>
           <Tag green bold>
@@ -101,7 +106,7 @@ const HelpsStandOut = () => {
           .sort((a, b) => !b?.visibility_boost ? -1 : b?.visibility_boost - a?.visibility_boost)
           .slice(0, 3)
           .map((help) => (
-            <HelpCard key={help.id} help={help} />
+            <HelpCard key={help.id} help={help} isMobile={isMobile} />
           ))}
       </HorizontalScrollableSection>
 
