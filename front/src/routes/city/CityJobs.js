@@ -12,7 +12,7 @@ import {
   Checkbox,
   ListItemText,
   TextField,
-  InputAdornment,
+  InputAdornment, Button,
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
@@ -22,9 +22,9 @@ import DescriptionIcon from '@mui/icons-material/Description'
 import ScheduleIcon from '@mui/icons-material/Schedule'
 
 import {
-  COLOR_GRAY,
-  COLOR_PRIMARY,
-  COLOR_TEXT_SECONDARY,
+  COLOR_GRAY, COLOR_OTHER_GREEN,
+  COLOR_PRIMARY, COLOR_TEXT_PRIMARY,
+  COLOR_TEXT_SECONDARY, COLOR_WHITE,
 } from '../../constants/colors'
 import { formatDate, thereAre } from '../../utils/utils'
 import { useWindowSize } from '../../common/hooks/window-size'
@@ -32,6 +32,131 @@ import { isMobileView } from '../../constants/mobile'
 import SubHeader from '../../components/SubHeader'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useProfessions } from '../../common/contexts/professionsContext'
+
+import CityMenuBack from "./components/CityMenuBack"
+import CityForm from "../../components/CityForm";
+import {ReactComponent as ResetFilterIcon} from "../../assets/images/icons/reset.svg";
+
+const CityName = styled.h1`
+  width: 100%;
+  max-width: 1040px;
+  margin: auto;
+  font-weight: 900;
+  font-size: ${({ isMobile }) => isMobile ? '24px' : '36px'};
+  line-height: ${({ isMobile }) => isMobile ? '36px' : '42px'};
+  color: ${COLOR_PRIMARY};
+`
+
+const SearchPanel = styled.div`
+`
+
+const SearchBar = styled.div`
+  > *:not(input) {
+    flex: 1;
+  }
+
+  .MuiFormControl-root {
+    width: 150px;
+    margin: 20px 0;
+  }
+
+  .gEkiVf {
+    padding: 0px;
+    border: 1px solid #f6f7fb;
+  }
+
+  position: relative;
+`
+
+const SearchFormControl = styled(FormControl)`
+  margin-right: 16px !important;
+`
+
+const CustomMenuItem = styled(MenuItem)`
+  height: 54px;
+  width: 155px;
+  color: ${({ value }) => (!!value ? COLOR_WHITE : `${COLOR_PRIMARY} !important`)};
+  display: flex;
+  justify-content: center !important;
+  align-items: center !important;
+  order: 0;
+  flex-grow: 0;
+  background-color: transparent !important;
+  margin: 10px 10px 0 10px !important;
+  &:hover {
+    background: #c7c7f3 !important;
+    border-radius: 8px;
+  }
+`
+const ItemLabel = styled.span`
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  line-height: 19px;
+  margin: auto !important;
+`
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 8px;
+  align-items: stretch;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+`
+
+const ContainerParent = styled.div`
+  height: 118px;
+  gap: 8px;
+  background: ${COLOR_OTHER_GREEN};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const SelectBlock = styled(Select)`
+  && {
+    &.css-nhoni8-MuiInputBase-root-MuiFilledInput-root:before,
+    &.css-nhoni8-MuiInputBase-root-MuiFilledInput-root:active::before {
+      border-bottom: none !important;
+    }
+
+    &.MuiFilledInput-root {
+      position: inherit;
+    }
+
+    .MuiSelect-select {
+      background-color: transparent !important;
+      padding-right: 0 !important;
+    }
+
+    fieldset {
+      border: 1px solid ${COLOR_PRIMARY};
+    }
+
+    svg {
+      color: ${({ value }) => (value ? COLOR_WHITE : COLOR_PRIMARY)};
+    }
+
+    width: 151px;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+    gap: 8px;
+    left: 0%;
+    right: 0%;
+    top: 0%;
+    bottom: 0%;
+    background: ${({ value }) => (value ? COLOR_PRIMARY : COLOR_WHITE)};
+    color: ${({ value }) => (value ? COLOR_WHITE : COLOR_PRIMARY)};
+    border-radius: 20px !important;
+  }
+`
 
 const JobLoading = styled.div`
   margin: auto;
@@ -42,14 +167,20 @@ const JobLayout = styled.div`
   background-color: ${COLOR_GRAY};
   flex: 1;
   margin-top: ${({ isMobile }) => (isMobile ? '8px' : '0')};
+  display: flex;
+  flex-direction: row;
+  max-width: 1040px;
+  width: 100%;
+  margin: auto;
+  gap: 8px;
 `
 
 const JobContentLayout = styled.div`
   display: flex;
   flex-wrap: wrap;
-  margin: auto;
+  flex-direction: column;
   width: 100%;
-  max-width: 688px;
+  max-width: 424px;
 `
 
 const JobTitleLayout = styled.div`
@@ -58,6 +189,7 @@ const JobTitleLayout = styled.div`
   font-weight: bold;
   font-size: 14px;
   flex-wrap: wrap;
+  margin: auto;
 `
 
 const JobTitleText = styled.h1`
@@ -170,6 +302,16 @@ const ApplyToJobLink = styled.a`
   }
 `
 
+const JobDescriptionLayout = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  width: 100%;
+  background-color: ${COLOR_WHITE};
+  margin-top: 8px;
+  border-radius: 8px;
+`
+
 const MAX_DESCRIPTION_LENGTH = 480
 
 const ONE_DAY = 'ONE_DAY'
@@ -200,6 +342,7 @@ const CityJobs = ({
   const [contractFilters, setContractFilters] = useState([])
   const [durationFilters, setDurationFilters] = useState([])
   const [fullJobsOnDisplay, setFullJobsOnDisplay] = useState({})
+  const [selectedOffer, setSelectedOffer] = useState(null)
 
   const toggleFullJobDisplay = (id) =>
     setFullJobsOnDisplay({ ...fullJobsOnDisplay, [id]: !fullJobsOnDisplay[id] })
@@ -316,8 +459,8 @@ const CityJobs = ({
     />
   )
 
-  const jobFilters = (
-    <JobFilters isMobile={isMobile}>
+  /*const jobFilters = (
+    /!*<JobFilters isMobile={isMobile}>
       <StyledFormControl>
         <InputLabel htmlFor="filter-date-creation">
           Date de publication
@@ -409,24 +552,35 @@ const CityJobs = ({
       </StyledFormControl>
 
       <StyledFormControl>{searchTextField}</StyledFormControl>
-    </JobFilters>
-  )
+    </JobFilters>*!/
+  )*/
 
   const subHeaderNode = (
     <JobTitleLayout>
       <JobTitleText>
         {displayedJobs.length} offre
         {displayedJobs.length > 1 ? 's' : ''}
-        {' pour '}
-        {romeLabel}
-        <br />
-        <span style={{ fontSize: 12 }}>
-          Dans un rayon de 30 km de {_.capitalize(city.nom_comm)}
-        </span>
+        {' d\'emploi dans un rayon de 30 km de '}
+        {_.capitalize(city.nom_comm)}
       </JobTitleText>
-      {!isMobile && jobFilters}
+      {/*{!isMobile && jobFilters}*/}
     </JobTitleLayout>
   )
+
+  const distanceValeurs = {
+    5: '5 km',
+    10: '10 km',
+    30: '30 km'
+  }
+
+  const datePublicationValeurs = {
+    ONE_DAY: 'Un jour',
+    THREE_DAY: 'Trois jours',
+    ONE_WEEK: 'Une semaine',
+    TWO_WEEKS: 'Deux semaines',
+    ONE_MONTH: 'Un mois',
+    ALL_TIME: 'Toutes les offres'
+  }
 
   return (
     <>
@@ -440,13 +594,81 @@ const CityJobs = ({
         />
       </Helmet>
 
-      <SubHeader backLink={backLink} node={subHeaderNode} isMobile={isMobile} />
+      <CityMenuBack backLink={backLink} isMobile={isMobile}/>
+      <CityName isMobile={isMobile}>
+        {_.capitalize(city.nom_comm)}
+        {isMobile ? <br /> : ' '}pour le métier {romeLabel}
+      </CityName>
+      {/*<SubHeader backLink={backLink} node={subHeaderNode} isMobile={isMobile} />*/}
+
+
+      <SearchPanel>
+        <Container>
+          <SearchBar className="wrapper">
+            <SearchFormControl sx={{ m: 1, width: 300 }}>
+
+              <SelectBlock
+                  displayEmpty
+                  onChange={(event) => setDateFilter(event.target.value)}
+                  value={dateFilter}
+              >
+                <CustomMenuItem value="" style={{ display: 'none' }}>
+                  <ItemLabel>Distance</ItemLabel>
+                </CustomMenuItem>
+                {Object.entries(distanceValeurs).map(([key, label]) => (
+                    <CustomMenuItem key={key} value={key}>
+                      <ItemLabel>{label}</ItemLabel>
+                    </CustomMenuItem>
+                ))}
+              </SelectBlock>
+            </SearchFormControl>
+
+            <SearchFormControl sx={{ m: 1, width: 300 }}>
+
+              <SelectBlock
+                  displayEmpty
+                  onChange={(event) => setDateFilter(event.target.value)}
+                  value={dateFilter}
+              >
+                <CustomMenuItem value="" style={{ display: 'none' }}>
+                  <ItemLabel>Date de publication</ItemLabel>
+                </CustomMenuItem>
+                {Object.entries(datePublicationValeurs).map(([key, label]) => (
+                    <CustomMenuItem key={key} value={key}>
+                      <ItemLabel>{label}</ItemLabel>
+                    </CustomMenuItem>
+                ))}
+              </SelectBlock>
+            </SearchFormControl>
+
+            {/*<SearchFormControl sx={{ m: 1, width: 300 }}>
+              <SelectBlock
+                  displayEmpty
+                  defaultValue={''}
+                  onChange={handleChangeCity}
+                  value={citySizeSelected}
+              >
+                <CustomMenuItem value="" style={{ display: 'none' }}>
+                  <ItemLabel>Taille de ville</ItemLabel>
+                </CustomMenuItem>
+                {cityCriterions.map((rome) => (
+                    <CustomMenuItem key={rome.key} value={rome.key}>
+                      <ItemLabel>{rome.label}</ItemLabel>
+                    </CustomMenuItem>
+                ))}
+              </SelectBlock>
+            </SearchFormControl>*/}
+          </SearchBar>
+        </Container>
+      </SearchPanel>
+
+      {subHeaderNode}
 
       {isLoading ? (
         <JobLoading>Chargement des offres...</JobLoading>
       ) : (
         <JobLayout isMobile={isMobile}>
-          {isMobile && jobFilters}
+          {/* {isMobile && jobFilters} */}
           <JobContentLayout>
             {displayedJobs.map((p) => {
               // We truncate too long descriptions. "?", as it seems they can be absent.
@@ -468,7 +690,7 @@ const CityJobs = ({
                   : p.typeContratLibelle
 
               return (
-                <JobItem key={p.id}>
+                <JobItem key={p.id} onClick={(p) => setSelectedOffer(p)}>
                   <JobItemHeader>
                     <div>
                       <JobItemTitle>{p.appellationlibelle}</JobItemTitle>
@@ -490,7 +712,7 @@ const CityJobs = ({
                         </div>
                       )}
                     </div>
-                    {fullJobsOnDisplay[p.id] && !isMobile && (
+                    {/*{fullJobsOnDisplay[p.id] && !isMobile && (
                       <ApplyToJobLink
                         href={p.origineOffre.urlOrigine}
                         target="_blank"
@@ -498,9 +720,9 @@ const CityJobs = ({
                       >
                         Postuler
                       </ApplyToJobLink>
-                    )}
+                    )}*/}
                   </JobItemHeader>
-                  <p className="description">
+                  {/*<p className="description">
                     {fullJobsOnDisplay[p.id] ? (
                       <>
                         {p.description.split('\n').map((text) => (
@@ -513,7 +735,7 @@ const CityJobs = ({
                     ) : (
                       shortDescription
                     )}
-                  </p>
+                  </p>*/}
 
                   <JobItemAdditionalInfos>
                     {p.salaire?.libelle && (
@@ -536,7 +758,7 @@ const CityJobs = ({
                     </JobItemAdditionalInfo>
                   </JobItemAdditionalInfos>
 
-                  <div
+                  {/*<div
                     style={{
                       display: 'flex',
                       justifyContent: isMobile ? 'space-between' : 'flex-end',
@@ -573,11 +795,33 @@ const CityJobs = ({
                         </>
                       )}
                     </ViewMoreButton>
-                  </div>
+                  </div>*/}
                 </JobItem>
               )
             })}
           </JobContentLayout>
+          <JobDescriptionLayout>
+            <div>
+              <JobItemTitle>{selectedOffer?.appellationlibelle}</JobItemTitle>
+              {selectedOffer?.entreprise?.nom && (
+                  <div style={{ color: COLOR_TEXT_SECONDARY }}>
+                    {selectedOffer?.entreprise.nom}
+                  </div>
+              )}
+              {selectedOffer?.lieuTravail?.libelle && (
+                  <div style={{ color: COLOR_TEXT_SECONDARY }}>
+                    {selectedOffer?.lieuTravail.libelle} -{' '}
+                    <a
+                        href={`https://fr.mappy.com/plan#/${selectedOffer?.lieuTravail.libelle}`}
+                        target="_blank"
+                        referer="noreferrer noopener"
+                    >
+                      Localiser avec Mappy
+                    </a>
+                  </div>
+              )}
+            </div>
+          </JobDescriptionLayout>
         </JobLayout>
       )}
     </>
