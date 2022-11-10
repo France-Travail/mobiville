@@ -277,7 +277,7 @@ export default (sequelizeInstance, Model) => {
 
     const result = await Model.findAll({
       where: { [Op.and]: whereAnd },
-      logging: true,
+      logging: process.env.ENABLE_DB_LOGGING ? console.log : false,
       include: [
         {
           attributes: [],
