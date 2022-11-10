@@ -16,6 +16,7 @@ router.post(
         codeRome,
         index,
         onlySearchInTension,
+        opportunity,
         sortBy,
       },
     },
@@ -41,6 +42,7 @@ router.post(
       onlySearchInTension,
       order,
       offset: index,
+      opportunity,
     })
 
     response.body = {

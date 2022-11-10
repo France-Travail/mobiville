@@ -38,8 +38,9 @@ const SearchFormControl = styled(FormControl)`
 
 const CustomMenuItem = styled(MenuItem)`
   height: 54px;
-  width: 155px;
-  color: ${({ value }) => (!!value ? COLOR_WHITE : `${COLOR_PRIMARY} !important`)};
+  width: -webkit-fill-available;
+  color: ${({ value }) =>
+    !!value ? COLOR_WHITE : `${COLOR_PRIMARY} !important`};
   display: flex;
   justify-content: center !important;
   align-items: center !important;
@@ -47,6 +48,8 @@ const CustomMenuItem = styled(MenuItem)`
   flex-grow: 0;
   background-color: transparent !important;
   margin: 10px 10px 0 10px !important;
+  overflow: hidden;
+  white-space: nowrap;
   &:hover {
     background: #c7c7f3 !important;
     border-radius: 8px;
@@ -133,16 +136,22 @@ const ResetFilterLabel = styled.span`
 const DesktopCriterionsPanel = ({ paramsUrl }) => {
   const { environmentCriterions, cityCriterions } = useCities()
 
-  const [environmentSelected, setEnvironmentSelected] = useState("")
-  const [citySizeSelected, setCitySizeSelected] = useState("")
-
-  const showReset = useCallback(() => (
-    !!environmentSelected || !!citySizeSelected
-  ), [environmentSelected, citySizeSelected])
+  const [environmentSelected, setEnvironmentSelected] = useState('')
+  const [citySizeSelected, setCitySizeSelected] = useState('')
+  const [opportunitySelected, setOpportunitySelected] = useState('')
+  const indiceTension = [ 
+    { text: 'Opportunités d\'emploi', value: 1 }, 
+    { text: 'Peu d\'opportunités d\'emploi', value: 2 } 
+  ]
+  const showReset = useCallback(
+    () => !!environmentSelected || !!citySizeSelected || !!opportunitySelected,
+    [environmentSelected, citySizeSelected, opportunitySelected]
+  )
 
   const resetFilter = () => {
     setEnvironmentSelected('')
     setCitySizeSelected('')
+    setOpportunitySelected('')
   }
 
   const handleChangeEnv = (event) => {
@@ -153,12 +162,22 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
     setCitySizeSelected(event.target.value)
   }
 
+  const handleChangeOpportunity = (event) => {
+    setOpportunitySelected(event.target.value)
+  }
+
   useEffect(() => {
     if (!!paramsUrl.codeCity && paramsUrl.codeCity !== citySizeSelected) {
       setCitySizeSelected(paramsUrl.codeCity)
     }
-    if (!!paramsUrl.codeEnvironment && paramsUrl.codeEnvironment !== environmentSelected) {
+    if (
+      !!paramsUrl.codeEnvironment &&
+      paramsUrl.codeEnvironment !== environmentSelected
+    ) {
       setEnvironmentSelected(paramsUrl.codeEnvironment)
+    }
+    if (!!paramsUrl.opportunity && paramsUrl.opportunity !== opportunitySelected) {
+      setOpportunitySelected(paramsUrl.opportunity)
     }
   }, [paramsUrl])
 
@@ -166,7 +185,7 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
     <SearchPanel>
       <ContainerParent>
         <Container>
-          <CityForm filters={{ environmentSelected, citySizeSelected }} />
+          <CityForm filters={{ environmentSelected, citySizeSelected, opportunitySelected }} />
         </Container>
       </ContainerParent>
       <Container>
@@ -204,6 +223,23 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
                   <ItemLabel>{rome.label}</ItemLabel>
                 </CustomMenuItem>
               ))}
+            </SelectBlock>
+          </SearchFormControl>
+          <SearchFormControl sx={{ m: 1, width: 300 }}>
+            <SelectBlock
+              displayEmpty
+              defaultValue={''}
+              onChange={handleChangeOpportunity}
+              value={opportunitySelected}
+            >
+              <CustomMenuItem value="" style={{ display: 'none' }}>
+                <ItemLabel>Opportunités</ItemLabel>
+              </CustomMenuItem>
+             {indiceTension.map(indice => ( 
+              <CustomMenuItem value={indice.value}>
+                <ItemLabel>{indice.text}</ItemLabel>
+              </CustomMenuItem>)
+              )}
             </SelectBlock>
           </SearchFormControl>
           {showReset() ? (
