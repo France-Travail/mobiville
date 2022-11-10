@@ -270,7 +270,7 @@ export default (sequelizeInstance, Model) => {
         required: true,
         where: {
           rome: codeRome,
-          ...(!!opportunity && {ind_t: opportunity == IndiceTension.HighOpportunity ? ({[Op.lt]: 4}) : ({[Op.gte]: 4}) })
+          ...(!!opportunity && {ind_t: opportunity == HIGH_OPPORTUNITY ? ({[Op.lt]: 4}) : ({[Op.gte]: 4}) })
         },
       })
     }
