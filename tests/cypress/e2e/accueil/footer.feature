@@ -16,7 +16,7 @@ Fonctionnalité: Footer - Disponibilité des liens
   Alors j'affiche la page "<url>"
 
   Exemples:
-    | lien                 | url                                                 |
-    | Questions fréquentes | https://mobiville.beta.pole-emploi.fr/faq           |
-    | Mentions légales     | https://mobiville.beta.pole-emploi.fr/legal         |
-    | Accessibilité        | https://mobiville.beta.pole-emploi.fr/accessibility |
+    | lien                         | url                                                 |
+    | Questions fréquentes         | https://mobiville.beta.pole-emploi.fr/faq           |
+    | Mentions légales             | https://mobiville.beta.pole-emploi.fr/legal         |
+    | Accessibilité : non conforme | https://mobiville.beta.pole-emploi.fr/accessibility |

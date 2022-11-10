@@ -15,7 +15,8 @@ Then("j'affiche la page de résultats avec une à plusieurs villes correspondant
   // cy.contains(filtreOpportunites, "Opportunité",  {timeout: SHORT_WAIT_TIME}).should('exist');
 
   let metierCourt = METIER.split(' (')[0];
-  cy.contains(rappelCritereMetierRegion, "villes pour " + metierCourt + " en " + ENDROIT,  {timeout: SHORT_WAIT_TIME}).should('exist');
+  cy.wait(1000);
+  cy.contains(rappelCritereMetierRegion, "pour " + metierCourt + " en " + ENDROIT,  {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.contains(resultatsRechercheVille, "Classement des villes par opportunités d'emploi",  {timeout: SHORT_WAIT_TIME}).should('exist');
 })
 

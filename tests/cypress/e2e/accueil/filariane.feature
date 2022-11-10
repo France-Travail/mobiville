@@ -24,4 +24,4 @@ Fonctionnalité: Rechercher villes - Affichage fil d'ariane
     | lien                             |
     | Offres d’emploi                  |
     | Services de la ville             |
-      # | Villes similaires ou à proximité |
+    # | Villes similaires ou à proximité |
