@@ -16,7 +16,7 @@ import {
   IS_SMALL_CITY,
   IS_SUNNY,
   SIDE_SEA,
-  IndiceTension
+  HIGH_OPPORTUNITY
 } from '../constants/criterion'
 import {
   getFranceShape,
