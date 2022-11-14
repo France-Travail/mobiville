@@ -7,12 +7,12 @@ const resultatsRechercheVille = "main[id=main] * > div > h2";
 const InfosPremiereVille = "a[data-automation-id^=cityItem-][href*=city]:nth-child(2) * > div";
 const filtreCadreVie = "main[id=main] * > div > span";
 const filtreTailleVille = "main[id=main] * > div > span";
-// const filtreOpportunites = "main[id=main] * > div > span";
+const filtreOpportunites = "main[id=main] * > div > span";
 
 Then("j'affiche la page de résultats avec une à plusieurs villes correspondantes", function () {
   cy.contains(filtreCadreVie, "Cadre de vie",  {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.contains(filtreTailleVille, "Taille de ville",  {timeout: SHORT_WAIT_TIME}).should('exist');
-  // cy.contains(filtreOpportunites, "Opportunité",  {timeout: SHORT_WAIT_TIME}).should('exist');
+  cy.contains(filtreOpportunites, "Opportunités",  {timeout: SHORT_WAIT_TIME}).should('exist');
 
   let metierCourt = METIER.split(' (')[0];
   cy.wait(1000);
