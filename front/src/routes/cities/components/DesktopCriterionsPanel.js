@@ -12,8 +12,7 @@ import {
 import CityForm from '../../../components/CityForm'
 import { ReactComponent as ResetFilterIcon } from '../../../assets/images/icons/reset.svg'
 
-const SearchPanel = styled.div`
-`
+const SearchPanel = styled.div``
 const SearchBar = styled.div`
   > *:not(input) {
     flex: 1;
@@ -22,12 +21,26 @@ const SearchBar = styled.div`
   .MuiFormControl-root {
     width: 150px;
     margin: 20px 0;
+
+    .MuiInputBase-root {
+      &:hover {
+        background: ${COLOR_PRIMARY} !important;
+
+        .MuiSelect-select {
+          color: ${COLOR_WHITE} !important;
+        }
+
+        svg {
+          color: ${COLOR_WHITE} !important;
+        }
+      }
+    }
   }
 
-  .gEkiVf {
-    padding: 0px;
-    border: 1px solid #f6f7fb;
-  }
+    .gEkiVf {
+      padding: 0px;
+      border: 1px solid #f6f7fb;
+    }
 
   position: relative;
 `
@@ -139,9 +152,9 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
   const [environmentSelected, setEnvironmentSelected] = useState('')
   const [citySizeSelected, setCitySizeSelected] = useState('')
   const [opportunitySelected, setOpportunitySelected] = useState('')
-  const indiceTension = [ 
-    { text: 'Opportunités d\'emploi', value: 1 }, 
-    { text: 'Peu d\'opportunités d\'emploi', value: 2 } 
+  const indiceTension = [
+    { text: "Opportunités d'emploi", value: 1 },
+    { text: "Peu d'opportunités d'emploi", value: 2 },
   ]
   const showReset = useCallback(
     () => !!environmentSelected || !!citySizeSelected || !!opportunitySelected,
@@ -176,7 +189,10 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
     ) {
       setEnvironmentSelected(paramsUrl.codeEnvironment)
     }
-    if (!!paramsUrl.opportunity && paramsUrl.opportunity !== opportunitySelected) {
+    if (
+      !!paramsUrl.opportunity &&
+      paramsUrl.opportunity !== opportunitySelected
+    ) {
       setOpportunitySelected(paramsUrl.opportunity)
     }
   }, [paramsUrl])
@@ -185,7 +201,13 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
     <SearchPanel>
       <ContainerParent>
         <Container>
-          <CityForm filters={{ environmentSelected, citySizeSelected, opportunitySelected }} />
+          <CityForm
+            filters={{
+              environmentSelected,
+              citySizeSelected,
+              opportunitySelected,
+            }}
+          />
         </Container>
       </ContainerParent>
       <Container>
@@ -235,11 +257,11 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
               <CustomMenuItem value="" style={{ display: 'none' }}>
                 <ItemLabel>Opportunités</ItemLabel>
               </CustomMenuItem>
-             {indiceTension.map(indice => ( 
-              <CustomMenuItem value={indice.value}>
-                <ItemLabel>{indice.text}</ItemLabel>
-              </CustomMenuItem>)
-              )}
+              {indiceTension.map((indice) => (
+                <CustomMenuItem value={indice.value}>
+                  <ItemLabel>{indice.text}</ItemLabel>
+                </CustomMenuItem>
+              ))}
             </SelectBlock>
           </SearchFormControl>
           {showReset() ? (
