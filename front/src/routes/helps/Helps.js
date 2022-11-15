@@ -15,11 +15,6 @@ import {
 import { isMobileView } from '../../constants/mobile'
 import { useScroll } from '../../common/hooks/use-scroll'
 
-import { ReactComponent as FinanceIcon } from '../../assets/images/icons/help-financiere.svg'
-import { ReactComponent as AccompagnementIcon } from '../../assets/images/icons/help-accompagnement.svg'
-import { ReactComponent as LogementIcon } from '../../assets/images/icons/help-logement.svg'
-import { ReactComponent as TransportIcon } from '../../assets/images/icons/help-transport.svg'
-
 import { Grid } from '@mui/material'
 import MobileAppliedFilters from './components/MobileAppliedFilters'
 import HelpCard from './components/HelpCard'
@@ -424,7 +419,6 @@ const Helps = () => {
         ) : (
           <>
             <HelpTypeTitleContainer isFirst={true} $isMobile={isMobile}>
-              <FinanceIcon />
               <h2 id={FINANCIERE} ref={financiereHeaderRef}>
                 Les aides financières
               </h2>
@@ -432,7 +426,6 @@ const Helps = () => {
             <HelpList items={financeItems} />
 
             <HelpTypeTitleContainer $isMobile={isMobile}>
-              <AccompagnementIcon />
               <h2 id={ACCOMPAGNEMENT} ref={accompagnementHeaderRef}>
                 Les aides {isMobile ? <br /> : ''} d'accompagnement
               </h2>
@@ -440,7 +433,6 @@ const Helps = () => {
             <HelpList items={accompagnementItems} />
 
             <HelpTypeTitleContainer $isMobile={isMobile}>
-              <LogementIcon />
               <h2 id={LOGEMENT} ref={logementHeaderRef}>
                 Les aides au logement
               </h2>
@@ -448,7 +440,6 @@ const Helps = () => {
             <HelpList items={logementItems} />
 
             <HelpTypeTitleContainer $isMobile={isMobile}>
-              <TransportIcon />
               <h2 id={TRANSPORT} ref={transportHeaderRef}>
                 Les aides Transport
               </h2>
