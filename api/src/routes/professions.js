@@ -38,14 +38,14 @@ router.post(
   '/search',
   async ({
     request: {
-      body: { codeRome, insee, offresManqueCandidats },
+      body: { codeRome, insee, offresManqueCandidats, distance = 30 },
     },
     response,
   }) => {
     const result = await searchJob({
       codeRome,
       insee: getInseeCodesForSearch(insee),
-      distance: 30,
+      distance: distance,
       offresManqueCandidats
     })
     response.body = {

@@ -19,7 +19,7 @@ const ActionButtonContainer = styled.div`
   `}
 `
 
-const ActionButtonElement = styled(Link)`
+const ButtonStyles = css`
   width: 100%;
   height: 100%;
   border-radius: inherit;
@@ -64,6 +64,14 @@ const ActionButtonElement = styled(Link)`
   }
 `
 
+const ActionButtonElement = styled(Link)`
+  ${ButtonStyles}
+`
+
+const ExternalLinkButton = styled.a`
+  ${ButtonStyles}
+`
+
 const ActionButton = ({
   path,
   libelle = 'Rechercher',
@@ -79,9 +87,11 @@ const ActionButton = ({
 
   const isExternalLink =
     !!path &&
-    typeof path == 'object' &&
-    path.hasOwnProperty('pathname') &&
-    isHttpMatched(path.pathname)
+      (typeof path == 'object'
+      && path.hasOwnProperty('pathname')
+      && isHttpMatched(path.pathname))
+    || (typeof path == 'string'
+      && isHttpMatched(path))
 
   return (
     <ActionButtonContainer
@@ -89,15 +99,26 @@ const ActionButton = ({
       $centered={centered}
       style={{ ...style }}
     >
-      <ActionButtonElement
-        data-automation-id={isMainSearch ? 'search-action' : undefined}
-        to={path}
-        $isBlue={isBlue}
-        $isWhite={isWhite}
-        target={isExternalLink ? '_blank' : undefined}
-      >
-        {libelle}
-      </ActionButtonElement>
+    {!!isExternalLink
+      ? (<ExternalLinkButton
+          data-automation-id={isMainSearch ? 'search-action' : undefined}
+          href={path}
+          $isBlue={isBlue}
+          $isWhite={isWhite}
+          target='_blank'
+        >
+          {libelle}
+        </ExternalLinkButton>)
+      : (<ActionButtonElement
+          data-automation-id={isMainSearch ? 'search-action' : undefined}
+          to={path}
+          $isBlue={isBlue}
+          $isWhite={isWhite}
+        >
+          {libelle}
+        </ActionButtonElement>)
+    }
+
     </ActionButtonContainer>
   )
 }

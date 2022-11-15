@@ -21,6 +21,7 @@ export { default as Button } from './inputs/Button.js'
 export { default as ButtonGroup } from './inputs/ButtonGroup.js'
 export { default as ActionButton } from './inputs/ActionButton.js'
 export { default as Select } from './inputs/Select.js'
+export { default as LittleSelect } from './inputs/LittleSelect.js'
 export { default as TextInput } from './inputs/TextInput.js'
 export { default as TextSearchInput } from './inputs/TextSearchInput.js'
 
