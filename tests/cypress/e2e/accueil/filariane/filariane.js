@@ -11,8 +11,8 @@ function quelleUrl() {
       return 'job';
     case 'Services de la ville':
       return 'life';
-    // case 'Villes similaires ou à proximité':
-    //   return 'villes-proches';
+    case 'Villes similaires ou à proximité':
+      return 'villes-proches';
   }
 }
 Then("je vois le fil d'ariane sur la page", function () {
