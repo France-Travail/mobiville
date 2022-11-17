@@ -635,8 +635,7 @@ export default (sequelizeInstance, Model) => {
         WHERE (`tensions`.`deleted_at` IS NULL\
           AND `tensions`.`rome` = '" + codeRome + "')\
         ORDER BY\
-          `tensions`.`ind_t` ASC\
-        LIMIT 6) AS `bassin->tensions` on `bassin`.`bassin_id` = `bassin->tensions`.`bassin_id`\
+          `tensions`.`ind_t` ASC) AS `bassin->tensions` on `bassin`.`bassin_id` = `bassin->tensions`.`bassin_id`\
       WHERE\
         (" + where + ")\
       ORDER BY\
