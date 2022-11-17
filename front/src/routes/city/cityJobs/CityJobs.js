@@ -92,7 +92,6 @@ const CityJobs = ({ romeLabel, codeRome }) => {
   })
 
   useEffect(() => {
-
     const isDateIncludedInFilter = (date, dateFilter) => {
       const currentMoment = moment()
       const creationMoment = moment(date)
@@ -126,12 +125,21 @@ const CityJobs = ({ romeLabel, codeRome }) => {
       return false
     }
 
+    const ONE_YEAR = moment.duration(1, 'years')
+    const THREE_YEAR = moment.duration(3, 'years')
     const filterExperience = (job) => {
+      const requiredExperience = (/\b((?:\d+\.)?\d+) *([a-zA-Z]+)/).exec(job.experienceLibelle)
+      const durationNeeded = !!requiredExperience ? moment.duration(requiredExperience[1], requiredExperience[2].toLowerCase().includes('an') ? 'years' : 'months') : null  
+
       if (!filters?.experience || filters.experience.length < 1) return true
-      if (filters.experience.includes('D') && job.experienceExige === 'D') return true
-      if (filters.experience.includes('E') && job.experienceExige === 'E') return true
-      if (filters.experience.includes('S') && job.experienceExige === 'S') return true
-      if (filters.experience === 'N/A' && !['D', 'E', 'S'].includes(job.experienceExige)) return true
+      if (filters.experience.includes('D')
+          && (job.experienceExige === 'D' || (!!durationNeeded && durationNeeded < ONE_YEAR))) return true
+      if (filters.experience.includes('1-3')
+          && (!!durationNeeded && durationNeeded >= ONE_YEAR && durationNeeded < THREE_YEAR)) return true
+      if (filters.experience.includes('3+')
+          && (!!durationNeeded && durationNeeded >= THREE_YEAR)) return true
+      if (filters.experience === 'N/A'
+          && (!job.experienceExige || (job.experienceExige !== 'D' && !durationNeeded))) return true
       return false
     }
 

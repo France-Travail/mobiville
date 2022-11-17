@@ -59,17 +59,10 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
     OTHERS: 'Autres',
   }
 
-  //   const experiences = {
-  //     moins1: 'Moins de 1 an',
-  //     '1a3': 'De 1 à 3 ans',
-  //     plus3: 'Plus de 3 ans',
-  //     'N/A': 'Non renseignée',
-  //   }
-
   const experiences = {
-    D: 'Débutant accepté',
-    E: 'Expérience exigée',
-    S: 'S ????',
+    'D': 'Moins de 1 an',
+    '1-3': 'De 1 à 3 ans',
+    '3+': 'Plus de 3 ans',
     'N/A': 'Non renseignée',
   }
 
