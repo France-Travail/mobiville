@@ -1,4 +1,4 @@
-import { Op } from 'sequelize'
+import { Op, QueryTypes } from 'sequelize'
 import { compact, mean, toLower, deburr, replace, words } from 'lodash'
 import {
   ALT_IS_MOUNTAIN,
@@ -541,7 +541,6 @@ export default (sequelizeInstance, Model) => {
   Model.searchCloseCities = async ({
     latitude,
     longitude,
-    codeRome,
     inseeCode,
   }) => {
     const cities = await Model.findAll({
@@ -555,21 +554,6 @@ export default (sequelizeInstance, Model) => {
         ],
       },
       include: [
-        {
-          attributes: [],
-          model: Model.models.bassins,
-          required: true,
-          include: [
-            {
-              attributes: [],
-              model: Model.models.tensions,
-              required: true,
-              where: {
-                rome: codeRome,
-              },
-            },
-          ],
-        },
         {
           attributes: ['name'],
           model: Model.models.newRegions,
@@ -628,18 +612,44 @@ export default (sequelizeInstance, Model) => {
       isMountain && CRIT_MOUNTAIN,
     ])
 
-    const [result] = await Model.search({
-      codeRome,
-      codeCriterion: criterions,
-    })
+    const where = (criterions.includes(CRIT_SMALL_CITY) ? "`cities`.`population` <= '20'"
+      : criterions.includes(CRIT_MEDIUM_CITY) ? "`cities`.`population` > '20' AND `cities`.`population` < '50'"
+      : criterions.includes(CRIT_LARGE_CITY) ?  "`cities`.`population` >= '50' AND `cities`.`population` < '200'"
+      : "`cities`.`population` >= '200'")
+      + (criterions.includes(CRIT_SIDE_SEA) ? " AND `cities`.`distance_from_sea` <= 30" : "")
+      + (criterions.includes(CRIT_CAMPAGNE) ? " AND `cities`.`distance_from_sea` >= 30 AND `cities`.`population` <= '20' AND `cities`.`z_moyen` <= 600" : "")
+      + (criterions.includes(CRIT_MOUNTAIN) ? " AND `cities`.`z_moyen` > 600" : "")
+      + " AND `cities`.`id` != " + city.id
+
+    const cities = await sequelizeInstance.query("\
+      SELECT\
+        `cities`.`id`,\
+        `cities`.`insee_com`,\
+        `cities`.`nom_comm`\
+      FROM\
+        `cities` AS `cities`\
+      INNER JOIN `bassins` AS `bassin` ON\
+        `cities`.`insee_com` = `bassin`.`code_commune_insee`\
+        AND (`bassin`.`deleted_at` IS NULL)\
+      INNER JOIN (SELECT * from `tensions`\
+        WHERE (`tensions`.`deleted_at` IS NULL\
+          AND `tensions`.`rome` = '" + codeRome + "')\
+        ORDER BY\
+          `tensions`.`ind_t` ASC\
+        LIMIT 6) AS `bassin->tensions` on `bassin`.`bassin_id` = `bassin->tensions`.`bassin_id`\
+      WHERE\
+        (" + where + ")\
+      ORDER BY\
+        `bassin->tensions`.`ind_t` ASC,\
+        `cities`.`population` DESC\
+      LIMIT 6;\
+    ", {
+      type: QueryTypes.SELECT
+    });
 
     return {
-      // Ignoring base city in case it was returned
-      result: result
-        .slice(0, 7)
-        .filter((similarCity) => similarCity.id !== city.id)
-        .slice(0, 6),
-      criterions,
+      result: cities,
+      criterions
     }
   }
 

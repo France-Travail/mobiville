@@ -43,10 +43,15 @@ const SelectBlock = styled(Select)`
     align-items: center;
 
     background: ${({ value }) =>
-      !value || value?.length <= 0 ? COLOR_WHITE : COLOR_PRIMARY};
+      (!value || value?.length <= 0) ? COLOR_WHITE : COLOR_PRIMARY};
     color: ${({ value }) =>
-      !value || value?.length <= 0 ? COLOR_PRIMARY : COLOR_WHITE};
+      (!value || value?.length <= 0) ? COLOR_PRIMARY : COLOR_WHITE};
     font-weight: 700;
+
+    &:hover {
+      background: ${COLOR_PRIMARY};
+      color: ${COLOR_WHITE};
+    }
   }
 `
 
