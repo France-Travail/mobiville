@@ -90,7 +90,9 @@ export const wordsCapitalize = (s) => {
 
 // === DATE UTILS ===
 
-export const thereAre = (date) => moment(date).fromNow()
+export const thereAre = (date) => moment(date)
+    .subtract(1, "hours")
+    .fromNow()
 
 export const formatDate = (date) => date.toLocaleDateString("fr-FR")
 
