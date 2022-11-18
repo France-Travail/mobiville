@@ -159,39 +159,6 @@ const CityCloseCities = ({ codeRome, backLink }) => {
   return (
     <Container $isMobile={isMobile}>
       <Title>Elargir votre zone géographique</Title>
-
-      <BlockContainer>
-        <BlockTitle>Villes similaires</BlockTitle>
-
-        <CitiesContainer $isMobile={isMobile}>
-          {!!similarCities && similarCities.length > 0 ? (
-            similarCities.map((similarCity) => (
-              <CityItem
-                key={similarCity.id}
-                city={similarCity}
-                total={
-                  professionsCountList?.find((item) =>
-                    item?.insee?.includes(similarCity.insee_com)
-                  )?.total
-                }
-              />
-            ))
-          ) : (
-            <CircularProgressContainer>
-              <CircularProgress />
-            </CircularProgressContainer>
-          )}
-        </CitiesContainer>
-
-        <ButtonContainer $isMobile={isMobile}>
-          <ActionButton
-            path={backLink}
-            libelle="Voir toutes les villes similaires"
-            isBlue={false}
-            isWhite
-          />
-        </ButtonContainer>
-      </BlockContainer>
       
       <BlockContainer>
         <BlockTitle>Villes à proximité</BlockTitle>
@@ -220,6 +187,39 @@ const CityCloseCities = ({ codeRome, backLink }) => {
           <ActionButton
             path={backLink}
             libelle="Voir toutes les villes à proximité"
+            isBlue={false}
+            isWhite
+          />
+        </ButtonContainer>
+      </BlockContainer>
+
+      <BlockContainer>
+        <BlockTitle>Villes similaires</BlockTitle>
+
+        <CitiesContainer $isMobile={isMobile}>
+          {!!similarCities && similarCities.length > 0 ? (
+            similarCities.map((similarCity) => (
+              <CityItem
+                key={similarCity.id}
+                city={similarCity}
+                total={
+                  professionsCountList?.find((item) =>
+                    item?.insee?.includes(similarCity.insee_com)
+                  )?.total
+                }
+              />
+            ))
+          ) : (
+            <CircularProgressContainer>
+              <CircularProgress />
+            </CircularProgressContainer>
+          )}
+        </CitiesContainer>
+
+        <ButtonContainer $isMobile={isMobile}>
+          <ActionButton
+            path={backLink}
+            libelle="Voir toutes les villes similaires"
             isBlue={false}
             isWhite
           />
