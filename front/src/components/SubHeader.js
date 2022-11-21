@@ -18,7 +18,7 @@ const HeaderContainer = styled.div`
   align-items: center;
   width: 100%;
   z-index: 10;
-  height: ${({ title }) => (title ? '112px' : '60px')};
+  height: auto;
 `
 
 const HeaderSubContainer = styled.div`
