@@ -441,7 +441,7 @@ const Helps = () => {
 
             <HelpTypeTitleContainer $isMobile={isMobile}>
               <h2 id={TRANSPORT} ref={transportHeaderRef}>
-                Les aides Transport
+                Les aides transport
               </h2>
             </HelpTypeTitleContainer>
             <HelpList items={transportItems} />
