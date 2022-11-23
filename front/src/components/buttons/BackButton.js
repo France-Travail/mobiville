@@ -7,9 +7,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import {
     COLOR_PRIMARY,
     COLOR_TEXT_PRIMARY
-} from '../constants/colors'
-import { isMobileView } from '../constants/mobile'
-import { useWindowSize } from '../common/hooks/window-size'
+} from '../../constants/colors'
+import { isMobileView } from '../../constants/mobile'
+import { useWindowSize } from '../../common/hooks/window-size'
 
 const BackContainer = styled.div`
   width: 100%;
@@ -21,6 +21,8 @@ const BackContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
+  order: 2;
 `
 
 const HeaderArrowLink = styled(Link)`

@@ -11,6 +11,7 @@ import {
   COLOR_WHITE,
 } from '../../../../constants/colors'
 import { thereAre, wordsCapitalize } from '../../../../utils/utils'
+import { useProfessions } from '../../../../common/contexts/professionsContext'
 
 const Container = styled.div`
   width: 100%;
@@ -57,14 +58,11 @@ const Location = styled(KeyInfo)`
   font-size: 14px;
 `
 
-const JobCard = ({ job, onClick, isSelected }) => {
-  const contractLabel =
-    job.typeContrat === 'CDI' || job.typeContrat === 'CDD'
-      ? job.typeContrat
-      : job.typeContratLibelle
+const JobCard = ({ job, onClick, isSelected, ...props }) => {
+  const { formatTypeContrat } = useProfessions()
 
   return (
-    <Container onClick={() => onClick(job)} $isSelected={isSelected}>
+    <Container onClick={() => onClick(job)} $isSelected={isSelected} {...props}>
       <Title>{job.appellationlibelle}</Title>
       
       {!!job?.entreprise?.nom && (
@@ -84,7 +82,7 @@ const JobCard = ({ job, onClick, isSelected }) => {
 
       <KeyInfo>
         <DescriptionIcon />
-        {contractLabel}{' '}
+        {formatTypeContrat(job)}{' '}
         {job.dureeTravailLibelleConverti &&
           ` - ${job.dureeTravailLibelleConverti}`}
       </KeyInfo>

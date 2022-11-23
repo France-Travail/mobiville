@@ -8,7 +8,7 @@ import {
   COLOR_GRAY,
   COLOR_PRIMARY,
 } from '../../../constants/colors'
-import { capitalize, formatDate } from '../../../utils/utils'
+import { capitalize, distance, formatDate } from '../../../utils/utils'
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
 import { useCities } from '../../../common/contexts/citiesContext'
@@ -19,9 +19,9 @@ import JobsList from './components/JobsList'
 import JobsFilters from './components/JobsFilters'
 
 const Title = styled.h1`
-  width: 100%;
+  width: ${({ $isMobile }) => ($isMobile ? 'auto' : '100%')};
   max-width: 1040px;
-  margin: 22px auto;
+  margin: ${({ $isMobile }) => ($isMobile ? '22px 16px' : '22px auto')};
 
   color: ${COLOR_PRIMARY};
   font-weight: 900;
@@ -32,11 +32,14 @@ const Title = styled.h1`
 const JobLoading = styled.div`
   margin: auto;
   padding-top: 8px;
+
+  grid-area: header;
 `
 
 const BoardContainer = styled.div`
   max-width: 1040px;
   width: 100%;
+  min-height: 40vh;
   margin: auto;
 
   display: grid;
@@ -83,67 +86,84 @@ const CityJobs = ({ romeLabel, codeRome }) => {
   const [displayedJobs, setDisplayedJobs] = useState([])
   const [selectedJob, setSelectedJob] = useState(null)
 
-  const [ filters, setFilters ] = useState({
+  const DEFAULT_FILTERS = {
     distance: '',
     date: '',
     type: [],
     experience: [],
     duration: []
-  })
+  }
+  const [ filters, setFilters ] = useState(DEFAULT_FILTERS)
 
   useEffect(() => {
+    const distanceFromCity = (job) => distance(
+      city.geo_point_2d_x,
+      city.geo_point_2d_y,
+      job.lieuTravail.latitude,
+      job.lieuTravail.longitude
+    )
+
     const isDateIncludedInFilter = (date, dateFilter) => {
-      const currentMoment = moment()
       const creationMoment = moment(date)
 
-      return (
-        dateFilter === 'ONE_DAY' && !currentMoment.isAfter(creationMoment.add(1 + 1, 'days'))
-        || dateFilter === 'THREE_DAY' && !currentMoment.isAfter(creationMoment.add(3 + 1, 'days'))
-        || dateFilter === 'ONE_WEEK' && !currentMoment.isAfter(creationMoment.add(7 + 1, 'days'))
-        || dateFilter === 'TWO_WEEKS' && !currentMoment.isAfter(creationMoment.add(14 + 1, 'days'))
-        || dateFilter === 'ONE_MONTH' && !currentMoment.isAfter(creationMoment.add(1, 'month').add(1, 'days'))
-      )
+      const durations = {
+        ONE_DAY: moment.duration(1, "days"),
+        THREE_DAY: moment.duration(3, "days"),
+        ONE_WEEK: moment.duration(1, "weeks"),
+        TWO_WEEKS: moment.duration(2, "weeks"),
+        ONE_MONTH: moment.duration(1, "months"),
+      }
+
+      return !moment().isAfter(creationMoment.add(durations[dateFilter]).add(1, 'days'))
     }
 
     const filterDate = (job) => {
       if (!filters?.date || filters.date === '' || filters.date === 'ALL_TIME') return true
+
       return isDateIncludedInFilter(job?.dateCreation, filters.date)
     }
 
     const filterType = (job) => {
       if (!filters?.type || filters.type.length < 1) return true
-      if (filters.type.includes(job.typeContrat)) return true
-      if (filters.type.includes('OTHERS') && job.typeContrat !== 'CDI' && job.typeContrat !== 'CDD'  && job.typeContrat !== 'MIS') return true
-      return false
+
+      const isFilteredAsOthers = filters.type.includes('OTHERS') && job.typeContrat !== 'CDI' && job.typeContrat !== 'CDD'  && job.typeContrat !== 'MIS'
+
+      return filters.type.includes(job.typeContrat) || isFilteredAsOthers
     }
 
     const filterDuration = (job) => {
       if (!filters?.duration || filters.duration.length < 1) return true
-      if (filters.duration.includes('FULL_TIME') && (job?.dureeTravailLibelleConverti === 'Temps plein')) return true
-      if (filters.duration.includes('PART_TIME') && (job?.dureeTravailLibelleConverti === 'Temps partiel')) return true
-      if (filters.duration.includes('N/A') && (!job?.dureeTravailLibelleConverti || job?.dureeTravailLibelleConverti !== 'Temps partiel' && job?.dureeTravailLibelleConverti !== 'Temps plein')) return true
-      return false
+
+      const isFilteredAsFullTime = filters.duration.includes('FULL_TIME') && (job?.dureeTravailLibelleConverti === 'Temps plein')
+      const isFilteredAsPartTime = filters.duration.includes('PART_TIME') && (job?.dureeTravailLibelleConverti === 'Temps partiel')
+      const isFilteredAsNA = filters.duration.includes('N/A') && (!job?.dureeTravailLibelleConverti || job?.dureeTravailLibelleConverti !== 'Temps partiel' && job?.dureeTravailLibelleConverti !== 'Temps plein')
+
+      return isFilteredAsFullTime || isFilteredAsPartTime || isFilteredAsNA
     }
 
     const ONE_YEAR = moment.duration(1, 'years')
     const THREE_YEAR = moment.duration(3, 'years')
     const filterExperience = (job) => {
+      if (!filters?.experience || filters.experience.length < 1) return true
+
       const requiredExperience = (/\b((?:\d+\.)?\d+) *([a-zA-Z]+)/).exec(job.experienceLibelle)
       const durationNeeded = !!requiredExperience ? moment.duration(requiredExperience[1], requiredExperience[2].toLowerCase().includes('an') ? 'years' : 'months') : null  
 
-      if (!filters?.experience || filters.experience.length < 1) return true
-      if (filters.experience.includes('D')
-          && (job.experienceExige === 'D' || (!!durationNeeded && durationNeeded < ONE_YEAR))) return true
-      if (filters.experience.includes('1-3')
-          && (!!durationNeeded && durationNeeded >= ONE_YEAR && durationNeeded < THREE_YEAR)) return true
-      if (filters.experience.includes('3+')
-          && (!!durationNeeded && durationNeeded >= THREE_YEAR)) return true
-      if (filters.experience === 'N/A'
-          && (!job.experienceExige || (job.experienceExige !== 'D' && !durationNeeded))) return true
-      return false
+      const isFilteredAsDebutant = filters.experience.includes('D') && (job.experienceExige === 'D' || (!!durationNeeded && durationNeeded < ONE_YEAR))
+      const isFilteredAsOneToThreeYears = filters.experience.includes('1-3') && (!!durationNeeded && durationNeeded >= ONE_YEAR && durationNeeded < THREE_YEAR)
+      const isFilteredAsThreeYears = filters.experience.includes('3+') && (!!durationNeeded && durationNeeded >= THREE_YEAR)
+      const isFilteredAsNA = filters.experience === 'N/A' && (!job.experienceExige || (job.experienceExige !== 'D' && !durationNeeded))
+
+      return isFilteredAsDebutant || isFilteredAsOneToThreeYears || isFilteredAsThreeYears || isFilteredAsNA
+    }
+
+    const filterDistance = (job) => {      
+      if (!filters?.distance || filters.distance === '' || filters.distance === '30') return true
+      return (distanceFromCity(job) <= filters.distance)
     }
 
     const filteredJobs = jobs
+      .filter(filterDistance)
       .filter(filterDate)
       .filter(filterType)
       .filter(filterDuration)
@@ -151,25 +171,25 @@ const CityJobs = ({ romeLabel, codeRome }) => {
 
     setDisplayedJobs(filteredJobs)
 
-    if (!!filteredJobs
+    if (isMobile) {
+      setSelectedJob(null)
+    } else if (!!filteredJobs
       && ((!!selectedJob && !filteredJobs?.find(job => job.id === selectedJob.id))
         || !selectedJob)) {
       setSelectedJob(filteredJobs[0] ?? null)
     }
+    
   }, [jobs, filters])
 
   useEffect(() => {
-    if ((!filters?.distance || filters.distance === '')
-        || !codeRome
-        || !city?.insee_com) return
+    if (!codeRome|| !city?.insee_com) return
 
     onSearch({
       codeRome: [codeRome],
-      insee: [city.insee_com],
-      distance: filters?.distance ?? null
+      insee: [city.insee_com]
     })
 
-  }, [filters?.distance, city?.insee_com, codeRome])
+  }, [city?.insee_com, codeRome])
 
   const updateFilters = (updatedFilters) => {
     setFilters((prev) => ({
@@ -179,13 +199,18 @@ const CityJobs = ({ romeLabel, codeRome }) => {
   }
 
   const resetFilters = () => {
-    setFilters({
-      distance: '',
-      date: '',
-      type: [],
-      experience: [],
-      duration: []
-    })
+    setFilters(DEFAULT_FILTERS)
+  }
+
+  const handleJobClick = (job) => {
+    setSelectedJob(job)
+    if (isMobile) {
+      window.scroll({ top: 0 })
+    }
+  }
+
+  const handleJobDetailClose = () => {
+    setSelectedJob(null)
   }
 
   return (
@@ -202,43 +227,47 @@ const CityJobs = ({ romeLabel, codeRome }) => {
           )} (${city.code_dept}) pour le métier de ${romeLabel}`}
         />
       </Helmet>
+      
+      {(!isMobile || !selectedJob)
+        ? (<>
+          <Title $isMobile={isMobile}>
+            {capitalize(city.nom_comm)}
+            {isMobile ? <br /> : ' '}pour le métier {romeLabel}
+          </Title>
 
-      <Title $isMobile={isMobile}>
-        {capitalize(city.nom_comm)}
-        {isMobile ? <br /> : ' '}pour le métier {romeLabel}
-      </Title>
+          <JobsFilters
+            filters={filters}
+            onFiltersChange={(filters) => updateFilters(filters)}
+            onReset={resetFilters}
+          />
 
-      <JobsFilters
-        filters={filters}
-        onFiltersChange={(filters) => updateFilters(filters)}
-        onReset={resetFilters}
-      />
+          <BoardContainer $isMobile={isMobile}>
+            {isLoading ? (
+              <JobLoading>Chargement des offres...</JobLoading>
+            ) : (
+              <>
+                <BoardHeader>
+                  { displayedJobs.length < 150
+                    ? (<>
+                        {displayedJobs.length} offre
+                        {displayedJobs.length > 1 ? 's' : ''}
+                        {` d'emploi dans un rayon de ${filters?.distance !== '' ? filters.distance : '30'} km de `}
+                        {capitalize(city.nom_comm)}
+                      </>)
+                    : <>{`Les 150 offres les plus récentes pour le métier ${romeLabel}`}</>}
+                </BoardHeader>
 
-      {isLoading ? (
-        <JobLoading>Chargement des offres...</JobLoading>
-      ) : (
-        <BoardContainer $isMobile={isMobile}>
-          <BoardHeader>
-            { displayedJobs.length < 150
-              ? (<>
-                  {displayedJobs.length} offre
-                  {displayedJobs.length > 1 ? 's' : ''}
-                  {` d'emploi dans un rayon de ${filters?.distance !== '' ? filters.distance : '30'} km de `}
-                  {capitalize(city.nom_comm)}
-                </>)
-              : <>{`Les 150 offres les plus récentes pour le métier ${romeLabel}`}</>}
-          </BoardHeader>
+                <JobsList
+                  jobs={displayedJobs}
+                  selectedJob={selectedJob}
+                  onJobClick={handleJobClick} />
 
-          <JobsList
-            jobs={displayedJobs}
-            selectedJob={selectedJob}
-            onJobClick={(job) => setSelectedJob(job)} />
-
-          {isMobile
-            ? null
-            : <JobDetail job={selectedJob} />}
-        </BoardContainer>
-      )}
+                <JobDetail job={selectedJob} />
+                </>
+              )}
+            </BoardContainer>
+          </>)
+        : <JobDetail job={selectedJob} onClose={handleJobDetailClose} /> }
     </>
   )
 }

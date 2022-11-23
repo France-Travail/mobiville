@@ -11,19 +11,16 @@ import {
 } from '../constants/colors'
 
 const Nav = styled.nav`
-  position: ${({ $isMobile }) => ($isMobile ? 'sticky' : 'absolute')};
-  left: 0;
-  right: 0;
-  z-index: 100;
-  margin-top: 12px;
+  order: ${({ $isMobile }) => $isMobile ? '3' : '1'};
 
   background: ${({ $isMobile }) =>
     $isMobile ? COLOR_WHITE : COLOR_OTHER_GREEN};
 `
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  padding: ${({ $isMobile }) => $isMobile ? '0 0 13px 0' : '13px 0'};
+  padding: 13px 0;
 
   display: flex;
   align-items: center;
@@ -31,6 +28,7 @@ const Container = styled.div`
   flex-wrap: wrap;
   gap: 8px 38px;
 `
+
 const MenuItem = styled(Link)`
   font-weight: ${({ $selected }) => ($selected ? 700 : 400)};
   font-size: 16px;
@@ -80,7 +78,7 @@ const MenuNavigation = ({ isMobile = false }) => {
 
   return (
     <Nav $isMobile={isMobile}>
-      <Container $isMobile={isMobile}>
+      <Container>
         {MENU_LINK.map((menu, key) => (
           <MenuItem
             $isMobile={isMobile}

@@ -7,6 +7,9 @@ import { BackButton, MenuNavigation } from '../../../components'
 const MenuBackContainer = styled.div`
   background: ${({ background }) => background};
   width: 100%;
+
+  display: flex;
+  flex-direction: column;
 `
 
 const CityMenuBack = ({
@@ -19,9 +22,7 @@ const CityMenuBack = ({
             libelle={!isMobile ? "Retour aux résultats" : "Retour"}
             backLink={backLink}
         />
-        {isMobile && (
-            <MenuNavigation isMobile={isMobile}/>
-        )}
+        <MenuNavigation isMobile={isMobile}/>
     </MenuBackContainer>
 )
 

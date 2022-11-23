@@ -89,16 +89,6 @@ const ButtonGroup = ({
           selected={selected === child.props.id}
           $isMobile={isMobile}
         >
-          {/* { child.props.children.map(child => ({
-                        ...child,
-                        props: {
-                            ...child.props,
-                            style: {
-                                ...child.style,
-                                pointerEvents: 'none',
-                            }
-                        }
-                    })) } */}
           {child.props.children}
         </Button>
       ))}

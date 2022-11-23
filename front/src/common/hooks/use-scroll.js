@@ -31,8 +31,13 @@ export function useScroll() {
     }
   }, [])
 
+  const toggleBodyScroll = (enable = true) => {
+    document.body.style.overflow = enable ? 'scroll' : 'hidden'
+  }
+
   return {
     isScrollingUp: scrollingUp,
     currentScroll: currentScroll,
+    toggleBodyScroll
   }
 }
