@@ -41,7 +41,7 @@ const Content = styled.div`
 
 const ChevronIcon = styled(RightChevronIcon)`
   transform: ${({ $isOpened }) =>
-    $isOpened ? 'rotate(90deg)' : 'rotate(-90deg)'};
+    $isOpened ? 'rotate(-90deg)' : 'rotate(90deg)'};
 `
 
 const Pane = ({ title, isOpened, onClick, children }) => (

@@ -129,11 +129,9 @@ const HelpForm = ({
                 isBlue
             ></ActionButton>
 
-            {
-                (isMobile && isDirty())
-                    ? (<ResetButton onClick={resetInputs} />)
-                    : null
-            }
+            {(isMobile && isDirty())
+                ? (<ResetButton style={{ margin: 'auto' }} onClick={resetInputs} />)
+                : null}
         </Container>
     )
 }

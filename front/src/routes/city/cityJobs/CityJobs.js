@@ -74,7 +74,8 @@ const BoardHeader = styled.p`
 `
 
 const CityJobs = ({ romeLabel, codeRome }) => {
-  const isMobile = isMobileView(useWindowSize())
+  const windowSize = useWindowSize()
+  const isMobile = isMobileView(windowSize)
 
   const { city } = useCities()
   const {
@@ -171,7 +172,7 @@ const CityJobs = ({ romeLabel, codeRome }) => {
 
     setDisplayedJobs(filteredJobs)
 
-    if (isMobile) {
+    if (isMobile || !windowSize.width || !windowSize.height) {
       setSelectedJob(null)
     } else if (!!filteredJobs
       && ((!!selectedJob && !filteredJobs?.find(job => job.id === selectedJob.id))
