@@ -18,6 +18,7 @@ const Container = styled.div`
   gap: 8px;
   display: ${({ $hidden }) => ($hidden ? 'none' : 'visible')};
 `
+
 const CityForm = ({
   hidden = false,
   filters = { citySizeSelected: '', environmentSelected: '', opportunitySelected: '' },
