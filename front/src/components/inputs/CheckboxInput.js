@@ -1,59 +1,26 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import { Checkbox } from '@mui/material'
 
 import {
   COLOR_PRIMARY,
-  COLOR_WHITE,
 } from '../../constants/colors'
 
 const Container = styled.div`
   color: ${COLOR_PRIMARY};
-  padding: 10px 0;
+  padding: 1px 0;
+
+  display: flex;
+  align-items: center;
 `
 
 const Label = styled.label`
   display: inline-block;
   position: relative;
 
-  margin: 5px 5px 5px 8px;
-  padding-left: 25px;
-
   font-size: 16px;
   font-weight: 700;
   line-height: 20px;
-
-  &&:before {
-    display: block;
-    position: absolute;
-    left: 0;
-    width: 18px;
-    height: 18px;
-    margin-top: 1px;
-    border-radius: 4px;
-    border: 2px solid ${COLOR_PRIMARY};
-
-    color: ${COLOR_WHITE};
-    text-align: center;
-    line-height: 16px;
-
-    ${({ $checked }) =>
-      $checked
-        ? css`
-            content: '🗸';
-            background-color: ${COLOR_PRIMARY};
-          `
-        : css`
-            content: '';
-            background-color: ${COLOR_WHITE};
-            opacity: 0.55;
-          `}
-  }
-`
-
-const Checkbox = styled.input.attrs({
-  type: 'checkbox',
-})`
-  display: none;
 `
 
 const CheckboxInput = ({ value, name, onClick, checked, ...props }) => {
