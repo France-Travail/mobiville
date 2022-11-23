@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
 import { COLOR_PRIMARY } from '../../constants/colors'
 
-const ActionButtonContainer = styled.div`
+const Container = styled.div`
   display: flex;
   justify-content: ${({ $isMobile }) => ($isMobile ? 'center' : 'flex-start')};
 
@@ -94,7 +94,7 @@ const ActionButton = ({
       && isHttpMatched(path))
 
   return (
-    <ActionButtonContainer
+    <Container
       $isMobile={isMobile}
       $centered={centered}
       style={{ ...style }}
@@ -119,7 +119,7 @@ const ActionButton = ({
         </ActionButtonElement>)
     }
 
-    </ActionButtonContainer>
+    </Container>
   )
 }
 

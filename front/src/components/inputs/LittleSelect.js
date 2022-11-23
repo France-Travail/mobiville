@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
 import {
+  COLOR_LIGHT_GREY,
   COLOR_OTHER_GREEN,
   COLOR_PRIMARY,
   COLOR_WHITE,
@@ -31,7 +32,7 @@ const SelectBlock = styled(Select)`
       color: inherit;
     }
 
-    max-width: 273px;
+    max-width: 194px;
     height: 40px;
     padding: 8px;
     gap: 8px;
@@ -66,6 +67,7 @@ const CustomMenuItem = styled(MenuItem)`
   justify-content: center !important;
   align-items: center !important;
 
+  border: 1px solid ${COLOR_LIGHT_GREY};
   background-color: ${({ $isSelected }) =>
     $isSelected ? COLOR_OTHER_GREEN : 'transparent'} !important;
   color: ${({ value }) =>

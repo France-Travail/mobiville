@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { FormControl, MenuItem, Select, Button } from '@mui/material'
+import { FormControl, MenuItem, Select } from '@mui/material'
 
 import { useCities } from '../../../common/contexts/citiesContext'
 import {
@@ -9,14 +9,13 @@ import {
   COLOR_PRIMARY,
   COLOR_OTHER_GREEN,
 } from '../../../constants/colors'
-import CityForm from '../../../components/CityForm'
-import { ReactComponent as ResetFilterIcon } from '../../../assets/images/icons/reset.svg'
+import { CityForm, ResetButton } from '../../../components'
 
 const SearchPanel = styled.div``
+
 const SearchBar = styled.div`
-  > *:not(input) {
-    flex: 1;
-  }
+  display: flex;
+  align-items: center;
 
   .MuiFormControl-root {
     width: 150px;
@@ -41,8 +40,6 @@ const SearchBar = styled.div`
       padding: 0px;
       border: 1px solid #f6f7fb;
     }
-
-  position: relative;
 `
 
 const SearchFormControl = styled(FormControl)`
@@ -137,15 +134,7 @@ const SelectBlock = styled(Select)`
     border-radius: 20px !important;
   }
 `
-const ResetFilterLabel = styled.span`
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  color: ${COLOR_PRIMARY};
-  margin-left: 8px;
-  text-transform: none;
-`
+
 const DesktopCriterionsPanel = ({ paramsUrl }) => {
   const { environmentCriterions, cityCriterions } = useCities()
 
@@ -211,7 +200,7 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
         </Container>
       </ContainerParent>
       <Container>
-        <SearchBar className="wrapper">
+        <SearchBar>
           <SearchFormControl sx={{ m: 1, width: 300 }}>
             <SelectBlock
               displayEmpty
@@ -265,18 +254,7 @@ const DesktopCriterionsPanel = ({ paramsUrl }) => {
             </SelectBlock>
           </SearchFormControl>
           {showReset() ? (
-            <Button
-              onClick={resetFilter}
-              style={{
-                margin: 0,
-                position: 'absolute',
-                top: '50%',
-                transform: 'translateY(-50%)',
-              }}
-            >
-              <ResetFilterIcon />
-              <ResetFilterLabel>Réinitialiser</ResetFilterLabel>
-            </Button>
+            <ResetButton onClick={resetFilter} />
           ) : null}
         </SearchBar>
       </Container>
