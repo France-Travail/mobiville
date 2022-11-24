@@ -18,9 +18,10 @@ const Container = styled.div`
   gap: 8px;
   display: ${({ $hidden }) => ($hidden ? 'none' : 'visible')};
 `
+
 const CityForm = ({
   hidden = false,
-  filters = { citySizeSelected: '', environmentSelected: '' },
+  filters = { citySizeSelected: '', environmentSelected: '', opportunitySelected: '' },
 }) => {
   const isMobile = isMobileView(useWindowSize())
   const navigate = useNavigate()
@@ -49,6 +50,9 @@ const CityForm = ({
     if (!!filters && !!filters.environmentSelected) {
       url += `&codeEnvironment=${filters.environmentSelected}`
     }
+    if (!!filters && !!filters.opportunitySelected) {
+      url += `&opportunity=${filters.opportunitySelected}`
+    }
 
     return url
   }, [jobSelected, citySelected, filters])
@@ -59,18 +63,24 @@ const CityForm = ({
 
   useEffect(() => {
     // dans le cas où la valeur est déjà dans l'url, on vérifie qu'on a bien une modification
-    if (search.includes("codeCity") || search.includes("codeEnvironment")) {
+    if (search.includes("codeCity") 
+       || search.includes("codeEnvironment") 
+       || search.includes("opportunity")) {
       const entries = new URLSearchParams(search).entries()
       for (let entry of entries) {
         const [key, value] = entry
-        if (key === 'codeCity' && value !== filters.citySizeSelected || key === 'codeEnvironment' && value !== filters.environmentSelected) {
+        if (key === 'codeCity' && value !== filters.citySizeSelected 
+            || key === 'codeEnvironment' && value !== filters.environmentSelected
+            || key === 'opportunity' && value !== filters.opportunitySelected) {
           redirect()
         }
       }
     }
-
+    
     // on vérifie que l'ajout de nouveaux filtres
-    if (!!filters && ((!!filters.citySizeSelected && !search.includes("codeCity")) || (!!filters.environmentSelected && !search.includes("codeEnvironment")))) {
+    if (!!filters && ((!!filters.citySizeSelected && !search.includes("codeCity")) 
+        || (!!filters.environmentSelected && !search.includes("codeEnvironment"))
+        || (!!filters.opportunitySelected && !search.includes("opportunity")))) {
       redirect()
     }
   }, [filters])

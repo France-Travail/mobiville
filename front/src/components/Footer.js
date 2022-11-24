@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import LOGO from '../assets/images/LogoMobiville_gros.svg'
+import { COLOR_VERT_MOBIVILLE } from '../constants/colors'
 import { MOBILE_WIDTH } from '../constants/mobile'
 
 const MainSpace = styled.div`
@@ -13,6 +14,7 @@ const MainSpace = styled.div`
     display: flex;
     width: 98%;
     max-width: 1040px;
+    overflow: hidden;
 
     padding-bottom: 42px;
     padding-top: 42px;
@@ -20,7 +22,6 @@ const MainSpace = styled.div`
       padding-top: 20px;
       flex-wrap: wrap;
       justify-content: start;
-      overflow-x: hidden; // le texte européen dépasse sur certains mobile
     }
   }
 `
@@ -49,7 +50,7 @@ const Wrapper = styled.div`
 
 const WrapperLinks = styled.div`
   max-width: 700px;
-  border-left: 2px solid #37b4b4;
+  border-left: 2px solid ${COLOR_VERT_MOBIVILLE};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -72,13 +73,13 @@ const Item = styled.div`
   @media (max-width: ${MOBILE_WIDTH}px) {
     margin: 0px 0px 24px 0px;
   }
+
   > a {
     color: black;
+    &:hover {
+      text-decoration: underline;
+    }
   }
-`
-
-const CustomLink = styled(Link)`
-  color: black;
 `
 
 const WrapperLogos = styled(Wrapper)`
@@ -141,13 +142,13 @@ const Footer = () => {
         </Wrapper>
         <WrapperLinks>
           <Item>
-            <CustomLink to="/faq">Questions fréquentes</CustomLink>
+            <Link to="/faq">Questions fréquentes</Link>
           </Item>
           <Item>
-            <CustomLink to="/legal">Mentions légales</CustomLink>
+            <Link to="/legal">Mentions légales</Link>
           </Item>
           <Item>
-            <CustomLink to="/accessibility">Accessibilité</CustomLink>
+            <Link to="/accessibility">Accessibilité : non conforme</Link>
           </Item>
           <Item>
             <a

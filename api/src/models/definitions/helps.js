@@ -72,6 +72,11 @@ export default (sequelizeInstance) => {
         type: Sequelize.STRING(255),
         allowNull: true,
       },
+      visibility_boost: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: null
+      }
     },
     {
       timestamps: false,

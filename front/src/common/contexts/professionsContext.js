@@ -45,11 +45,20 @@ export function ProfessionsProvider(props) {
         _setIsLoading(true)
 
         return searchProfessionsCountList(params)
-            .then((params) => {
-                _setProfessionsCountList(params)
+            .then((response) => {
+                _setProfessionsCountList(prev => ([
+                    ...prev,
+                    ...response.filter(newItem => !prev.find(prevItem => prevItem.insee.includes(newItem.insee[0])))
+                ]))
             })
             .then(() => _setIsLoading(false))
     }, [])
+
+    const formatTypeContrat = (job) => (
+        job.typeContrat === 'CDI' || job.typeContrat === 'CDD'
+            ? job.typeContrat
+            : job.typeContratLibelle
+    )
 
     return (
         <ProfessionsContext.Provider
@@ -65,7 +74,9 @@ export function ProfessionsProvider(props) {
                 // function
                 onSearch,
                 onSearchInfosTravail,
-                onSearchCountList
+                onSearchCountList,
+                // utils
+                formatTypeContrat
             }}
         />
     )

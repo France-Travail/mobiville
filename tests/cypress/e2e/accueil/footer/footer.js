@@ -9,7 +9,7 @@ Then("je vois le footer sur la page", function () {
   cy.contains(footer, "Mobiville est un service vous permettant de trouver la ville qui correspond à votre besoin ainsi que les aides financières à la mobilité.", {timeout: SHORT_WAIT_TIME}).should('exist');
 })
 
-When("je clique sur {string}", function (lien) {
+When("je clique sur {string} dans le footer", function (lien) {
   cy.contains(lienACliquer, lien, {timeout: SHORT_WAIT_TIME}).click();
   cy.wait(500);
 })

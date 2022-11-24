@@ -12,11 +12,11 @@ Fonctionnalité: Footer - Disponibilité des liens
     Alors je vois le footer sur la page
 
   Scénario: Disponibilité des liens
-  Lorsque je clique sur "<lien>"
+  Lorsque je clique sur "<lien>" dans le footer
   Alors j'affiche la page "<url>"
 
   Exemples:
-    | lien                 | url                                                 |
-    | Questions fréquentes | https://mobiville.beta.pole-emploi.fr/faq           |
-    | Mentions légales     | https://mobiville.beta.pole-emploi.fr/legal         |
-    | Accessibilité        | https://mobiville.beta.pole-emploi.fr/accessibility |
+    | lien                         | url                                                 |
+    | Questions fréquentes         | https://mobiville.beta.pole-emploi.fr/faq           |
+    | Mentions légales             | https://mobiville.beta.pole-emploi.fr/legal         |
+    | Accessibilité : non conforme | https://mobiville.beta.pole-emploi.fr/accessibility |

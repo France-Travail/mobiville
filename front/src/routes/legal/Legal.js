@@ -1,16 +1,25 @@
 import React from 'react'
-import styled from 'styled-components'
-import MainLayout from '../../components/MainLayout'
+import styled, { css } from 'styled-components'
+import { useWindowSize } from '../../common/hooks/window-size'
+import { BackButton, MainLayout } from '../../components'
+import { isMobileView } from '../../constants/mobile'
 
 const Container = styled.div`
-  margin: 124px 16px;
+  ${({ $isMobile }) => $isMobile && css`
+    padding-top: 96px;
+  `}
 
   > .wrapper {
-    max-width: 600px;
+    max-width: 1040px;
+    ${({ $isMobile }) => $isMobile && css`
+      padding: 0 16px;
+    `}
   }
 `
 
 const Legal = () => {
+  const isMobile = isMobileView(useWindowSize())
+
   const onOpenTC = () => {
     window.tC.privacyCenter.showPrivacyCenter()
     return false
@@ -18,7 +27,8 @@ const Legal = () => {
 
   return (
     <MainLayout topMobileMenu>
-      <Container>
+      <Container $isMobile={isMobile}>
+        <BackButton />
         <div className="wrapper">
           <h2>Conditions générales d’utilisation</h2>
 

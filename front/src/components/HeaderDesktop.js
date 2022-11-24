@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { Typography } from '@mui/material'
-import MenuNavigation from './MenuNavigation'
 import {
   COLOR_HEADER_BACKGROUND,
   COLOR_PRIMARY,
@@ -76,6 +75,8 @@ const NavContainer = styled.div`
 `
 
 const NavItem = styled(Link)`
+  font-size: 16px;
+
   && {
     position: relative;
     
@@ -99,25 +100,8 @@ const HeaderDesktop = ({
 
   const searchSelected = location.pathname.includes('rechercher')
   const helpSelected = location.pathname.includes('aides')
-  const cityPage = location.pathname.includes('city')
-  const Navigation = () => (
-    <>
-      {displaySearch
-        ? (<NavContainer>
-            <NavItem to="/rechercher" $isSelected={searchSelected}>
-              Rechercher une ville
-            </NavItem>
-            <NavItem to="/aides" $isSelected={helpSelected}>
-              Rechercher des aides
-            </NavItem>
-          </NavContainer>)
-        : null
-      }
-    </>
-  )
 
   return (
-    <>
     <Container>
       <HomeLink
         to="/"
@@ -134,7 +118,16 @@ const HeaderDesktop = ({
         />
       </HomeLink>
 
-      <Navigation />
+      {displaySearch
+        ? (<NavContainer>
+            <NavItem to="/rechercher" $isSelected={searchSelected}>
+              Rechercher une ville
+            </NavItem>
+            <NavItem to="/aides" $isSelected={helpSelected}>
+              Rechercher des aides
+            </NavItem>
+          </NavContainer>)
+        : null}
 
       <PartnersContainer>
           <PartnerText>Proposé par</PartnerText>
@@ -156,11 +149,6 @@ const HeaderDesktop = ({
           </PartnersLogoContainer>
         </PartnersContainer>
     </Container>
-    { cityPage ? 
-    <Container>
-    <MenuNavigation isMobile={false}/>
-    </Container> : null }
-    </>
   )
 }
 

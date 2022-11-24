@@ -19,6 +19,15 @@ Fonctionnalité: Rechercher villes - Informations de la ville
   Scénario: Présence des entreprises à proximité
     Alors j'affiche la liste des entreprises à proximité
 
+  Scénario: Présence des 3 aides d'accompagnement dans mon projet
+    Alors j'affiche les trois aides pour m'accompagner dans mon projet
+    Lorsque je clique sur le premier des trois liens Découvrir l'aide
+    Alors j'affiche le détail de l'aide
+
+  Scénario: Affichage de toutes les aides
+    Lorsque je clique sur Voir tous les aides
+    Alors j'affiche la page avec toutes les aides
+    
   Scénario: Présence des services de la ville
     Alors j'affiche la découverte des services de la ville
     Lorsque je clique sur Voir tous les services

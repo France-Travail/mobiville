@@ -3,8 +3,12 @@ import PropTypes from 'prop-types'
 import _ from 'lodash'
 import styled, { css } from 'styled-components'
 
-import {formatCityTension, formatNumber} from '../../../utils/utils'
-import { COLOR_PRIMARY } from '../../../constants/colors'
+import { formatCityTension, formatNumber } from '../../../utils/utils'
+import {
+  COLOR_LIGHT_GREY,
+  COLOR_PRIMARY,
+  COLOR_WHITE,
+} from '../../../constants/colors'
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
 import selectedMarker from '../../../assets/images/marker-selected.svg'
@@ -14,17 +18,16 @@ import { CircularProgress } from '@mui/material'
 import { Tag } from '../../../components'
 
 const CityLink = styled(Link)`
-  margin-top: 16px;
-  margin-bottom: ${({ $isMobile }) => ($isMobile ? '16px' : '32px')};
+  margin: 8px 0;
   border-radius: 8px;
-  border: 1px solid #e4e9ed;
+  border: 1px solid ${COLOR_LIGHT_GREY};
 
   display: flex;
   flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row')};
   align-items: ${({ $isMobile }) => ($isMobile ? 'stretch' : 'center')};
   max-width: ${({ $isMobile }) => ($isMobile ? '100%' : 'inherit')};
 
-  background: #ffffff;
+  background: ${COLOR_WHITE};
   color: inherit;
   text-decoration: none;
 
@@ -44,7 +47,6 @@ const Title = styled.p`
 
 const SelectedMarkerImg = styled.img`
   width: 12px;
-  height: auto;
   margin-left: 8px;
 `
 

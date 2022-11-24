@@ -45,7 +45,8 @@
       "slug": "garantie-visale",
       "logo": "action-logement-2.png",
       "type": "Aide administrative",
-      "partner": "Action logement"
+      "partner": "Action logement",
+      "visibility_boost": "1"
     },
     {
       "title": "Bail mobilité",
@@ -72,12 +73,13 @@
       "cumulable": "non",
       "link": "https://candidat.pole-emploi.fr/candidat/aides/mobilite/tableaudebord",
       "who": "demandeur d'emploi^ plus de 26 ans^ moins de 26 ans",
-      "section": "transport,, logement",
+      "section": "transport, logement",
       "situation": "je recherche un emploi",
       "slug": "aide-pour-la-recherche-demploi",
       "logo": "pole-emploi.png",
       "type": "Aide financière",
-      "partner": "Pôle emploi"
+      "partner": "Pôle emploi",
+      "visibility_boost": "3"
     },
     {
       "title": "Aide pour la reprise d'emploi",
@@ -173,7 +175,8 @@
       "slug": "subvention-mobili-pass",
       "logo": "action-logement-2.png",
       "type": "Accompagnement du projet, accès au logement",
-      "partner": "Action logement"
+      "partner": "Action logement",
+      "visibility_boost": "2"
     },
     {
       "title": "Changement d'adresse en ligne",

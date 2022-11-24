@@ -1,5 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useCallback } from 'react'
+
+import EuroIcon from '@mui/icons-material/Euro'
+import HomeWorkIcon from '@mui/icons-material/HomeWork'
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
+import PeopleIcon from '@mui/icons-material/People'
+
 import { apiLoadHelpPreviews, apiLoadHelpPreview } from '../../api/helps.api'
 
 const HelpsContext = React.createContext()
@@ -13,7 +19,33 @@ export function HelpsProvider(props) {
     if (previews.length === 0) {
       _setIsLoading(true)
       apiLoadHelpPreviews()
-        .then(_setPreviews)
+        .then((fetchedPreviews) => {
+          if(!!fetchedPreviews) {
+            fetchedPreviews = fetchedPreviews.map((preview) => {
+              let type = (preview.type.includes(',')) ? preview.type.substring(0, preview.type.indexOf(',')) : preview.type
+              if (
+                type.toLowerCase().includes('aide administrative') ||
+                type.toLowerCase().includes('accompagnement du projet')
+              ) {
+                type = 'Accompagnement'
+              }
+
+              return {
+                ...preview,
+                type: type,
+                goal: preview.goal.includes('.') ? preview.goal.substring(0, preview.goal.indexOf('.') + 1) : preview.goal,
+                icon : preview.type.includes('logement')
+                  ? <HomeWorkIcon />
+                  : preview.type.includes('financière')
+                  ? <EuroIcon />
+                  : preview.type.includes('transport')
+                  ? <DirectionsCarIcon />
+                  : <PeopleIcon />,
+              }
+            })
+          }
+          _setPreviews(fetchedPreviews)
+        })
         .then(() => _setIsLoading(false))
     }
   }, [])

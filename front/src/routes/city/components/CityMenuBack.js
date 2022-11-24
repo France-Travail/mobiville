@@ -1,36 +1,35 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import MenuNavigation from "../../../components/MenuNavigation"
-import BackResultsButton from "./BackResultsButton"
 import styled from "styled-components"
 import {COLOR_WHITE} from "../../../constants/colors"
+import { BackButton, MenuNavigation } from '../../../components'
 
 const MenuBackContainer = styled.div`
-  background-color: ${COLOR_WHITE};
+  background: ${({ background }) => background};
   width: 100%;
-  max-width: 1040px;
-  margin: auto;
+
+  display: flex;
+  flex-direction: column;
 `
 
 const CityMenuBack = ({
   backLink,
-  isMobile
+  isMobile,
+  background = COLOR_WHITE
 }) => (
-    <MenuBackContainer>
-        <BackResultsButton
+    <MenuBackContainer background={background}>
+        <BackButton
+            libelle={!isMobile ? "Retour aux résultats" : "Retour"}
             backLink={backLink}
-            isMobile={isMobile}
         />
-        {isMobile && (
-            <MenuNavigation isMobile={isMobile}/>
-        )}
+        <MenuNavigation isMobile={isMobile}/>
     </MenuBackContainer>
 )
 
 CityMenuBack.props = {
     backLink: PropTypes.string,
-    desktopTitleWidth: PropTypes.number,
     isMobile: PropTypes.bool,
+    background: PropTypes.string
 }
 
 export default CityMenuBack

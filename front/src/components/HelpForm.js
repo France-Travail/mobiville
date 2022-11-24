@@ -3,9 +3,8 @@ import styled from 'styled-components'
 import { useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import { ProjectsSelect, JobSituationSelect, AgeSituationSelect, ActionButton, Button } from '.'
+import { ProjectsSelect, ResetButton, JobSituationSelect, AgeSituationSelect, ActionButton } from '.'
 import { AGE_SITUATIONS, JOB_SITUATIONS, PROJECTS } from '../constants/search'
-import { ReactComponent as ResetIcon } from '../assets/images/icons/reset.svg'
 import { isMobileView } from '../constants/mobile'
 import { useWindowSize } from '../common/hooks/window-size'
 
@@ -130,18 +129,9 @@ const HelpForm = ({
                 isBlue
             ></ActionButton>
 
-            {
-                (isMobile && isDirty())
-                    ? (<Button
-                        primary={false}
-                        light={true}
-                        onClick={resetInputs}
-                    >
-                        <ResetIcon />
-                        Réinitialiser
-                    </Button>)
-                    : null
-            }
+            {(isMobile && isDirty())
+                ? (<ResetButton style={{ margin: 'auto' }} onClick={resetInputs} />)
+                : null}
         </Container>
     )
 }

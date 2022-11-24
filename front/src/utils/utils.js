@@ -68,14 +68,46 @@ moment.locale('fr', {
 
 moment.locale('fr')
 
+// === STRING UTILS ===
+
 export const ucFirst = (s) => {
   if (typeof s !== 'string') return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
+  return s?.charAt(0)?.toUpperCase() + s?.slice(1)
 }
 
-export const thereAre = (date) => moment(date).fromNow()
+export const capitalize = (string) => ucFirst(string?.toLowerCase())
+
+export const wordsCapitalize = (s) => {
+  const wordBreakerChar = [' ', "'", '-', '.'] // on met une majuscule à la suite de ces caractères
+  s = s.toLowerCase()
+  wordBreakerChar.forEach(breaker => {
+    s = s.split(breaker)
+      .map(w => ucFirst(w))
+      .join(breaker)
+  })
+  return s
+}
+
+// === DATE UTILS ===
+
+export const thereAre = (date) => moment(date)
+    .subtract(1, "hours")
+    .fromNow()
 
 export const formatDate = (date) => date.toLocaleDateString("fr-FR")
+
+export function getXDaysAgo(date) {
+  const daysAgo = moment().diff(date, "days")
+  if (daysAgo > 0) {
+    return `${daysAgo} jour${daysAgo > 1 ? 's' : ''}`
+  }
+
+  let hoursAgo = moment().diff(date, "hours") + 1
+  if (hoursAgo < 1) {
+    return "moins d'une heure"
+  }
+  return `${hoursAgo} heure${hoursAgo > 1 ? 's' : ''}`
+}
 
 const numberFormatter = Intl.NumberFormat()
 export const formatNumber = (number) => numberFormatter.format(Math.floor(number))
@@ -108,15 +140,53 @@ export const formatCityTension = (tension) => {
   return "Peu d'opportunités d'emploi"
 }
 
-export function getXDaysAgo(date) {
-  const daysAgo = moment().diff(date, "days")
-  if (daysAgo > 0) {
-    return `${daysAgo} jour${daysAgo > 1 ? 's' : ''}`
+// trie selon le boost de visibilité : 5 > 3 > 2 > null > null ...
+export const visibilityBoostSorter = (a, b) => (!b?.visibility_boost ? -1 : b?.visibility_boost - a?.visibility_boost)
+
+// === URL UTILS ===
+
+export const formatCityUrl = (city, codeRome) => {
+  let url = `/city/${city.insee_com}-${city.nom_comm}`
+  if (!!codeRome) {
+    url += `?codeRome=${codeRome}`
   }
 
-  let hoursAgo = moment().diff(date, "hours") + 1
-  if (hoursAgo < 1) {
-    return "moins d'une heure"
+  return url
+}
+
+export const formatHelpUrl = (help) => `/aides/${help.slug}`
+
+// ======
+
+export function distance(
+  lat1,
+  lon1,
+  lat2,
+  lon2,
+  unit = 'K'
+) {
+  if (lat1 === lat2 && lon1 === lon2) {
+    return 0
+  } else {
+    var radlat1 = (Math.PI * lat1) / 180
+    var radlat2 = (Math.PI * lat2) / 180
+    var theta = lon1 - lon2
+    var radtheta = (Math.PI * theta) / 180
+    var dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
+    if (dist > 1) {
+      dist = 1
+    }
+    dist = Math.acos(dist)
+    dist = (dist * 180) / Math.PI
+    dist = dist * 60 * 1.1515
+    if (unit === 'K') {
+      dist = dist * 1.609344
+    }
+    if (unit === 'N') {
+      dist = dist * 0.8684
+    }
+    return dist
   }
-  return `${hoursAgo} heure${hoursAgo > 1 ? 's' : ''}`
 }

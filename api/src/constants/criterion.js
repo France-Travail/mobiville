@@ -15,7 +15,8 @@ export const IS_SUNNY = 15 // in degres
 export const CAREGIVER_ROME_CODE = 'J1501'
 export const COMPUTER_MAINTENANCE_TECHNICIAN_ROME_CODE = 'I1401'
 export const WEIGHT_REGION = 6
-
+export const HIGH_OPPORTUNITY= 1
+export const LOW_OPPORTUNITY= 2
 export const CRITERIONS = [
   {
     label: 'Mer',

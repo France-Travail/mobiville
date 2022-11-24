@@ -15,11 +15,6 @@ import {
 import { isMobileView } from '../../constants/mobile'
 import { useScroll } from '../../common/hooks/use-scroll'
 
-import { ReactComponent as FinanceIcon } from '../../assets/images/icons/help-financiere.svg'
-import { ReactComponent as AccompagnementIcon } from '../../assets/images/icons/help-accompagnement.svg'
-import { ReactComponent as LogementIcon } from '../../assets/images/icons/help-logement.svg'
-import { ReactComponent as TransportIcon } from '../../assets/images/icons/help-transport.svg'
-
 import { Grid } from '@mui/material'
 import MobileAppliedFilters from './components/MobileAppliedFilters'
 import HelpCard from './components/HelpCard'
@@ -229,6 +224,10 @@ const Helps = () => {
   }, [])
 
   useEffect(() => {
+    setAllItems(previews)
+  }, [previews])
+
+  useEffect(() => {
     const parsedQueryString = queryString.parse(search)
 
     const parsedProjects = parsedQueryString.project
@@ -296,25 +295,6 @@ const Helps = () => {
       )
     )
   }, [allItems])
-
-  useEffect(() => {
-    previews.forEach((preview) => {
-      if (preview.type.includes(',')) {
-        preview.type = preview.type.substring(0, preview.type.indexOf(','))
-      }
-      if (preview.goal.includes('.')) {
-        preview.goal = preview.goal.substring(0, preview.goal.indexOf('.') + 1)
-      }
-      if (
-        preview.type.toLowerCase().includes('aide administrative') ||
-        preview.type.toLowerCase().includes('accompagnement du projet')
-      ) {
-        preview.type = 'Accompagnement'
-      }
-    })
-
-    setAllItems(previews)
-  }, [previews])
 
   useEffect(() => {
     if ((!!projects && projects.length) || (!!situations && situations.length))
@@ -439,7 +419,6 @@ const Helps = () => {
         ) : (
           <>
             <HelpTypeTitleContainer isFirst={true} $isMobile={isMobile}>
-              <FinanceIcon />
               <h2 id={FINANCIERE} ref={financiereHeaderRef}>
                 Les aides financières
               </h2>
@@ -447,7 +426,6 @@ const Helps = () => {
             <HelpList items={financeItems} />
 
             <HelpTypeTitleContainer $isMobile={isMobile}>
-              <AccompagnementIcon />
               <h2 id={ACCOMPAGNEMENT} ref={accompagnementHeaderRef}>
                 Les aides {isMobile ? <br /> : ''} d'accompagnement
               </h2>
@@ -455,7 +433,6 @@ const Helps = () => {
             <HelpList items={accompagnementItems} />
 
             <HelpTypeTitleContainer $isMobile={isMobile}>
-              <LogementIcon />
               <h2 id={LOGEMENT} ref={logementHeaderRef}>
                 Les aides au logement
               </h2>
@@ -463,9 +440,8 @@ const Helps = () => {
             <HelpList items={logementItems} />
 
             <HelpTypeTitleContainer $isMobile={isMobile}>
-              <TransportIcon />
               <h2 id={TRANSPORT} ref={transportHeaderRef}>
-                Les aides Transport
+                Les aides transport
               </h2>
             </HelpTypeTitleContainer>
             <HelpList items={transportItems} />
