@@ -42,6 +42,9 @@ const Modale = styled.div`
   z-index: 1000;
   width: 100vw;
   height: 100vh;
+  height: -moz-available;
+  height: -webkit-fill-available;
+  height: fill-available;
 
   overflow-y: scroll;
 
