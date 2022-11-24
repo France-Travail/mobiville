@@ -42,8 +42,8 @@ const CheckboxInput = ({ value, name, onClick, checked, ...props }) => {
 }
 
 CheckboxInput.propTypes = {
-  value: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
-  name: PropTypes.oneOf([PropTypes.string, PropTypes.number]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onClick: PropTypes.func,
   checked: PropTypes.bool,
 }
