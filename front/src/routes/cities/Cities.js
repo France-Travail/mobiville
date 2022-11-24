@@ -79,7 +79,6 @@ const Cities = () => {
 
   useEffect(() => {
     if (location.search) {
-      localStorage.setItem('lastSearch', location.search)
       setParams(queryString.parse(location.search))
     }
   }, [location])

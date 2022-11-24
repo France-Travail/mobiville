@@ -54,6 +54,12 @@ export function ProfessionsProvider(props) {
             .then(() => _setIsLoading(false))
     }, [])
 
+    const formatTypeContrat = (job) => (
+        job.typeContrat === 'CDI' || job.typeContrat === 'CDD'
+            ? job.typeContrat
+            : job.typeContratLibelle
+    )
+
     return (
         <ProfessionsContext.Provider
             {...props}
@@ -68,7 +74,9 @@ export function ProfessionsProvider(props) {
                 // function
                 onSearch,
                 onSearchInfosTravail,
-                onSearchCountList
+                onSearchCountList,
+                // utils
+                formatTypeContrat
             }}
         />
     )

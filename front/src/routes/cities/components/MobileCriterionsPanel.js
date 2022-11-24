@@ -82,6 +82,7 @@ const MobileCriterionsPanel = ({
         wrapper && wrapper.current && wrapper.current.clientHeight
       }
     >
+      {/* todo : refacto avec le component <FiltersButton /> */}
       <Wrapper ref={wrapper}>
         <Title>Mes critères</Title>
         <TagsBlock>

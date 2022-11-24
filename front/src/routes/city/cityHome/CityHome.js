@@ -2,9 +2,6 @@ import { useEffect } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
-import DescriptionIcon from '@mui/icons-material/Description'
-
 import CityHousingSimulator from './components/CityHousingSimulator'
 import CloseCompanies from './components/CloseCompanies'
 import HelpsStandOut from './components/HelpsStandOut'
@@ -16,7 +13,7 @@ import { ReactComponent as ProfilEntrepriseIcon } from '../../../assets/images/i
 // import { ReactComponent as HandshakeIcon } from '../../assets/images/icons/handshake.svg'
 import cityServicesStandOut from '../../../assets/images/cityServicesStandOut.png'
 
-import { capitalize, formatCityTension, getXDaysAgo } from '../../../utils/utils'
+import { capitalize, formatCityTension } from '../../../utils/utils'
 import {
   COLOR_PRIMARY,
   COLOR_TEXT_PRIMARY,
@@ -27,6 +24,8 @@ import { useProfessions } from '../../../common/contexts/professionsContext'
 import { useCities } from '../../../common/contexts/citiesContext'
 import { isMobileView } from '../../../constants/mobile'
 import { useWindowSize } from '../../../common/hooks/window-size'
+import { Link } from 'react-router-dom'
+import JobCard from '../cityJobs/components/JobCard'
 
 const ElementContainer = styled.div`
   display: flex;
@@ -40,56 +39,8 @@ const ElementContainer = styled.div`
   line-height: 24px;
 `
 
-const BlockCardOffer = styled.div`
-  width: ${({ isMobile }) => (isMobile ? '279px' : '336px')};
-  height: 170px;
-  padding: 16px;
-  border-radius: 8px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-
-  background-color: #fff;
-`
-
-const BlockOfferLabel = styled.div`
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 21px;
-  color: ${COLOR_PRIMARY};
-`
-
-const BlockOfferCompany = styled.div`
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 21px;
-  color: ${COLOR_PRIMARY};
-`
-
-const BlockOfferCity = styled.div`
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 19px;
-  color: ${COLOR_TEXT_PRIMARY};
-`
-
-const BlockOfferContract = styled.div`
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 21px;
-  color: ${COLOR_PRIMARY};
-  display: flex;
-  align-items: center;
-`
-
-const BlockOfferDate = styled.div`
-  font-weight: 700;
-  font-size: 12px;
-  line-height: 14px;
-  color: ${COLOR_PRIMARY};
-  display: flex;
-  align-items: center;
+const JobCardContainer = styled(Link)`
+  width: ${({ $isMobile }) => ($isMobile ? '279px' : '336px')};
 `
 
 const TitlesContainer = styled.div`
@@ -179,8 +130,12 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
   const isMobile = isMobileView(useWindowSize())
 
   const { companiesCount, onSearchCloseCompanies, city } = useCities()
-  const { professionsCandidatsManquants, totalOffres, bassinTensionIndT, onSearchInfosTravail } =
-    useProfessions()
+  const {
+    professionsCandidatsManquants,
+    totalOffres,
+    bassinTensionIndT,
+    onSearchInfosTravail
+  } = useProfessions()
   
   useEffect(() => {
     if (!city?.insee_com || !codeRome) return
@@ -242,29 +197,16 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
       <HorizontalScrollableSection>
         {professionsCandidatsManquants
           ?.slice(0, 3)
-          .map((profession, index) => (
-            <BlockCardOffer isMobile={isMobile} key={index}>
-              <BlockOfferLabel>
-                {profession.appellationlibelle}
-              </BlockOfferLabel>
-              <BlockOfferCompany>
-                {profession.entreprise.nom}
-              </BlockOfferCompany>
-              <BlockOfferCity>
-                {profession.lieuTravail.libelle}
-              </BlockOfferCity>
-              <BlockOfferContract>
-                <DescriptionIcon />
-                {profession.typeContrat}{' '}
-                {profession.dureeTravailLibelleConverti
-                  ? ' \u2022 ' + profession.dureeTravailLibelleConverti
-                  : ''}
-              </BlockOfferContract>
-              <BlockOfferDate>
-                <AccessTimeIcon />
-                Publié il y a {getXDaysAgo(profession.dateActualisation)}
-              </BlockOfferDate>
-            </BlockCardOffer>
+          .map((job) => (
+            <JobCardContainer
+              key={job.id}
+              to={{
+                pathname: `/city/${insee}/job`,
+                search: `?codeRome=${codeRome}`
+              }}
+            >
+              <JobCard job={job} style={{ height: '100%' }} />
+            </JobCardContainer>
           ))}
       </HorizontalScrollableSection>
 

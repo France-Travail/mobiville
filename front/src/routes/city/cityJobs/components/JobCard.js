@@ -11,11 +11,13 @@ import {
   COLOR_WHITE,
 } from '../../../../constants/colors'
 import { thereAre, wordsCapitalize } from '../../../../utils/utils'
+import { useProfessions } from '../../../../common/contexts/professionsContext'
 
 const Container = styled.div`
   width: 100%;
   padding: 16px;
-  border: 1px solid ${({ $isSelected }) => $isSelected ? COLOR_PRIMARY : COLOR_GRAY};
+  border: 1px solid
+    ${({ $isSelected }) => ($isSelected ? COLOR_PRIMARY : COLOR_GRAY)};
   border-radius: 8px;
 
   background: ${COLOR_WHITE};
@@ -57,16 +59,13 @@ const Location = styled(KeyInfo)`
   font-size: 14px;
 `
 
-const JobCard = ({ job, onClick, isSelected }) => {
-  const contractLabel =
-    job.typeContrat === 'CDI' || job.typeContrat === 'CDD'
-      ? job.typeContrat
-      : job.typeContratLibelle
+const JobCard = ({ job, onClick = () => {}, isSelected, ...props }) => {
+  const { formatTypeContrat } = useProfessions()
 
   return (
-    <Container onClick={() => onClick(job)} $isSelected={isSelected}>
+    <Container onClick={() => onClick(job)} $isSelected={isSelected} {...props}>
       <Title>{job.appellationlibelle}</Title>
-      
+
       {!!job?.entreprise?.nom && (
         <Company>{wordsCapitalize(job.entreprise.nom)}</Company>
       )}
@@ -84,7 +83,7 @@ const JobCard = ({ job, onClick, isSelected }) => {
 
       <KeyInfo>
         <DescriptionIcon />
-        {contractLabel}{' '}
+        {formatTypeContrat(job)}{' '}
         {job.dureeTravailLibelleConverti &&
           ` - ${job.dureeTravailLibelleConverti}`}
       </KeyInfo>
@@ -100,7 +99,7 @@ const JobCard = ({ job, onClick, isSelected }) => {
 JobCard.propTypes = {
   job: PropTypes.object.isRequired,
   onClick: PropTypes.func,
-  isSelected: PropTypes.bool
+  isSelected: PropTypes.bool,
 }
 
 export default JobCard

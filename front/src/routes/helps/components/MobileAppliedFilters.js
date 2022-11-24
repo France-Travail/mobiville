@@ -1,9 +1,8 @@
-import { Link } from 'react-router-dom'
+import { useCallback } from 'react'
 import styled from 'styled-components'
 
-import pictoFilterMobile from '../../../assets/images/icons/filter-mobille.svg'
+import { FiltersButton } from '../../../components'
 import { COLOR_PRIMARY, COLOR_WHITE } from '../../../constants/colors'
-import { useCallback } from 'react'
 
 const Container = styled.div`
   align-self: start;
@@ -28,26 +27,6 @@ const Tag = styled.div`
   font-size: 16px;
   font-weight: 700;
   line-height: 19px;
-`
-
-const BlocFilterMobile = styled(Link)`
-  padding: 4px 6px;
-  border-radius: 22px;
-
-  display: flex;
-  align-items: center;
-
-  font-size: 16px;
-  line-height: 24px;
-
-  color: ${COLOR_WHITE};
-  background: ${COLOR_PRIMARY};
-
-  img {
-    margin: 0 4px;
-    height: 16px;
-    width: 16px;
-  }
 `
 
 const MobileAppliedFilters = ({ search, style }) => {
@@ -85,11 +64,10 @@ const MobileAppliedFilters = ({ search, style }) => {
     <Container style={style}>
       <AppliedFilters />
 
-      <BlocFilterMobile to={`/aides-filters` + window.location.search}>
-        <img alt={''} src={pictoFilterMobile} />
-        {!!search && <div>Modifier</div>}
-        {!search && <div>Filtrer selon votre situation</div>}
-      </BlocFilterMobile>
+      <FiltersButton
+        to={`/aides-filters` + window.location.search}
+        libelle={!!search ? 'Modifier' : 'Filtrer selon votre situation'}
+      />
     </Container>
   )
 }

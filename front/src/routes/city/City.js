@@ -43,7 +43,16 @@ const CityPage = () => {
   const params = queryString.parse(location.search)
 
   const codeRome = params?.codeRome || ''
+  let romeLabel = ''
 
+  if (criterions?.codeRomes && codeRome) {
+    const foundLabel =
+      criterions.codeRomes.find((c) => c.key === codeRome)?.label || ''
+    romeLabel = foundLabel.toLowerCase()
+  }
+
+  const backLink = `/cities?codeRome=${ codeRome }&codeRegion=${ city?.newRegion?.code ?? '' }`
+  
   useEffect(() => {
     onLoadCity(inseeCode)
 
@@ -65,18 +74,6 @@ const CityPage = () => {
       offresManqueCandidats: true,
     })
   }, [city?.insee_com, codeRome])
-
-  let romeLabel = ''
-
-  if (criterions?.codeRomes && codeRome) {
-    const foundLabel =
-      criterions.codeRomes.find((c) => c.key === codeRome)?.label || ''
-    romeLabel = foundLabel.toLowerCase()
-  }
-  
-  const lastSearch = localStorage.getItem('lastSearch')
-
-  const backLink = `/cities${lastSearch || `?codeRome=${codeRome}`}`
 
   const currentSection = useMemo(() => {
     if (!city) return

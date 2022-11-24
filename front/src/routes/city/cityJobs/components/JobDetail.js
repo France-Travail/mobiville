@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 
 import DescriptionIcon from '@mui/icons-material/Description'
@@ -7,20 +7,30 @@ import ScheduleIcon from '@mui/icons-material/Schedule'
 
 import { COLOR_PRIMARY, COLOR_PURPLE, COLOR_WHITE } from '../../../../constants/colors'
 import { capitalize, thereAre } from '../../../../utils/utils'
-import { ActionButton } from '../../../../components'
+import { ActionButton, CloseButton } from '../../../../components'
 import { useEffect, useState } from 'react'
+import { isMobileView } from '../../../../constants/mobile'
+import { useWindowSize } from '../../../../common/hooks/window-size'
 
 const Container = styled.div`
-  position: sticky;
   top: 8px;
-  grid-area: jobDetail;
   height: fit-content;
   padding: 16px;
   border-radius: 8px;
 
+  color: ${COLOR_PRIMARY};
   background-color: ${COLOR_WHITE};
 
-  color: ${COLOR_PRIMARY};
+  ${({ $isMobile }) => $isMobile
+    ? css`
+      margin-top: -120px;
+      padding-top: 64px;
+      z-index: 101;
+    `
+    : css`
+      position: sticky;
+      grid-area: jobDetail;
+    `}
 `
 
 const Title = styled.h2`
@@ -51,7 +61,9 @@ const Type = styled(KeyInfo)``
 
 const Time = styled(KeyInfo)``
 
-const Description = styled.p``
+const Description = styled.p`
+  font-size: 16px;
+`
 
 const HR = styled.hr`
   margin: 20px;
@@ -62,8 +74,9 @@ const HR = styled.hr`
   background: ${COLOR_PURPLE};
 `
 
-const JobDetail = ({ job }) => {
+const JobDetail = ({ job, onClose }) => {
   const [displayedDescription, setDisplayedDescription] = useState('')
+  const isMobile = isMobileView(useWindowSize())
 
   const LocateWithMappy = ({ job }) => (
     <a
@@ -90,61 +103,68 @@ const JobDetail = ({ job }) => {
     setDisplayedDescription(shortDescription)
   }, [job?.description])
 
+  if (!job) return
+
   return (
-    <>
-      {!job ? null : (
-        <Container>
-          <Title>{job?.appellationlibelle}</Title>
+    <Container $isMobile={isMobile}>
 
-          {!!job?.entreprise?.nom
-            ? (<Company>{capitalize(job?.entreprise?.nom)}</Company>)
-            : null}
-          
-          {!!job?.lieuTravail?.libelle
-            ? (<><Location>{job?.lieuTravail?.libelle} • </Location><LocateWithMappy job={job} /></>)
-            : null}
-          
-          {!!job?.salaire?.libelle
-            ? (<Salary>
-              <EuroIcon />
-              Salaire : {job?.salaire?.libelle}
-            </Salary>)
-            : null}
+      {isMobile
+        ? (<CloseButton onClick={onClose} />)
+        : null }
 
-          {!!job?.typeContrat
-            ? (<Type>
-              <DescriptionIcon />
-              {job?.typeContrat === 'CDI' || job?.typeContrat === 'CDD'
-                ? job?.typeContrat
-                : job?.typeContratLibelle}
-            </Type>)
-            : null}
+      <Title>{job?.appellationlibelle}</Title>
 
-          {!!job?.dateCreation
-            ? (<Time>
-              <ScheduleIcon />
-              Publié {thereAre(job?.dateCreation)}
-            </Time>)
-            : null}
+      {!!job?.entreprise?.nom
+        ? (<Company>{capitalize(job?.entreprise?.nom)}</Company>)
+        : null}
+      
+      {!!job?.lieuTravail?.libelle
+        ? (<><Location>{job?.lieuTravail?.libelle} • </Location><LocateWithMappy job={job} /></>)
+        : null}
+      
+      {!!job?.salaire?.libelle
+        ? (<Salary>
+          <EuroIcon />
+          Salaire : {job?.salaire?.libelle}
+        </Salary>)
+        : null}
 
-          <div style={{ width: 'fit-content', margin: 'auto' }}>
-            <ActionButton
-              libelle="Postuler sur Pôle emploi.fr"
-              path={job?.origineOffre?.urlOrigine}
-            />
-          </div>
+      {!!job?.typeContrat
+        ? (<Type>
+          <DescriptionIcon />
+          {job?.typeContrat === 'CDI' || job?.typeContrat === 'CDD'
+            ? job?.typeContrat
+            : job?.typeContratLibelle}
+        </Type>)
+        : null}
 
-          <HR />
+      {!!job?.dateCreation
+        ? (<Time>
+          <ScheduleIcon />
+          Publié {thereAre(job?.dateCreation)}
+        </Time>)
+        : null}
 
-          <Description>{displayedDescription}</Description>
-        </Container>
-      )}
-    </>
+      <div style={{ width: 'fit-content', margin: 'auto' }}>
+        <ActionButton
+          libelle="Postuler sur Pôle emploi.fr"
+          path={job?.origineOffre?.urlOrigine}
+          style={{
+            marginTop: 19
+          }}
+        />
+      </div>
+
+      <HR />
+
+      <Description>{displayedDescription}</Description>
+    </Container>
   )
 }
 
 JobDetail.propTypes = {
-  job: PropTypes.object
+  job: PropTypes.object,
+  onClose: PropTypes.func
 }
 
 export default JobDetail

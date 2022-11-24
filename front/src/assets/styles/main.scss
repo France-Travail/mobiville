@@ -1,4 +1,3 @@
-@import '../fonts/Roboto/roboto.scss';
 @import './form.scss';
 
 html,
@@ -10,6 +9,15 @@ body {
   font-family: 'Roboto', sans-serif;
   color: #23333e;
   font-size: 14px;
+}
+
+html {
+  height: -webkit-fill-available;
+}
+
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
 }
 
 body.white {
