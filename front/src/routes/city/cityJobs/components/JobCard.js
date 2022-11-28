@@ -11,6 +11,7 @@ import {
   COLOR_WHITE,
 } from '../../../../constants/colors'
 import { thereAre, wordsCapitalize } from '../../../../utils/utils'
+import { Tag } from '../../../../components'
 import { useProfessions } from '../../../../common/contexts/professionsContext'
 
 const Container = styled.div`
@@ -60,7 +61,7 @@ const Location = styled(KeyInfo)`
 `
 
 const JobCard = ({ job, onClick = () => {}, isSelected, ...props }) => {
-  const { formatTypeContrat } = useProfessions()
+  const { isMissingApplicants, formatTypeContrat } = useProfessions()
 
   return (
     <Container onClick={() => onClick(job)} $isSelected={isSelected} {...props}>
@@ -73,6 +74,12 @@ const JobCard = ({ job, onClick = () => {}, isSelected, ...props }) => {
       {!!job?.lieuTravail?.libelle && (
         <Location>{job.lieuTravail.libelle}</Location>
       )}
+
+      {isMissingApplicants(job)
+        ? (<Tag green bold>
+            Offre avec plus d'opportunités
+          </Tag>)
+        : null}
 
       {job.salaire?.libelle && (
         <KeyInfo>

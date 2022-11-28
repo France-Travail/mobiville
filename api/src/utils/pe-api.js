@@ -49,7 +49,7 @@ const cache = setupCache({
 const apiEmploiStore = axios.create({
     adapter: cache.adapter
 })
-export async function searchJob({ codeRome = [], insee = [], distance = 10, offresManqueCandidats = false }) {
+export async function searchJob({ codeRome = [], insee = [], distance = 30 }) {
     const token = await getAccessToken()
     const callToOffres = function () {
         return apiEmploiStore.get(
@@ -58,8 +58,7 @@ export async function searchJob({ codeRome = [], insee = [], distance = 10, offr
                 params: {
                     codeROME: codeRome.join(','),
                     commune: insee.join(','),
-                    distance,
-                    offresManqueCandidats
+                    distance
                 },
                 headers: { Authorization: `Bearer ${token}` },
                 ...(config.PE_ENV && {proxy: false}),

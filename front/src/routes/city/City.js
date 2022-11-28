@@ -68,11 +68,6 @@ const CityPage = () => {
       codeRome: [codeRome],
       insee: [city.insee_com]
     })
-    onSearchProfessions({
-      codeRome: [codeRome],
-      insee: [city.insee_com],
-      offresManqueCandidats: true,
-    })
   }, [city?.insee_com, codeRome])
 
   const currentSection = useMemo(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import { Helmet } from 'react-helmet-async'
@@ -17,6 +17,7 @@ import { useProfessions } from '../../../common/contexts/professionsContext'
 import JobDetail from './components/JobDetail'
 import JobsList from './components/JobsList'
 import JobsFilters from './components/JobsFilters'
+import { useSearchParams } from 'react-router-dom'
 
 const Title = styled.h1`
   width: ${({ $isMobile }) => ($isMobile ? 'auto' : '100%')};
@@ -77,11 +78,17 @@ const CityJobs = ({ romeLabel, codeRome }) => {
   const windowSize = useWindowSize()
   const isMobile = isMobileView(windowSize)
 
+  const [searchParams] = useSearchParams()
+  const [isQueryParamsUsed,  setIsQueryParamsUsed] = useState(false)
+  const [topJobsMissingsApplicants, setTopJobsMissingsApplicants] = useState([])
+
   const { city } = useCities()
   const {
     professions: jobs,
     onSearch,
-    isLoading
+    isLoading,
+    isMissingApplicants,
+    sortByDistanceFromCity
   } = useProfessions()
 
   const [displayedJobs, setDisplayedJobs] = useState([])
@@ -92,18 +99,31 @@ const CityJobs = ({ romeLabel, codeRome }) => {
     date: '',
     type: [],
     experience: [],
-    duration: []
+    duration: [],
+    opportunity: ''
   }
   const [ filters, setFilters ] = useState(DEFAULT_FILTERS)
 
+  const distanceFromCity = useCallback((job) => distance(
+    city.geo_point_2d_x,
+    city.geo_point_2d_y,
+    job.lieuTravail.latitude,
+    job.lieuTravail.longitude
+  ), [ city ])
+  
   useEffect(() => {
-    const distanceFromCity = (job) => distance(
-      city.geo_point_2d_x,
-      city.geo_point_2d_y,
-      job.lieuTravail.latitude,
-      job.lieuTravail.longitude
-    )
+    if (isQueryParamsUsed || !displayedJobs || displayedJobs.length < 1 || !searchParams?.get('jobSelected')) return
 
+    const selectedJob = displayedJobs.find(job => job.id === searchParams.get('jobSelected'))
+    setSelectedJob(selectedJob)
+    setIsQueryParamsUsed(true)
+    setFilters((prev) => ({
+      ...prev,
+      opportunity: 'OPPORTUNITIES'
+    }))
+  }, [ searchParams, displayedJobs ])
+
+  useEffect(() => {
     const isDateIncludedInFilter = (date, dateFilter) => {
       const creationMoment = moment(date)
 
@@ -163,16 +183,27 @@ const CityJobs = ({ romeLabel, codeRome }) => {
       return (distanceFromCity(job) <= filters.distance)
     }
 
-    const filteredJobs = jobs
-      .filter(filterDistance)
-      .filter(filterDate)
-      .filter(filterType)
-      .filter(filterDuration)
-      .filter(filterExperience)
+    const filteredJobs = [
+      ...(topJobsMissingsApplicants
+        .filter(_ => (filters?.opportunity === 'OPPORTUNITIES'))
+        .filter(filterType)
+        .filter(filterExperience)
+        .filter(filterDate)
+        .filter(filterDuration)
+        .filter(filterDistance)),
+      ...(jobs
+        .filter(job => (filters?.opportunity === 'OPPORTUNITIES' && !!topJobsMissingsApplicants && topJobsMissingsApplicants.length > 0) ? (!topJobsMissingsApplicants.find(j => j.id === job.id)) : true)
+        .filter(filterType)
+        .filter(filterExperience)
+        .filter(filterDate)
+        .filter(filterDuration)
+        .filter(filterDistance)
+        .sort(sortByDistanceFromCity(city)))
+    ]
 
     setDisplayedJobs(filteredJobs)
 
-    if (isMobile || !windowSize.width || !windowSize.height) {
+    if ((isMobile || !windowSize.width || !windowSize.height) && !selectedJob) {
       setSelectedJob(null)
     } else if (!!filteredJobs
       && ((!!selectedJob && !filteredJobs?.find(job => job.id === selectedJob.id))
@@ -181,6 +212,13 @@ const CityJobs = ({ romeLabel, codeRome }) => {
     }
     
   }, [jobs, filters])
+
+  useEffect(() => {
+    setTopJobsMissingsApplicants(jobs
+      .filter(job => isMissingApplicants(job))
+      .sort(sortByDistanceFromCity(city))
+      .slice(0, 3))
+  }, [ jobs ])
 
   useEffect(() => {
     if (!codeRome|| !city?.insee_com) return

@@ -131,10 +131,11 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
 
   const { companiesCount, onSearchCloseCompanies, city } = useCities()
   const {
-    professionsCandidatsManquants,
+    jobsMissingApplicant,
     totalOffres,
     bassinTensionIndT,
-    onSearchInfosTravail
+    onSearchInfosTravail,
+    sortByDistanceFromCity
   } = useProfessions()
   
   useEffect(() => {
@@ -195,14 +196,15 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
       />
 
       <HorizontalScrollableSection>
-        {professionsCandidatsManquants
-          ?.slice(0, 3)
+        {jobsMissingApplicant
+          ?.sort(sortByDistanceFromCity(city))
+          .slice(0, 3)
           .map((job) => (
             <JobCardContainer
               key={job.id}
               to={{
                 pathname: `/city/${insee}/job`,
-                search: `?codeRome=${codeRome}`
+                search: `?codeRome=${codeRome}&jobSelected=${job.id}`
               }}
             >
               <JobCard job={job} style={{ height: '100%' }} />
