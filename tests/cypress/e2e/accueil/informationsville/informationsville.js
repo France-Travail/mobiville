@@ -2,8 +2,8 @@ const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor');
 import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "../common/common";
 import { METIER, ENDROIT } from '../../../support/step_definitions/formulaire-recherche';
 
-const rappelCritereMetier = "main[id=main] * > h1";
-const rappelCritereVille = "main[id=main] * > div > h1";
+const rappelCritereOffres = "main[id=main] > h1";
+const rappelCritereServices = "main[id=main] * > div > h1";
 const infoHabitants = "main[id=main] * > div > p";
 const infoSuperficie = "main[id=main] * > div > p";
 const infoTemperature = "main[id=main] * > div > p";
@@ -31,15 +31,17 @@ const boutonVoirTousServices  =  "main[id=main] * > div > a";
 const nombreBlocsEntreprises = "main[id=main] > div:nth-child(9) > div > div:nth-child(2)";
 
 Then("j'affiche les offres d'emploi de la ville pour le métier", function () {
-  let metierCourt = METIER.split(' (')[0].toLowerCase();
   cy.url().should('include', 'job');
-  cy.contains(rappelCritereMetier, "pour le métier " + metierCourt,  {timeout: SHORT_WAIT_TIME}).should('exist');
+  let villeSansCP = ENDROIT.split(' (')[0];
+  let metierCourt = METIER.split(' (')[0].toLowerCase();
+  cy.contains(rappelCritereOffres, villeSansCP,  {timeout: SHORT_WAIT_TIME}).should('exist');
+  cy.contains(rappelCritereOffres, "pour le métier " + metierCourt,  {timeout: SHORT_WAIT_TIME}).should('exist');
 })
 
 Then("j'affiche les services de la ville", function () {
-  let villeSansCP = ENDROIT.split(' (')[0];
   cy.url().should('include', 'life');
-  cy.contains(rappelCritereVille, "Vivre à " + villeSansCP,  {timeout: SHORT_WAIT_TIME}).should('exist');
+  let villeSansCP = ENDROIT.split(' (')[0];
+  cy.contains(rappelCritereServices, "Vivre à " + villeSansCP,  {timeout: SHORT_WAIT_TIME}).should('exist');
 })
 
 Then("j'affiche les informations correspondantes des services de la ville", function () {

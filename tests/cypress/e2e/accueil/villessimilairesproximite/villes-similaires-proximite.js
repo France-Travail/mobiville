@@ -5,7 +5,8 @@ import { METIER } from "../../../support/step_definitions/formulaire-recherche";
 const fil = "nav > div > a";
 const resultatsVilles = "main[id=main] > div > h1";
 const VillesSimilairesProches = "main[id=main] * div > p";
-const nombreVillesSimilairesProches = "a[href*=city]";
+const nombreVillesSimilaires = "main[id=main] > div > div:nth-child(2)> div";
+const nombreVillesProches = "main[id=main] > div > div:nth-child(3)> div";
 const premiereVilleSimilaireProche = "a[href*=city]:nth-child(1)";
 const rappelCritereMetier = "main[id=main] * > div > h1";
 const rappelCritereMetierRegion = "main[id=main] * > div > h1";
@@ -20,7 +21,8 @@ Then("j'affiche les villes similaires et les villes à proximité", function () 
   cy.contains(VillesSimilairesProches, "Villes similaires",  {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.contains(VillesSimilairesProches, "Villes à proximité",  {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.wait(SHORT_WAIT_TIME);
-  cy.contains(nombreVillesSimilairesProches, " offres", {timeout: SHORT_WAIT_TIME}).children().should('have.length.lte', 12);
+  cy.contains(nombreVillesSimilaires, "offres", {timeout: SHORT_WAIT_TIME}).children().should('have.length.lte', 6);
+  cy.contains(nombreVillesProches, "offres", {timeout: SHORT_WAIT_TIME}).children().should('have.length.lte', 6);
 })                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 
 When("je clique sur une ville similaire/proche", function () {

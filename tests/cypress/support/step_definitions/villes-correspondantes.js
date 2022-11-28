@@ -8,6 +8,31 @@ const InfosPremiereVille = "a[data-automation-id^=cityItem-][href*=city]:nth-chi
 const filtreCadreVie = "main[id=main] * > div > span";
 const filtreTailleVille = "main[id=main] * > div > span";
 const filtreOpportunites = "main[id=main] * > div > span";
+const selectionCritere = "div[id=menu-] * > ul[role=listbox] > li[role=option] > span";
+const listeVillesParPage = "a[data-automation-id^=cityItem-][href*=city]";
+
+function boutonSelectionFiltre(critere){
+  switch (critere) {
+    case "Mer" :
+      return filtreCadreVie;
+    case "Montagne" :
+      return filtreCadreVie;
+    case "Campagne" :
+      return filtreCadreVie;
+    case "Petite ville" :
+      return filtreTailleVille;
+    case "Ville moyenne" :
+      return filtreTailleVille;
+    case "Grande ville" :
+      return filtreTailleVille;
+    case "Métropole" :
+      return filtreTailleVille;
+    case "Opportunités d'emploi" :
+      return filtreOpportunites;
+    case "Peu d'opportunités d'emploi" :
+      return filtreOpportunites;
+  }
+}
 
 Then("j'affiche la page de résultats avec une à plusieurs villes correspondantes", function () {
   cy.contains(filtreCadreVie, "Cadre de vie",  {timeout: SHORT_WAIT_TIME}).should('exist');
@@ -24,4 +49,22 @@ Then("j'affiche les informations sur le métier dans la page des villes correspo
   cy.contains(InfosPremiereVille, "Opportunités d'emploi",  {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.contains(InfosPremiereVille, " habitants",  {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.contains(InfosPremiereVille, " offres d'emploi",  {timeout: SHORT_WAIT_TIME}).should('exist');
+})
+
+When("je clique sur le filtre {string} et je sélectionne {string}", function (filtre, selection) {
+  cy.contains(boutonSelectionFiltre(filtre), filtre, {timeout: SHORT_WAIT_TIME}).click();
+  cy.contains(selectionCritere, selection, {timeout: SHORT_WAIT_TIME}).click();
+  cy.wait(1000);
+})
+
+Then("j'affiche les villes pour lesquelles il y a des opportunités d'emploi", function () {
+  cy.get(listeVillesParPage).each((ville) => {
+    expect(ville.text()).to.include("Opportunités d'emploi");
+  });
+})
+
+Then("j'affiche les villes pour lesquelles il y a peu d'opportunités d'emploi", function () {
+  cy.get(listeVillesParPage).each((ville) => {
+    expect(ville.text()).to.include("Peu d'opportunités d'emploi");
+  });
 })
