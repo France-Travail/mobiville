@@ -25,7 +25,7 @@ const Container = styled.div`
 
 const ContainerParent = styled.div`
   height: 118px;
-  
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,7 +43,7 @@ const DesktopCriterionsPanel = ({ paramsUrl = [] }) => {
 
   const opportunities = {
     1: "Opportunités d'emploi",
-    2: "Peu d'opportunités d'emploi"
+    2: "Peu d'opportunités d'emploi",
   }
 
   const showReset = useCallback(
@@ -89,7 +89,6 @@ const DesktopCriterionsPanel = ({ paramsUrl = [] }) => {
 
   return (
     <>
-
       <ContainerParent>
         <Container>
           <CityForm
@@ -104,41 +103,61 @@ const DesktopCriterionsPanel = ({ paramsUrl = [] }) => {
 
       <Container>
         <SearchBar>
-
           <LittleSelect
             label="Cadre de vie"
-            values={Object.assign({}, ...environmentCriterions
-              .map(criterion => ({
-                [criterion.key]: criterion.label
-              })))}
+            values={Object.assign(
+              {},
+              ...environmentCriterions.map((criterion) => ({
+                [criterion.key]: criterion.label,
+              }))
+            )}
             selectedValue={environmentSelected}
-            onChange={handleChangeEnv}
+            onChange={(v) => {
+              handleChangeEnv(v)
+              window.smartTag({
+                name: 'cadre_de_vie',
+                type: 'action',
+                chapters: ['cities', 'recherche', 'filtres'],
+              })
+            }}
           />
 
           <LittleSelect
             label="Taille de ville"
-            values={Object.assign({}, ...cityCriterions
-              .map(criterion => ({
-                [criterion.key]: criterion.label
-              })))}
+            values={Object.assign(
+              {},
+              ...cityCriterions.map((criterion) => ({
+                [criterion.key]: criterion.label,
+              }))
+            )}
             selectedValue={citySizeSelected}
-            onChange={handleChangeCity}
+            onChange={(val) => {
+              handleChangeCity(val)
+              window.smartTag({
+                name: 'taille_de_ville',
+                type: 'action',
+                chapters: ['cities', 'recherche', 'filtres'],
+              })
+            }}
           />
 
           <LittleSelect
             label="Opportunités"
             values={opportunities}
             selectedValue={opportunitySelected}
-            onChange={handleChangeOpportunity}
+            onChange={(v) => {
+              handleChangeOpportunity(v)
+              window.smartTag({
+                name: 'opportunites',
+                type: 'action',
+                chapters: ['cities', 'recherche', 'filtres'],
+              })
+            }}
           />
 
-          {showReset()
-            ? <ResetButton onClick={resetFilter} />
-            : null}
-
+          {showReset() ? <ResetButton onClick={resetFilter} /> : null}
         </SearchBar>
       </Container>
-
     </>
   )
 }

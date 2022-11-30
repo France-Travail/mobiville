@@ -126,7 +126,14 @@ const MobileCriterionsSelection = ({
             const isSelected = criterion.key === selectedEnvironment
             return (
               <CriterionButton
-                onClick={() => setSelectedEnvironment(criterion.key)}
+                onClick={() => {
+                  setSelectedEnvironment(criterion.key)
+                  window.smartTag({
+                    name: 'cadre_de_vie',
+                    type: 'action',
+                    chapters: ['cities', 'recherche', 'filtres'],
+                  })
+                }}
                 light
                 column
                 isSelected={isSelected}
@@ -162,7 +169,14 @@ const MobileCriterionsSelection = ({
             const isSelected = criterion.key === selectedCitySize
             return (
               <CriterionButton
-                onClick={() => setSelectedCitySize(criterion.key)}
+                onClick={() => {
+                  setSelectedCitySize(criterion.key)
+                  window.smartTag({
+                    name: 'taille_de_ville',
+                    type: 'action',
+                    chapters: ['cities', 'recherche', 'filtres'],
+                  })
+                }}
                 light
                 column
                 style={{

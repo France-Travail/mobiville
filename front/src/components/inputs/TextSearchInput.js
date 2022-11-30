@@ -1,16 +1,17 @@
-import { useCallback, useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
 import _ from 'lodash'
+import PropTypes from 'prop-types'
+import { useCallback, useEffect, useState } from 'react'
+import styled, { css } from 'styled-components'
 
 import {
-  TextField,
   Autocomplete,
-  CircularProgress,
   Box,
+  CircularProgress,
   Popper,
+  TextField,
 } from '@mui/material'
 
+import { useWindowSize } from '../../common/hooks/window-size'
 import {
   COLOR_LIGHT_GREY,
   COLOR_PRIMARY,
@@ -19,7 +20,6 @@ import {
   COLOR_WHITE,
 } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
-import { useWindowSize } from '../../common/hooks/window-size'
 
 const AppAutocomplete = styled(Autocomplete)`
   flex: 1;
@@ -97,6 +97,7 @@ const TextSearchInput = ({
   defaultValue,
   openThreshold = -1,
   showEndAdornment = true,
+  onClickTag = () => {},
 }) => {
   const [open, setOpen] = useState(false)
   const [inputValue, setInputValue] = useState('')
@@ -145,6 +146,7 @@ const TextSearchInput = ({
       open={open}
       onOpen={() => {
         handleOpen(true)
+        onClickTag()
       }}
       onClose={() => {
         setOpen(false)
@@ -230,6 +232,7 @@ TextSearchInput.propTypes = {
   isOptionEqualToValue: PropTypes.func,
   defaultValue: PropTypes.any,
   openThreshold: PropTypes.number,
+  onClickTag: PropTypes.func,
 }
 
 export default TextSearchInput

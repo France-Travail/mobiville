@@ -12,15 +12,15 @@ import { capitalize, wordsCapitalize } from '../../../../utils/utils'
 
 const Container = styled.div`
   max-width: 1040px;
-  width: ${({ $isMobile }) => $isMobile ? '' : '100%'};
-  margin: ${({ $isMobile }) => $isMobile ? '0 16px' : 'auto'};
+  width: ${({ $isMobile }) => ($isMobile ? '' : '100%')};
+  margin: ${({ $isMobile }) => ($isMobile ? '0 16px' : 'auto')};
 
   color: ${COLOR_PRIMARY};
 `
 
 const Wrapper = styled.div`
   margin: auto;
-  width: ${({ $isMobile }) => $isMobile ? '100%' : 'fit-content'};
+  width: ${({ $isMobile }) => ($isMobile ? '100%' : 'fit-content')};
 `
 
 const CardsContainer = styled.div`
@@ -32,18 +32,22 @@ const CardsContainer = styled.div`
   justify-content: center;
   gap: 16px;
 
-  ${({  $isMobile }) => $isMobile && css`
-    flex-direction: column;
-    justify-content: stretch;
-  `};
+  ${({ $isMobile }) =>
+    $isMobile &&
+    css`
+      flex-direction: column;
+      justify-content: stretch;
+    `};
 `
 
 const Card = styled.div`
- ${({ $isMobile }) => !$isMobile && css`
-    max-width: calc((100vw / 2) - 8px)
- `};
+  ${({ $isMobile }) =>
+    !$isMobile &&
+    css`
+      max-width: calc((100vw / 2) - 8px);
+    `};
 
-  width: ${({ $isMobile }) => $isMobile ? '100%' : '512px'};
+  width: ${({ $isMobile }) => ($isMobile ? '100%' : '512px')};
   padding: 24px 16px;
   border-radius: 4px;
 
@@ -93,26 +97,42 @@ const CloseCompanies = () => {
           <Card $isMobile={isMobile}>
             {closeCompanies?.slice(0, 5).map((company, index) => (
               <a key={index} href={company.url} target="_blank">
-                <BlockCompanyName>{wordsCapitalize(company.name)}</BlockCompanyName>{' '}
+                <BlockCompanyName>
+                  {wordsCapitalize(company.name)}
+                </BlockCompanyName>{' '}
                 <BlockCompanyCity>{capitalize(company.city)}</BlockCompanyCity>
               </a>
             ))}
           </Card>
 
-          {(closeCompanies?.length >= 10) ?
+          {closeCompanies?.length >= 10 ? (
             <Card $isMobile={isMobile}>
               {closeCompanies?.slice(5, 10).map((company, index) => (
-                  <a key={index} href={company.url} target="_blank">
-                    <BlockCompanyName>{wordsCapitalize(company.name)}</BlockCompanyName>{' '}
-                    <BlockCompanyCity>{capitalize(company.city)}</BlockCompanyCity>
-                  </a>
-                ))}
+                <a key={index} href={company.url} target="_blank">
+                  <BlockCompanyName>
+                    {wordsCapitalize(company.name)}
+                  </BlockCompanyName>{' '}
+                  <BlockCompanyCity>
+                    {capitalize(company.city)}
+                  </BlockCompanyCity>
+                </a>
+              ))}
             </Card>
-          : null}
+          ) : null}
         </CardsContainer>
         <BlockCompanyDataFrom>
           (Données issues de{' '}
-          <a target="_blank" href="https://labonneboite.pole-emploi.fr/">
+          <a
+            target="_blank"
+            href="https://labonneboite.pole-emploi.fr/"
+            onClick={() => {
+              window.smartTag({
+                name: 'acces_entreprise',
+                type: 'exit',
+                chapters: ['city', 'labonneboite'],
+              })
+            }}
+          >
             La Bonne Boite
           </a>
           )

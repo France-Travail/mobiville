@@ -39,9 +39,9 @@ const SelectBlock = styled(Select)`
     align-items: center;
 
     background: ${({ value }) =>
-      (!value || value?.length <= 0) ? COLOR_WHITE : COLOR_PRIMARY};
+      !value || value?.length <= 0 ? COLOR_WHITE : COLOR_PRIMARY};
     color: ${({ value }) =>
-      (!value || value?.length <= 0) ? COLOR_PRIMARY : COLOR_WHITE};
+      !value || value?.length <= 0 ? COLOR_PRIMARY : COLOR_WHITE};
     font-weight: 700;
 
     &:hover {
@@ -86,8 +86,9 @@ const LittleSelect = ({
   values,
   selectedValue,
   onChange,
+  onClickTag,
 }) => (
-  <FormControl sx={{ m: 1 }}>
+  <FormControl onClick={onClickTag} sx={{ m: 1 }}>
     <SelectBlock
       multiple={multiple}
       displayEmpty
@@ -125,6 +126,7 @@ LittleSelect.propTypes = {
     PropTypes.string,
   ]),
   onChange: PropTypes.func,
+  onClickTag: PropTypes.func,
 }
 
 export default LittleSelect

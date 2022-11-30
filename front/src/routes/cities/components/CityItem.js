@@ -111,6 +111,7 @@ const CityItem = ({
   onMouseLeave,
   to,
   isLoadingProfessions,
+  onClickTag = ()=>{},
 }) => {
   const size = useWindowSize()
   const isMobile = isMobileView(size)
@@ -129,6 +130,7 @@ const CityItem = ({
     <CityLink
       onMouseOver={onMouseOver}
       onMouseLeave={onMouseLeave}
+      onClick={onClickTag}
       to={to}
       $isMobile={isMobile}
       data-automation-id={`cityItem-${city.nom_comm}`}
@@ -172,6 +174,7 @@ CityItem.propTypes = {
   onMouseLeave: PropTypes.func.isRequired,
   to: PropTypes.string.isRequired,
   isLoadingProfessions: PropTypes.any,
+  onClickTag: PropTypes.func
 }
 
 export default CityItem

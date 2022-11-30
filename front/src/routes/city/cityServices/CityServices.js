@@ -103,7 +103,7 @@ const CityServices = () => {
           )} : transports, santé, culture et loisirs, éducation, environnement`}
         />
       </Helmet>
-
+      <div tag-page="/city-services">
       <WelcomeContainer $isMobile={isMobile}>
         <WelcomeWrapper $isMobile={isMobile}>
           <Title>Vivre à {_.capitalize(city.nom_comm)}</Title>
@@ -161,6 +161,7 @@ const CityServices = () => {
       <CityServiceInfoCards cityEquipments={city.equipments} />
 
       <ElectedContact />
+      </div>
     </>
   )
 }

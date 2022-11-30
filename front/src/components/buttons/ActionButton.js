@@ -1,7 +1,7 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import React from 'react'
 import { Link } from 'react-router-dom'
+import styled, { css } from 'styled-components'
 import { COLOR_PRIMARY } from '../../constants/colors'
 
 const Container = styled.div`
@@ -10,13 +10,17 @@ const Container = styled.div`
 
   border-radius: 20px;
 
-  ${({ $isMobile }) => $isMobile && css`
-    max-width: 80vw;
-  `}
-  
-  ${({ $centered }) => $centered && css`
-    margin: auto;
-  `}
+  ${({ $isMobile }) =>
+    $isMobile &&
+    css`
+      max-width: 80vw;
+    `}
+
+  ${({ $centered }) =>
+    $centered &&
+    css`
+      margin: auto;
+    `}
 `
 
 const ButtonStyles = css`
@@ -75,50 +79,57 @@ const ExternalLinkButton = styled.a`
 const ActionButton = ({
   path,
   libelle = 'Rechercher',
-  isMainSearch = false,
+  isWelcomeCitySearch = false,
+  isWelcomeHelpSearch = false,
   isMobile = false,
   isBlue = true,
   isWhite = false,
   centered = false,
   style = {},
+  buttonProps = {},
 }) => {
   const isHttpMatched = (str) =>
     !!str?.match(new RegExp('^(http|https)://'))?.length
 
   const isExternalLink =
-    !!path &&
-      (typeof path == 'object'
-      && path.hasOwnProperty('pathname')
-      && isHttpMatched(path.pathname))
-    || (typeof path == 'string'
-      && isHttpMatched(path))
+    (!!path &&
+      typeof path == 'object' &&
+      path.hasOwnProperty('pathname') &&
+      isHttpMatched(path.pathname)) ||
+    (typeof path == 'string' && isHttpMatched(path))
 
   return (
-    <Container
-      $isMobile={isMobile}
-      $centered={centered}
-      style={{ ...style }}
-    >
-    {!!isExternalLink
-      ? (<ExternalLinkButton
-          data-automation-id={isMainSearch ? 'search-action' : undefined}
+    <Container $isMobile={isMobile} $centered={centered} style={{ ...style }}>
+      {!!isExternalLink ? (
+        <ExternalLinkButton
+          {...buttonProps}
+          data-automation-id={
+            isWelcomeCitySearch || isWelcomeHelpSearch
+              ? 'search-action'
+              : undefined
+          }
           href={path}
           $isBlue={isBlue}
           $isWhite={isWhite}
-          target='_blank'
+          target="_blank"
         >
           {libelle}
-        </ExternalLinkButton>)
-      : (<ActionButtonElement
-          data-automation-id={isMainSearch ? 'search-action' : undefined}
+        </ExternalLinkButton>
+      ) : (
+        <ActionButtonElement
+          {...buttonProps}
+          data-automation-id={
+            isWelcomeCitySearch || isWelcomeHelpSearch
+              ? 'search-action'
+              : undefined
+          }
           to={path}
           $isBlue={isBlue}
           $isWhite={isWhite}
         >
           {libelle}
-        </ActionButtonElement>)
-    }
-
+        </ActionButtonElement>
+      )}
     </Container>
   )
 }
@@ -127,11 +138,13 @@ ActionButton.propTypes = {
   path: PropTypes.string.isRequired,
   libelle: PropTypes.string,
   isMobile: PropTypes.bool,
-  isMainSearch: PropTypes.bool,
+  isWelcomeCitySearch: PropTypes.bool,
+  isWelcomeHelpSearch: PropTypes.bool,
   isBlue: PropTypes.bool,
   isWhite: PropTypes.bool,
   centered: PropTypes.bool,
   style: PropTypes.object,
+  buttonProps: PropTypes.object,
 }
 
 export default ActionButton

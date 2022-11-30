@@ -52,7 +52,7 @@ const ImageContainer = styled.div`
   }
 `
 
-const MobilityGuide = () => {
+const MobilityGuideBanner = () => {
     const windowsSize = useWindowSize()
     const isMobile = isMobileView(windowsSize)
 
@@ -83,4 +83,4 @@ const MobilityGuide = () => {
     )
 }
 
-export default MobilityGuide
+export default MobilityGuideBanner

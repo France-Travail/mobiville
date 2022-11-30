@@ -7,6 +7,7 @@ import { ProjectsSelect, ResetButton, JobSituationSelect, AgeSituationSelect, Ac
 import { AGE_SITUATIONS, JOB_SITUATIONS, PROJECTS } from '../constants/search'
 import { isMobileView } from '../constants/mobile'
 import { useWindowSize } from '../common/hooks/window-size'
+import { useNomPage } from '../common/contexts/NomPageContext'
 
 const Container = styled.div`
     max-width: 1036px;
@@ -27,7 +28,7 @@ const HelpForm = ({
 
     const isMobile = isMobileView(useWindowSize())
     const { search } = useLocation()
-
+    const { nomPage } = useNomPage()
     const [ projectsSelected, setProjectsSelected ] = useState([])
     const [ jobSituationSelected, setJobSituationSelected ] = useState('')
     const [ ageSelected, setAgeSituationSelected ] = useState('')
@@ -98,6 +99,37 @@ const HelpForm = ({
         setAgeSituationSelected('')
     }
 
+    const tagSearchAction = () => {
+      if (nomPage === 'accueil') {
+        window.smartTag({
+          name: 'rechercher_aide',
+          type: 'action',
+          chapters: ['accueil'],
+        })
+      }
+      if (projectsSelected?.length > 0) {
+        window.smartTag({
+          name: 'projet',
+          type: 'action',
+          chapters: ['aides', 'critere_recherche'],
+        })
+      }
+      if (!!jobSituationSelected) {
+        window.smartTag({
+          name: 'situation',
+          type: 'action',
+          chapters: ['aides', 'critere_recherche'],
+        })
+      }
+      if (!!ageSelected) {
+        window.smartTag({
+          name: 'age',
+          type: 'action',
+          chapters: ['aides', 'critere_recherche'],
+        })
+      }
+    }
+
     return (
         <Container $isMobile={isMobile} $hidden={hidden}>
             <ProjectsSelect
@@ -119,7 +151,8 @@ const HelpForm = ({
             ></AgeSituationSelect>
 
             <ActionButton
-                isMainSearch={true}
+                isWelcomeHelpSearch={true}
+                buttonProps={{ onClick: tagSearchAction }}
                 style={{
                     flex: 2,
                     boxShadow: isMobile ? 'none' : '0px 5px 10px rgba(0, 0, 0, 0.3)',

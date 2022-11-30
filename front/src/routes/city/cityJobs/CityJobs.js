@@ -267,6 +267,7 @@ const CityJobs = ({ romeLabel, codeRome }) => {
         />
       </Helmet>
       
+      <div tag-page="/city-offres">
       {(!isMobile || !selectedJob)
         ? (<>
           <Title $isMobile={isMobile}>
@@ -307,6 +308,7 @@ const CityJobs = ({ romeLabel, codeRome }) => {
             </BoardContainer>
           </>)
         : <JobDetail job={selectedJob} onClose={handleJobDetailClose} /> }
+        </div>
     </>
   )
 }

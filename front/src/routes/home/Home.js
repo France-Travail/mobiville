@@ -5,7 +5,7 @@ import { COLOR_BACKGROUND } from '../../constants/colors'
 
 import { MainLayout } from '../../components/'
 import Testimonies from './components/Testimonies'
-import MobilityGuide from './components/MobilityGuide'
+import MobilityGuideBanner from './components/MobilityGuideBanner'
 import Advantages from './components/Advantages'
 import Welcome from './components/Welcome'
 
@@ -30,7 +30,7 @@ const HomePage = () => (
     <Advantages></Advantages>
 
     {/* MOBILITY GUIDE */}
-    <MobilityGuide></MobilityGuide>
+    <MobilityGuideBanner></MobilityGuideBanner>
 
     {/* TESTIMONIES */}
     <Testimonies></Testimonies>

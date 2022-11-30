@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
-import PropTypes from 'prop-types'
 import _ from 'lodash'
+import PropTypes from 'prop-types'
+import { useEffect, useMemo, useState } from 'react'
 
+import { useLocation } from 'react-router-dom'
 import { useCities } from '../../common/contexts/citiesContext'
 import {
   ALL_REGIONS_LABEL,
@@ -10,7 +11,6 @@ import {
   REGION_TYPE,
 } from '../../constants/search'
 import TextSearchInput from './TextSearchInput'
-import { useLocation } from 'react-router-dom'
 
 const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
   const {
@@ -20,7 +20,8 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
     // isLoadingAutocomplete
   } = useCities()
 
-  const { search } = useLocation()
+  const { search, pathname } = useLocation()
+  const isCitiesPage = pathname === '/cities'
 
   const [options, setOptions] = useState([])
   const [inputValue, setInputValue] = useState('')
@@ -118,12 +119,21 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
     setValue(value)
   }
 
+  const onClickTag = () => {
+    window.smartTag({
+      name: 'modification_ville',
+      type: 'action',
+      chapters: ['cities', 'recherche'],
+    })
+  }
+
   return (
     <TextSearchInput
       label="L'endroit qui vous fait envie"
       placeholder="Choisissez une région ou indiquez une ville"
       value={value}
       options={options ?? []}
+      onClickTag={isCitiesPage ? onClickTag : undefined}
       // loading={isLoadingAutocomplete}
       disabled={!codeRome || codeRome === ''}
       onInputChange={onInputChange}
