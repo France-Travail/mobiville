@@ -15,7 +15,7 @@ import {
 
 import { ReactComponent as MaletteIcon } from '../../../assets/images/icons/malette.svg'
 import { ReactComponent as ProfilEntrepriseIcon } from '../../../assets/images/icons/profil_entreprise.svg'
-// import { ReactComponent as HandshakeIcon } from '../../assets/images/icons/handshake.svg'
+import { ReactComponent as HandshakeIcon } from '../../../assets/images/icons/handshake.svg'
 import cityServicesStandOut from '../../../assets/images/cityServicesStandOut.png'
 
 import { capitalize, formatCityTension } from '../../../utils/utils'
@@ -134,11 +134,15 @@ const ServicesStandOutImageContainer = styled.div`
 const CityHome = ({ romeLabel, insee, codeRome }) => {
   const isMobile = isMobileView(useWindowSize())
 
-  const { companiesCount, onSearchCloseCompanies, city } = useCities()
+  const {
+    companiesCount,
+    onSearchCloseCompanies,
+    city
+  } = useCities()
   const {
     jobsMissingApplicant,
     totalOffres,
-    bassinTensionIndT,
+    infosTravail,
     onSearchInfosTravail,
     sortByDistanceFromCity
   } = useProfessions()
@@ -174,8 +178,8 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
       </CityHeader>
 
       <TagsContainer>
-        <Tag green={bassinTensionIndT < 4} tall>
-          {formatCityTension(bassinTensionIndT)}
+        <Tag green={infosTravail?.bassinTensionIndT < 4} tall>
+          {formatCityTension(infosTravail?.bassinTensionIndT)}
         </Tag>
       </TagsContainer>
 
@@ -191,7 +195,11 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
             data: companiesCount,
             icon: <ProfilEntrepriseIcon />,
           },
-          // { label: "Taux d'embauche", data: totalOffres, icon: <BlockJobInfosImg src={handshake} /> },
+          !infosTravail?.hiringRate ? null : {
+            label: "Taux d'embauche",
+            data: (infosTravail?.hiringRate > 100 ? '100%' : `${infosTravail?.hiringRate}%`),
+            icon: <HandshakeIcon />,
+          },
         ]}
       />
 
@@ -209,7 +217,7 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
               key={job.id}
               to={{
                 pathname: `/city/${insee}/job`,
-                search: `?codeRome=${codeRome}&jobSelected=${job.id}`
+                search: `?codeRome=${codeRome}&jobSelected=${job.id}`,
               }}
               onClick={() => {
                 window.smartTag({

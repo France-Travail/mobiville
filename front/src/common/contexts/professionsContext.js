@@ -14,7 +14,10 @@ export function ProfessionsProvider(props) {
     const [isLoading, _setIsLoading] = useState(false)
     const [professionsCountList, _setProfessionsCountList] = useState([])
     const [totalOffres, _setTotalOffres] = useState(null)
-    const [bassinTensionIndT, _setBassinTensionIndT] = useState(null)
+    const [infosTravail, _setInfosTravail] = useState({
+        bassinTensionIndT: null,
+        hiringRate: null
+    })
 
     const onSearch = useCallback((params) => {
         _setIsLoading(true)
@@ -30,7 +33,10 @@ export function ProfessionsProvider(props) {
     const onSearchInfosTravail = useCallback(
         (params) => searchInfosTravail(params)
             .then((res) => {
-                _setBassinTensionIndT(res.bassinTensionIndT)
+                _setInfosTravail(prev => ({
+                    ...prev,
+                    ...res
+                }))
             }),
         []
     )
@@ -74,7 +80,7 @@ export function ProfessionsProvider(props) {
                 isLoading,
                 professionsCountList,
                 totalOffres,
-                bassinTensionIndT,
+                infosTravail,
                 // api fetchers
                 onSearch,
                 onSearchInfosTravail,

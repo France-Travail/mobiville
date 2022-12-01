@@ -39,5 +39,3 @@ export const searchCloseCompanies = (body) =>
   axios
     .post(`/api/cities/search-close-companies`, body)
     .then((response) => response.data || null)
-
-export class companiesCount {}

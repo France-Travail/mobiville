@@ -7,6 +7,7 @@ import {
   infosTravail,
   infosTensionTravail,
   searchJobCount,
+  getHiringRate,
 } from '../utils/pe-api'
 import { meanBy } from 'lodash'
 
@@ -198,7 +199,7 @@ router.post(
       return
     }
 
-    const [infosResult, { bassin: bassinStatsResult, dept: deptStatsResult }] =
+    const [infosResult, { bassin: bassinStatsResult, dept: deptStatsResult }, hiringRate] =
       await Promise.all([
         infosTravail({
           codeProfession: pcs.pcs,
@@ -210,11 +211,15 @@ router.post(
           codeRome,
           codeDept: city.code_dept,
         }),
+        getHiringRate({
+          codeTerritoire: bassinId,
+          codeRome
+        })
       ]).catch((err) => {
         // A better handling of errors should be included, but for now we’ll do with just not screwing the whole app
         // as this previously did
         console.error(err)
-        return [null, { bassin: null, dept: null }]
+        return [null, { bassin: null, dept: null }, null]
       })
 
     const bassinTension =
@@ -253,6 +258,7 @@ router.post(
       max,
       bassinTension,
       deptTension,
+      hiringRate
     }
   }
 )

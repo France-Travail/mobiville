@@ -59,7 +59,9 @@ const KeyFigures = ({ figures }) => {
 
   return (
     <Container $isMobile={isMobile}>
-      {figures.map((figure) => (
+      {figures
+      .filter(figure => !!figure)
+      .map(figure => (
         <Figure key={figure.label}>
           {figure.icon}
           <Data>{figure.data}</Data>
