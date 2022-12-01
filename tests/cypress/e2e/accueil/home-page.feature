@@ -5,6 +5,9 @@ Fonctionnalité: Homepage - Moteur de recherche
     Etant donné que je suis sur l'accueil Mobiville
     Et que j'accepte tous les cookies
 
+  Scénario: Lire le titre de la page
+    Alors le titre est "Trouvez l’emploi et la ville qui va avec ! | Mobiville"
+
   Scénario: Recherche du métier dans les villes d'une région
     Lorsque je saisis "<metier>" dans le métier
     Et que je choisis "<proposition>" dans la liste des métiers

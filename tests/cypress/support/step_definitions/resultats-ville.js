@@ -1,35 +1,23 @@
 const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor');
-import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "../../e2e/accueil/common/common";
-import { METIER, ENDROIT } from "./formulaire-recherche";
+import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "./common/common";
+import { METIER, ENDROIT } from "./home-page";
 
 const rappelCritereMetierRegion = "main[id=main] * > div > h1";
 const resultatsRechercheVille = "main[id=main] * > div > h2";
 const InfosPremiereVille = "a[data-automation-id^=cityItem-][href*=city]:nth-child(2) * > div";
-const filtreCadreVie = "main[id=main] * > div > span";
-const filtreTailleVille = "main[id=main] * > div > span";
-const filtreOpportunites = "main[id=main] * > div > span";
+const filtreCadreVie = "main[id=main] * > div";
+const filtreTailleVille = "main[id=main] * > div";
+const filtreOpportunites = "main[id=main] * > div";
 const selectionCritere = "div[id=menu-] * > ul[role=listbox] > li[role=option] > span";
 const listeVillesParPage = "a[data-automation-id^=cityItem-][href*=city]";
 
-function boutonSelectionFiltre(critere){
+function boutonSelectionFiltreVille(critere){
   switch (critere) {
-    case "Mer" :
+    case "Cadre de vie" :
       return filtreCadreVie;
-    case "Montagne" :
-      return filtreCadreVie;
-    case "Campagne" :
-      return filtreCadreVie;
-    case "Petite ville" :
+    case "Taille de ville" :
       return filtreTailleVille;
-    case "Ville moyenne" :
-      return filtreTailleVille;
-    case "Grande ville" :
-      return filtreTailleVille;
-    case "Métropole" :
-      return filtreTailleVille;
-    case "Opportunités d'emploi" :
-      return filtreOpportunites;
-    case "Peu d'opportunités d'emploi" :
+    case "Opportunités" :
       return filtreOpportunites;
   }
 }
@@ -40,9 +28,14 @@ Then("j'affiche la page de résultats avec une à plusieurs villes correspondant
   cy.contains(filtreOpportunites, "Opportunités",  {timeout: SHORT_WAIT_TIME}).should('exist');
 
   let metierCourt = METIER.split(' (')[0];
-  cy.wait(1000);
+  cy.wait(2000);
   cy.contains(rappelCritereMetierRegion, "pour " + metierCourt + " en " + ENDROIT,  {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.contains(resultatsRechercheVille, "Classement des villes par opportunités d'emploi",  {timeout: SHORT_WAIT_TIME}).should('exist');
+})
+
+Then("j'affiche la page de résultats avec une à plusieurs villes similaires/proches", function () {
+  let metierCourt = METIER.split(' (')[0];
+  cy.contains(rappelCritereMetierRegion, "pour " + metierCourt,  {timeout: SHORT_WAIT_TIME}).should('exist');
 })
 
 Then("j'affiche les informations sur le métier dans la page des villes correspondantes", function () {
@@ -51,20 +44,14 @@ Then("j'affiche les informations sur le métier dans la page des villes correspo
   cy.contains(InfosPremiereVille, " offres d'emploi",  {timeout: SHORT_WAIT_TIME}).should('exist');
 })
 
-When("je clique sur le filtre {string} et je sélectionne {string}", function (filtre, selection) {
-  cy.contains(boutonSelectionFiltre(filtre), filtre, {timeout: SHORT_WAIT_TIME}).click();
+When("je clique sur le filtre ville {string} et je sélectionne {string}", function (filtre, selection) {
+  cy.contains(boutonSelectionFiltreVille(filtre), filtre, {timeout: SHORT_WAIT_TIME}).click();
   cy.contains(selectionCritere, selection, {timeout: SHORT_WAIT_TIME}).click();
-  cy.wait(1000);
+  cy.wait(2000);
 })
 
-Then("j'affiche les villes pour lesquelles il y a des opportunités d'emploi", function () {
+Then("j'affiche les villes pour lesquelles le critère est {string}", function (critere) {
   cy.get(listeVillesParPage).each((ville) => {
-    expect(ville.text()).to.include("Opportunités d'emploi");
-  });
-})
-
-Then("j'affiche les villes pour lesquelles il y a peu d'opportunités d'emploi", function () {
-  cy.get(listeVillesParPage).each((ville) => {
-    expect(ville.text()).to.include("Peu d'opportunités d'emploi");
+    expect(ville.text()).to.include(critere);
   });
 })

@@ -1,5 +1,5 @@
 const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor');
-import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "../common/common";
+import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "./common/common";
 
 const titreSimulateur = "main[id=main] * > p";
 

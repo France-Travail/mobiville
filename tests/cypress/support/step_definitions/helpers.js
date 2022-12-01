@@ -1,5 +1,5 @@
 const { Given, When, Then, And } = require('@badeball/cypress-cucumber-preprocessor');
-import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "../../e2e/accueil/common/common";
+import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "./common/common";
 
 const boutonToutAccepter = "button[type=button][id=footer_tc_privacy_button_2]";
 

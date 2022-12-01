@@ -1,8 +1,7 @@
 const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor');
-import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "../common/common";
+import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "./common/common";
 
 const filAriane = "nav > div > a";
-
 let URL = '';
 
 function quelleUrl() {
@@ -15,6 +14,7 @@ function quelleUrl() {
       return 'villes-proches';
   }
 }
+
 Then("je vois le fil d'ariane sur la page", function () {
   cy.contains(filAriane, "Emploi et logement", {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.contains(filAriane, "Offres d’emploi", {timeout: SHORT_WAIT_TIME}).should('exist');
@@ -24,11 +24,8 @@ Then("je vois le fil d'ariane sur la page", function () {
 
 And("je clique sur {string} dans le fil d'ariane", function (lienAriane) {
   URL = lienAriane;
-  cy.get(filAriane)
-  .should('be.visible')
-  .wait(1000)
-  .contains(lienAriane, { timeout: MIDDLE_WAIT_TIME })
-  .click()
+  cy.contains(filAriane, lienAriane, { timeout: MIDDLE_WAIT_TIME }).click();
+  cy.wait(500);
 })
 
 Then("j'affiche la page sélectionnée", function () {
