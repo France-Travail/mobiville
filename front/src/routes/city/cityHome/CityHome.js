@@ -84,11 +84,10 @@ const RoundSeparator = styled.span`
 `
 
 const TagsContainer = styled.div`
-  margin: 28px auto 0 auto;
+  margin-top: 28px;
 
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  display: grid;
+  place-content: center
 `
 
 const ServicesStandOut = styled.div`

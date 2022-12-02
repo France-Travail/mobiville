@@ -1,5 +1,5 @@
 import { Op, QueryTypes } from 'sequelize'
-import { compact, mean, toLower, deburr, replace, words } from 'lodash'
+import { compact, mean } from 'lodash'
 import {
   ALT_IS_MOUNTAIN,
   CRITERIONS,
@@ -26,8 +26,7 @@ import {
   getTensionsCities,
   getCrawledImageCity,
   getAllRegions,
-  getHousePricing,
-  getAllBassins,
+  getCitiesRent,
   getAveragePricing,
   getAverageHouseRent,
 } from '../utils/api'
@@ -51,50 +50,65 @@ export default (sequelizeInstance, Model) => {
 
   Model.syncCities = async ({ cities }) => {
     const oldRegions = await getAllRegions()
-    const oldRegionsToNewRegionsMap = oldRegions.reduce(
-      (prev, oldRegion) => ({
+    const oldRegionsToNewRegionsMap = oldRegions.reduce((prev, oldRegion) => ({
         ...prev,
         [padLeadingZeros(oldRegion.former_code, 2)]: padLeadingZeros(
           oldRegion.new_code,
           2
         ),
-      }),
-      {}
-    )
+      }), {})
 
-    const data = cities.map((city) => {
+    const citiesRent = await getCitiesRent()
+    let citiesNotUsedNames = citiesRent.map(city => city.city)
 
-      return {
-        code_comm: city.code_commune,
-        nom_dept: city.departement,
-        statut: city.statut,
-        z_moyen: city.altitude_moyenne,
-        nom_region: city.region,
-        new_code_region:
-          oldRegionsToNewRegionsMap[padLeadingZeros(city.code_region, 2)],
-        insee_com: city.code_insee,
-        code_dept: city.code_departement,
-        geo_point_2d_x: city.geo_point_2d
-          ? city.geo_point_2d.split(',')[0]
-          : null,
-        geo_point_2d_y: city.geo_point_2d
-          ? city.geo_point_2d.split(',')[1]
-          : null,
-        postal_code: city.code_postal,
-        id_geofla: city.id_geofla,
-        code_cant: city.code_canton,
-        superficie: city.superficie,
-        nom_comm: city.commune,
-        code_arr: city.code_arrondissement,
-        population: city.population,
-        total_social_housing: isNaN(parseInt(city.lgt_sociaux, 10))
-          ? null
-          : parseInt(city.lgt_sociaux, 10)
-      }
-    })
+    const data = cities
+      .sort((a, b) => b.population - a.population)
+      .map((city) => {
+        let cityRent = null
+        if (city.commune.includes("ARRONDISSEMENT")) {
+          cityRent = citiesRent.find(r => (city.commune.includes(r.city)))
+        } else if (citiesNotUsedNames.includes(city.commune.replaceAll('-', ' '))) {
+          cityRent = citiesRent.find(r => (r.city === city.commune.replaceAll('-', ' ')))
+          citiesNotUsedNames = citiesNotUsedNames.filter(cityName => cityName !== cityRent.city)
+        }
+
+        return {
+          code_comm: city.code_commune,
+          nom_dept: city.departement,
+          statut: city.statut,
+          z_moyen: city.altitude_moyenne,
+          nom_region: city.region,
+          new_code_region:
+            oldRegionsToNewRegionsMap[padLeadingZeros(city.code_region, 2)],
+          insee_com: city.code_insee,
+          code_dept: city.code_departement,
+          geo_point_2d_x: city.geo_point_2d
+            ? city.geo_point_2d.split(',')[0]
+            : null,
+          geo_point_2d_y: city.geo_point_2d
+            ? city.geo_point_2d.split(',')[1]
+            : null,
+          postal_code: city.code_postal,
+          id_geofla: city.id_geofla,
+          code_cant: city.code_canton,
+          superficie: city.superficie,
+          nom_comm: city.commune,
+          code_arr: city.code_arrondissement,
+          population: city.population,
+          total_social_housing: isNaN(parseInt(city.lgt_sociaux, 10))
+            ? null
+            : parseInt(city.lgt_sociaux, 10),
+          rent_t2: ((cityRent && cityRent.rent_t2) ? +(cityRent.rent_t2) : null),
+          rent_t4: ((cityRent && cityRent.rent_t4) ? +(cityRent.rent_t4) : null)
+        }
+      })
 
     await Model.bulkCreate(data, {
-      updateOnDuplicate: ['total_social_housing'],
+      updateOnDuplicate: [
+        'total_social_housing',
+        'rent_t2',
+        'rent_t4'
+      ],
     }) // updateOnDuplicate == les champs a MaJ si id déja existant
     await Model.addSpecialCities()
 
@@ -317,7 +331,7 @@ export default (sequelizeInstance, Model) => {
   Model.getCity = async ({ insee }) => {
     const city = await Model.findOne({
       where: { insee_com: insee },
-      include: [Model.models.equipments, Model.models.newRegions],
+      include: [Model.models.equipments, Model.models.newRegions, Model.models.departements],
     })
 
     if (city) {
@@ -377,13 +391,6 @@ export default (sequelizeInstance, Model) => {
       const { photo, description } = await Model.getDescription(city.nom_comm)
       options.photo = photo
       options.description = description
-
-      // données sur les logements
-      const houseRentF2F4 = await Model.getAverageHouseRentF2F4(city.insee_com)
-      options = {
-        ...options,
-        ...houseRentF2F4
-      }
 
       if (city.dataValues.average_houseselled === null) {
         options.average_houseselled = await Model.getAveragePricing(
@@ -680,59 +687,6 @@ export default (sequelizeInstance, Model) => {
     }
 
     return 0
-  }
-
-  Model.getAverageHouseRentF2F4 = async (cityInsee) => {
-    // load file
-    let housePricings = Model.cacheLoadAverageHouseRent
-    if (!housePricings) {
-      housePricings = await getHousePricing()
-      Model.cacheLoadAverageHouseRent = housePricings
-    }
-
-    // constants
-    const APPART_2P = "Appart 2P"
-    const APPART_4P = "Appart 4P+"
-
-    const bassins = await getAllBassins()
-
-    const cityBassin = bassins.find(bassin => {
-      return `${bassin.code_commune_insee}` === `${cityInsee}`
-    })
-
-    const cityHouseRent = housePricings
-      .filter(housePricing =>
-        !!housePricing
-        && !!housePricing.agglomeration
-        && !!cityBassin
-        && !!cityBassin.bassin_name
-        && words(toLower(deburr(housePricing.agglomeration)), /[^, ,']+/g).includes(toLower(deburr(cityBassin.bassin_name)).replaceAll(' ', '-')))
-    
-    let cityHouseRentF2 = null
-    let cityHouseRentF4 = null
-
-    if (!!cityHouseRent && cityHouseRent.length > 0) {
-      cityHouseRentF2 = Math.max(...cityHouseRent
-        .filter(houseRent => houseRent.nombre_pieces_homogene === APPART_2P)
-        .map(houseRent => houseRent.moyenne_loyer_mensuel))
-
-      cityHouseRentF4 = Math.max(...cityHouseRent
-        .filter(houseRent => houseRent.nombre_pieces_homogene === APPART_4P)
-        .map(houseRent => houseRent.moyenne_loyer_mensuel))
-      
-      // détenction d'incohérence -> pas de données pour les F4
-      if (cityHouseRentF4 <= cityHouseRentF2) {
-        cityHouseRentF4 = null
-      }
-    }
-    if (!!cityInsee && !!cityBassin && !!cityBassin.bassin_name) {
-      console.log(`City ${cityInsee} (bassin ${cityBassin.bassin_name}) | ${cityHouseRentF2} ${cityHouseRentF4}`)
-    }
-
-    return {
-      average_houserent_f2: cityHouseRentF2,
-      average_houserent_f4: cityHouseRentF4
-    }
   }
 
   Model.getAverageHouseRent = async (cityInsee) => {

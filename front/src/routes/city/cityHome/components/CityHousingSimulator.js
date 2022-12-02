@@ -12,7 +12,9 @@ import logoALin from '../../../../assets/images/logo-ALin.png'
 import logoLogementSocial from '../../../../assets/images/logo-logement-social.png'
 
 import HousingSimulator from '../../components/HousingSimulator'
-import { Tag } from '../../../../components'
+import { KeyFigures, Tag } from '../../../../components'
+
+import { ReactComponent as BuildingIcon } from '../../../../assets/images/icons/building.svg'
 
 const HousingMetrics = styled.div`
   display: flex;
@@ -20,50 +22,15 @@ const HousingMetrics = styled.div`
   width: 100%;
   flex-direction: column;
   margin-bottom: 40px;
-  .metrics-container {
-    display: flex;
-    justify-content: space-between;
-    width: ${({ $isMobile }) => ($isMobile ? '328px' : '400px')};
-    margin: 0px auto;
-  }
-
-  .no-events {
-    pointer-events: none;
-    user-select: none;
-  }
 `
 
-const ElementObject = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-
-  img {
-    width: 40px;
-    height: 42px;
-  }
-  b {
+const MetricsTitle = styled.p`
+  vertical-align: middle;
+  height: 48px;
+  line-height: 48px;
+  span {
     font-weight: 900;
-    font-size: 24px;
-    line-height: 28px;
-    text-align: center;
-  }
-  .metrics-title {
-    margin: unset;
-    vertical-align: middle;
-    span {
-      font-weight: 900;
-      font-size: 45px;
-    }
-  }
-  .metrics-description {
-    font-weight: 700;
-    line-height: 19px;
-    text-align: center;
-    font-size: 16px;
-    margin: unset;
+    font-size: 45px;
   }
 `
 
@@ -134,6 +101,7 @@ const HousingActorLink = styled.a`
 
 const HousingActorImage = styled.img`
   max-height: 70px;
+  max-width: 100%;
   align-self: center;
 `
 
@@ -145,59 +113,38 @@ const CityHousingSimulator = ({ city }) => {
     <>
       <HousingMetrics $isMobile={isMobile}>
         
-      <TagsContainer>
-        <Tag green={!city.city_house_tension} tall>{
-          city && city.city_house_tension
-          ? "Tension immobilière a l'achat"
-          : "Pas de tension immobilière a l'achat"
-        }</Tag>
-      </TagsContainer>
+        <TagsContainer>
+          <Tag green={!city.city_house_tension} tall>{
+            city && city.city_house_tension
+            ? "Tension immobilière a l'achat"
+            : "Pas de tension immobilière a l'achat"
+          }</Tag>
+        </TagsContainer>
 
-        <div className="metrics-container">
-          <ElementObject $isMobile={isMobile}>
-            <div>
-              <img
-                className="no-events"
-                draggable="false"
-                src="/icons/building.svg"
-                alt="icone d'immeuble"
-              />
-            </div>
-            <b>
-              {city.average_houseselled
-                ? `${formatNumber(city.average_houseselled)}€`
-                : 'A venir'}
-            </b>
-            <p className="metrics-description">
-              Prix d’achat <br />
-              moyen/m2
-            </p>
-          </ElementObject>
+        <KeyFigures
+          figures={[
+            {
+              label: "Prix d’achat moyen/m2",
+              data: city.average_houseselled ? `${formatNumber(city.average_houseselled)}€` : 'A venir',
+              icon: <BuildingIcon />,
+            },
+            {
+              label: 'Loyer moyen en location',
+              data: (city.rent_t2 || city?.departement?.rent_t2) ? `${formatNumber(city.rent_t2 ?? city?.departement?.rent_t2)}€` : 'A venir',
+              icon: (<MetricsTitle className="metrics-title">
+                <span>2</span> pièces
+              </MetricsTitle>),
+            },
+            {
+              label: 'Loyer moyen en location',
+              data: (city.rent_t4 || city?.departement?.rent_t4) ? `${formatNumber(city.rent_t4 ?? city?.departement?.rent_t4)}€` : 'A venir',
+              icon: (<MetricsTitle className="metrics-title">
+                <span>4</span> pièces
+              </MetricsTitle>),
+            },
+          ]}
+        />
 
-          {[
-            { label: '2', rentValue: city.average_houserent_f2 },
-            { label: '4', rentValue: city.average_houserent_f4 },
-          ].map(({ label, rentValue }) => (
-            <ElementObject $isMobile={isMobile} key={label}>
-              <div
-                style={{
-                  height: '48px',
-                  display: 'flex',
-                  alignItems: 'flex-end',
-                }}
-              >
-                <p className="metrics-title">
-                  <span>{label}</span> pièces
-                </p>
-              </div>
-              <b>{rentValue ? `${+rentValue}€` : 'A venir'}</b>
-              <p className="metrics-description">
-                Loyer moyen <br />
-                en location
-              </p>
-            </ElementObject>
-          ))}
-        </div>
       </HousingMetrics>
 
       <HousingSearchContainer $isMobile={isMobile}>

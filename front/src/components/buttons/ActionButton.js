@@ -19,6 +19,7 @@ const Container = styled.div`
   ${({ $centered }) =>
     $centered &&
     css`
+      width: fit-content;
       margin: auto;
     `}
 `

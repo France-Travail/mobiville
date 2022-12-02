@@ -20,7 +20,8 @@
     "sync:regionsTensionsCriterions": "babel-node ./src/scripts/syncRegionsTensionsCriterions.js",
     "sync:equipments": "babel-node ./src/scripts/syncEquipments.js",
     "sync:equipmentsSpecial": "babel-node ./src/scripts/syncSpecialEquipments.js",
-    "sync:helps": "babel-node ./src/scripts/syncHelps.js"
+    "sync:helps": "babel-node ./src/scripts/syncHelps.js",
+    "sync:departements": "babel-node ./src/scripts/syncDepartements.js"
   },
   "dependencies": {
     "@koa/cors": "4.0.0",

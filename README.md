@@ -39,12 +39,13 @@ yarn sync:regions # almost instantaneous. Run this first.
 yarn sync:cities # 1 minutes long
 yarn sync:professionsInTension # 1 minutes long
 yarn sync:helps # almost instantaneous
-yarn sync:equipments # This will take a few minutes minutes
+yarn sync:equipments # This will take a few minutes
 yarn sync:equipmentsSpecial # almost instantaneous, needs to be run after the previous script
 yarn sync:romeOgrs # almost instantaneous
-yarn sync:romeSkills # almost instantaneous
+yarn sync:romeSkills # This will take a few minutes
 yarn sync:tensionsPCS # almost instantaneous
 yarn sync:regionsTensionsCriterions # Takes about 5 minutes
+yarn sync:departements # almost instantaneous
 ```
 
 ## Structure de données
