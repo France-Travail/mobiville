@@ -10,9 +10,11 @@ import {
   CITY_TYPE,
   REGION_TYPE,
 } from '../../constants/search'
+import { alphabetOrder } from '../../utils/utils'
 import TextSearchInput from './TextSearchInput'
 
 const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
+  const MIN_REGIONS_SHOWED = 2
   const {
     criterions,
     autocompletedCities,
@@ -58,20 +60,45 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
     }
   }, [search, criterions])
 
+  const regionFilterByRome = (region) =>
+    (!!value && inputValue === value?.label) ||
+    (region?.romes?.[codeRome] &&
+      region.label.toLowerCase().match(
+        inputValue
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z_-]/g, '')
+      ))
+
+  const isRegionWithOpportunityRate = (rate) => {
+    return (r) => r.romes?.[codeRome]?.opportunite >= rate
+  }
+  const regionWithPositiveOpportunityRate = (r) =>
+    r.romes?.[codeRome]?.opportunite > 0
+
+  const regionSortByOpportunity = (a, b) =>
+    a.romes?.[codeRome]?.opportunite > b.romes?.[codeRome]?.opportunite ? -1 : 1
+
   useEffect(() => {
-    // find best regions based on rome selected
     let regionsForRome = []
+
     if (!!criterions) {
-      regionsForRome = criterions.regions.filter(
-        (region) =>
-          (!!value && inputValue === value?.label) ||
-          (region?.criterions?.[codeRome] &&
-            region.label.toLowerCase().match(
-              inputValue
-                .trim()
-                .toLowerCase()
-                .replace(/[^a-z_-]/g, '')
-            ))
+      const sortedRegions = criterions.regions
+        .filter(regionFilterByRome)
+        .sort(regionSortByOpportunity)
+      const bestRegion = sortedRegions.filter(isRegionWithOpportunityRate(0.15))
+      const lesserRegions =
+        bestRegion.length < MIN_REGIONS_SHOWED
+          ? sortedRegions
+              .filter((v) => !bestRegion.includes(v))
+              .filter(regionWithPositiveOpportunityRate)
+              .slice(0, MIN_REGIONS_SHOWED - bestRegion.length)
+          : []
+
+      // 2 régions minimum : toutes les regions avec > 40% de tension
+      // complété avec les 2 régions avec le plus d'opportunités
+      regionsForRome = [...bestRegion, ...lesserRegions].sort(
+        alphabetOrder('label')
       )
     }
 

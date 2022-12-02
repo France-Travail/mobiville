@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { debounce } from 'lodash'
 
@@ -6,7 +6,7 @@ import { TextSearchInput } from '../../components'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useLocation } from 'react-router-dom'
 
-const JobSelect = ({ onSelect, defaultValue }) => {
+const JobSelect = React.forwardRef(({ onSelect, defaultValue }, ref) => {
   const { search, pathname } = useLocation()
   const {
     initializeJobsAutocomplete,
@@ -81,6 +81,7 @@ const JobSelect = ({ onSelect, defaultValue }) => {
       label="Votre métier"
       placeholder="Saisissez votre métier"
       value={value}
+      ref={ref}
       groupLabel="Métiers"
       onClickTag={isCitiesPage ? onClickTag : undefined}
       options={jobsMatchingCriterions ?? []}
@@ -96,7 +97,7 @@ const JobSelect = ({ onSelect, defaultValue }) => {
       showEndAdornment={false}
     ></TextSearchInput>
   )
-}
+})
 
 JobSelect.propTypes = {
   defaultValue: PropTypes.any,

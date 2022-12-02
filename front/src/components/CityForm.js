@@ -1,6 +1,6 @@
 import { debounce } from 'lodash'
 import PropTypes from 'prop-types'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -32,6 +32,7 @@ const CityForm = ({
   const navigate = useNavigate()
   const { search } = useLocation()
 
+  const jobSelect = useRef(null)
   const [jobSelected, setJobSelected] = useState('')
   const [citySelected, setCitySelected] = useState('')
 
@@ -107,9 +108,14 @@ const CityForm = ({
     setCitySelected(city)
   }
 
+  const isJobSelected = !!jobSelected && !!`${jobSelected}`.trim()
+
   return (
     <Container $hidden={hidden} $isMobile={isMobile}>
-      <JobSelect onSelect={(job) => onJobSelect(job)}></JobSelect>
+      <JobSelect
+        ref={jobSelect}
+        onSelect={(job) => onJobSelect(job)}
+      ></JobSelect>
 
       <CitySelect
         onSelect={(city) => onCitySelect(city)}
@@ -119,7 +125,12 @@ const CityForm = ({
       <ActionButton
         isWelcomeCitySearch={isWelcomeCitySearch}
         buttonProps={{
-          onClick: () => {
+          onClick: (e) => {
+            if (!isJobSelected) {
+              // bricolage pour empecher le clic si vide mais le focus sur le champs obligatoire est pas tres voyant
+              e.preventDefault()
+              jobSelect.current.focus()
+            }
             if (citySelected) {
               window.smartTag({
                 name: 'rechercher_ville',

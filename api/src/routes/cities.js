@@ -155,8 +155,9 @@ router.post(
       distance: 30,
       page: 1,
       pageSize: 10,
-      sort: sort
+      sort: sort,
     })
-  })
+  }
+)
 
 export default router

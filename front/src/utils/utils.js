@@ -154,6 +154,8 @@ export const formatCityUrl = (city, codeRome) => {
   return url
 }
 
+export const alphabetOrder = (key) => (a, b) => a[key].localeCompare(b[key]) 
+
 export const formatHelpUrl = (help) => `/aides/${help.slug}`
 
 // ======
