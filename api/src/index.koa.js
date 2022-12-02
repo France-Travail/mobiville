@@ -31,10 +31,12 @@ db.migrations().then(async () => {
   startCrons(app.context.models) // start crons
 })
 
+// TODO sentry tracing : https://docs.sentry.io/platforms/node/guides/koa/#monitor-performance
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   tracesSampleRate: 1.0,
   environment: process.env.NODE_ENV,
+  release: "nodejs@" + process.env.CI_COMMIT_SHA,
 })
 
 // we add the relevant middlewares to our API
