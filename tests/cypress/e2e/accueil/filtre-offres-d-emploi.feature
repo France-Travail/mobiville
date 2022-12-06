@@ -4,10 +4,10 @@ Fonctionnalité: Rechercher villes - Offres d'emploi
   Contexte:
     Etant donné que je suis sur l'accueil Mobiville
     Et que j'accepte tous les cookies
-    Et que je saisis "journaliste " dans le métier
-    Et que je choisis "Journalisme et information média (Journaliste, …)" dans la liste des métiers
-    Et que je saisis "Boulogne" dans la ville
-    Et que je choisis "Boulogne-billancourt (92100)" dans la liste des villes
+    Et que je saisis "boulanger" dans le métier
+    Et que je choisis "Boulangerie - viennoiserie (Aide-boulanger / Aide-boulangère, …)" dans la liste des métiers
+    Et que je saisis "Lille" dans la ville
+    Et que je choisis "Lille (59000/59160/59260/59777/59800)" dans la liste des villes
     Et que je clique sur rechercher
     Et que je clique sur "Offres d’emploi" dans le fil d'ariane
 
@@ -26,3 +26,10 @@ Fonctionnalité: Rechercher villes - Offres d'emploi
   Scénario: Affichage d'une offre
     Lorsque je sélectionne une offre
     Alors le détail de l'offre s'affiche
+
+  Scénario: Affichage des offres avec des opportunités
+    Alors j'affiche les informations sur l'offre avec des opportunités
+
+  Scénario: Filtre des offres avec des opportunités
+    Lorsque je clique sur le filtre offre "Offres avec plus d'opportunités" et je sélectionne "Offres avec plus d'opportunités"
+    Alors j'affiche les offres pour lesquelles il y a des opportunités

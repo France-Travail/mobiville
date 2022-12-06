@@ -12,11 +12,11 @@ const rappelCritereOffres = "main[id=main] > div[tag-page$=city-offres] > h1";
 const selectionCritere = "div[id=menu-] * > ul[role=listbox] > li[role=option] > span";
 const critereTypeDureeOffre = "main[id=main] > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div";
 const criterePublicationOffre = "main[id=main] > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div > p";
-const offre2 = "main[id=main] > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div:nth-child(2)";
+const InfosPremiereOffre = "main[id=main] > div:nth-child(2) > div:nth-child(3) > div:nth-child(2)  > div:nth-child(1) > div";
+const InfosDeuxiemeOffre = "main[id=main] > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) > div:nth-child(2)";
 const descriptifOffreSelectionnee = "main[id=main] > div:nth-child(2) > div:nth-child(3) > div:nth-child(3) > p";
 
 let CRITERE = "";
-let DESCRIPTIF = "";
 
 function boutonSelectionFiltreOffre(critere){
   switch (critere) {
@@ -97,8 +97,16 @@ Then("j'affiche les offres pour lesquelles la date est inférieure au critère",
   });
 })
 
+Then("j'affiche les offres pour lesquelles il y a des opportunités", function () {
+  cy.get(InfosPremiereOffre, {timeout: SHORT_WAIT_TIME}).should('have.text',"Offre avec plus d'opportunités");
+})
+
+Then("j'affiche les informations sur l'offre avec des opportunités", function () {
+  cy.contains("Offre avec plus d'opportunités",  {timeout: SHORT_WAIT_TIME}).should('exist');
+})
+
 When("je sélectionne une offre", function () {
-  cy.get(offre2, {timeout: SHORT_WAIT_TIME}).click();
+  cy.get(InfosDeuxiemeOffre, {timeout: SHORT_WAIT_TIME}).click();
 })
 
 Then("le détail de l'offre s'affiche", function () {

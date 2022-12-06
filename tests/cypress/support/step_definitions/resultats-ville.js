@@ -9,7 +9,9 @@ const filtreCadreVie = "main[id=main] * > div";
 const filtreTailleVille = "main[id=main] * > div";
 const filtreOpportunites = "main[id=main] * > div";
 const selectionCritere = "div[id=menu-] * > ul[role=listbox] > li[role=option] > span";
-const listeVillesParPage = "a[data-automation-id^=cityItem-][href*=city]";
+const listeVillesParPage = "div[data-automation-id=cities-list] > a[data-automation-id^=cityItem]";
+
+let CRITERE = "";
 
 function boutonSelectionFiltreVille(critere){
   switch (critere) {
@@ -45,13 +47,14 @@ Then("j'affiche les informations sur le métier dans la page des villes correspo
 })
 
 When("je clique sur le filtre ville {string} et je sélectionne {string}", function (filtre, selection) {
+  CRITERE = selection;
   cy.contains(boutonSelectionFiltreVille(filtre), filtre, {timeout: SHORT_WAIT_TIME}).click();
   cy.contains(selectionCritere, selection, {timeout: SHORT_WAIT_TIME}).click();
   cy.wait(2000);
 })
 
-Then("j'affiche les villes pour lesquelles le critère est {string}", function (critere) {
-  cy.get(listeVillesParPage).each((ville) => {
-    expect(ville.text()).to.include(critere);
+Then("j'affiche les villes qui correspondent aux critères", function () {
+  cy.get(listeVillesParPage, {timeout: SHORT_WAIT_TIME}).each((ville) => {
+    expect(ville.text()).to.include(CRITERE);
   });
 })

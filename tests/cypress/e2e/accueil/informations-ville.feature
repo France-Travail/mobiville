@@ -19,6 +19,10 @@ Fonctionnalité: Rechercher villes - Informations de la ville
   Scénario: Présence des entreprises à proximité
     Alors j'affiche la liste des entreprises à proximité
 
+  Scénario: Présence des informations sur la tension immboilière
+    Alors j'affiche le prix d'achat moyen au m²
+    Et j'affiche les loyers moyens pour un logement F2 et F4
+
   Scénario: Présence des 3 aides d'accompagnement dans mon projet
     Alors j'affiche les trois aides pour m'accompagner dans mon projet
     Lorsque je clique sur le premier des trois liens Découvrir l'aide
