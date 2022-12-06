@@ -41,7 +41,7 @@ export function getAccessToken() {
 
 // cache de 6 heures, a discuter avec les PO
 const cache = setupCache({
-    maxAge: 6 * 60 * 60 * 1000,
+    maxAge: 24 * 60 * 60 * 1000,
     exclude: {
         query: false
     }
