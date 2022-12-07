@@ -39,10 +39,10 @@ const CityForm = ({
   const computeSearchPath = useCallback(() => {
     if (!!jobSelected && !!citySelected && citySelected.type === CITY_TYPE) {
       // on va directement sur la page de la ville choisi
-      return `/city/${citySelected.id}-${citySelected.cityName}?codeRome=${jobSelected.key}`
+      return `/ville/${citySelected.id}-${citySelected.cityName}?codeRome=${jobSelected.key}`
     }
 
-    let url = '/cities'
+    let url = '/villes'
 
     if (!!jobSelected) {
       url += `?codeRome=${jobSelected.key}`

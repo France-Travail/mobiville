@@ -102,7 +102,7 @@ const Cities = () => {
     }
 
     navigate({
-      pathname: '/cities',
+      pathname: '/villes',
       search: queryString.stringify(data),
     })
   }
