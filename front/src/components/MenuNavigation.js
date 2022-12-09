@@ -11,7 +11,7 @@ import {
 } from '../constants/colors'
 
 const Nav = styled.nav`
-  order: ${({ $isMobile }) => $isMobile ? '3' : '1'};
+  order: ${({ $isMobile }) => ($isMobile ? '3' : '1')};
 
   background: ${({ $isMobile }) =>
     $isMobile ? COLOR_WHITE : COLOR_OTHER_GREEN};
@@ -85,7 +85,7 @@ const MenuNavigation = ({ isMobile = false }) => {
             $disabled={menu.disabled}
             $selected={menu.selected}
             key={key}
-            to={menu.path.replace('city', 'ville')}
+            to={menu.path}
           >
             {menu.label}
           </MenuItem>
@@ -96,7 +96,7 @@ const MenuNavigation = ({ isMobile = false }) => {
 }
 
 MenuNavigation.propTypes = {
-  isMobile: PropTypes.bool
+  isMobile: PropTypes.bool,
 }
 
 export default MenuNavigation

@@ -18,8 +18,8 @@ import { isMobileView } from '../../constants/mobile'
 import { COLOR_WHITE } from '../../constants/colors'
 import { capitalize, ucFirst } from '../../utils/utils'
 
-const JOB = 'job'
-const LIFE = 'life'
+const JOB = 'metier'
+const LIFE = 'services'
 const CLOSE_CITIES = 'villes-proches'
 
 const CityPage = () => {

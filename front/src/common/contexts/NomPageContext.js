@@ -7,8 +7,9 @@ const NomPageContext = React.createContext()
 const planMarquageDictionnaire = {
   '': 'accueil',
   aides: 'aides',
-  city: 'city',
-  // ...
+  ville: 'city',
+  villes: 'cities',
+  accessibilite: 'accessibility',
 }
 
 /** Contexte pour accéder nom de la page tel que défini dans le plan de taggage fait par le studio

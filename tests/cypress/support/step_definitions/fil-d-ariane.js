@@ -7,9 +7,9 @@ let URL = '';
 function quelleUrl() {
   switch (URL) {
     case 'Offres d’emploi':
-      return 'job';
+      return 'metier';
     case 'Services de la ville':
-      return 'life';
+      return 'services';
     case 'Villes similaires ou à proximité':
       return 'villes-proches';
   }

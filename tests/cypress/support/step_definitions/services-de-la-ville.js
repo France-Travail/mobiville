@@ -15,7 +15,7 @@ const infosElus = "main[id=main] > div[tag-page$=city-services] * > div > p";
 const boutonContacter = "main[id=main] > div[tag-page$=city-services] > div > a[href*=mailto]";
 
 Then("j'affiche les services de la ville", function () {
-  cy.url().should('include', 'life');
+  cy.url().should('include', 'services');
   
   let villeSansCP = ENDROIT.split(' (')[0];
   cy.contains(rappelCritereServices, "Vivre à " + villeSansCP,  {timeout: SHORT_WAIT_TIME}).should('exist');
