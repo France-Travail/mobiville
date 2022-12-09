@@ -57,7 +57,7 @@ function combienJours(critere){
 }
 
 Then("j'affiche les offres d'emploi de la ville pour le métier", function () {
-  cy.url().should('include', 'job');
+  cy.url().should('include', 'metier');
 
   cy.contains(filtreDistance, "Distance",  {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.contains(filtreDatePublication, "Date de publication",  {timeout: SHORT_WAIT_TIME}).should('exist');

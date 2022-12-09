@@ -4,7 +4,7 @@ import { METIER, ENDROIT } from "./home-page";
 
 const rappelCritereMetierRegion = "main[id=main] * > div > h1";
 const resultatsRechercheVille = "main[id=main] * > div > h2";
-const InfosPremiereVille = "a[data-automation-id^=cityItem-][href*=city]:nth-child(2) * > div";
+const InfosPremiereVille = "a[data-automation-id^=cityItem-][href*=ville]:nth-child(2) * > div";
 const filtreCadreVie = "main[id=main] * > div";
 const filtreTailleVille = "main[id=main] * > div";
 const filtreOpportunites = "main[id=main] * > div";

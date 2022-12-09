@@ -8,6 +8,12 @@ Fonctionnalité: Homepage - Moteur de recherche
   Scénario: Lire le titre de la page
     Alors le titre est "Trouvez l’emploi et la ville qui va avec ! | Mobiville"
 
+  Scénario: Affichage par défaut des régions
+    Alors j'affiche les filtres métier endroit
+    Et que je saisis "boulanger" dans le métier
+    Et que je choisis "Boulangerie - viennoiserie (Aide-boulanger / Aide-boulangère, …)" dans la liste des métiers
+    Alors plusieurs régions s'affichent dans la liste des régions
+    
   Scénario: Recherche du métier dans les villes d'une région
     Lorsque je saisis "<metier>" dans le métier
     Et que je choisis "<proposition>" dans la liste des métiers

@@ -2,7 +2,7 @@ const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor');
 import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "./common/common";
 export { champSaisieMetier, champSaisieEndroit, boutoncritere1, boutoncritere2, boutoncritere3 };
 
-const boutonRechercherEndroit = 'a[data-automation-id=search-action][href*=cit]';
+const boutonRechercherEndroit = 'a[data-automation-id=search-action][href*=ville]';
 const boutonRechercherAide = 'a[data-automation-id=search-action][href*=aides]';
 const boutonEndroit = 'button[type=button][data-automation-id=search-ville][id=cities]';
 const boutonAide = 'button[type=button][data-automation-id=search-aide][id=helps]';
@@ -88,6 +88,11 @@ When("je saisis {string} dans le métier", function (metier) {
 And("je choisis {string} dans la liste des métiers", function (propositionmetier) {
   METIER = propositionmetier;
   cy.contains(listeMetiers, propositionmetier, {timeout: SHORT_WAIT_TIME}).click();
+})
+
+And("plusieurs régions s'affichent dans la liste des régions", function () {
+  cy.get(champSaisieEndroit, {timeout: SHORT_WAIT_TIME}).click();
+  cy.get(listeEndroits, {timeout: SHORT_WAIT_TIME}).children().should('have.length.lte', 3);
 })
 
 And("je saisis {string} dans la région/ville", function (endroit) {

@@ -1,13 +1,12 @@
 const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor');
 import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "./common/common";
-import { METIER } from "./home-page";
 
 const resultatsVilles = "main[id=main] > div[tag-page$=city-villes-similaires] > div > h1";
 const VillesSimilairesProches = "main[id=main] > div[tag-page$=city-villes-similaires] > div > div > p";
 const nombreVillesSimilaires = "main[id=main] > div[tag-page$=city-villes-similaires] > div > div:nth-child(2) > div";
 const nombreVillesProches = "main[id=main] > div[tag-page$=city-villes-similaires] > div > div:nth-child(3) > div";
-const premiereVilleSimilaireProche = "main[id=main] > div[tag-page$=city-villes-similaires] > div > div:nth-child(2) > div > a[href*=city]:nth-child(1)";
-const boutonvoirtToutesVilles  =  "main[id=main] * > div > a[href*=cities]";
+const premiereVilleSimilaireProche = "main[id=main] > div[tag-page$=city-villes-similaires] > div > div:nth-child(2) > div > a[href*=ville]:nth-child(1)";
+const boutonvoirtToutesVilles  =  "main[id=main] * > div > a[href*=villes]";
 
 Then("j'affiche les villes similaires et les villes à proximité", function () {
   cy.url().should('include', 'villes-proches');
