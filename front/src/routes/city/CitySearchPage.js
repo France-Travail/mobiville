@@ -12,8 +12,6 @@ import { MainLayout, Modale, Section } from "../../components"
 import CityForm from "../../components/CityForm"
 import { COLOR_BACKGROUND, COLOR_PRIMARY } from "../../constants/colors"
 import { isMobileView } from "../../constants/mobile"
-import { ReactComponent as CitiesImage } from '../../assets/images/cities.svg'
-
 
 const Container = styled(Section)`
     display: flex;
@@ -32,9 +30,9 @@ const Title = styled.h1`
     color: ${ COLOR_PRIMARY };
 `
 
-const CitiesImageContainer = styled.div`
-    align-self: center;
-    margin-top: 50px;
+const CitiesImage = styled.img`
+    width: 370px;
+    margin: 50px auto 0 auto;
 `
 
 const CitySearchPage = () => {
@@ -76,9 +74,7 @@ const CitySearchPage = () => {
 
                     <CityForm></CityForm>
 
-                    <CitiesImageContainer>
-                        <CitiesImage />
-                    </CitiesImageContainer>
+                    <CitiesImage src="/images/cities.png" />
                 </Container>
             </MainLayout>
         )
