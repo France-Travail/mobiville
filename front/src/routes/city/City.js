@@ -18,22 +18,15 @@ import { isMobileView } from '../../constants/mobile'
 import { COLOR_WHITE } from '../../constants/colors'
 import { capitalize, ucFirst } from '../../utils/utils'
 
-const JOB = 'job'
-const LIFE = 'life'
+const JOB = 'metier'
+const LIFE = 'services'
 const CLOSE_CITIES = 'villes-proches'
 
 const CityPage = () => {
-  const {
-    onLoadCity,
-    isLoadingCity,
-    city,
-    criterions,
-    unloadCity,
-  } = useCities()
+  const { onLoadCity, isLoadingCity, city, criterions, unloadCity } =
+    useCities()
 
-  const {
-    onSearch: onSearchProfessions,
-  } = useProfessions()
+  const { onSearch: onSearchProfessions } = useProfessions()
 
   const location = useLocation()
   const { insee, section } = useParams()
@@ -51,7 +44,7 @@ const CityPage = () => {
     romeLabel = foundLabel.toLowerCase()
   }
 
-  const backLink = `/cities?codeRome=${ codeRome }&codeRegion=${ city?.newRegion?.code ?? '' }`
+  const backLink = `/villes?codeRome=${ codeRome }&codeRegion=${ city?.newRegion?.code ?? '' }`
   
   useEffect(() => {
     onLoadCity(inseeCode)
@@ -66,45 +59,21 @@ const CityPage = () => {
 
     onSearchProfessions({
       codeRome: [codeRome],
-      insee: [city.insee_com]
-    })
-    onSearchProfessions({
-      codeRome: [codeRome],
       insee: [city.insee_com],
-      offresManqueCandidats: true,
     })
   }, [city?.insee_com, codeRome])
 
   const currentSection = useMemo(() => {
     if (!city) return
     if (JOB === section) {
-      return (
-        <CityJobs
-          codeRome={codeRome}
-          romeLabel={romeLabel}
-        />
-      )
+      return <CityJobs codeRome={codeRome} romeLabel={romeLabel} />
     } else if (CLOSE_CITIES === section) {
-      return <CityCloseCities
-        backLink={backLink}
-        codeRome={codeRome}
-      />
+      return <CityCloseCities backLink={backLink} codeRome={codeRome} />
     } else if (LIFE === section) {
       return <CityServices />
     }
-    return <CityHome
-      romeLabel={romeLabel}
-      codeRome={codeRome}
-      insee={insee}
-    />
-  }, [
-    section,
-    city,
-    codeRome,
-    romeLabel,
-    backLink,
-    insee,
-  ])
+    return <CityHome romeLabel={romeLabel} codeRome={codeRome} insee={insee} />
+  }, [section, city, codeRome, romeLabel, backLink, insee])
 
   if (isLoadingCity) {
     return (
@@ -141,11 +110,14 @@ const CityPage = () => {
       <CityMenuBack
         backLink={backLink}
         isMobile={isMobile}
-        background={([CLOSE_CITIES, JOB].includes(section) && !isMobile) ? 'none' : COLOR_WHITE}
+        background={
+          [CLOSE_CITIES, JOB].includes(section) && !isMobile
+            ? 'none'
+            : COLOR_WHITE
+        }
       />
 
       {currentSection}
-
     </MainLayout>
   )
 }

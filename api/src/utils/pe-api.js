@@ -24,7 +24,7 @@ export function getAccessToken() {
                 grant_type: 'client_credentials',
                 client_id: config.EMPLOI_STORE_ID,
                 client_secret: config.EMPLOI_STORE_SECRET,
-                scope: `api_infotravailv1 api_offresdemploiv2 api_romev1 nomenclatureRome application_${config.EMPLOI_STORE_ID} o2dsoffre api_explorateurmetiersv1 explojob api_labonneboitev1`,
+                scope: `api_infotravailv1 api_offresdemploiv2 api_romev1 nomenclatureRome application_${config.EMPLOI_STORE_ID} o2dsoffre api_explorateurmetiersv1 explojob api_labonneboitev1 api_stats-offres-demandes-emploiv1 offresetdemandesemploi`,
             }),
             {
                 headers: {
@@ -41,7 +41,7 @@ export function getAccessToken() {
 
 // cache de 6 heures, a discuter avec les PO
 const cache = setupCache({
-    maxAge: 6 * 60 * 60 * 1000,
+    maxAge: 24 * 60 * 60 * 1000,
     exclude: {
         query: false
     }
@@ -49,7 +49,7 @@ const cache = setupCache({
 const apiEmploiStore = axios.create({
     adapter: cache.adapter
 })
-export async function searchJob({ codeRome = [], insee = [], distance = 10, offresManqueCandidats = false }) {
+export async function searchJob({ codeRome = [], insee = [], distance = 30 }) {
     const token = await getAccessToken()
     const callToOffres = function () {
         return apiEmploiStore.get(
@@ -58,8 +58,7 @@ export async function searchJob({ codeRome = [], insee = [], distance = 10, offr
                 params: {
                     codeROME: codeRome.join(','),
                     commune: insee.join(','),
-                    distance,
-                    offresManqueCandidats
+                    distance
                 },
                 headers: { Authorization: `Bearer ${token}` },
                 ...(config.PE_ENV && {proxy: false}),
@@ -224,4 +223,43 @@ export async function searchCloseCompanies({ codeRome = '', insee = '', distance
             })
     }
     return fetchAndRetryIfNecessary(callToSearchCloseEnterprises)
+}
+
+export async function getHiringRate({ codeTerritoire, codeRome }) {
+    const token = await getAccessToken()
+    return axios
+        .post(`https://api.emploi-store.fr/partenaire/stats-offres-demandes-emploi/v1/indicateur/stat-embauches`,
+            {
+                codeTypeTerritoire: "BASBMO",
+                codeTerritoire: `${codeTerritoire}`,
+                codeTypeActivite: "ROME",
+                codeActivite: `${codeRome}`,
+                codeTypePeriode: "TRIMESTRE",
+                codeTypeNomenclature: "CATCANDxDUREEEMP",
+                dernierePeriode: true,
+                sansCaracteristiques: true
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                ...(config.PE_ENV && {proxy: false}),
+                ...(config.PE_ENV && {httpsAgent: new HttpsProxyAgent('http://host.docker.internal:9000')} ),
+            }
+        )
+        .then((result) => result.data)
+        .then(result => {
+            if (!result || !result.listeValeursParPeriode) return null
+            
+            const preferedCategories = [ "ABCDE-SUP1M", "ABCDE-TOUTE", "TOUT-TOUTE" ]
+            const foundCategories = result.listeValeursParPeriode.map(data => data.codeNomenclature);
+
+            const bestCategory = preferedCategories.find(category => (foundCategories.includes(category)))
+            return result.listeValeursParPeriode.find(data => data.codeNomenclature === bestCategory).valeurSecondairePourcentage
+        })
+        .catch(error => {
+            console.log(error)
+            return error.response
+        })
 }

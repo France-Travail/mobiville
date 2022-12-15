@@ -1,22 +1,27 @@
-import React from 'react'
 import CssBaseline from '@mui/material/CssBaseline'
+import React, { Suspense } from 'react'
+import { BrowserRouter } from 'react-router-dom'
 import { MobivilleRoutes } from './routes/Routes'
+import TC_Wrapper from "react-tag-commander"
 
 function App() {
   // import tag commander
-  const script = document.createElement('script')
+  const wrapper = TC_Wrapper.getInstance()
   if (window.location.host === 'mobiville.pole-emploi.fr') {
-    script.src = 'https://cdn.tagcommander.com/5595/tc_Mobiville_31.js'
+    wrapper.addContainer('tc', 'https://cdn.tagcommander.com/5595/tc_Mobiville_31.js', 'body')
   } else {
-    script.src = 'https://cdn.tagcommander.com/5595/uat/tc_Mobiville_31.js'
+    wrapper.addContainer('tc', 'https://cdn.tagcommander.com/5595/uat/tc_Mobiville_31.js', 'body')
   }
-  script.async = true
-  document.body.appendChild(script)
 
   return (
     <>
       <CssBaseline />
-      <MobivilleRoutes />
+
+      <Suspense fallback={<p>Chargement...</p>}>
+        <BrowserRouter>
+          <MobivilleRoutes />
+        </BrowserRouter>
+      </Suspense>
     </>
   )
 }

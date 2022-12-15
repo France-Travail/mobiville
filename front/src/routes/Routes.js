@@ -1,5 +1,6 @@
-import React, { Suspense, lazy } from 'react'
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
+import React, { lazy, useEffect } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { useNomPage } from '../common/contexts/NomPageContext'
 
 const Home = lazy(() => import('./home/Home'))
 
@@ -17,37 +18,41 @@ const FAQ = lazy(() => import('./faq/Faq'))
 const Legal = lazy(() => import('./legal/Legal'))
 const Accessibility = lazy(() => import('./accessibility/Accessibility'))
 
-export const MobivilleRoutes = () => (
-  <Suspense fallback={<p>Chargement...</p>}>
-    <BrowserRouter>
-      <Routes>
-        <Route end path="/" element={<Home />} />
+export const MobivilleRoutes = () => {
+  const { setNomPage } = useNomPage()
+  let location = useLocation()
+  useEffect(() => {
+    setNomPage(location.pathname.replace('/', ''))
+  }, [location])
 
-        <Route end path="/cities" element={<Cities />} />
-        <Route end path="/city/:insee" element={<City />} />
-        <Route end path="/city/:insee/:section" element={<City />} />
-        <Route end path="/rechercher" element={<CitySearchPage />} />
+  return (
+    <Routes>
+      <Route end path="/" element={<Home />} />
 
-        <Route end path="/aides" element={<Helps />} />
-        <Route end path="/aides/:slug" element={<HelpDetailsPage />} />
-        <Route end path="/aides-filters" element={<HelpFilterMobilePage />} />
-        <Route end path="/aides-search" element={<HelpsSearchPage />} />
+      <Route end path="/villes" element={<Cities />} />
+      <Route end path="/ville/:insee" element={<City />} />
+      <Route end path="/ville/:insee/:section" element={<City />} />
+      <Route end path="/rechercher" element={<CitySearchPage />} />
 
-        <Route end path="/mobility-guide" element={<MobilityGuide />} />
-        <Route end path="/faq" element={<FAQ />} />
-        <Route end path="/legal" element={<Legal />} />
-        <Route end path="/accessibility" element={<Accessibility />} />
+      <Route end path="/aides" element={<Helps />} />
+      <Route end path="/aides/:slug" element={<HelpDetailsPage />} />
+      <Route end path="/aides-filtres" element={<HelpFilterMobilePage />} />
+      <Route end path="/aides-recherche" element={<HelpsSearchPage />} />
 
-        {/* Redirection sur la home page si le path ne match aucune route */}
-        <Route
-          path="*"
-          element={
-            <>
-              <Navigate to="/" replace />
-            </>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
-  </Suspense>
-)
+      <Route end path="/conseils-et-astuces" element={<MobilityGuide />} />
+      <Route end path="/faq" element={<FAQ />} />
+      <Route end path="/mentions-legales" element={<Legal />} />
+      <Route end path="/accessibilite" element={<Accessibility />} />
+
+      {/* Redirection sur la home page si le path ne match aucune route */}
+      <Route
+        path="*"
+        element={
+          <>
+            <Navigate to="/" replace />
+          </>
+        }
+      />
+    </Routes>
+  )
+}

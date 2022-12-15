@@ -186,21 +186,6 @@ export function getAveragePricing() {
   })
 }
 
-export function getHousePricing() {
-  return new Promise((resolve, reject) => {
-    readFile(
-      __dirname + '/../assets/datas/house-pricing.csv',
-      (err, data) => {
-        if (err) {
-          reject(err)
-        } else {
-          resolve(csvToArrayJson(data))
-        }
-      }
-    )
-  })
-}
-
 export const getTensionsCities = () => {
   let rawdata = readFileSync(
     __dirname + '/../assets/datas/donnees-de-reference_zonage-commune.json'
@@ -350,6 +335,36 @@ export function getPCSByRome(rome) {
 
             resolve(finded)
           })
+        }
+      }
+    )
+  })
+}
+
+export const getAllDepartements = () => {
+  return new Promise((resolve, reject) => {
+    readFile(
+      __dirname + '/../assets/datas/departements.csv',
+      (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(csvToArrayJson(data, { delimiter: ';' }))
+        }
+      }
+    )
+  })
+}
+
+export const getCitiesRent = () => {
+  return new Promise((resolve, reject) => {
+    readFile(
+      __dirname + '/../assets/datas/cities_rent.csv',
+      (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(csvToArrayJson(data, { delimiter: ';' }))
         }
       }
     )

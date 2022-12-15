@@ -6,11 +6,16 @@ import CityHousingSimulator from './components/CityHousingSimulator'
 import CloseCompanies from './components/CloseCompanies'
 import HelpsStandOut from './components/HelpsStandOut'
 import SectionHeader from '../components/SectionHeader'
-import { ActionButton, HorizontalScrollableSection, KeyFigures, Tag } from '../../../components'
+import {
+  ActionButton,
+  HorizontalScrollableSection,
+  KeyFigures,
+  Tag,
+} from '../../../components'
 
 import { ReactComponent as MaletteIcon } from '../../../assets/images/icons/malette.svg'
 import { ReactComponent as ProfilEntrepriseIcon } from '../../../assets/images/icons/profil_entreprise.svg'
-// import { ReactComponent as HandshakeIcon } from '../../assets/images/icons/handshake.svg'
+import { ReactComponent as HandshakeIcon } from '../../../assets/images/icons/handshake.svg'
 import cityServicesStandOut from '../../../assets/images/cityServicesStandOut.png'
 
 import { capitalize, formatCityTension } from '../../../utils/utils'
@@ -79,11 +84,10 @@ const RoundSeparator = styled.span`
 `
 
 const TagsContainer = styled.div`
-  margin: 28px auto 0 auto;
+  margin-top: 28px;
 
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+  display: grid;
+  place-content: center
 `
 
 const ServicesStandOut = styled.div`
@@ -129,14 +133,19 @@ const ServicesStandOutImageContainer = styled.div`
 const CityHome = ({ romeLabel, insee, codeRome }) => {
   const isMobile = isMobileView(useWindowSize())
 
-  const { companiesCount, onSearchCloseCompanies, city } = useCities()
   const {
-    professionsCandidatsManquants,
+    companiesCount,
+    onSearchCloseCompanies,
+    city
+  } = useCities()
+  const {
+    jobsMissingApplicant,
     totalOffres,
-    bassinTensionIndT,
-    onSearchInfosTravail
+    infosTravail,
+    onSearchInfosTravail,
+    sortByDistanceFromCity
   } = useProfessions()
-  
+
   useEffect(() => {
     if (!city?.insee_com || !codeRome) return
 
@@ -147,12 +156,12 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
     })
     onSearchInfosTravail({
       codeRome: codeRome,
-      insee: city.insee_com
+      insee: city.insee_com,
     })
   }, [city?.insee_com, codeRome])
 
   return (
-    <>
+    <div tag-page="/city">
       <CityHeader isMobile={isMobile}>
         <TitlesContainer isMobile={isMobile}>
           <RegionName isMobile={isMobile}>
@@ -168,8 +177,8 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
       </CityHeader>
 
       <TagsContainer>
-        <Tag green={bassinTensionIndT < 4} tall>
-          {formatCityTension(bassinTensionIndT)}
+        <Tag green={infosTravail?.bassinTensionIndT < 4} tall>
+          {formatCityTension(infosTravail?.bassinTensionIndT)}
         </Tag>
       </TagsContainer>
 
@@ -185,7 +194,11 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
             data: companiesCount,
             icon: <ProfilEntrepriseIcon />,
           },
-          // { label: "Taux d'embauche", data: totalOffres, icon: <BlockJobInfosImg src={handshake} /> },
+          !infosTravail?.hiringRate ? null : {
+            label: "Taux d'embauche",
+            data: (infosTravail?.hiringRate > 100 ? '100%' : `${infosTravail?.hiringRate}%`),
+            icon: <HandshakeIcon />,
+          },
         ]}
       />
 
@@ -195,13 +208,14 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
       />
 
       <HorizontalScrollableSection>
-        {professionsCandidatsManquants
-          ?.slice(0, 3)
+        {jobsMissingApplicant
+          ?.sort(sortByDistanceFromCity(city))
+          .slice(0, 3)
           .map((job) => (
             <JobCardContainer
               key={job.id}
               to={{
-                pathname: `/city/${insee}/job`,
+                pathname: `/ville/${insee}/metier`,
                 search: `?codeRome=${codeRome}`
               }}
             >
@@ -211,7 +225,7 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
       </HorizontalScrollableSection>
 
       <ActionButton
-        path={`/city/${insee}/job?codeRome=${codeRome}`}
+        path={`/ville/${insee}/metier?codeRome=${codeRome}`}
         libelle={`Voir toutes les offres d’emploi`}
         isMobile={isMobile}
         isBlue={true}
@@ -239,7 +253,7 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
           </ServicesStandOutDescription>
           <ActionButton
             style={{ marginTop: 16, width: 'fit-content' }}
-            path={`/city/${insee}/life?codeRome=${codeRome}`}
+            path={`/ville/${insee}/services?codeRome=${codeRome}`}
             libelle={`Voir tous les services`}
             isMobile={isMobile}
             isBlue={false}
@@ -252,21 +266,21 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
       </ServicesStandOut>
 
       <ActionButton
-        path={'/mobility-guide'}
+        path={'/conseils-et-astuces'}
         libelle={`Consultez nos conseils pour votre projet`}
         isMobile={isMobile}
         isBlue={false}
         isWhite={true}
         centered
       />
-    </>
+    </div>
   )
 }
 
 CityHome.propTypes = {
   romeLabel: PropTypes.string,
   insee: PropTypes.string,
-  codeRome: PropTypes.string
+  codeRome: PropTypes.string,
 }
 
 export default CityHome

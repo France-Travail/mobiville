@@ -7,8 +7,8 @@ import { COLOR_OTHER_GREEN, COLOR_PRIMARY } from '../../../constants/colors'
 import Euro from '@mui/icons-material/Euro'
 import { TextInput } from '../../../components'
 import { formatNumber } from '../../../utils/utils'
-import {isMobileView} from "../../../constants/mobile"
-import {useWindowSize} from "../../../common/hooks/window-size"
+import { isMobileView } from '../../../constants/mobile'
+import { useWindowSize } from '../../../common/hooks/window-size'
 
 const Container = styled.div`
   max-width: 440px;
@@ -116,15 +116,22 @@ const HousingSimulator = ({ city }) => {
           <div>
             <Title>Simulateur de logement</Title>
             <SubTitle $isMobile={isMobile}>
-              Calculer votre budget pour un achat
-              ou une location
+              Calculer votre budget pour un achat ou une location
             </SubTitle>
           </div>
 
           {!!city?.average_houserent && (
             <div>
               <InputLabel>Pour un loyer en location</InputLabel>
-              <InputGroup>
+              <InputGroup
+                onClick={() => {
+                  window.smartTag({
+                    name: 'utilisation',
+                    type: 'action',
+                    chapters: ['city', 'simulateur'],
+                  })
+                }}
+              >
                 <TextInput
                   placeholder="Renseigner un budget"
                   type="number"
@@ -138,10 +145,12 @@ const HousingSimulator = ({ city }) => {
                 <ResultText $isVisible={!!squareMeters}>
                   Votre pouvez occuper un logement de{' '}
                   {squareMeters ? (
-                      <Result $isMobile={isMobile}>
-                        <span data-automation-id="housing-square-meters">{formatNumber(squareMeters)}</span>
-                        m2
-                      </Result>
+                    <Result $isMobile={isMobile}>
+                      <span data-automation-id="housing-square-meters">
+                        {formatNumber(squareMeters)}
+                      </span>
+                      m2
+                    </Result>
                   ) : null}
                 </ResultText>
               </ResultContainer>
@@ -153,7 +162,15 @@ const HousingSimulator = ({ city }) => {
           {!!city?.average_houseselled && (
             <div>
               <InputLabel>Pour un achat de logement</InputLabel>
-              <InputGroup>
+              <InputGroup
+                onClick={() => {
+                  window.smartTag({
+                    name: 'utilisation',
+                    type: 'action',
+                    chapters: ['city', 'simulateur'],
+                  })
+                }}
+              >
                 <TextInput
                   placeholder="Renseigner la surface"
                   type="number"
@@ -165,12 +182,12 @@ const HousingSimulator = ({ city }) => {
                 <ResultText $isVisible={!!housingCost}>
                   Votre logement va vous coûter{' '}
                   {housingCost ? (
-                      <Result $isMobile={isMobile}>
-                    <span data-automation-id="housing-cost">
-                      {formatNumber(housingCost)}
-                    </span>
-                        <Euro fontSize="large" />
-                      </Result>
+                    <Result $isMobile={isMobile}>
+                      <span data-automation-id="housing-cost">
+                        {formatNumber(housingCost)}
+                      </span>
+                      <Euro fontSize="large" />
+                    </Result>
                   ) : null}
                 </ResultText>
               </ResultContainer>

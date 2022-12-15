@@ -1,7 +1,8 @@
-import { CRITERIONS } from '../constants/criterion'
 import { compact } from 'lodash'
 import Router from '@koa/router'
-import {searchCloseCompanies} from "../utils/pe-api";
+
+import { searchCloseCompanies } from "../utils/pe-api";
+import { CRITERIONS } from '../constants/criterion'
 
 const router = new Router({ prefix: '/cities' })
 
@@ -141,22 +142,22 @@ router.get('/load/:insee', async ({ params: { insee }, models, response }) => {
 })
 
 router.post(
-    '/search-close-companies',
-    async ({
-               request: {
-                   body: { codeRome, insee, sort },
-               },
-               response,
-           }) => {
-        response.body = await searchCloseCompanies({
-            codeRome,
-            insee,
-            distance: 30,
-            page: 1,
-            pageSize: 10,
-            sort: sort
-        })
-    }
+  '/search-close-companies',
+  async ({
+    request: {
+      body: { codeRome, insee, sort },
+    },
+    response,
+  }) => {
+    response.body = await searchCloseCompanies({
+      codeRome,
+      insee,
+      distance: 30,
+      page: 1,
+      pageSize: 10,
+      sort: sort,
+    })
+  }
 )
 
 export default router

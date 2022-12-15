@@ -65,7 +65,7 @@ const MobileAppliedFilters = ({ search, style }) => {
       <AppliedFilters />
 
       <FiltersButton
-        to={`/aides-filters` + window.location.search}
+        to={`/aides-filtres` + window.location.search}
         libelle={!!search ? 'Modifier' : 'Filtrer selon votre situation'}
       />
     </Container>

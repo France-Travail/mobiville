@@ -122,15 +122,15 @@ export function CitiesProvider(props) {
     setCityInput(label)
   }
 
-    const onSearchCloseCompanies = (params) => {
-        _setIsLoadingCloseCompanies(true)
-        searchCloseCompanies(params)
-            .then((res) => {
-                _setCloseCompanies(res.companies)
-                _setCompaniesCount(res.companies_count)
-            })
-            .then(() => _setIsLoadingCloseCompanies(false))
-    }
+  const onSearchCloseCompanies = (params) => {
+    _setIsLoadingCloseCompanies(true)
+    searchCloseCompanies(params)
+      .then((res) => {
+        _setCloseCompanies(res.companies)
+        _setCompaniesCount(res.companies_count)
+      })
+      .then(() => _setIsLoadingCloseCompanies(false))
+  }
 
   useEffect(() => {
 

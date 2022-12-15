@@ -7,6 +7,7 @@ import {
   infosTravail,
   infosTensionTravail,
   searchJobCount,
+  getHiringRate,
 } from '../utils/pe-api'
 import { meanBy } from 'lodash'
 
@@ -38,15 +39,13 @@ router.post(
   '/search',
   async ({
     request: {
-      body: { codeRome, insee, offresManqueCandidats, distance = 30 },
+      body: { codeRome, insee },
     },
     response,
   }) => {
     const result = await searchJob({
       codeRome,
-      insee: getInseeCodesForSearch(insee),
-      distance: distance,
-      offresManqueCandidats
+      insee: getInseeCodesForSearch(insee)
     })
     response.body = {
       resultats: result ? result.resultats : [],
@@ -123,8 +122,7 @@ router.post(
     response,
   }) => {
     const result = await searchJob({
-      insee: getInseeCodesForSearch(insee),
-      distance: 30,
+      insee: getInseeCodesForSearch(insee)
     })
     if (result) {
       const total = result.resultats.length
@@ -144,8 +142,7 @@ router.post(
     response,
   }) => {
     const result = await searchJob({
-      codeRome,
-      distance: 30,
+      codeRome
     })
     if (result) {
       const total = result.resultats.length
@@ -202,7 +199,7 @@ router.post(
       return
     }
 
-    const [infosResult, { bassin: bassinStatsResult, dept: deptStatsResult }] =
+    const [infosResult, { bassin: bassinStatsResult, dept: deptStatsResult }, hiringRate] =
       await Promise.all([
         infosTravail({
           codeProfession: pcs.pcs,
@@ -214,11 +211,15 @@ router.post(
           codeRome,
           codeDept: city.code_dept,
         }),
+        getHiringRate({
+          codeTerritoire: bassinId,
+          codeRome
+        })
       ]).catch((err) => {
         // A better handling of errors should be included, but for now we’ll do with just not screwing the whole app
         // as this previously did
         console.error(err)
-        return [null, { bassin: null, dept: null }]
+        return [null, { bassin: null, dept: null }, null]
       })
 
     const bassinTension =
@@ -257,6 +258,7 @@ router.post(
       max,
       bassinTension,
       deptTension,
+      hiringRate
     }
   }
 )

@@ -28,7 +28,7 @@ const WelcomeWrapper = styled.div`
   max-width: 1040px;
   margin: ${({ $isMobile }) =>
     $isMobile ? 'auto' : '0 auto 50px auto'};
-  ${({ $isMobile }) => ($isMobile ? 'padding: 0 16px 16px 16px' : '')};
+  padding: ${({ $isMobile }) => ($isMobile ? '1px 16px 16px 16px' : '1px 0 50px 0')};
   color: ${COLOR_PRIMARY};
 `
 
@@ -103,7 +103,7 @@ const CityServices = () => {
           )} : transports, santé, culture et loisirs, éducation, environnement`}
         />
       </Helmet>
-
+      <div tag-page="/city-services">
       <WelcomeContainer $isMobile={isMobile}>
         <WelcomeWrapper $isMobile={isMobile}>
           <Title>Vivre à {_.capitalize(city.nom_comm)}</Title>
@@ -161,6 +161,7 @@ const CityServices = () => {
       <CityServiceInfoCards cityEquipments={city.equipments} />
 
       <ElectedContact />
+      </div>
     </>
   )
 }

@@ -86,6 +86,10 @@ export default (sequelizeInstance) => {
   )
 
   Model.associate = function (models) {
+    Model.hasMany(models.bassins, {
+      foreignKey: 'bassin_id',
+      sourceKey: 'bassin_id',
+    })
     return models
   }
 

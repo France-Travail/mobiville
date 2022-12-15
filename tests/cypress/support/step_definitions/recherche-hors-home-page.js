@@ -1,13 +1,22 @@
 const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor')
-import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "../common/common";
-import { champSaisieMetier, champSaisieEndroit, boutoncritere1, boutoncritere2, boutoncritere3 } from '../../../support/step_definitions/formulaire-recherche'
+import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "./common/common";
+import { champSaisieMetier, champSaisieEndroit, boutoncritere1, boutoncritere2, boutoncritere3 } from './home-page';
+
+const lienRechercherAide = 'header > div > a[href$=aides]';
+const lienRechercherEndroit = 'header > div > a[href$=rechercher]';
+
+function selecteurLienRecherche(lienEndroitAide) {
+  switch (lienEndroitAide) {
+    case 'Rechercher des aides':
+      return lienRechercherAide;
+    case 'Rechercher une ville':
+      return lienRechercherEndroit;
+  }
+}
 
 And("je clique sur {string} dans le header", function (lienEndroitAide) {
-    cy.get('header')
-    .should('be.visible')
-    .wait(2000)
-    .contains(lienEndroitAide, { timeout: MIDDLE_WAIT_TIME })
-    .click({force: true})
+    cy.get(selecteurLienRecherche(lienEndroitAide), { timeout: MIDDLE_WAIT_TIME }).click();
+    cy.wait(1000);
 })
 
 Then("j'affiche la page de recherche de ville avec le moteur de recherche", function () {

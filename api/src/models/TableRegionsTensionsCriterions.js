@@ -10,6 +10,7 @@ export default (sequelizeInstance, Model) => {
 
     const jobList = await Model.models.tensions.fetchJobList()
     const regionsList = await Model.models.newRegions.findAll()
+    const opportuniteMap = await Model.models.tensions.getTauxdOpportunite()
 
     const regionsTensionsTemp = []
 
@@ -43,11 +44,17 @@ export default (sequelizeInstance, Model) => {
         const region = regionsList.find((region) => region.code == regionCode)
 
         for (const rome of romes) {
+          const opportuniteByKey = opportuniteMap.find(
+            (v) => v.code_rome === rome && `${v.code_region}` === regionCode
+          )
           regionsTensionsTemp.push({
             rome,
             region_new_code: regionCode,
             region_new_name: region.name,
             criterion: criterion.key,
+            opportunite: opportuniteByKey
+              ? opportuniteByKey.opportunite
+              : undefined,
           })
         }
       }
@@ -62,28 +69,35 @@ export default (sequelizeInstance, Model) => {
         objectByRegions[row.region_new_code] = {
           id: row.region_new_code,
           label: row.region_new_name,
-          criterions: {
-            [row.rome]: [row.criterion],
+          romes: {
+            [row.rome]: {
+              criterions: [row.criterion],
+              opportunite: row.opportunite,
+            },
           },
         }
         return
       }
 
-      if (!objectByRegions[row.region_new_code].criterions[row.rome]) {
-        objectByRegions[row.region_new_code].criterions[row.rome] = [
-          row.criterion,
-        ]
+      if (!objectByRegions[row.region_new_code].romes[row.rome]) {
+        objectByRegions[row.region_new_code].romes[row.rome] = {
+          criterions: [row.criterion],
+          opportunite: row.opportunite,
+        }
         return
       }
 
+      objectByRegions[row.region_new_code].romes[row.rome].opportunite =
+        row.opportunite
+
       if (
-        objectByRegions[row.region_new_code].criterions[row.rome].includes(
-          row.criterion
-        )
+        objectByRegions[row.region_new_code].romes[
+          row.rome
+        ].criterions.includes(row.criterion)
       )
         return
 
-      objectByRegions[row.region_new_code].criterions[row.rome].push(
+      objectByRegions[row.region_new_code].romes[row.rome].criterions.push(
         row.criterion
       )
     })

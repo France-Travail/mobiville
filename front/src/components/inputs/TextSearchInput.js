@@ -1,16 +1,17 @@
-import { useCallback, useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
 import _ from 'lodash'
+import PropTypes from 'prop-types'
+import React, { useCallback, useEffect, useState } from 'react'
+import styled, { css } from 'styled-components'
 
 import {
-  TextField,
   Autocomplete,
-  CircularProgress,
   Box,
+  CircularProgress,
   Popper,
+  TextField,
 } from '@mui/material'
 
+import { useWindowSize } from '../../common/hooks/window-size'
 import {
   COLOR_LIGHT_GREY,
   COLOR_PRIMARY,
@@ -19,7 +20,6 @@ import {
   COLOR_WHITE,
 } from '../../constants/colors'
 import { isMobileView } from '../../constants/mobile'
-import { useWindowSize } from '../../common/hooks/window-size'
 
 const AppAutocomplete = styled(Autocomplete)`
   flex: 1;
@@ -82,139 +82,147 @@ const CustomPopper = styled(Popper)`
   }
 `
 
-const TextSearchInput = ({
-  options,
-  onChange,
-  label = '',
-  placeholder = '',
-  value,
-  noOptionsText = 'Aucun résultat trouvé...',
-  groupLabel = null,
-  loading = false,
-  disabled = false,
-  onInputChange = () => {},
-  isOptionEqualToValue = (option, value) => option.label === value.label,
-  defaultValue,
-  openThreshold = -1,
-  showEndAdornment = true,
-}) => {
-  const [open, setOpen] = useState(false)
-  const [inputValue, setInputValue] = useState('')
+const TextSearchInput = React.forwardRef(
+  (
+    {
+      options,
+      onChange,
+      label = '',
+      placeholder = '',
+      value,
+      noOptionsText = 'Aucun résultat trouvé...',
+      groupLabel = null,
+      loading = false,
+      disabled = false,
+      onInputChange = () => {},
+      isOptionEqualToValue = (option, value) => option.label === value.label,
+      defaultValue,
+      openThreshold = -1,
+      showEndAdornment = true,
+      onClickTag = () => {},
+    },
+    ref
+  ) => {
+    const [open, setOpen] = useState(false)
+    const [inputValue, setInputValue] = useState('')
 
-  const isMobile = isMobileView(useWindowSize())
+    const isMobile = isMobileView(useWindowSize())
 
-  const handleInputChange = (event, value) => {
-    onInputChange(event, value)
-    setInputValue(value)
-  }
-
-  const handleChange = (event, value) => {
-    onChange(event, value)
-  }
-
-  const handleOpen = (isOpen) => {
-    if (inputValue.length >= openThreshold) {
-      setOpen(isOpen)
+    const handleInputChange = (event, value) => {
+      onInputChange(event, value)
+      setInputValue(value)
     }
-  }
 
-  useEffect(() => {
-    if (openThreshold > 0 && inputValue.length <= openThreshold) {
-      setOpen(false)
+    const handleChange = (event, value) => {
+      onChange(event, value)
     }
-  }, [inputValue, openThreshold])
 
-  const isPlaceholderSelected = useCallback(() => {
-    return !inputValue
-  }, [inputValue])
+    const handleOpen = (isOpen) => {
+      if (inputValue.length >= openThreshold) {
+        setOpen(isOpen)
+      }
+    }
 
-  return (
-    <AppAutocomplete
-      $isMobile={isMobile}
-      // states and basics
-      id={`autocomplete-${_.kebabCase(label)}`}
-      disablePortal
-      disabled={disabled}
-      options={options}
-      loading={loading}
-      defaultValue={defaultValue}
-      value={value}
-      noOptionsText={noOptionsText}
-      // interactions logic
-      filterOptions={(input) => input}
-      open={open}
-      onOpen={() => {
-        handleOpen(true)
-      }}
-      onClose={() => {
+    useEffect(() => {
+      if (openThreshold > 0 && inputValue.length <= openThreshold) {
         setOpen(false)
-      }}
-      openOnFocus
-      onInputChange={handleInputChange}
-      onChange={handleChange}
-      // rendering
-      $isPlaceholderSelected={isPlaceholderSelected()}
-      isOptionEqualToValue={isOptionEqualToValue}
-      // - grouping
-      groupBy={(option) => !!option}
-      renderGroup={(params) => (
-        <>
-          {/* render group label if exists */}
-          {groupLabel ? (
-            <CustomBox key={groupLabel} $primary component="li">
-              {groupLabel}
-            </CustomBox>
-          ) : null}
-          {/* render options */}
-          {params.children.map((child) => (
-            <CustomBox key={child.key} component="li" {...child.props}>
-              {child.props.children}
-            </CustomBox>
-          ))}
-        </>
-      )}
-      // - options
-      getOptionLabel={(option) => option?.label ?? ''}
-      renderOption={(props, option) => (
-        <CustomBox
-          key={props.id ?? props.label}
-          $primary={option.style === 'primary'}
-          component="li"
-          {...props}
-        >
-          {option.label}
-        </CustomBox>
-      )}
-      // - input
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          placeholder={placeholder}
-          variant="filled"
-          InputLabelProps={{
-            shrink: true,
-            required: true,
-          }}
-          InputProps={{
-            ...params.InputProps,
-            disableUnderline: true,
-            endAdornment: (
-              <>
-                {loading ? (
-                  <CircularProgress color="inherit" size={20} />
-                ) : null}
-                {showEndAdornment ? params.InputProps.endAdornment : null}
-              </>
-            ),
-          }}
-        />
-      )}
-      // - popper
-      PopperComponent={CustomPopper}
-    />
-  )
-}
+      }
+    }, [inputValue, openThreshold])
+
+    const isPlaceholderSelected = useCallback(() => {
+      return !inputValue
+    }, [inputValue])
+
+    return (
+      <AppAutocomplete
+        $isMobile={isMobile}
+        // states and basics
+        id={`autocomplete-${_.kebabCase(label)}`}
+        disablePortal
+        disabled={disabled}
+        options={options}
+        loading={loading}
+        defaultValue={defaultValue}
+        value={value}
+        noOptionsText={noOptionsText}
+        // interactions logic
+        filterOptions={(input) => input}
+        open={open}
+        onOpen={() => {
+          handleOpen(true)
+          onClickTag()
+        }}
+        onClose={() => {
+          setOpen(false)
+        }}
+        openOnFocus
+        onInputChange={handleInputChange}
+        onChange={handleChange}
+        // rendering
+        $isPlaceholderSelected={isPlaceholderSelected()}
+        isOptionEqualToValue={isOptionEqualToValue}
+        // - grouping
+        groupBy={(option) => !!option}
+        renderGroup={(params) => (
+          <>
+            {/* render group label if exists */}
+            {groupLabel ? (
+              <CustomBox key={groupLabel} $primary component="li">
+                {groupLabel}
+              </CustomBox>
+            ) : null}
+            {/* render options */}
+            {params.children.map((child) => (
+              <CustomBox key={child.key} component="li" {...child.props}>
+                {child.props.children}
+              </CustomBox>
+            ))}
+          </>
+        )}
+        // - options
+        getOptionLabel={(option) => option?.label ?? ''}
+        renderOption={(props, option) => (
+          <CustomBox
+            key={props.id ?? props.label}
+            $primary={option.style === 'primary'}
+            component="li"
+            {...props}
+          >
+            {option.label}
+          </CustomBox>
+        )}
+        // - input
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={label}
+            placeholder={placeholder}
+            variant="filled"
+            inputRef={ref}
+            InputLabelProps={{
+              shrink: true,
+              required: true,
+            }}
+            InputProps={{
+              ...params.InputProps,
+              disableUnderline: true,
+              endAdornment: (
+                <>
+                  {loading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : null}
+                  {showEndAdornment ? params.InputProps.endAdornment : null}
+                </>
+              ),
+            }}
+          />
+        )}
+        // - popper
+        PopperComponent={CustomPopper}
+      />
+    )
+  }
+)
 
 TextSearchInput.propTypes = {
   options: PropTypes.array.isRequired,
@@ -230,6 +238,7 @@ TextSearchInput.propTypes = {
   isOptionEqualToValue: PropTypes.func,
   defaultValue: PropTypes.any,
   openThreshold: PropTypes.number,
+  onClickTag: PropTypes.func,
 }
 
 export default TextSearchInput

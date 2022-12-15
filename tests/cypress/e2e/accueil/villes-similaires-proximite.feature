@@ -9,7 +9,7 @@ Fonctionnalité: Rechercher villes - Villes similaires ou a proximité
     Et que je saisis "Lille" dans la ville
     Et que je choisis "Lille (59000/59160/59260/59777/59800)" dans la liste des villes
     Et que je clique sur rechercher
-    Et que je clique sur le lien "Villes similaires ou à proximité"
+    Et que je clique sur "Villes similaires ou à proximité" dans le fil d'ariane
 
   Scénario: Présence des villes similaires ou a proximité
     Alors j'affiche les villes similaires et les villes à proximité

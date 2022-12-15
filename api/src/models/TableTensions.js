@@ -1,3 +1,4 @@
+import sequelize from 'sequelize'
 import { getPCSByRome } from '../utils/api'
 
 export default (sequelizeInstance, Model) => {
@@ -55,5 +56,30 @@ export default (sequelizeInstance, Model) => {
     }
   }
 
+  Model.getTauxdOpportunite = async () => {
+    return Model.findAll({
+      attributes: [
+        'rome',
+        [
+          sequelize.literal(
+            'CAST(sum(ind_t < 4) / count(tensions.bassin_id) AS DECIMAL(12,2))'
+          ),
+          'opportunite',
+        ],
+      ],
+      include: {
+        attributes: ['reg'],
+        model: Model.models.bassins,
+        required: true,
+      },
+      group: ['rome', 'bassins.reg'],
+    }).then((r) =>
+      r.map((v) => ({
+        code_rome: v.rome,
+        code_region: v.dataValues.bassins[0].reg,
+        opportunite: parseFloat(v.dataValues.opportunite),
+      }))
+    )
+  }
   return Model
 }

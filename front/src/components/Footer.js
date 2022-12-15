@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import LOGO from '../assets/images/LogoMobiville_gros.svg'
+import { useNomPage } from '../common/contexts/NomPageContext'
 import { COLOR_VERT_MOBIVILLE } from '../constants/colors'
 import { MOBILE_WIDTH } from '../constants/mobile'
 
@@ -129,6 +130,8 @@ const CopyRight = styled.p`
 `
 
 const Footer = () => {
+  const { nomPage } = useNomPage()
+
   return (
     <MainSpace>
       <div className="footer">
@@ -145,10 +148,10 @@ const Footer = () => {
             <Link to="/faq">Questions fréquentes</Link>
           </Item>
           <Item>
-            <Link to="/legal">Mentions légales</Link>
+            <Link to="/mentions-legales">Mentions légales</Link>
           </Item>
           <Item>
-            <Link to="/accessibility">Accessibilité : non conforme</Link>
+            <Link to="/accessibilite">Accessibilité : non conforme</Link>
           </Item>
           <Item>
             <a
@@ -171,6 +174,7 @@ const Footer = () => {
               href="https://www.pole-emploi.fr/"
               target="_blank"
               rel="noreferrer"
+              tag-exit={`${nomPage}/footer/liens-pole-emploi`}
             >
               <img
                 className="logo-pe"
@@ -182,6 +186,7 @@ const Footer = () => {
               href="https://www.actionlogement.fr/"
               target="_blank"
               rel="noreferrer"
+              tag-exit={`${nomPage}/footer/liens-actionlogement`}
             >
               <img
                 className="logo-al"
@@ -189,7 +194,12 @@ const Footer = () => {
                 alt="action logement"
               />
             </a>
-            <a href="http://www.fse.gouv.fr/" target="_blank" rel="noreferrer">
+            <a
+              href="http://www.fse.gouv.fr/"
+              tag-exit={`${nomPage}/footer/liens-fse`}
+              target="_blank"
+              rel="noreferrer"
+            >
               <img
                 className="logo-fse"
                 src="/logos/logo_fonds_social_eu.svg"
@@ -201,6 +211,7 @@ const Footer = () => {
               href="http://www.fse.gouv.fr/"
               target="_blank"
               rel="noreferrer"
+              tag-exit={`${nomPage}/footer/liens-fse`}
             >
               <img src="/logos/logo-ue.svg" alt="fond social européen" />
               <span>

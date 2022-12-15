@@ -52,7 +52,7 @@ const ImageContainer = styled.div`
   }
 `
 
-const MobilityGuide = () => {
+const MobilityGuideBanner = () => {
     const windowsSize = useWindowSize()
     const isMobile = isMobileView(windowsSize)
 
@@ -67,7 +67,7 @@ const MobilityGuide = () => {
             <Text isMobile={isMobile}>Par où commencer ?... Où aller ?... Comment faire ?...</Text>
             <Text>Les réponses se trouvent dans notre guide à la mobilité</Text>
             <ActionButton
-              path={'/mobility-guide'}
+              path={'/conseils-et-astuces'}
               libelle={'Consulter notre guide sur la mobilité'}
               isMobile={isMobile}
               isBlue={true}
@@ -83,4 +83,4 @@ const MobilityGuide = () => {
     )
 }
 
-export default MobilityGuide
+export default MobilityGuideBanner

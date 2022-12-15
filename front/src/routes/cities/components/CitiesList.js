@@ -201,6 +201,13 @@ const CitiesList = ({
           sortCriterions={sortCriterions}
           key={city.id}
           to={formatCityUrl(city, params.codeRome)}
+          onClickTag={() =>
+            window.smartTag({
+              name: 'acces_detail_ville',
+              type: 'navigation',
+              chapters: ['cities'],
+            })
+          }
           onMouseOver={() => setHoveredCityId(city.id)}
           onMouseLeave={() => setHoveredCityId(null)}
           isLoadingProfessions={isLoadingProfessions}
@@ -226,7 +233,14 @@ const CitiesList = ({
           page={page}
           siblingCount={2}
           boundaryCount={0}
-          onChange={(_, value) => setPage(value)}
+          onChange={(_, value) => {
+            setPage(value)
+            window.smartTag({
+              name: 'pagination',
+              type: 'navigation',
+              chapters: ['cities'],
+            })
+          }}
         />
       </PaginationContainer>
     </Container>

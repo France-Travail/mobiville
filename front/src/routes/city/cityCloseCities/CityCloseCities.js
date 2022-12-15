@@ -97,9 +97,10 @@ const ButtonContainer = styled.div`
   margin: 16px auto;
 
   ${({ $isMobile }) =>
-    !$isMobile && css`
+    !$isMobile &&
+    css`
       width: fit-content;
-  `}
+    `}
 `
 
 const CityCloseCities = ({ codeRome, backLink }) => {
@@ -146,8 +147,8 @@ const CityCloseCities = ({ codeRome, backLink }) => {
     })
   }, [similarCities, codeRome])
 
-  const CityItem = ({ city, total }) => (
-    <CityItemContainer to={formatCityUrl(city, codeRome)}>
+  const CityItem = ({ city, total, containerProps }) => (
+    <CityItemContainer to={formatCityUrl(city, codeRome)} {...containerProps}>
       <CityItemCity>
         <CityItemStrong>{total ?? '_'} offres</CityItemStrong> à{' '}
         {capitalize(city?.nom_comm)}
@@ -157,9 +158,10 @@ const CityCloseCities = ({ codeRome, backLink }) => {
   )
 
   return (
+    <div tag-page="/city-villes-similaires">
     <Container $isMobile={isMobile}>
       <Title>Elargir votre zone géographique</Title>
-      
+
       <BlockContainer>
         <BlockTitle>Villes à proximité</BlockTitle>
 
@@ -174,6 +176,15 @@ const CityCloseCities = ({ codeRome, backLink }) => {
                     item?.insee?.includes(closeCity.insee_com)
                   )?.total
                 }
+                containerProps={{
+                  onClick: () => {
+                    window.smartTag({
+                      name: 'acces_offre',
+                      type: 'navigation',
+                      chapters: ['city-villes-similaire', 'proximite'],
+                    })
+                  },
+                }}
               />
             ))
           ) : (
@@ -189,6 +200,15 @@ const CityCloseCities = ({ codeRome, backLink }) => {
             libelle="Voir toutes les villes à proximité"
             isBlue={false}
             isWhite
+            buttonProps={{
+              onClick: () => {
+                window.smartTag({
+                  name: 'voir_toutes_les_villes',
+                  type: 'navigation',
+                  chapters: ['city-villes-similaire', 'proximite'],
+                })
+              },
+            }}
           />
         </ButtonContainer>
       </BlockContainer>
@@ -207,6 +227,15 @@ const CityCloseCities = ({ codeRome, backLink }) => {
                     item?.insee?.includes(similarCity.insee_com)
                   )?.total
                 }
+                containerProps={{
+                  onClick: () => {
+                    window.smartTag({
+                      name: 'acces_offre',
+                      type: 'navigation',
+                      chapters: ['city-villes-similaire', 'similaires'],
+                    })
+                  },
+                }}
               />
             ))
           ) : (
@@ -222,10 +251,20 @@ const CityCloseCities = ({ codeRome, backLink }) => {
             libelle="Voir toutes les villes similaires"
             isBlue={false}
             isWhite
+            buttonProps={{
+              onClick: () => {
+                window.smartTag({
+                  name: 'voir_toutes_les_villes',
+                  type: 'navigation',
+                  chapters: ['city-villes-similaire', 'similaires'],
+                })
+              },
+            }}
           />
         </ButtonContainer>
       </BlockContainer>
     </Container>
+    </div>
   )
 }
 

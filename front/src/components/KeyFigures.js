@@ -42,6 +42,7 @@ const Data = styled.p`
   color: ${COLOR_PRIMARY};
   font-size: 24px;
   font-weight: 900;
+  line-height: 36px;
 `
 
 const Label = styled.p`
@@ -59,7 +60,9 @@ const KeyFigures = ({ figures }) => {
 
   return (
     <Container $isMobile={isMobile}>
-      {figures.map((figure) => (
+      {figures
+      .filter(figure => !!figure)
+      .map(figure => (
         <Figure key={figure.label}>
           {figure.icon}
           <Data>{figure.data}</Data>

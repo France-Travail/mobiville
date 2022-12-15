@@ -11,7 +11,7 @@ import {
 } from '../constants/colors'
 
 const Nav = styled.nav`
-  order: ${({ $isMobile }) => $isMobile ? '3' : '1'};
+  order: ${({ $isMobile }) => ($isMobile ? '3' : '1')};
 
   background: ${({ $isMobile }) =>
     $isMobile ? COLOR_WHITE : COLOR_OTHER_GREEN};
@@ -50,25 +50,25 @@ const MenuNavigation = ({ isMobile = false }) => {
 
   const MENU_LINK = [
     {
-      path: `/city/${insee}?codeRome=${codeRome}`,
+      path: `/ville/${insee}?codeRome=${codeRome}`,
       label: 'Emploi et logement',
       selected:
-        !location.pathname.includes('job') &&
-        !location.pathname.includes('life') &&
+        !location.pathname.includes('metier') &&
+        !location.pathname.includes('services') &&
         !location.pathname.includes('villes-proches'),
     },
     {
-      path: `/city/${insee}/job?codeRome=${codeRome}`,
+      path: `/ville/${insee}/metier?codeRome=${codeRome}`,
       label: 'Offres d’emploi',
-      selected: location.pathname.includes('job'),
+      selected: location.pathname.includes('metier'),
     },
     {
-      path: `/city/${insee}/life?codeRome=${codeRome}`,
+      path: `/ville/${insee}/services?codeRome=${codeRome}`,
       label: 'Services de la ville',
-      selected: location.pathname.includes('life'),
+      selected: location.pathname.includes('services'),
     },
     {
-      path: `/city/${insee}/villes-proches?codeRome=${codeRome}`,
+      path: `/ville/${insee}/villes-proches?codeRome=${codeRome}`,
       label: isMobile
         ? 'Villes similaires'
         : 'Villes similaires ou à proximité',
@@ -96,7 +96,7 @@ const MenuNavigation = ({ isMobile = false }) => {
 }
 
 MenuNavigation.propTypes = {
-  isMobile: PropTypes.bool
+  isMobile: PropTypes.bool,
 }
 
 export default MenuNavigation

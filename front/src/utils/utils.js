@@ -146,13 +146,15 @@ export const visibilityBoostSorter = (a, b) => (!b?.visibility_boost ? -1 : b?.v
 // === URL UTILS ===
 
 export const formatCityUrl = (city, codeRome) => {
-  let url = `/city/${city.insee_com}-${city.nom_comm}`
+  let url = `/ville/${city.insee_com}-${city.nom_comm}`
   if (!!codeRome) {
     url += `?codeRome=${codeRome}`
   }
 
   return url
 }
+
+export const alphabetOrder = (key) => (a, b) => a[key].localeCompare(b[key]) 
 
 export const formatHelpUrl = (help) => `/aides/${help.slug}`
 

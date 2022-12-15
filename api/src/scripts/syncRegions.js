@@ -31,6 +31,6 @@ const doSync = async () => {
 }
 
 console.log(
-  'Starting synchronization for cities. This should be almost instanteneous. Please wait for the confirmation message…'
+  'Starting synchronization for regions. This should be almost instanteneous. Please wait for the confirmation message…'
 )
 doSync()

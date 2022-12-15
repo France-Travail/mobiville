@@ -150,6 +150,7 @@ publish api image:
     # on construit l'image docker du composant api et on la sauvegarde dans le registry gitlab
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
     - PUB_BRANCH=${CI_COMMIT_BRANCH//\//_}
+    - echo "CI_COMMIT_SHA=$CI_COMMIT_SHA" >> .env
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dockerfile_api --destination $CI_REGISTRY_IMAGE:api-${PUB_BRANCH}-${VERSION} --destination $CI_REGISTRY_IMAGE:api-${PUB_BRANCH}-latest
   rules:
     - if: '($CI_COMMIT_BRANCH == $DEV_BRANCH || $CI_COMMIT_BRANCH == $PROD_BRANCH) && $FORCE_DEPLOY == ""'
