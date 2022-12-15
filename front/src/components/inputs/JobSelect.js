@@ -18,7 +18,7 @@ const JobSelect = React.forwardRef(({ onSelect, defaultValue }, ref) => {
 
   const [value, setValue] = useState(null)
   const [inputValue, setInputValue] = useState(null)
-  const isCitiesPage = pathname === '/cities'
+  const isCitiesPage = pathname === '/villes'
 
   useEffect(() => {
     if (!!search && !!criterions?.codeRomes && !value) {

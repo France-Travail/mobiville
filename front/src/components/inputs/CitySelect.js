@@ -23,7 +23,7 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
   } = useCities()
 
   const { search, pathname } = useLocation()
-  const isCitiesPage = pathname === '/cities'
+  const isCitiesPage = pathname === '/villes'
 
   const [options, setOptions] = useState([])
   const [inputValue, setInputValue] = useState('')
