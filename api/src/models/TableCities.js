@@ -1,4 +1,4 @@
-import { Op, QueryTypes } from 'sequelize'
+import Sequelize, { Op, QueryTypes } from 'sequelize'
 import { compact, mean } from 'lodash'
 import {
   ALT_IS_MOUNTAIN,
@@ -347,7 +347,20 @@ export default (sequelizeInstance, Model) => {
     await Model.findAll({
       attributes: ['nom_comm', 'insee_com', 'postal_code'],
       where: {
-        nom_comm: { [Op.like]: `${query}%` },
+        nom_comm: {
+          [Op.and]: [
+            Sequelize.where(
+              Sequelize.fn('LOWER', Sequelize.col('nom_comm')),
+              'LIKE',
+              `${query}%`
+            ),
+            Sequelize.where(
+              Sequelize.fn('LOWER', Sequelize.col('nom_comm')),
+              'NOT LIKE',
+              '%-ARRONDISSEMENT'
+            ),
+          ],
+        },
       },
       order: ['nom_comm'],
       limit: 10,

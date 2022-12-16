@@ -59,16 +59,6 @@ const CitySelect = ({ value, codeRome, onSelect }) => {
     }
   }, [search, criterions])
 
-  const regionFilterByRome = (region) =>
-    (!!value && inputValue === value?.label) ||
-    (region?.romes?.[codeRome] &&
-      region.label.toLowerCase().match(
-        inputValue
-          .trim()
-          .toLowerCase()
-          .replace(/[^a-z_-]/g, '')
-      ))
-
   const isRegionWithOpportunityRate = (rate) => {
     return (r) => r.romes?.[codeRome]?.opportunite >= rate
   }
@@ -83,7 +73,7 @@ const CitySelect = ({ value, codeRome, onSelect }) => {
       ...(!!criterions
         ? codeRome
           ? autocompleteRegionWithRome()
-          : criterions.regions
+          : criterions.regions.filter(regionFilterByInput)
         : []),
     ]
     // format autocompleted cities list item
@@ -108,6 +98,7 @@ const CitySelect = ({ value, codeRome, onSelect }) => {
   const autocompleteRegionWithRome = () => {
     const sortedRegions = criterions.regions
       .filter(regionFilterByRome)
+      .filter(regionFilterByInput)
       .sort(regionSortByOpportunity)
     const bestRegion = sortedRegions.filter(isRegionWithOpportunityRate(0.15))
     const lesserRegions =
@@ -122,6 +113,17 @@ const CitySelect = ({ value, codeRome, onSelect }) => {
     // complété avec les 2 régions avec le plus d'opportunités
     return [...bestRegion, ...lesserRegions].sort(alphabetOrder('label'))
   }
+
+  const regionFilterByRome = (region) =>
+    (!value || inputValue !== value?.label) && region?.romes?.[codeRome]
+
+  const regionFilterByInput = (region) =>
+    region.label.toLowerCase().match(
+      inputValue
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z_-]/g, '')
+    )
 
   // trigger when text input has been updated
   const onInputChange = (_, inputValue) => {

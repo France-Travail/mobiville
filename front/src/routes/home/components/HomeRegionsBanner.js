@@ -76,7 +76,7 @@ const HomeHelpsBanner = () => {
 
   useEffect(() => {
     setRegions(
-      criterions.regions
+      criterions?.regions
         .sort(alphabetOrder('label'))
         .slice(0, 12)
         .map((r) => ({ label: r.label, path: regionUrl(r) }))
