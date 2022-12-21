@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 
@@ -63,7 +64,15 @@ const CityName = styled.h1`
   margin: 8px 0 22px 0;
 
   font-weight: 900;
-  font-size: ${({ isMobile }) => (isMobile ? '24px' : '36px')};
+  font-size: ${({ isMobile, title  }) => {
+    if(isMobile && title <= 40)
+      return '22px'  
+
+    else if(isMobile && title > 40)
+      return '18px'
+    else
+      return '36px'
+  }};
   line-height: ${({ isMobile }) => (isMobile ? '36px' : '42px')};
   color: ${COLOR_PRIMARY};
 `
@@ -132,6 +141,8 @@ const ServicesStandOutImageContainer = styled.div`
 
 const CityHome = ({ romeLabel, insee, codeRome }) => {
   const isMobile = isMobileView(useWindowSize())
+  const inputRef = useRef('')
+  const [titleLength, setTitleLength] = useState(0)
 
   const {
     companiesCount,
@@ -145,10 +156,9 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
     onSearchInfosTravail,
     sortByDistanceFromCity
   } = useProfessions()
-
   useEffect(() => {
     if (!city?.insee_com || !codeRome) return
-
+    setTitleLength((inputRef.current)?.innerHTML.length)
     onSearchCloseCompanies({
       codeRome,
       insee: city.insee_com,
@@ -169,7 +179,7 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
             <RoundSeparator> • </RoundSeparator>
             {capitalize(city.nom_dept)}
           </RegionName>
-          <CityName isMobile={isMobile}>
+          <CityName isMobile={isMobile} title={titleLength} ref={inputRef}>
             {capitalize(city.nom_comm)}
             {isMobile ? <br /> : ' '}pour le métier {romeLabel}
           </CityName>

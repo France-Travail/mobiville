@@ -62,7 +62,6 @@ const BlockCompanyName = styled.span`
   font-weight: 700;
   font-size: 16px;
   line-height: 19px;
-  text-decoration-line: underline;
 `
 
 const BlockCompanyCity = styled.span`
@@ -85,6 +84,9 @@ const BlockCompanyDataFrom = styled.div`
     text-decoration: underline;
   }
 `
+const Lien = styled.a`
+text-decoration: underline;
+`
 
 const CloseCompanies = () => {
   const isMobile = isMobileView(useWindowSize())
@@ -96,26 +98,26 @@ const CloseCompanies = () => {
         <CardsContainer $isMobile={isMobile}>
           <Card $isMobile={isMobile}>
             {closeCompanies?.slice(0, 5).map((company, index) => (
-              <a key={index} href={company.url} target="_blank">
+              <Lien key={index} href={company.url} target="_blank">
                 <BlockCompanyName>
                   {wordsCapitalize(company.name)}
                 </BlockCompanyName>{' '}
                 <BlockCompanyCity>{capitalize(company.city)}</BlockCompanyCity>
-              </a>
+              </Lien>
             ))}
           </Card>
 
           {closeCompanies?.length >= 10 ? (
             <Card $isMobile={isMobile}>
               {closeCompanies?.slice(5, 10).map((company, index) => (
-                <a key={index} href={company.url} target="_blank">
+                <Lien key={index} href={company.url} target="_blank">
                   <BlockCompanyName>
                     {wordsCapitalize(company.name)}
                   </BlockCompanyName>{' '}
                   <BlockCompanyCity>
                     {capitalize(company.city)}
                   </BlockCompanyCity>
-                </a>
+                </Lien>
               ))}
             </Card>
           ) : null}

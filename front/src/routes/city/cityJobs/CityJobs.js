@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import { Helmet } from 'react-helmet-async'
@@ -26,7 +26,15 @@ const Title = styled.h1`
 
   color: ${COLOR_PRIMARY};
   font-weight: 900;
-  font-size: ${({ $isMobile }) => ($isMobile ? '24px' : '36px')};
+  font-size: ${({ $isMobile, title }) => {
+   if($isMobile && title <= 40)
+      return '22px'  
+
+    else if($isMobile && title > 40)
+      return '18px'
+    else
+      return '36px'
+  }};
   line-height: ${({ $isMobile }) => ($isMobile ? '36px' : '42px')};
 `
 
@@ -93,6 +101,8 @@ const CityJobs = ({ romeLabel, codeRome }) => {
 
   const [displayedJobs, setDisplayedJobs] = useState([])
   const [selectedJob, setSelectedJob] = useState(null)
+  const inputRef = useRef('')
+  const [titleLength, setTitleLength] = useState(0)
 
   const DEFAULT_FILTERS = {
     distance: '',
@@ -113,7 +123,7 @@ const CityJobs = ({ romeLabel, codeRome }) => {
   
   useEffect(() => {
     if (isQueryParamsUsed || !displayedJobs || displayedJobs.length < 1 || !searchParams?.get('jobSelected')) return
-
+    
     const selectedJob = displayedJobs.find(job => job.id === searchParams.get('jobSelected'))
     setSelectedJob(selectedJob)
     setIsQueryParamsUsed(true)
@@ -222,7 +232,7 @@ const CityJobs = ({ romeLabel, codeRome }) => {
 
   useEffect(() => {
     if (!codeRome|| !city?.insee_com) return
-
+    setTitleLength((inputRef.current)?.innerHTML.length)
     onSearch({
       codeRome: [codeRome],
       insee: [city.insee_com]
@@ -270,7 +280,7 @@ const CityJobs = ({ romeLabel, codeRome }) => {
       <div tag-page="/city-offres">
       {(!isMobile || !selectedJob)
         ? (<>
-          <Title $isMobile={isMobile}>
+          <Title $isMobile={isMobile} title={titleLength} ref={inputRef}>
             {capitalize(city.nom_comm)}
             {isMobile ? <br /> : ' '}pour le métier {romeLabel}
           </Title>
