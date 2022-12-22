@@ -202,7 +202,7 @@ const CitiesSearchBar = ({
             <SubTitle>Classement des villes par opportunités d'emploi</SubTitle>
           </TitleContainer>
         </Container>)}
-      
+
       <Modale
         title='Ma recherche'
         onClose={() => setShowMobileSearch(false)}
