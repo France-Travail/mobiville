@@ -27,22 +27,22 @@ export const MobivilleRoutes = () => {
 
   return (
     <Routes>
-      <Route end path="/" element={<Home />} />
+      <Route index path="/" element={<Home />} />
 
-      <Route end path="/villes" element={<Cities />} />
-      <Route end path="/ville/:insee" element={<City />} />
-      <Route end path="/ville/:insee/:section" element={<City />} />
-      <Route end path="/rechercher" element={<CitySearchPage />} />
+      <Route path="/villes" element={<Cities />} />
+      <Route path="/ville/:insee" element={<City />} />
+      <Route path="/ville/:insee/:section" element={<City />} />
+      <Route path="/rechercher" element={<CitySearchPage />} />
 
-      <Route end path="/aides" element={<Helps />} />
-      <Route end path="/aides/:slug" element={<HelpDetailsPage />} />
-      <Route end path="/aides-filtres" element={<HelpFilterMobilePage />} />
-      <Route end path="/aides-recherche" element={<HelpsSearchPage />} />
+      <Route path="/aides" element={<Helps />} />
+      <Route path="/aides/:slug" element={<HelpDetailsPage />} />
+      <Route path="/aides-filtres" element={<HelpFilterMobilePage />} />
+      <Route path="/aides-recherche" element={<HelpsSearchPage />} />
 
-      <Route end path="/conseils-et-astuces" element={<MobilityGuide />} />
-      <Route end path="/faq" element={<FAQ />} />
-      <Route end path="/mentions-legales" element={<Legal />} />
-      <Route end path="/accessibilite" element={<Accessibility />} />
+      <Route path="/conseils-et-astuces" element={<MobilityGuide />} />
+      <Route path="/faq" element={<FAQ />} />
+      <Route path="/mentions-legales" element={<Legal />} />
+      <Route path="/accessibilite" element={<Accessibility />} />
 
       {/* Redirection sur la home page si le path ne match aucune route */}
       <Route
