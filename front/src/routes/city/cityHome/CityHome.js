@@ -64,14 +64,10 @@ const CityName = styled.h1`
   margin: 8px 0 22px 0;
 
   font-weight: 900;
-  font-size: ${({ isMobile, title  }) => {
-    if(isMobile && title <= 40)
-      return '22px'  
-
-    else if(isMobile && title > 40)
-      return '18px'
-    else
-      return '36px'
+  font-size: ${({ isMobile, title }) => {
+    if (isMobile && title <= 40) return '22px'
+    else if (isMobile && title > 40) return '18px'
+    else return '36px'
   }};
   line-height: ${({ isMobile }) => (isMobile ? '36px' : '42px')};
   color: ${COLOR_PRIMARY};
@@ -96,7 +92,7 @@ const TagsContainer = styled.div`
   margin-top: 28px;
 
   display: grid;
-  place-content: center
+  place-content: center;
 `
 
 const ServicesStandOut = styled.div`
@@ -144,21 +140,20 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
   const inputRef = useRef('')
   const [titleLength, setTitleLength] = useState(0)
 
-  const {
-    companiesCount,
-    onSearchCloseCompanies,
-    city
-  } = useCities()
+  const { companiesCount, onSearchCloseCompanies, city } = useCities()
   const {
     jobsMissingApplicant,
+    professions,
     totalOffres,
     infosTravail,
     onSearchInfosTravail,
-    sortByDistanceFromCity
+    sortByDistanceFromCity,
   } = useProfessions()
+  const isDerniereOffreDemploi = jobsMissingApplicant.length < 3
+
   useEffect(() => {
     if (!city?.insee_com || !codeRome) return
-    setTitleLength((inputRef.current)?.innerHTML.length)
+    setTitleLength(inputRef.current?.innerHTML.length)
     onSearchCloseCompanies({
       codeRome,
       insee: city.insee_com,
@@ -187,7 +182,7 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
       </CityHeader>
 
       <TagsContainer>
-        <Tag green={infosTravail?.bassinTensionIndT < 4} size='tall'>
+        <Tag green={infosTravail?.bassinTensionIndT < 4} size="tall">
           {formatCityTension(infosTravail?.bassinTensionIndT)}
         </Tag>
       </TagsContainer>
@@ -204,21 +199,33 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
             data: companiesCount,
             icon: <ProfilEntrepriseIcon />,
           },
-          !infosTravail?.hiringRate ? null : {
-            label: "Taux d'embauche",
-            data: (infosTravail?.hiringRate > 100 ? '100%' : `${infosTravail?.hiringRate}%`),
-            icon: <HandshakeIcon />,
-          },
+          !infosTravail?.hiringRate
+            ? null
+            : {
+                label: "Taux d'embauche",
+                data:
+                  infosTravail?.hiringRate > 100
+                    ? '100%'
+                    : `${infosTravail?.hiringRate}%`,
+                icon: <HandshakeIcon />,
+              },
         ]}
       />
 
       <SectionHeader
-        title="Les offres d'emploi avec plus d'opportunités"
-        subTitle="Offres de plus de 15 jours, comptant moins de 4 candidatures"
+        title={
+          isDerniereOffreDemploi
+            ? "Les dernières offres d'emploi"
+            : "Les offres d'emploi avec plus d'opportunités"
+        }
+        subTitle={
+          !isDerniereOffreDemploi &&
+          'Offres de plus de 15 jours, comptant moins de 4 candidatures'
+        }
       />
 
       <HorizontalScrollableSection>
-        {jobsMissingApplicant
+        {(isDerniereOffreDemploi ? professions : jobsMissingApplicant)
           ?.sort(sortByDistanceFromCity(city))
           .slice(0, 3)
           .map((job) => (
@@ -226,7 +233,7 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
               key={job.id}
               to={{
                 pathname: `/ville/${insee}/metier`,
-                search: `?codeRome=${codeRome}`
+                search: `?codeRome=${codeRome}`,
               }}
             >
               <JobCard job={job} style={{ height: '100%' }} />

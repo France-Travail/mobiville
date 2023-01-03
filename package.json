@@ -37,12 +37,12 @@
 	"homepage": "https://git.beta.pole-emploi.fr/mobiville/mobiville/-/blob/master/README.md",
 	"dependencies": {
 		"husky": "8.0.2",
-		"lint-staged": "13.0.4",
-		"prettier": "2.8.0"
+		"lint-staged": "13.1.0",
+		"prettier": "2.8.1"
 	},
 	"devDependencies": {
 		"babel-eslint": "10.1.0",
-		"eslint": "8.28.0",
+		"eslint": "8.31.0",
 		"eslint-config-prettier": "8.5.0",
 		"eslint-config-react-app": "7.0.1"
 	}
