@@ -75,11 +75,11 @@ const JobCard = ({ job, onClick = () => {}, isSelected, ...props }) => {
         <Location>{job.lieuTravail.libelle}</Location>
       )}
 
-      {isMissingApplicants(job)
-        ? (<Tag green bold>
-            Offre avec plus d'opportunités
-          </Tag>)
-        : null}
+      {isMissingApplicants(job) ? (
+        <Tag green bold>
+          Offre avec plus d'opportunités
+        </Tag>
+      ) : null}
 
       {job.salaire?.libelle && (
         <KeyInfo>
