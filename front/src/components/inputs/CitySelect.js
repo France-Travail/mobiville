@@ -114,16 +114,21 @@ const CitySelect = ({ value, codeRome, onSelect }) => {
     return [...bestRegion, ...lesserRegions].sort(alphabetOrder('label'))
   }
 
-  const regionFilterByRome = (region) =>
-    (!value || inputValue !== value?.label) && region?.romes?.[codeRome]
+  const regionFilterByRome = (region) => region?.romes?.[codeRome]
 
-  const regionFilterByInput = (region) =>
-    region.label.toLowerCase().match(
-      inputValue
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z_-]/g, '')
+  const regionFilterByInput = (region) => {
+    const isAutocompleteFilled = inputValue === value?.label
+    // si une region est sélectionnée les autres s'affichent en liste déroulante
+    return (
+      isAutocompleteFilled ||
+      region.label.toLowerCase().match(
+        inputValue
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-zàâçéèêëîïôûùüÿñæœ .-]/g, '')
+      )
     )
+  }
 
   // trigger when text input has been updated
   const onInputChange = (_, inputValue) => {

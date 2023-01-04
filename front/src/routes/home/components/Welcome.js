@@ -10,10 +10,12 @@ import WelcomeSearchForm from './WelcomeSearchForm'
 
 const Container = styled.section`
   background: linear-gradient(180deg, #ddddea 0%, #c3e9e9 100%);
-  padding-bottom: ${({ $isMobile }) => ($isMobile ? '40px' : '80px')};
+  padding-bottom: ${({ $isMobile }) => ($isMobile ? '40px' : '50px')};
   border-radius: 0;
 `
-
+const WelcomeSection = styled(Section)`
+  margin-top: unset;
+`
 // === TITLE BLOCK ===
 
 const TitleContainer = styled.div`
@@ -61,7 +63,7 @@ const Welcome = () => {
 
   return (
     <Container $isMobile={isMobile}>
-      <Section>
+      <WelcomeSection>
         <TitleContainer $isMobile={isMobile}>
           <TitleWrapper>
             <Title>Trouvez l’emploi et la ville qui va avec !</Title>
@@ -76,7 +78,7 @@ const Welcome = () => {
         </TitleContainer>
 
         <WelcomeSearchForm></WelcomeSearchForm>
-      </Section>
+      </WelcomeSection>
     </Container>
   )
 }
