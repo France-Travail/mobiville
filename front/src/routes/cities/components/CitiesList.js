@@ -1,10 +1,8 @@
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import loadable from '@loadable/component'
 
 import { CircularProgress } from '@mui/material'
-import Pagination from '@mui/material/Pagination'
-
-import CityItem from './CityItem'
 
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
@@ -20,6 +18,10 @@ import {
 } from '../../../constants/colors'
 import { useProfessions } from '../../../common/contexts/professionsContext'
 import { formatCityUrl } from '../../../utils/utils'
+
+// import CityItem from './CityItem'
+const CityItem = loadable(() => import('./CityItem'))
+const Pagination = loadable(() => import('@mui/material/Pagination'))
 
 const Container = styled.div`
   grid-area: citiesList;
@@ -96,11 +98,10 @@ const CitiesList = ({
   selectedCityId = null,
   setHoveredCityId = null,
   page = 1,
-  onPageChange = () => {}
+  onPageChange = () => {},
 }) => {
   const isMobile = isMobileView(useWindowSize())
-  const { totalCities, sortCriterions, isLoading } =
-    useCities()
+  const { totalCities, sortCriterions, isLoading } = useCities()
   const { isLoading: isLoadingProfessions, professionsCountList } =
     useProfessions()
 
@@ -195,7 +196,7 @@ CitiesList.propTypes = {
   cities: PropTypes.array.isRequired,
   selectedCityId: PropTypes.func,
   setHoveredCityId: PropTypes.func,
-  onPageChange: PropTypes.func
+  onPageChange: PropTypes.func,
 }
 
 export default CitiesList

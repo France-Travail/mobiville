@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
+
+import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 
 import defaultMarker from '../assets/images/marker-blue.svg'
 import selectedMarker from '../assets/images/marker-selected.svg'
@@ -31,7 +33,7 @@ const BoundsControler = ({ bounds, center, zoom }) => {
     if (!map || !bounds || bounds.length < 1) return
 
     map.flyToBounds(bounds, {
-      duration: 0.75
+      duration: 0.75,
     })
   }, [bounds])
 
@@ -39,7 +41,7 @@ const BoundsControler = ({ bounds, center, zoom }) => {
     if (!map || !center || center.length < 1) return
 
     map.flyTo(center, zoom)
-  }, [ center, zoom ])
+  }, [center, zoom])
 }
 
 const Map = ({

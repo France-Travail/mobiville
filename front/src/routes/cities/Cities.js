@@ -1,18 +1,22 @@
-import { useEffect, useState, memo, useCallback, useMemo } from 'react'
-import { useLocation } from 'react-router-dom'
-import { Helmet } from 'react-helmet-async'
-import styled, { css } from 'styled-components'
+import loadable from '@loadable/component'
 import queryString from 'query-string'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
+import { useLocation } from 'react-router-dom'
+import styled, { css } from 'styled-components'
 
 import { useCities } from '../../common/contexts/citiesContext'
-import { MainLayout, Map } from '../../components'
+import { MainLayout } from '../../components'
+
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 
 import { useProfessions } from '../../common/contexts/professionsContext'
-import CitiesList from './components/CitiesList'
 import { formatCityUrl } from '../../utils/utils'
-import CitiesSearchBar from './components/CitiesSearchBar'
+
+const CitiesSearchBar = loadable(() => import('./components/CitiesSearchBar'))
+const CitiesList = loadable(() => import('./components/CitiesList'))
+const Map = loadable(() => import('../../components/Map'))
 
 const Container = styled.div`
   width: 100%;
@@ -20,19 +24,22 @@ const Container = styled.div`
   display: grid;
   grid-template-rows: auto auto 1fr;
 
-  ${({ $isMobile }) => $isMobile ? css`
-    grid-template-areas:
-      "cityForm"
-      "filters"
-      "citiesList";
-    grid-template-columns: auto;
-  ` : css`
-    grid-template-areas:
-      "cityForm cityForm cityForm cityForm"
-      ". filters map map"
-      ". citiesList map map";
-    grid-template-columns: 1fr 600px minmax(0, 440px) 1fr;
-  `}
+  ${({ $isMobile }) =>
+    $isMobile
+      ? css`
+          grid-template-areas:
+            'cityForm'
+            'filters'
+            'citiesList';
+          grid-template-columns: auto;
+        `
+      : css`
+          grid-template-areas:
+            'cityForm cityForm cityForm cityForm'
+            '. filters map map'
+            '. citiesList map map';
+          grid-template-columns: 1fr 600px minmax(0, 440px) 1fr;
+        `}
 `
 
 const MapContainer = styled.div`
@@ -47,15 +54,9 @@ const Cities = () => {
   const isMobile = isMobileView(useWindowSize())
   const location = useLocation()
 
-  const {
-    onSearchCountList,
-  } = useProfessions()
+  const { onSearchCountList } = useProfessions()
 
-  const {
-    cities,
-    sortCriterions,
-    onSearch
-  } = useCities()
+  const { cities, sortCriterions, onSearch } = useCities()
 
   const [params, setParams] = useState(queryString.parse(location.search))
   const [page, setPage] = useState(1)
@@ -92,9 +93,7 @@ const Cities = () => {
     ) {
       return (
         <Helmet>
-          <title>
-            Où travailler en {cities[0]['newRegion.name']} | Mobiville
-          </title>
+          <title>Où travailler en {cities[0]['region.name']} | Mobiville</title>
           <meta
             name="description"
             content={`Découvrez les villes qui correspondent le mieux à votre recherche d'emploi dans la région ${cities[0]['newRegion.name']} et la liste des villes les plus attractives pour votre métier`}
@@ -138,7 +137,7 @@ const Cities = () => {
       y: city.geo_point_2d_y ?? 0,
       url: formatCityUrl(city, params.codeRome),
     }))
-  }, [ cities ])
+  }, [cities])
 
   return (
     <>
@@ -152,9 +151,7 @@ const Cities = () => {
         topMobileMenu
       >
         <Container $isMobile={isMobile}>
-          <CitiesSearchBar
-            params={params}
-          />
+          <CitiesSearchBar params={params} />
 
           <CitiesList
             cities={cities}
