@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import loadable from '@loadable/component'
 
 import CityHousingSimulator from './components/CityHousingSimulator'
 import CloseCompanies from './components/CloseCompanies'
@@ -25,13 +26,15 @@ import {
   COLOR_TEXT_PRIMARY,
   COLOR_WHITE,
 } from '../../../constants/colors'
-import CityHeader from '../CityHeader'
 import { useProfessions } from '../../../common/contexts/professionsContext'
 import { useCities } from '../../../common/contexts/citiesContext'
 import { isMobileView } from '../../../constants/mobile'
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { Link } from 'react-router-dom'
-import JobCard from '../cityJobs/components/JobCard'
+import CityHeader from '../CityHeader'
+
+const JobCard = loadable(() => import('../cityJobs/components/JobCard'))
+
 
 const ElementContainer = styled.div`
   display: flex;
@@ -151,7 +154,8 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
     onSearchInfosTravail,
     sortByDistanceFromCity,
   } = useProfessions()
-  const isDerniereOffreDemploi = jobsMissingApplicant.length < 3
+
+  const isDefaultJobsPreview = jobsMissingApplicant.length < 3
   const jobSelectedParam = (job) =>
     isMissingApplicants(job) ? `&jobSelected=${job.id}` : ''
 
@@ -218,18 +222,18 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
 
       <SectionHeader
         title={
-          isDerniereOffreDemploi
+          isDefaultJobsPreview
             ? "Les dernières offres d'emploi"
             : "Les offres d'emploi avec plus d'opportunités"
         }
         subTitle={
-          !isDerniereOffreDemploi &&
+          !isDefaultJobsPreview &&
           'Offres de plus de 15 jours, comptant moins de 4 candidatures'
         }
       />
 
       <HorizontalScrollableSection>
-        {(isDerniereOffreDemploi ? professions : jobsMissingApplicant)
+        {(isDefaultJobsPreview ? professions : jobsMissingApplicant)
           ?.sort(sortByDistanceFromCity(city))
           .slice(0, 3)
           .map((job) => (

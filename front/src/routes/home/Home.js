@@ -1,15 +1,17 @@
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
+import loadable from '@loadable/component'
 
 import { COLOR_BACKGROUND } from '../../constants/colors'
 
 import { MainLayout } from '../../components/'
-import Testimonies from './components/Testimonies'
-import MobilityGuideBanner from './components/MobilityGuideBanner'
-import Advantages from './components/Advantages'
 import Welcome from './components/Welcome'
-import HomeHelpsBanner from './components/HomeHelpsBanner'
-import HomeRegionsBanner from './components/HomeRegionsBanner'
+
+const Advantages = loadable(() => import('./components/Advantages'))
+const HomeHelpsBanner = loadable(() => import('./components/HomeHelpsBanner'))
+const HomeRegionsBanner = loadable(() => import('./components/HomeRegionsBanner'))
+const MobilityGuideBanner = loadable(() => import('./components/MobilityGuideBanner'))
+const Testimonies = loadable(() => import('./components/Testimonies'))
 
 const HomePage = () => (
   <MainLayout

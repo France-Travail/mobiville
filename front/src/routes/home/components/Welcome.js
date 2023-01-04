@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import loadable from '@loadable/component'
 
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
@@ -6,7 +7,8 @@ import { COLOR_PRIMARY } from '../../../constants/colors'
 import { Section } from '../../../components'
 
 import heroHomepagePic from '../../../assets/images/hero-homepage.png'
-import WelcomeSearchForm from './WelcomeSearchForm'
+
+const WelcomeSearchForm = loadable(() => import('./WelcomeSearchForm'))
 
 const Container = styled.section`
   background: linear-gradient(180deg, #ddddea 0%, #c3e9e9 100%);
