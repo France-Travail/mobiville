@@ -13,13 +13,17 @@ Fonctionnalité: Rechercher villes - Informations de la ville
 
   Scénario: Présence des offres d'emploi qui ont le moins de candidature
     Alors j'affiche les offres d'emploi qui ont le moins de candidature
+    Lorsque je clique sur la première des trois offres d'emploi
+    Alors le détail de l'offre s'affiche
+
+  Scénario: Affichage de toutes les offres d'emploi
     Lorsque je clique sur Voir toutes les offres d’emploi
     Alors j'affiche les offres d'emploi de la ville pour le métier
 
   Scénario: Présence des entreprises à proximité
     Alors j'affiche la liste des entreprises à proximité
 
-  Scénario: Présence des informations sur la tension immboilière
+  Scénario: Présence des informations sur la tension immobilière
     Alors j'affiche le prix d'achat moyen au m²
     Et j'affiche les loyers moyens pour un logement F2 et F4
 
