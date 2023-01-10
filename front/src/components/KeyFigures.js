@@ -49,7 +49,8 @@ const Label = styled.p`
   width: min-content;
   max-width: 120px;
   min-width: 112px;
-  
+
+  white-space: ${({ $isNoWrap }) => ($isNoWrap ? 'nowrap' : 'initial')};
   font-size: 16px;
   font-weight: 700;
   text-align: center;
@@ -61,14 +62,14 @@ const KeyFigures = ({ figures }) => {
   return (
     <Container $isMobile={isMobile}>
       {figures
-      .filter(figure => !!figure)
-      .map((figure, index) => (
-        <Figure key={`${figure.label}-${index}`}>
-          {figure.icon}
-          <Data>{figure.data}</Data>
-          <Label>{figure.label}</Label>
-        </Figure>
-      ))}
+        .filter((figure) => !!figure)
+        .map((figure, index) => (
+          <Figure key={`${figure.label}-${index}`}>
+            {figure.icon}
+            <Data>{figure.data}</Data>
+            <Label $isNoWrap={figure.$isNoWrap}>{figure.label}</Label>
+          </Figure>
+        ))}
     </Container>
   )
 }
