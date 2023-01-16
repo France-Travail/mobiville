@@ -6,7 +6,7 @@ import { TextSearchInput } from '../../components'
 import { useCities } from '../../common/contexts/citiesContext'
 import { useLocation } from 'react-router-dom'
 
-const JobSelect = React.forwardRef(({ onSelect, defaultValue }, ref) => {
+const JobSelect = ({ value, onSelect }) => {
   const { search, pathname } = useLocation()
   const {
     initializeJobsAutocomplete,
@@ -16,7 +16,6 @@ const JobSelect = React.forwardRef(({ onSelect, defaultValue }, ref) => {
     // isLoadingJobsMatchingCriterion
   } = useCities()
 
-  const [value, setValue] = useState(null)
   const [inputValue, setInputValue] = useState(null)
   const isCitiesPage = pathname === '/villes'
 
@@ -30,16 +29,12 @@ const JobSelect = React.forwardRef(({ onSelect, defaultValue }, ref) => {
         if (key === 'codeRome') {
           const foundJob = criterions.codeRomes.find((job) => job.key === value)
           if (!!foundJob) {
-            setValue(foundJob)
+            onSelect(foundJob)
           }
         }
       }
     }
   }, [search, criterions?.codeRomes])
-
-  useEffect(() => {
-    onSelect(value)
-  }, [value])
 
   useEffect(() => {
     if (!!inputValue) {
@@ -65,7 +60,7 @@ const JobSelect = React.forwardRef(({ onSelect, defaultValue }, ref) => {
 
   // trigger when an option is selected
   const onChange = (_, value) => {
-    setValue(value)
+    onSelect(value)
   }
 
   const onClickTag = () => {
@@ -81,26 +76,24 @@ const JobSelect = React.forwardRef(({ onSelect, defaultValue }, ref) => {
       label="Votre métier"
       placeholder="Saisissez votre métier"
       value={value}
-      ref={ref}
       groupLabel="Métiers"
       onClickTag={isCitiesPage ? onClickTag : undefined}
       options={jobsMatchingCriterions ?? []}
       isOptionEqualToValue={(option, value) =>
-        option.label === value.label ||
-        (!value.label.includes('(') && option.key === value.key)
+        option?.label === value?.label ||
+        (!value?.label?.includes('(') && option?.key === value?.key)
       }
       // loading={isLoadingJobsMatchingCriterion}
       onInputChange={onInputChange}
       onChange={onChange}
-      defaultValue={defaultValue}
       openThreshold={2}
       showEndAdornment={false}
     ></TextSearchInput>
   )
-})
+}
 
 JobSelect.propTypes = {
-  defaultValue: PropTypes.any,
+  value: PropTypes.any,
   onSelect: PropTypes.func.isRequired,
 }
 

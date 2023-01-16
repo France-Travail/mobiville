@@ -5,15 +5,13 @@ import LOGO from '../assets/images/LogoMobiville_gros.svg'
 import LOGO_FR from '../assets/images/marianne-logo.png'
 
 const Header = styled.header`
-  background-color: #fff;
   height: 102px;
-  top: 0;
-  left: 0;
-  right: 0;
-  position: absolute;
   padding: 0 16px;
+
   display: flex;
   align-items: center;
+
+  background-color: #fff;
 `
 
 const HeaderMobile = () => (

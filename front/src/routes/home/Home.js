@@ -8,6 +8,8 @@ import Testimonies from './components/Testimonies'
 import MobilityGuideBanner from './components/MobilityGuideBanner'
 import Advantages from './components/Advantages'
 import Welcome from './components/Welcome'
+import HomeHelpsBanner from './components/HomeHelpsBanner'
+import HomeRegionsBanner from './components/HomeRegionsBanner'
 
 const HomePage = () => (
   <MainLayout
@@ -23,17 +25,17 @@ const HomePage = () => (
       />
     </Helmet>
 
-    {/* WELCOME SECTION */}
-    <Welcome></Welcome>
+    <Welcome />
 
-    {/* ADVANTAGES */}
-    <Advantages></Advantages>
+    <HomeHelpsBanner />
 
-    {/* MOBILITY GUIDE */}
-    <MobilityGuideBanner></MobilityGuideBanner>
+    <HomeRegionsBanner />
 
-    {/* TESTIMONIES */}
-    <Testimonies></Testimonies>
+    <MobilityGuideBanner />
+
+    <Advantages />
+
+    <Testimonies />
   </MainLayout>
 )
 

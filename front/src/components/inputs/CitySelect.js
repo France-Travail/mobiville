@@ -13,7 +13,7 @@ import {
 import { alphabetOrder } from '../../utils/utils'
 import TextSearchInput from './TextSearchInput'
 
-const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
+const CitySelect = ({ value, codeRome, onSelect }) => {
   const MIN_REGIONS_SHOWED = 2
   const {
     criterions,
@@ -27,7 +27,6 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
 
   const [options, setOptions] = useState([])
   const [inputValue, setInputValue] = useState('')
-  const [value, setValue] = useState(null)
 
   useEffect(() => {
     if (!!criterions && !!search) {
@@ -40,9 +39,9 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
               (region) => region.id === value
             )
             if (!!foundRegion) {
-              setValue({ ...foundRegion, type: REGION_TYPE })
+              onSelect({ ...foundRegion, type: REGION_TYPE })
             } else {
-              setValue({
+              onSelect({
                 label: ALL_REGIONS_LABEL,
                 type: ALL_REGION_TYPE,
                 style: 'primary',
@@ -51,7 +50,7 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
           }
         }
       } else {
-        setValue({
+        onSelect({
           label: ALL_REGIONS_LABEL,
           type: ALL_REGION_TYPE,
           style: 'primary',
@@ -80,33 +79,18 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
     a.romes?.[codeRome]?.opportunite > b.romes?.[codeRome]?.opportunite ? -1 : 1
 
   useEffect(() => {
-    let regionsForRome = []
-
-    if (!!criterions) {
-      const sortedRegions = criterions.regions
-        .filter(regionFilterByRome)
-        .sort(regionSortByOpportunity)
-      const bestRegion = sortedRegions.filter(isRegionWithOpportunityRate(0.15))
-      const lesserRegions =
-        bestRegion.length < MIN_REGIONS_SHOWED
-          ? sortedRegions
-              .filter((v) => !bestRegion.includes(v))
-              .filter(regionWithPositiveOpportunityRate)
-              .slice(0, MIN_REGIONS_SHOWED - bestRegion.length)
-          : []
-
-      // 2 régions minimum : toutes les regions avec > 40% de tension
-      // complété avec les 2 régions avec le plus d'opportunités
-      regionsForRome = [...bestRegion, ...lesserRegions].sort(
-        alphabetOrder('label')
-      )
-    }
-
+    const regionsProposee = [
+      ...(!!criterions
+        ? codeRome
+          ? autocompleteRegionWithRome()
+          : criterions.regions
+        : []),
+    ]
     // format autocompleted cities list item
     setOptions(
       [{ label: ALL_REGIONS_LABEL, type: ALL_REGION_TYPE, style: 'primary' }]
         .concat(
-          regionsForRome.map((region) => ({ ...region, type: REGION_TYPE }))
+          regionsProposee.map((region) => ({ ...region, type: REGION_TYPE }))
         )
         .concat(
           !!inputValue &&
@@ -120,6 +104,24 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
         .filter((el) => !!el)
     )
   }, [autocompletedCities, criterions, codeRome, inputValue, value])
+
+  const autocompleteRegionWithRome = () => {
+    const sortedRegions = criterions.regions
+      .filter(regionFilterByRome)
+      .sort(regionSortByOpportunity)
+    const bestRegion = sortedRegions.filter(isRegionWithOpportunityRate(0.15))
+    const lesserRegions =
+      bestRegion.length < MIN_REGIONS_SHOWED
+        ? sortedRegions
+            .filter((v) => !bestRegion.includes(v))
+            .filter(regionWithPositiveOpportunityRate)
+            .slice(0, MIN_REGIONS_SHOWED - bestRegion.length)
+        : []
+
+    // 2 régions minimum : toutes les regions avec > 40% de tension
+    // complété avec les 2 régions avec le plus d'opportunités
+    return [...bestRegion, ...lesserRegions].sort(alphabetOrder('label'))
+  }
 
   // trigger when text input has been updated
   const onInputChange = (_, inputValue) => {
@@ -137,13 +139,9 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
     }
   }, [inputValue])
 
-  useEffect(() => {
-    onSelect(value)
-  }, [value])
-
   // trigger when an option is selected
   const onChange = (_, value) => {
-    setValue(value)
+    onSelect(value)
   }
 
   const onClickTag = () => {
@@ -160,21 +158,20 @@ const CitySelect = ({ codeRome, onSelect, defaultValue }) => {
       placeholder="Choisissez une région ou indiquez une ville"
       value={value}
       options={options ?? []}
+      required
       onClickTag={isCitiesPage ? onClickTag : undefined}
       // loading={isLoadingAutocomplete}
-      disabled={!codeRome || codeRome === ''}
       onInputChange={onInputChange}
       onChange={onChange}
-      defaultValue={defaultValue}
       showEndAdornment={false}
     ></TextSearchInput>
   )
 }
 
 CitySelect.propTypes = {
+  value: PropTypes.any,
   codeRome: PropTypes.string,
   onSelect: PropTypes.func.isRequired,
-  defaultValue: PropTypes.any,
   style: PropTypes.object,
 }
 

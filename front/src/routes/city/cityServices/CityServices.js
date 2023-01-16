@@ -26,10 +26,9 @@ const WelcomeContainer = styled.div`
 
 const WelcomeWrapper = styled.div`
   max-width: 1040px;
-  margin: ${({ $isMobile }) =>
-    $isMobile ? 'auto' : '0 auto 50px auto'};
-  padding: ${({ $isMobile }) => ($isMobile ? '1px 16px 16px 16px' : '1px 0 50px 0')};
+  margin: ${({ $isMobile }) => $isMobile ? 'auto' : '0 auto 50px auto'};
   color: ${COLOR_PRIMARY};
+  padding: ${({ $isMobile }) => ($isMobile ? '1px 16px 16px 16px' : '1px 0')};
 `
 
 const Title = styled.h1`
@@ -38,6 +37,7 @@ const Title = styled.h1`
 `
 
 const InfoContainer = styled.div`
+  padding: 16px 0;
   display: flex;
   flex-direction: ${({ $isMobile }) => ($isMobile ? 'column' : 'row')};
   gap: 24px;
@@ -79,6 +79,7 @@ const ReadMoreText = styled.span`
 
 const MapContainer = styled.div`
   flex: 1;
+  width: 100%;
 `
 
 const CityServices = () => {
@@ -142,8 +143,11 @@ const CityServices = () => {
                     y: city.geo_point_2d_y ?? 0,
                   },
                 ]}
-                style={{ height: 255, width: '100%', margin: 0 }}
-                zoom={7}
+                style={{
+                  height: 255, 
+                  borderRadius: 8,
+                  margin: 0
+                }}
               />
             </MapContainer>
           </InfoContainer>

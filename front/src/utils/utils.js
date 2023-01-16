@@ -109,6 +109,16 @@ export function getXDaysAgo(date) {
   return `${hoursAgo} heure${hoursAgo > 1 ? 's' : ''}`
 }
 
+// === FORMS UTILS
+
+export const isDirty = (filters) => Object.values(filters).reduce((prev, currFilter) => {
+  if (typeof currFilter === 'string') return prev || currFilter !== ''
+  if (Array.isArray(currFilter)) return prev || currFilter?.length > 0
+  return prev || !!currFilter
+}, false)
+
+// === 
+
 const numberFormatter = Intl.NumberFormat()
 export const formatNumber = (number) => numberFormatter.format(Math.floor(number))
 

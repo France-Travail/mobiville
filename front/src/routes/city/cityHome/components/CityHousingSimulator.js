@@ -114,7 +114,7 @@ const CityHousingSimulator = ({ city }) => {
       <HousingMetrics $isMobile={isMobile}>
         
         <TagsContainer>
-          <Tag green={!city.city_house_tension} tall>{
+          <Tag green={!city.city_house_tension} size='tall'>{
             city && city.city_house_tension
             ? "Tension immobilière a l'achat"
             : "Pas de tension immobilière a l'achat"

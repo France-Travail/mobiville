@@ -18,7 +18,7 @@ import { CircularProgress } from '@mui/material'
 import { Tag } from '../../../components'
 
 const CityLink = styled(Link)`
-  margin: 8px 0;
+  margin: ${({ $isMobile }) => ($isMobile ? '16px 0' : '8px 0')};
   border-radius: 8px;
   border: 1px solid ${COLOR_LIGHT_GREY};
 

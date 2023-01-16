@@ -62,8 +62,8 @@ const KeyFigures = ({ figures }) => {
     <Container $isMobile={isMobile}>
       {figures
       .filter(figure => !!figure)
-      .map(figure => (
-        <Figure key={figure.label}>
+      .map((figure, index) => (
+        <Figure key={`${figure.label}-${index}`}>
           {figure.icon}
           <Data>{figure.data}</Data>
           <Label>{figure.label}</Label>

@@ -23,7 +23,7 @@ const TitleContainer = styled.div`
   justify-content: space-between;
   gap: ${({ $isMobile }) => ($isMobile ? '32px' : '0')};
 
-  margin-top: ${({ $isMobile }) => ($isMobile ? '102px' : '30px')};
+  margin-top: ${({ $isMobile }) => ($isMobile ? '0' : '30px')};
 `
 
 const TitleWrapper = styled.div`

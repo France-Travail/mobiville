@@ -51,7 +51,7 @@ const Title = styled.h1`
 `
 
 const Header = styled.div`
-  margin-top: ${({ $isMobile }) => ($isMobile ? '115px' : '0')};
+  margin-top: ${({ $isMobile }) => ($isMobile ? '13px' : '0')};
 
   display: flex;
   flex-direction: column;
@@ -60,7 +60,7 @@ const Header = styled.div`
   font-weight: bold;
   background-color: ${({ $isMobile }) => $isMobile ? 'none' : COLOR_OTHER_GREEN};
 
-  ${({ $isScrollingUp, $isMobile }) =>
+  ${({ $isMobile }) =>
     !$isMobile &&
     css`
       position: sticky;
@@ -352,10 +352,10 @@ const Helps = () => {
       }
 
       if (!!ref) {
+        setInitialScrollDone(true)
         setTimeout(() => {
           scrollTo(ref)
-          setInitialScrollDone(true)
-        }, 500)
+        }, 350)
       }
     }
   }, [hash, allItems, initialScrollDone])

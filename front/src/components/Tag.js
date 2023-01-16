@@ -1,10 +1,11 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 import {
   COLOR_GRAY,
   COLOR_PRIMARY,
   COLOR_TAG_GREEN,
   COLOR_TAG_RED,
+  COLOR_WHITE,
 } from '../constants/colors'
 
 const Container = styled.div`
@@ -21,24 +22,36 @@ const Container = styled.div`
     $green === null ? COLOR_GRAY : $green ? COLOR_TAG_GREEN : COLOR_TAG_RED};
 
   vertical-align: bottom;
-  font-size: ${({ $tall }) => ($tall ? '16px' : '12px')};
-  font-weight: ${({ $tall, $bold }) => (($tall || $bold) ? 'bold' : '500')};
+  font-size: 12px;
+  font-weight: ${({ $bold }) => ($bold ? 'bold' : '500')};
+
+  ${({ $size }) => $size === 'small' && css`
+    background-color: ${ COLOR_WHITE };
+    border-radius: 1000px;
+    font-size: 16px;
+    font-weight: 700;
+  `}
+
+  ${({ $size }) => $size === 'tall' && css`
+    font-size: 16px;
+    font-weight: bold;
+  `}
 `
 
 const Tag = ({
   green = null,
-  tall = false,
+  size = 'normal',
   bold = false,
   children
 }) => (
-  <Container $green={green} $tall={tall} $bold={bold}>
+  <Container $green={green} $size={size} $bold={bold}>
     {children}
   </Container>
 )
 
 Tag.propTypes = {
   green: PropTypes.bool,
-  tall: PropTypes.bool,
+  size: PropTypes.oneOf([ 'small', 'normal', 'tall' ]),
   bold: PropTypes.bool,
   children: PropTypes.oneOfType([
     // PropTypes.string,

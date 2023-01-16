@@ -94,6 +94,7 @@ const TextSearchInput = React.forwardRef(
       groupLabel = null,
       loading = false,
       disabled = false,
+      required = false,
       onInputChange = () => {},
       isOptionEqualToValue = (option, value) => option.label === value.label,
       defaultValue,
@@ -167,7 +168,7 @@ const TextSearchInput = React.forwardRef(
           <>
             {/* render group label if exists */}
             {groupLabel ? (
-              <CustomBox key={groupLabel} $primary component="li">
+              <CustomBox $primary component="li">
                 {groupLabel}
               </CustomBox>
             ) : null}
@@ -201,7 +202,7 @@ const TextSearchInput = React.forwardRef(
             inputRef={ref}
             InputLabelProps={{
               shrink: true,
-              required: true,
+              required: required,
             }}
             InputProps={{
               ...params.InputProps,
@@ -230,6 +231,7 @@ TextSearchInput.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   value: PropTypes.any,
+  required: PropTypes.bool,
   noOptionsText: PropTypes.string,
   groupLabel: PropTypes.string,
   loading: PropTypes.bool,

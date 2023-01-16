@@ -5,10 +5,6 @@ import { BackButton, MainLayout } from '../../components'
 import { isMobileView } from '../../constants/mobile'
 
 const Container = styled.div`
-  ${({ $isMobile }) => $isMobile && css`
-    padding-top: 96px;
-  `}
-
   > .wrapper {
     max-width: 1040px;
     ${({ $isMobile }) => $isMobile && css`
