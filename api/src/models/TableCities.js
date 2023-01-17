@@ -1,4 +1,4 @@
-import { Op, QueryTypes } from 'sequelize'
+import Sequelize, { Op, QueryTypes } from 'sequelize'
 import { compact, mean } from 'lodash'
 import {
   ALT_IS_MOUNTAIN,
@@ -347,7 +347,20 @@ export default (sequelizeInstance, Model) => {
     await Model.findAll({
       attributes: ['nom_comm', 'insee_com', 'postal_code'],
       where: {
-        nom_comm: { [Op.like]: `${query}%` },
+        nom_comm: {
+          [Op.and]: [
+            Sequelize.where(
+              Sequelize.fn('LOWER', Sequelize.col('nom_comm')),
+              'LIKE',
+              `${query}%`
+            ),
+            Sequelize.where(
+              Sequelize.fn('LOWER', Sequelize.col('nom_comm')),
+              'NOT LIKE',
+              '%-ARRONDISSEMENT'
+            ),
+          ],
+        },
       },
       order: ['nom_comm'],
       limit: 10,
@@ -558,6 +571,11 @@ export default (sequelizeInstance, Model) => {
           { geo_point_2d_y: { [Op.lt]: longitude + 0.5 } },
           { geo_point_2d_y: { [Op.gt]: longitude - 0.5 } },
           { insee_com: { [Op.notLike]: inseeCode } },
+          Sequelize.where(
+            Sequelize.fn('LOWER', Sequelize.col('nom_comm')),
+            'NOT LIKE',
+            '%-ARRONDISSEMENT'
+          ),
         ],
       },
       include: [
@@ -627,6 +645,7 @@ export default (sequelizeInstance, Model) => {
       + (criterions.includes(CRIT_CAMPAGNE) ? " AND `cities`.`distance_from_sea` >= 30 AND `cities`.`population` <= '20' AND `cities`.`z_moyen` <= 600" : "")
       + (criterions.includes(CRIT_MOUNTAIN) ? " AND `cities`.`z_moyen` > 600" : "")
       + " AND `cities`.`id` != " + city.id
+      + " AND `cities`.`nom_comm` NOT LIKE '%-ARRONDISSEMENT'"
 
     const cities = await sequelizeInstance.query("\
       SELECT\

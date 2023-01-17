@@ -11,12 +11,6 @@ const Container = styled.div`
   align-items: center;
 `
 
-const Label = styled.label`
-  margin-left: 8px;
-  font-size: 16px;
-  font-weight: 700;
-`
-
 const Radio = styled.input.attrs({
   type: 'radio',
 })`
@@ -37,10 +31,10 @@ const Radio = styled.input.attrs({
     display: block;
     content: '';
 
-    height: 15px;
-    width: 15px;
+    height: 16px;
+    width: 16px;
     border-radius: 100%;
-    transform: translate(-50%, -50%);
+    transform: translate(-8px, -8px);
     border: 3px solid white;
     background-color: white;
   }
@@ -55,7 +49,25 @@ const Radio = styled.input.attrs({
   }
 `
 
-const RadioInput = ({ value, name, onClick, checked, ...props }) => {
+const Label = styled.label`
+  margin-left: 8px;
+  font-size: 16px;
+  font-weight: 700;
+`
+
+const ValueTips = styled.span`
+  font-size: 14px;
+  font-weight: normal;
+`
+
+const RadioInput = ({
+  value,
+  valueTips,
+  name,
+  onClick,
+  checked,
+  ...props
+}) => {
   return (
     <Container>
       <Radio
@@ -66,13 +78,14 @@ const RadioInput = ({ value, name, onClick, checked, ...props }) => {
         checked={checked}
         {...props}
       />
-      <Label htmlFor={value}>{value}</Label>
+      <Label htmlFor={value}>{value}<ValueTips> {valueTips}</ValueTips></Label>
     </Container>
   )
 }
 
 RadioInput.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  valueTips: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onClick: PropTypes.func,
   checked: PropTypes.bool,

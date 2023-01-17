@@ -1,10 +1,13 @@
+import { useNavigate } from "react-router-dom"
 import { HelpForm, Modale } from "../../components"
 
 const HelpsSearchPage = () => {
+    const navigate = useNavigate()
+
     return (
-        <Modale
+        <Modale show
             title="Recherchez une aide"
-            closeLink="/"
+            onClose={() => navigate('/')}
         >
             <HelpForm />
         </Modale>

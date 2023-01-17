@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+
+import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 
 import defaultMarker from '../assets/images/marker-blue.svg'
 import selectedMarker from '../assets/images/marker-selected.svg'
@@ -12,9 +14,8 @@ import { formatNumber } from '../utils/utils'
 import { COLOR_BUTTON_HOVER, COLOR_PRIMARY } from '../constants/colors'
 
 const StyledMapContainer = styled(MapContainer)`
-  max-height: 424px;
   margin: 0 8px;
-  border-radius: 8px;
+  width: 100%;
 `
 
 const PopupLink = styled(Link)`
@@ -25,17 +26,38 @@ const PopupLink = styled(Link)`
   }
 `
 
+const BoundsControler = ({ bounds, center, zoom }) => {
+  const map = useMap()
+
+  useEffect(() => {
+    if (!map || !bounds || bounds.length < 1) return
+
+    map.flyToBounds(bounds, {
+      duration: 0.75,
+    })
+  }, [bounds])
+
+  useEffect(() => {
+    if (!map || !center || center.length < 1) return
+
+    map.flyTo(center, zoom)
+  }, [center, zoom])
+}
+
 const Map = ({
   cities,
   style,
-  zoom = 6,
+  zoom = 7,
   popupopen = () => {},
   popupclose = () => {},
   showPopUp = false,
   selectedCityId = null,
   hoveredCityId = null,
 }) => {
-  const [mapBounds, setMapBounds] = useState(null)
+  const [mapBounds, setMapBounds] = useState([
+    [51.180623, -5.528866],
+    [41.361852, 9.676212],
+  ])
 
   useEffect(() => {
     if (cities.length > 1) {
@@ -64,18 +86,19 @@ const Map = ({
     }
   }, [cities])
 
-  if (!!cities && cities.length > 1 && !mapBounds) {
-    return null
-  }
-
   return (
     <StyledMapContainer
-      center={cities.length > 1 ? null : [cities[0].x, cities[0].y]}
-      zoom={cities.length > 1 ? null : zoom}
-      bounds={cities.length > 1 ? mapBounds : null}
+      center={cities.length === 1 ? [cities[0].x, cities[0].y] : null}
+      zoom={cities.length === 1 ? zoom : null}
+      bounds={cities.length === 1 ? null : mapBounds}
       scrollWheelZoom
       style={style}
     >
+      <BoundsControler
+        bounds={cities.length === 1 ? null : mapBounds}
+        center={cities.length === 1 ? [cities[0].x, cities[0].y] : null}
+        zoom={cities.length === 1 ? zoom : null}
+      />
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

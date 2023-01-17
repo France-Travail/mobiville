@@ -4,7 +4,7 @@ import { useWindowSize } from "../../../common/hooks/window-size"
 import { isMobileView } from "../../../constants/mobile"
 
 import { Section, SectionTitle } from '../../../components'
-import { COLOR_PRIMARY, COLOR_VERT_MOBIVILLE, COLOR_WHITE } from '../../../constants/colors'
+import { COLOR_PRIMARY, COLOR_VERT_MOBIVILLE } from '../../../constants/colors'
 
 import { ReactComponent as MapPointerIcon } from '../../../assets/images/icons/map-pointer.svg'
 import { ReactComponent as HouseOutlineIcon } from '../../../assets/images/icons/house-outline.svg'
@@ -24,7 +24,6 @@ const Advantage = styled.div`
 
   max-width: ${({ isMobile }) => (isMobile ? 'initial' : '336px')};
 
-  background: ${COLOR_WHITE};
   border-radius: 8px;
 
   text-align: center;

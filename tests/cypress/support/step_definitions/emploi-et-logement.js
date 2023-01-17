@@ -2,30 +2,29 @@ const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor');
 import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "./common/common";
 import { METIER, ENDROIT } from "./home-page";
 
-const rappelCritereVille = "main[id=main] * > div > h1";
-const rappelCritereMetier = "main[id=main] * > div > h1";
-const infoOpportunites = "main[id=main] > div > div ";
-const infoOffres = "main[id=main] * > div > p";
-const infoEntreprises = "main[id=main] * > div > p";
-const infoTauxEmbauche = "main[id=main] * > div > p";
-const resultatOffre = "main[id=main] * > div > h2";
-const commentaireOffre = "main[id=main] * > div > p";
-const nombreOffres = "main[id=main] > div:nth-child(2) > div:nth-child(5) > div";
-const boutonVoirToutesOffres =  "main[id=main] > div:nth-child(2) > div:nth-child(6) > a";
-const resultatEntreprise = "main[id=main] * > div > h2";
+const rappelCritereVille = "div[tag-page$=city] * > div > h1";
+const rappelCritereMetier = "div[tag-page$=city] * > div > h1";
+const infoOpportunites = "div[tag-page$=city] > div ";
+const infoOffres = "div[tag-page$=city] * > div > p";
+const infoEntreprises = "div[tag-page$=city] * > div > p";
+const infoTauxEmbauche = "div[tag-page$=city] * > div > p";
+const resultatOffre = "div[tag-page$=city] * > div > h2";
+const nombreOffres = "div[tag-page$=city] > div:nth-child(5) > div";
+const boutonVoirToutesOffres =  "div[tag-page$=city] > div:nth-child(6) > a";
+const resultatEntreprise = "div[tag-page$=city] * > div > h2";
 const donneesTensionImmobiliere = "div[tag-page$=city] > div:nth-child(9) > div > div > div";
 const donneePrixUniteSurfaceAchat = "div[tag-page$=city] > div:nth-child(9) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1)";
 const donneeLoyerF2Location = "div[tag-page$=city] > div:nth-child(9) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)";
 const donneeLoyerF4Location = "div[tag-page$=city] > div:nth-child(9) > div:nth-child(1) > div:nth-child(2) > div:nth-child(3)";
-const aidesVille = "main[id=main] * > div > h2";
-const nombreAides = "main[id=main] > div:nth-child(2) > div:nth-child(11) > div:nth-child(1) > div";
+const aidesVille = "div[tag-page$=city] * > div > h2";
+const nombreAides = "div[tag-page$=city] > div:nth-child(11) > div:nth-child(1) > div";
 const premiereAide = "a[href*=aide-pour-la-recherche-demploi]";
 const deuxiemeAide = "a[href*=subvention-mobili-pass]";
 const troisiemeAide = "a[href*=garantie-visale]";
-const boutonVoirToutesAides = "main[id=main] * > div > a";
-const servicesVille = "main[id=main] * > div > p";
-const boutonVoirTousServices  =  "main[id=main] * > div > a";
-const nombreBlocsEntreprises = "main[id=main] > div > div:nth-child(8) > div > div:nth-child(1)";
+const boutonVoirToutesAides = "div[tag-page$=city] * > div > a";
+const servicesVille = "div[tag-page$=city] * > div > p";
+const boutonVoirTousServices  =  "div[tag-page$=city] * > div > a";
+const nombreBlocsEntreprises = "div[tag-page$=city] > div:nth-child(8) > div > div:nth-child(1)";
 
 Then("j'affiche la page de la ville pour le métier", function () {
   let villeSansCP = ENDROIT.split(' (')[0];
@@ -45,9 +44,13 @@ Then("j'affiche la page de la ville similaire/proche pour le métier", function 
   })
 
 Then("j'affiche les offres d'emploi qui ont le moins de candidature", function () {
-  cy.contains(resultatOffre, "Les offres d'emploi avec plus d'opportunités", {timeout: SHORT_WAIT_TIME}).should('exist');
-  cy.contains(commentaireOffre, "Offres de plus de 15 jours, comptant moins de 4 candidatures", {timeout: SHORT_WAIT_TIME}).should('exist');
+  cy.contains(resultatOffre, "Les dernières offres d'emploi", {timeout: SHORT_WAIT_TIME}).should('exist');
   cy.get(nombreOffres, {timeout: SHORT_WAIT_TIME}).children().should('have.length.lte', 3);
+})
+
+When("je clique sur la première des trois offres d'emploi", function () {
+  cy.get(nombreOffres, {timeout: SHORT_WAIT_TIME}).first().click();
+  cy.wait(1000);
 })
 
 When("je clique sur Voir toutes les offres d’emploi", function () {

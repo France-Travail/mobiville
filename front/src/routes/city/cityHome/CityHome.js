@@ -1,13 +1,12 @@
 import { useEffect } from 'react'
+
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import loadable from '@loadable/component'
 
-import CityHousingSimulator from './components/CityHousingSimulator'
-import CloseCompanies from './components/CloseCompanies'
-import HelpsStandOut from './components/HelpsStandOut'
-import SectionHeader from '../components/SectionHeader'
 import {
   ActionButton,
+  HelpsStandOut,
   HorizontalScrollableSection,
   KeyFigures,
   Tag,
@@ -24,13 +23,19 @@ import {
   COLOR_TEXT_PRIMARY,
   COLOR_WHITE,
 } from '../../../constants/colors'
-import CityHeader from '../CityHeader'
 import { useProfessions } from '../../../common/contexts/professionsContext'
 import { useCities } from '../../../common/contexts/citiesContext'
 import { isMobileView } from '../../../constants/mobile'
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { Link } from 'react-router-dom'
-import JobCard from '../cityJobs/components/JobCard'
+
+const CityHeader = loadable(() => import('../CityHeader'))
+const SectionHeader = loadable(() => import('../components/SectionHeader'))
+const JobCard = loadable(() => import('../cityJobs/components/JobCard'))
+const CloseCompanies = loadable(() => import('./components/CloseCompanies'))
+const CityHousingSimulator = loadable(() =>
+  import('./components/CityHousingSimulator')
+)
 
 const ElementContainer = styled.div`
   display: flex;
@@ -38,7 +43,8 @@ const ElementContainer = styled.div`
   justify-content: space-around;
   width: 100%;
   max-width: 1040px;
-  margin: ${({ isMobile }) => (isMobile ? '5px auto' : '60px auto 20px auto')};
+  margin: ${({ $isMobile }) =>
+    $isMobile ? '5px auto' : '60px auto 20px auto'};
   align-items: center;
   font-size: 16px;
   line-height: 24px;
@@ -50,7 +56,7 @@ const JobCardContainer = styled(Link)`
 
 const TitlesContainer = styled.div`
   width: 100%;
-  padding: ${({ isMobile }) => (isMobile ? '0 14px' : '0')};
+  padding: ${({ $isMobile }) => ($isMobile ? '0 14px' : '0')};
 
   display: flex;
   flex-direction: column;
@@ -63,8 +69,8 @@ const CityName = styled.h1`
   margin: 8px 0 22px 0;
 
   font-weight: 900;
-  font-size: ${({ isMobile }) => (isMobile ? '24px' : '36px')};
-  line-height: ${({ isMobile }) => (isMobile ? '36px' : '42px')};
+  font-size: ${({ $isMobile }) => ($isMobile ? '24px' : '36px')};
+  line-height: ${({ $isMobile }) => ($isMobile ? '36px' : '42px')};
   color: ${COLOR_PRIMARY};
 `
 
@@ -87,7 +93,7 @@ const TagsContainer = styled.div`
   margin-top: 28px;
 
   display: grid;
-  place-content: center
+  place-content: center;
 `
 
 const ServicesStandOut = styled.div`
@@ -133,22 +139,23 @@ const ServicesStandOutImageContainer = styled.div`
 const CityHome = ({ romeLabel, insee, codeRome }) => {
   const isMobile = isMobileView(useWindowSize())
 
-  const {
-    companiesCount,
-    onSearchCloseCompanies,
-    city
-  } = useCities()
+  const { companiesCount, onSearchCloseCompanies, city } = useCities()
   const {
     jobsMissingApplicant,
+    isMissingApplicants,
+    professions,
     totalOffres,
     infosTravail,
     onSearchInfosTravail,
-    sortByDistanceFromCity
+    sortByDistanceFromCity,
   } = useProfessions()
+
+  const isDefaultJobsPreview = jobsMissingApplicant.length < 3
+  const jobSelectedParam = (job) =>
+    isMissingApplicants(job) ? `&jobSelected=${job.id}` : ''
 
   useEffect(() => {
     if (!city?.insee_com || !codeRome) return
-
     onSearchCloseCompanies({
       codeRome,
       insee: city.insee_com,
@@ -163,13 +170,13 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
   return (
     <div tag-page="/city">
       <CityHeader isMobile={isMobile}>
-        <TitlesContainer isMobile={isMobile}>
+        <TitlesContainer $isMobile={isMobile}>
           <RegionName isMobile={isMobile}>
             {capitalize(city.nom_region)}
             <RoundSeparator> • </RoundSeparator>
             {capitalize(city.nom_dept)}
           </RegionName>
-          <CityName isMobile={isMobile}>
+          <CityName $isMobile={isMobile}>
             {capitalize(city.nom_comm)}
             {isMobile ? <br /> : ' '}pour le métier {romeLabel}
           </CityName>
@@ -177,7 +184,7 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
       </CityHeader>
 
       <TagsContainer>
-        <Tag green={infosTravail?.bassinTensionIndT < 4} tall>
+        <Tag green={infosTravail?.bassinTensionIndT < 4} size="tall">
           {formatCityTension(infosTravail?.bassinTensionIndT)}
         </Tag>
       </TagsContainer>
@@ -194,29 +201,43 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
             data: companiesCount,
             icon: <ProfilEntrepriseIcon />,
           },
-          !infosTravail?.hiringRate ? null : {
-            label: "Taux d'embauche",
-            data: (infosTravail?.hiringRate > 100 ? '100%' : `${infosTravail?.hiringRate}%`),
-            icon: <HandshakeIcon />,
-          },
+          !infosTravail?.hiringRate
+            ? null
+            : {
+                label: "Taux d'embauche",
+                $isNoWrap: true,
+                data:
+                  infosTravail?.hiringRate > 100
+                    ? '100%'
+                    : `${infosTravail?.hiringRate}%`,
+                icon: <HandshakeIcon />,
+              },
         ]}
       />
 
       <SectionHeader
-        title="Les offres d'emploi avec plus d'opportunités"
-        subTitle="Offres de plus de 15 jours, comptant moins de 4 candidatures"
+        title={
+          isDefaultJobsPreview
+            ? "Les dernières offres d'emploi"
+            : "Les offres d'emploi avec plus d'opportunités"
+        }
+        subTitle={
+          !isDefaultJobsPreview &&
+          'Offres de plus de 15 jours, comptant moins de 4 candidatures'
+        }
       />
 
       <HorizontalScrollableSection>
-        {jobsMissingApplicant
+        {(isDefaultJobsPreview ? professions : jobsMissingApplicant)
           ?.sort(sortByDistanceFromCity(city))
           .slice(0, 3)
           .map((job) => (
             <JobCardContainer
+              $isMobile={isMobile}
               key={job.id}
               to={{
                 pathname: `/ville/${insee}/metier`,
-                search: `?codeRome=${codeRome}`
+                search: `?codeRome=${codeRome}${jobSelectedParam(job)}`,
               }}
             >
               <JobCard job={job} style={{ height: '100%' }} />
@@ -235,7 +256,7 @@ const CityHome = ({ romeLabel, insee, codeRome }) => {
       <SectionHeader title="Les entreprises qui recrutent à proximité" />
       <CloseCompanies />
 
-      <ElementContainer isMobile={isMobile}>
+      <ElementContainer $isMobile={isMobile}>
         <CityHousingSimulator city={city}></CityHousingSimulator>
       </ElementContainer>
 

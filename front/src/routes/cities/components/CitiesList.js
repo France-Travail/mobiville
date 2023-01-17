@@ -1,10 +1,8 @@
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
+import loadable from '@loadable/component'
 
 import { CircularProgress } from '@mui/material'
-import Pagination from '@mui/material/Pagination'
-
-import CityItem from './CityItem'
 
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
@@ -21,27 +19,16 @@ import {
 import { useProfessions } from '../../../common/contexts/professionsContext'
 import { formatCityUrl } from '../../../utils/utils'
 
+// import CityItem from './CityItem'
+const CityItem = loadable(() => import('./CityItem'))
+const Pagination = loadable(() => import('@mui/material/Pagination'))
+
 const Container = styled.div`
+  grid-area: citiesList;
+
   flex-grow: 1;
   max-width: ${({ isMobile }) => (isMobile ? '100%' : '620px')};
-  padding: ${({ isMobile }) => (isMobile ? '10 16px' : '0 8px 0 8px')};
-`
-
-const TitleContainer = styled.div`
-  color: ${COLOR_PRIMARY};
-  padding: 8px;
-`
-
-const Title = styled.h1`
-  font-weight: 900;
-  font-size: 24px;
-  line-height: 28px;
-`
-
-const SubTitle = styled.h2`
-  font-weight: 400;
-  font-size: 22px;
-  line-height: 27px;
+  padding: ${({ isMobile }) => (isMobile ? '16px' : '0 8px')};
 `
 
 const NotFoundContainer = styled.div`
@@ -107,58 +94,25 @@ const PaginationContainer = styled.div`
 
 const CitiesList = ({
   cities,
-  params,
+  codeRome,
   selectedCityId = null,
   setHoveredCityId = null,
+  page = 1,
+  onPageChange = () => {},
 }) => {
   const isMobile = isMobileView(useWindowSize())
-  const { totalCities, criterions, sortCriterions, onSearch, isLoading } =
-    useCities()
+  const { totalCities, sortCriterions, isLoading } = useCities()
   const { isLoading: isLoadingProfessions, professionsCountList } =
     useProfessions()
 
-  const [regionLabel, setRegionLabel] = useState('')
-  const [metierLabel, setMetierLabel] = useState('')
   const [formattedCities, setFormattedCities] = useState([])
 
   const itemsPerPage = 10
-  const [page, setPage] = useState(1)
   const [noOfPages, setNoOfPages] = useState(0)
 
   useEffect(() => {
     setNoOfPages(Math.ceil(totalCities / itemsPerPage))
   }, [totalCities])
-
-  useEffect(() => {
-    onSearch(
-      {
-        ...params,
-        sortBy: sortCriterions,
-        onlySearchInTension: true,
-      },
-      (!!page ? page - 1 : 0) * 10,
-      cities ?? []
-    )
-  }, [params, sortCriterions, page])
-
-  useEffect(() => {
-    if (!!params?.codeRegion) {
-      if (!!criterions?.regions) {
-        const region = criterions.regions.find(
-          (region) => params.codeRegion === region.id
-        )
-        setRegionLabel(region?.label ?? '')
-      }
-    } else {
-      setRegionLabel('')
-    }
-    if (!!params?.codeRome && !!criterions?.codeRomes) {
-      const metier = criterions.codeRomes.find(
-        (codeRome) => params.codeRome === codeRome.key
-      )
-      setMetierLabel(metier.label)
-    }
-  }, [params, criterions])
 
   useEffect(() => {
     setFormattedCities(cities)
@@ -184,23 +138,13 @@ const CitiesList = ({
 
   return (
     <Container isMobile={isMobile} data-automation-id="cities-list">
-      <TitleContainer>
-        <Title>
-          {totalCities}
-          {!!metierLabel
-            ? ` ville${totalCities > 1 ? 's' : ''} pour ${metierLabel}`
-            : ''}{' '}
-          {!!regionLabel ? `en ${regionLabel}` : ''}
-        </Title>
-        <SubTitle>Classement des villes par opportunités d'emploi</SubTitle>
-      </TitleContainer>
       {formattedCities.map((city) => (
         <CityItem
           city={city}
           selected={selectedCityId === city.id}
           sortCriterions={sortCriterions}
           key={city.id}
-          to={formatCityUrl(city, params.codeRome)}
+          to={formatCityUrl(city, codeRome)}
           onClickTag={() =>
             window.smartTag({
               name: 'acces_detail_ville',
@@ -234,7 +178,7 @@ const CitiesList = ({
           siblingCount={2}
           boundaryCount={0}
           onChange={(_, value) => {
-            setPage(value)
+            onPageChange(value)
             window.smartTag({
               name: 'pagination',
               type: 'navigation',
@@ -248,10 +192,11 @@ const CitiesList = ({
 }
 
 CitiesList.propTypes = {
+  codeRome: PropTypes.string,
   cities: PropTypes.array.isRequired,
-  params: PropTypes.object,
   selectedCityId: PropTypes.func,
   setHoveredCityId: PropTypes.func,
+  onPageChange: PropTypes.func,
 }
 
 export default CitiesList

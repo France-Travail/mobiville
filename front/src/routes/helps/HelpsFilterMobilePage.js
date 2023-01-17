@@ -1,9 +1,12 @@
 import { Helmet } from 'react-helmet-async'
+import { useNavigate } from "react-router-dom"
 
 import { HelpForm, Modale } from '../../components'
 
-const HelpsFilterMobilePage = () => (
-  <>
+const HelpsFilterMobilePage = () => {
+  const navigate = useNavigate()
+
+  return (<>
     <Helmet>
       <title>Identifiez les aides à la mobilité | Mobiville</title>
       <meta
@@ -12,16 +15,14 @@ const HelpsFilterMobilePage = () => (
       />
     </Helmet>
 
-    <Modale
+    <Modale show
       title="Filtrer selon votre situation"
-      closeLink="/aides"
+      onClose={() => navigate('/aides')}
     >
-
       <HelpForm />
-
     </Modale>
 
-  </>
-)
+  </>)
+}
 
 export default HelpsFilterMobilePage

@@ -1,79 +1,70 @@
-import { Link } from "react-router-dom"
-import styled from "styled-components"
+import styled from 'styled-components'
 import PropTypes from 'prop-types'
-
-import CloseIcon from '@mui/icons-material/Close'
-
-import {
-    COLOR_OTHER_GREEN,
-    COLOR_PRIMARY,
-    COLOR_WHITE
-} from "../constants/colors"
+import { COLOR_PRIMARY, COLOR_WHITE } from '../constants/colors'
+import { useEffect } from 'react'
+import { useScroll } from '../common/hooks/use-scroll'
+import CloseButton from './buttons/CloseButton'
 
 const Container = styled.div`
-  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+
   padding: 20px;
 
-  background: ${ COLOR_WHITE };
+  overflow-y: scroll;
 
-  display: flex;
-  flex-direction: column;
+  background: ${COLOR_WHITE};
+  color: ${COLOR_PRIMARY};
 `
 
-const CloseLink = styled(Link)`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-
-  background: ${ COLOR_OTHER_GREEN };
-`
-
-const Title = styled.h1`
-  margin: 45px 0 32px 0;
+const Title = styled.p`
+  margin: 36px 0;
 
   font-size: 36px;
   font-weight: 900;
-
-  color: ${ COLOR_PRIMARY };
 `
 
-const Modale = ({
-    children,
-    closeLink,
-    title = ''
-}) => {
+const Modale = ({ title = '', show = false, onClose, children }) => {
+  const { toggleBodyScroll } = useScroll()
 
-    return (
-        <Container>
+  useEffect(() => {
+    toggleBodyScroll(!show)
+  }, [show])
 
-            <CloseLink to={closeLink} title="Fermer">
-                <CloseIcon color="primary" fontSize="large" />
-            </CloseLink>
+  const handleCloseButtonClick = () => {
+    toggleBodyScroll(true)
+    onClose()
+  }
 
-            <Title>{ title }</Title>
+  useEffect(() => {
+    return () => {
+      toggleBodyScroll(true)
+    }
+  }, [])
 
-            { children }
+  if (!show) return
 
-        </Container>
-    )
-
+  return (
+    <Container>
+      <CloseButton onClick={handleCloseButtonClick} />
+      <Title>{title}</Title>
+      {children}
+    </Container>
+  )
 }
 
 Modale.propTypes = {
+  title: PropTypes.string,
+  show: PropTypes.bool,
+  onClose: PropTypes.func,
   children: PropTypes.oneOfType([
     PropTypes.node,
     PropTypes.arrayOf(PropTypes.node),
   ]).isRequired,
-  closeLink: PropTypes.string.isRequired,
-  title: PropTypes.string,
 }
 
 export default Modale

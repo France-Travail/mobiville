@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 
 import {
@@ -36,8 +36,8 @@ const CitiesImage = styled.img`
 `
 
 const CitySearchPage = () => {
-
     const isMobile = isMobileView(useWindowSize())
+    const navigate = useNavigate()
 
     const breadcrumbs = [
         <Link underline="hover" key="1" to="/">
@@ -50,11 +50,11 @@ const CitySearchPage = () => {
 
     if (isMobile) {
         return (
-            <Modale
+            <Modale show
                 title="Recherchez une ville"
-                closeLink="/"
+                onClose={() => navigate('/')}
             >
-                <CityForm></CityForm>
+                <CityForm />
             </Modale>
         )
     } else {
@@ -72,7 +72,7 @@ const CitySearchPage = () => {
                         
                     <Title>Recherchez le métier et l'endroit qui vous correspond !</Title>
 
-                    <CityForm></CityForm>
+                    <CityForm />
 
                     <CitiesImage src="/images/cities.png" />
                 </Container>

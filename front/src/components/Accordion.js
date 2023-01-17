@@ -66,7 +66,9 @@ Pane.props = {
 
 // === ACCORDION ===
 
-const AccordionContainer = styled.div``
+const AccordionContainer = styled.div`
+  margin: 0 -20px;
+`
 
 const Accordion = ({ children }) => {
   const [openedPane, setOpenedPane] = useState(

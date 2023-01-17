@@ -10,18 +10,19 @@ const Container = styled.div`
 
   border-radius: 20px;
 
-  ${({ $isMobile }) =>
-    $isMobile &&
-    css`
-      max-width: 80vw;
-    `}
+  ${({ $isMobile }) => $isMobile && css`
+    max-width: 80vw;
+  `}
 
-  ${({ $centered }) =>
-    $centered &&
-    css`
-      width: fit-content;
-      margin: auto;
-    `}
+  ${({ $centered }) => $centered && css`
+    width: fit-content;
+    margin: auto;
+  `}
+
+  ${({ $disabled }) => $disabled && css `
+    pointer-events: none;
+    opacity: 0.7;
+  `}
 `
 
 const ButtonStyles = css`
@@ -86,6 +87,7 @@ const ActionButton = ({
   isBlue = true,
   isWhite = false,
   centered = false,
+  disabled = false,
   style = {},
   buttonProps = {},
 }) => {
@@ -100,7 +102,7 @@ const ActionButton = ({
     (typeof path == 'string' && isHttpMatched(path))
 
   return (
-    <Container $isMobile={isMobile} $centered={centered} style={{ ...style }}>
+    <Container $isMobile={isMobile} $centered={centered} $disabled={disabled} style={{ ...style }}>
       {!!isExternalLink ? (
         <ExternalLinkButton
           {...buttonProps}
@@ -144,6 +146,7 @@ ActionButton.propTypes = {
   isBlue: PropTypes.bool,
   isWhite: PropTypes.bool,
   centered: PropTypes.bool,
+  disabled: PropTypes.bool,
   style: PropTypes.object,
   buttonProps: PropTypes.object,
 }

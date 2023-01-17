@@ -1,15 +1,16 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
+import PropTypes from 'prop-types'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
-import { useHelps } from '../../../../common/contexts/helpsContext'
-import { ActionButton, Tag } from '../../../../components'
-import { COLOR_PRIMARY } from '../../../../constants/colors'
-import { formatHelpUrl } from '../../../../utils/utils'
-import HorizontalScrollableSection from '../../../../components/HorizontalScrollableSection'
-import { isMobileView } from '../../../../constants/mobile'
-import { useWindowSize } from '../../../../common/hooks/window-size'
+import { useHelps } from '../common/contexts/helpsContext'
+import { ActionButton, Tag } from '.'
+import { COLOR_PRIMARY } from '../constants/colors'
+import { formatHelpUrl } from '../utils/utils'
+import HorizontalScrollableSection from './HorizontalScrollableSection'
+import { isMobileView } from '../constants/mobile'
+import { useWindowSize } from '../common/hooks/window-size'
 
 const Container = styled.div`
   max-width: 1040px;
@@ -72,7 +73,7 @@ const DiscoverText = styled.p`
   font-weight: 700;
 `
 
-const HelpsStandOut = () => {
+const HelpsStandOut = ({ buttonLibelle = 'Voir toutes les aides' }) => {
   const isMobile = isMobileView(useWindowSize())
   const { previews, onLoadPreviews } = useHelps()
 
@@ -112,7 +113,7 @@ const HelpsStandOut = () => {
 
       <ActionButton
         path='/aides'
-        libelle='Voir toutes les aides'
+        libelle={buttonLibelle}
         style={{ width: 'fit-content', margin: '0 auto 32px auto' }}
         isWhite
         isBlue={false}
@@ -121,6 +122,8 @@ const HelpsStandOut = () => {
   )
 }
 
-HelpsStandOut.props = {}
+HelpsStandOut.propTypes = {
+  buttonLibelle: PropTypes.string
+}
 
 export default HelpsStandOut

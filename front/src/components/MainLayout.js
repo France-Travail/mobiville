@@ -1,13 +1,18 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
+import loadable from '@loadable/component'
 import PropTypes from 'prop-types'
 import { useLocation } from 'react-router-dom'
-import MenuMobile from './MenuMobile'
-import HeaderMobile from './HeaderMobile'
-import HeaderDesktop from './HeaderDesktop'
 import { isMobileView } from '../constants/mobile'
 import { useWindowSize } from '../common/hooks/window-size'
-import Footer from './Footer'
+
+import HeaderMobile from './HeaderMobile'
+import HeaderDesktop from './HeaderDesktop'
+// const HeaderMobile = loadable(() => import('./HeaderMobile'))
+// const HeaderDesktop = loadable(() => import('./HeaderDesktop'))
+const MenuMobile = loadable(() => import('./MenuMobile'))
+const Footer = loadable(() => import('./Footer'))
+
 const Container = styled.div`
   height: 100%;
   display: flex;
@@ -97,7 +102,7 @@ MainLayout.propTypes = {
   menu: PropTypes.oneOfType([PropTypes.object]),
   topMobileMenu: PropTypes.bool,
   style: PropTypes.object,
-  displaySearch: PropTypes.bool
+  displaySearch: PropTypes.bool,
 }
 
 export default MainLayout

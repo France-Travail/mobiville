@@ -1,8 +1,9 @@
+import { CircularProgress } from '@mui/material'
 import CssBaseline from '@mui/material/CssBaseline'
 import React, { Suspense } from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import TC_Wrapper from 'react-tag-commander'
 import { MobivilleRoutes } from './routes/Routes'
-import TC_Wrapper from "react-tag-commander"
+import { SuspenseRouter } from './utils/SuspenseRouter'
 
 function App() {
   // import tag commander
@@ -13,15 +14,30 @@ function App() {
     wrapper.addContainer('tc', 'https://cdn.tagcommander.com/5595/uat/tc_Mobiville_31.js', 'body')
   }
 
+  const spinner = (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        width: '100%',
+        height: '100%',
+      }}
+    >
+      <CircularProgress />
+      <p>Chargement...</p>
+    </div>
+  )
+
   return (
     <>
       <CssBaseline />
-
-      <Suspense fallback={<p>Chargement...</p>}>
-        <BrowserRouter>
+      <SuspenseRouter>
+        <Suspense fallback={spinner}>
           <MobivilleRoutes />
-        </BrowserRouter>
-      </Suspense>
+        </Suspense>
+      </SuspenseRouter>
     </>
   )
 }

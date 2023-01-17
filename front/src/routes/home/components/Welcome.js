@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import loadable from '@loadable/component'
 
 import { useWindowSize } from '../../../common/hooks/window-size'
 import { isMobileView } from '../../../constants/mobile'
@@ -6,14 +7,17 @@ import { COLOR_PRIMARY } from '../../../constants/colors'
 import { Section } from '../../../components'
 
 import heroHomepagePic from '../../../assets/images/hero-homepage.png'
-import WelcomeSearchForm from './WelcomeSearchForm'
+
+const WelcomeSearchForm = loadable(() => import('./WelcomeSearchForm'))
 
 const Container = styled.section`
   background: linear-gradient(180deg, #ddddea 0%, #c3e9e9 100%);
-  padding-bottom: ${({ $isMobile }) => ($isMobile ? '40px' : '80px')};
+  padding-bottom: ${({ $isMobile }) => ($isMobile ? '40px' : '50px')};
   border-radius: 0;
 `
-
+const WelcomeSection = styled(Section)`
+  margin-top: unset;
+`
 // === TITLE BLOCK ===
 
 const TitleContainer = styled.div`
@@ -23,7 +27,7 @@ const TitleContainer = styled.div`
   justify-content: space-between;
   gap: ${({ $isMobile }) => ($isMobile ? '32px' : '0')};
 
-  margin-top: ${({ $isMobile }) => ($isMobile ? '102px' : '30px')};
+  margin-top: ${({ $isMobile }) => ($isMobile ? '0' : '30px')};
 `
 
 const TitleWrapper = styled.div`
@@ -61,7 +65,7 @@ const Welcome = () => {
 
   return (
     <Container $isMobile={isMobile}>
-      <Section>
+      <WelcomeSection>
         <TitleContainer $isMobile={isMobile}>
           <TitleWrapper>
             <Title>Trouvez l’emploi et la ville qui va avec !</Title>
@@ -76,7 +80,7 @@ const Welcome = () => {
         </TitleContainer>
 
         <WelcomeSearchForm></WelcomeSearchForm>
-      </Section>
+      </WelcomeSection>
     </Container>
   )
 }

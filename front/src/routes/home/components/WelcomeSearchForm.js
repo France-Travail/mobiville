@@ -18,7 +18,9 @@ const Container = styled.div`
   align-items: start;
   gap: 24px;
 
-  margin-top: ${({ $isMobile }) => ($isMobile ? '' : '-96px')};
+  margin-top: ${({ $isMobile, $windowSize }) =>
+    $isMobile ? '' : $windowSize.width <= 1037 ? '-80px' : '-96px'};
+  // quickfix du texte qui se chevauche a < 1037px de large
 `
 
 const ButtonGroupLabel = styled.p`
@@ -31,7 +33,8 @@ const WelcomeSearchForm = () => {
   const HELPS_BUTTON_ID = 'helps'
   const CITIES_BUTTON_ID = 'cities'
 
-  const isMobile = isMobileView(useWindowSize())
+  const windowSize = useWindowSize()
+  const isMobile = isMobileView(windowSize)
   const navigate = useNavigate()
 
   const [selectedSearchMode, setSelectedSearchMode] = useState('city')
@@ -59,7 +62,7 @@ const WelcomeSearchForm = () => {
   }
 
   return (
-    <Container $isMobile={isMobile}>
+    <Container $isMobile={isMobile} $windowSize={windowSize}>
       <div style={{ width: '100%' }}>
         <ButtonGroupLabel>Que recherchez-vous ?</ButtonGroupLabel>
         <ButtonGroup
@@ -90,11 +93,11 @@ const WelcomeSearchForm = () => {
       {!isMobile && (
         <>
           <CityForm
-            isWelcomeCitySearch={true}
+            isWelcomeCitySearch
             hidden={!isSelected(CITIES_BUTTON_ID)}
-          ></CityForm>
+          />
 
-          <HelpForm hidden={!isSelected(HELPS_BUTTON_ID)}></HelpForm>
+          <HelpForm hidden={!isSelected(HELPS_BUTTON_ID)} />
         </>
       )}
     </Container>

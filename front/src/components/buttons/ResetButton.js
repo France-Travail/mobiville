@@ -8,15 +8,20 @@ const StyledResetIcon = styled(ResetIcon)`
   vertical-align: text-top;
 `
 
-const ResetButton = ({ libelle = 'Réinitialiser', ...props }) => (
-  <Button light primary={false} {...props}>
-    <StyledResetIcon />
-    {libelle}
-  </Button>
-)
+const ResetButton = ({ libelle = 'Réinitialiser', show = true, ...props }) => {
+  if (!show) return
+
+  return (
+    <Button light primary={false} {...props}>
+      <StyledResetIcon />
+      {libelle}
+    </Button>
+  )
+}
 
 ResetButton.props = {
-  libelle: PropTypes.string
+  libelle: PropTypes.string,
+  show: PropTypes.bool,
 }
 
 export default ResetButton

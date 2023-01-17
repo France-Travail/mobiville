@@ -2,17 +2,17 @@ const { When, Then, And } = require('@badeball/cypress-cucumber-preprocessor');
 import { SHORT_WAIT_TIME, MIDDLE_WAIT_TIME, LONG_WAIT_TIME } from "./common/common";
 import { ENDROIT } from './home-page';
 
-const rappelCritereServices = "main[id=main] > div[tag-page$=city-services] > div > div > h1";
-const infoHabitants = "main[id=main] > div[tag-page$=city-services] > div > div > p";
-const infoSuperficie = "main[id=main] > div[tag-page$=city-services] > div > div > p";
-const infoTemperature = "main[id=main] > div[tag-page$=city-services] > div > div > p";
-const infoServices = "main[id=main] > div[tag-page$=city-services] > div > h2";
-const infoTransport = "main[id=main] > div[tag-page$=city-services] * > div > p";
-const infoEducation = "main[id=main] > div[tag-page$=city-services] * > div > p";
-const infoSante = "main[id=main] > div[tag-page$=city-services] * > div > p";
-const infoCultureLoisirs = "main[id=main] > div[tag-page$=city-services] * > div > p";
-const infosElus = "main[id=main] > div[tag-page$=city-services] * > div > p";
-const boutonContacter = "main[id=main] > div[tag-page$=city-services] > div > a[href*=mailto]";
+const rappelCritereServices = "div[tag-page$=city-services] > div > div > h1";
+const infoHabitants = "div[tag-page$=city-services] > div > div > p";
+const infoSuperficie = "div[tag-page$=city-services] > div > div > p";
+const infoTemperature = "div[tag-page$=city-services] > div > div > p";
+const infoServices = "div[tag-page$=city-services] > div > h2";
+const infoTransport = "div[tag-page$=city-services] * > div > p";
+const infoEducation = "div[tag-page$=city-services] * > div > p";
+const infoSante = "div[tag-page$=city-services] * > div > p";
+const infoCultureLoisirs = "div[tag-page$=city-services] * > div > p";
+const infosElus = "div[tag-page$=city-services] * > div > p";
+const boutonContacter = "div[tag-page$=city-services] > div > a[href*=mailto]";
 
 Then("j'affiche les services de la ville", function () {
   cy.url().should('include', 'services');

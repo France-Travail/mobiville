@@ -5,18 +5,17 @@ import {
   Accordion,
   Button,
   CheckboxInput,
-  CloseButton,
   FiltersButton,
   LittleSelect,
+  Modale,
   Pane,
-  RadioInput,
+  RadioGroup,
   ResetButton,
 } from '../../../../components'
-import { COLOR_PRIMARY, COLOR_WHITE } from '../../../../constants/colors'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { isMobileView } from '../../../../constants/mobile'
 import { useWindowSize } from '../../../../common/hooks/window-size'
-import { useScroll } from '../../../../common/hooks/use-scroll'
+import { isDirty } from '../../../../utils/utils'
 
 const Container = styled.div`
   max-width: 1040px;
@@ -35,30 +34,6 @@ const Row = styled.div`
   flex-wrap: wrap;
 `
 
-const Modale = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  width: 100vw;
-  height: 100vh;
-  height: -moz-available;
-  height: -webkit-fill-available;
-  height: fill-available;
-
-  overflow-y: scroll;
-
-  background: ${COLOR_WHITE};
-  color: ${COLOR_PRIMARY};
-`
-
-const Title = styled.p`
-  margin: 36px 16px 16px 16px;
-
-  font-size: 36px;
-  font-weight: 900;
-`
-
 const ButtonsContainer = styled.div`
   padding: 34px 50px;
 `
@@ -70,7 +45,6 @@ const CustomButton = styled(Button)`
 const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
   const isMobile = isMobileView(useWindowSize())
   const [showMobileFilters, setShowMobileFilters] = useState(false)
-  const { toggleBodyScroll } = useScroll()
 
   const datesPublication = {
     ONE_DAY: 'Un jour',
@@ -112,16 +86,10 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
     ALL_OFFERS: 'Toutes les offres',
   }
 
-  useEffect(() => {
-    toggleBodyScroll(!showMobileFilters)
-  }, [showMobileFilters])
-
-  const showReset = useMemo(() => Object.values(filters).reduce((prev, currFilter) => {
-    if (typeof currFilter === 'string') return prev || currFilter !== ''
-    if (Array.isArray(currFilter)) return prev || currFilter?.length > 0
-    return prev || !!currFilter
-  }, false),
-  [ filters ])
+  const showReset = useMemo(
+    () => isDirty(filters),
+    [filters]
+  )
 
   const numbersOfSelectedFilters = useMemo(() => {
     return Object.values(filters).reduce((prev, currFilter) => {
@@ -136,17 +104,29 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
     setShowMobileFilters(true)
   }
 
-  const handleClose = () => {
-    setShowMobileFilters(false)
+  const handleFiltersChange = (name, key) => {
+    onFiltersChange({
+      [name]: key,
+    })
   }
 
-  const handleSubmitFilters = () => {
-    setShowMobileFilters(false)
+  const handleRadioButtonClick = (name, key) => {
+    const tagsNames = {
+      distance: 'distance',
+      date: 'date_publication',
+    }
+    if (!!tagsNames[name]) {
+      window.smartTag({
+        name: tagsNames[name],
+        type: 'action',
+        chapters: ['city-offres', 'filtres'],
+      })
+    }
   }
 
   if (isMobile) {
-    if (!showMobileFilters) {
-      return (
+    return (
+      <>
         <FiltersButton
           libelle={`Filtrer par critères ${
             numbersOfSelectedFilters > 0 ? `(${numbersOfSelectedFilters})` : ''
@@ -154,178 +134,144 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
           onClick={handleFiltersClick}
           style={{ margin: 'auto' }}
         />
-      )
-    }
 
-    return (
-      <Modale>
-        <CloseButton onClick={handleClose} />
-        <Title>Filtrer</Title>
-
-        <Accordion>
-          <Pane title={`Distance ${filters?.distance !== '' ? '(1)' : ''}`}>
-            {Object.entries(distances).map(([key, value]) => (
-              <RadioInput
-                key={key}
+        <Modale
+          title="Filtrer"
+          show={showMobileFilters}
+          onClose={() => setShowMobileFilters(false)}
+        >
+          <Accordion>
+            <Pane title={`Distance ${filters?.distance !== '' ? '(1)' : ''}`}>
+              <RadioGroup
                 name="distance"
-                value={value}
-                onChange={() =>
-                  onFiltersChange({
-                    distance: key,
-                  })
-                }
-                onClick={() => {
-                  window.smartTag({
-                    name: 'distance',
-                    type: 'action',
-                    chapters: ['city-offres', 'filtres'],
-                  })
-                }}
-                checked={filters.distance === key}
+                values={distances}
+                selectedButton={filters.distance}
+                onChange={handleFiltersChange}
+                onClick={handleRadioButtonClick}
               />
-            ))}
-          </Pane>
-          <Pane
-            title={`Date de publication ${filters?.date !== '' ? '(1)' : ''}`}
-          >
-            {Object.entries(datesPublication).map(([key, value]) => (
-              <RadioInput
-                key={key}
+            </Pane>
+            <Pane
+              title={`Date de publication ${filters?.date !== '' ? '(1)' : ''}`}
+            >
+              <RadioGroup
                 name="date"
-                value={value}
-                onChange={() =>
-                  onFiltersChange({
-                    date: key,
-                  })
-                }
-                onClick={() => {
-                  window.smartTag({
-                    name: 'date_publication',
-                    type: 'action',
-                    chapters: ['city-offres', 'filtres'],
-                  })
-                }}
-                checked={filters.date === key}
+                values={datesPublication}
+                selectedButton={filters.date}
+                onChange={handleFiltersChange}
+                onClick={handleRadioButtonClick}
               />
-            ))}
-          </Pane>
-          <Pane
-            title={`Type de contrat ${
-              filters?.type?.length > 0 ? `(${filters?.type?.length})` : ''
-            }`}
-          >
-            {Object.entries(typeContrats).map(([key, value]) => (
-              <CheckboxInput
-                key={key}
-                name="type"
-                value={value}
-                onChange={() => {
-                  onFiltersChange({
-                    type: filters.type.includes(key)
-                      ? filters.type.filter((type) => type !== key)
-                      : [...filters.type, key],
-                  })
-                }}
-                onClick={() => {
-                  window.smartTag({
-                    name: 'type_contrat',
-                    type: 'action',
-                    chapters: ['city-offres', 'filtres'],
-                  })
-                }}
-                checked={filters.type.includes(key)}
-              />
-            ))}
-          </Pane>
-          <Pane
-            title={`Expérience ${
-              filters?.experience?.length > 0
-                ? `(${filters?.experience?.length})`
-                : ''
-            }`}
-          >
-            {Object.entries(experiences).map(([key, value]) => (
-              <CheckboxInput
-                key={key}
-                name="experience"
-                value={value}
-                onChange={() => {
-                  onFiltersChange({
-                    experience: filters.experience.includes(key)
-                      ? filters.experience.filter(
-                          (experience) => experience !== key
-                        )
-                      : [...filters.experience, key],
-                  })
-                }}
-                onClick={() => {
-                  window.smartTag({
-                    name: 'experience',
-                    type: 'action',
-                    chapters: ['city-offres', 'filtres'],
-                  })
-                }}
-                checked={filters.experience.includes(key)}
-              />
-            ))}
-          </Pane>
-          <Pane
-            title={`Durée hebdomadaire ${
-              filters?.duration?.length > 0
-                ? `(${filters?.duration?.length})`
-                : ''
-            }`}
-          >
-            {Object.entries(durations).map(([key, value]) => (
-              <CheckboxInput
-                key={key}
-                name="duration"
-                value={value}
-                onChange={(e) => {
-                  onFiltersChange({
-                    duration: !e.target.checked
-                      ? filters.duration.filter((duration) => duration !== key)
-                      : [...filters.duration, key],
-                  })
-                }}
-                onClick={() => {
-                  window.smartTag({
-                    name: 'duree_hebdomadaire',
-                    type: 'action',
-                    chapters: ['city-offres', 'filtres'],
-                  })
-                }}
-                checked={filters.duration.includes(key)}
-              />
-            ))}
-          </Pane>
-          <Pane title={"Opportunités"}>
-            {Object.entries(opportunities).map(([ key, value ]) => (
-              <RadioInput
-                key={key}
+            </Pane>
+            <Pane
+              title={`Type de contrat ${
+                filters?.type?.length > 0 ? `(${filters?.type?.length})` : ''
+              }`}
+            >
+              {Object.entries(typeContrats).map(([key, value]) => (
+                <CheckboxInput
+                  key={key}
+                  name="type"
+                  value={value}
+                  onChange={() => {
+                    onFiltersChange({
+                      type: filters.type.includes(key)
+                        ? filters.type.filter((type) => type !== key)
+                        : [...filters.type, key],
+                    })
+                  }}
+                  onClick={() => {
+                    window.smartTag({
+                      name: 'type_contrat',
+                      type: 'action',
+                      chapters: ['city-offres', 'filtres'],
+                    })
+                  }}
+                  checked={filters.type.includes(key)}
+                />
+              ))}
+            </Pane>
+            <Pane
+              title={`Expérience ${
+                filters?.experience?.length > 0
+                  ? `(${filters?.experience?.length})`
+                  : ''
+              }`}
+            >
+              {Object.entries(experiences).map(([key, value]) => (
+                <CheckboxInput
+                  key={key}
+                  name="experience"
+                  value={value}
+                  onChange={() => {
+                    onFiltersChange({
+                      experience: filters.experience.includes(key)
+                        ? filters.experience.filter(
+                            (experience) => experience !== key
+                          )
+                        : [...filters.experience, key],
+                    })
+                  }}
+                  onClick={() => {
+                    window.smartTag({
+                      name: 'experience',
+                      type: 'action',
+                      chapters: ['city-offres', 'filtres'],
+                    })
+                  }}
+                  checked={filters.experience.includes(key)}
+                />
+              ))}
+            </Pane>
+            <Pane
+              title={`Durée hebdomadaire ${
+                filters?.duration?.length > 0
+                  ? `(${filters?.duration?.length})`
+                  : ''
+              }`}
+            >
+              {Object.entries(durations).map(([key, value]) => (
+                <CheckboxInput
+                  key={key}
+                  name="duration"
+                  value={value}
+                  onChange={(e) => {
+                    onFiltersChange({
+                      duration: !e.target.checked
+                        ? filters.duration.filter(
+                            (duration) => duration !== key
+                          )
+                        : [...filters.duration, key],
+                    })
+                  }}
+                  onClick={() => {
+                    window.smartTag({
+                      name: 'duree_hebdomadaire',
+                      type: 'action',
+                      chapters: ['city-offres', 'filtres'],
+                    })
+                  }}
+                  checked={filters.duration.includes(key)}
+                />
+              ))}
+            </Pane>
+            <Pane title={'Opportunités'}>
+              <RadioGroup
                 name="opportunity"
-                value={value}
-                onChange={() =>
-                  onFiltersChange({
-                    opportunity: key,
-                  })
-                }
-                checked={filters.opportunity === key}
+                values={opportunities}
+                selectedButton={filters.opportunity}
+                onChange={handleFiltersChange}
               />
-            ))}
-          </Pane>
-        </Accordion>
+            </Pane>
+          </Accordion>
 
-        <ButtonsContainer>
-          <CustomButton fullWidth onClick={handleSubmitFilters}>
-            Valider
-          </CustomButton>
+          <ButtonsContainer>
+            <CustomButton fullWidth onClick={() => setShowMobileFilters(false)}>
+              Valider
+            </CustomButton>
 
-          {showReset ? (
-            <ResetButton style={{ margin: 'auto' }} onClick={onReset} />
-          ) : null}
-        </ButtonsContainer>
-      </Modale>
+            <ResetButton style={{ margin: 'auto' }} show={showReset} onClick={onReset} />
+          </ButtonsContainer>
+        </Modale>
+      </>
     )
   }
 
@@ -410,7 +356,7 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
           }}
         />
 
-        {showReset ? <ResetButton onClick={onReset} /> : null}
+        <ResetButton show={showReset} onClick={onReset} />
       </Row>
 
       <Row>

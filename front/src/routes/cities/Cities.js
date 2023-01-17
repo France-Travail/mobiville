@@ -1,51 +1,88 @@
-import { useEffect, useState, memo, useCallback } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { Helmet } from 'react-helmet-async'
-import styled from 'styled-components'
+import loadable from '@loadable/component'
 import queryString from 'query-string'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { Helmet } from 'react-helmet-async'
+import { useLocation } from 'react-router-dom'
+import styled, { css } from 'styled-components'
 
 import { useCities } from '../../common/contexts/citiesContext'
-import { MainLayout, Map } from '../../components'
+import { MainLayout } from '../../components'
+
 import { useWindowSize } from '../../common/hooks/window-size'
 import { isMobileView } from '../../constants/mobile'
 
-import MobileCriterionsPanel from './components/MobileCriterionsPanel'
-import DesktopCriterionsPanel from './components/DesktopCriterionsPanel'
-import MobileCriterionsSelection from './components/MobileCriterionsSelection'
-
 import { useProfessions } from '../../common/contexts/professionsContext'
-import CitiesList from './components/CitiesList'
 import { formatCityUrl } from '../../utils/utils'
+
+const CitiesSearchBar = loadable(() => import('./components/CitiesSearchBar'))
+const CitiesList = loadable(() => import('./components/CitiesList'))
+const Map = loadable(() => import('../../components/Map'))
 
 const Container = styled.div`
   width: 100%;
-  max-width: 1040px;
-  margin: 0 auto;
 
-  display: flex;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+
+  ${({ $isMobile }) =>
+    $isMobile
+      ? css`
+          grid-template-areas:
+            'cityForm'
+            'filters'
+            'citiesList';
+          grid-template-columns: auto;
+        `
+      : css`
+          grid-template-areas:
+            'cityForm cityForm cityForm cityForm'
+            '. filters map map'
+            '. citiesList map map';
+          grid-template-columns: 1fr 600px minmax(0, 440px) 1fr;
+        `}
+`
+
+const MapContainer = styled.div`
+  grid-area: map;
+  position: sticky;
+  top: 0;
+  max-height: 100vh;
+  height: 880px;
 `
 
 const Cities = () => {
   const isMobile = isMobileView(useWindowSize())
   const location = useLocation()
-  const navigate = useNavigate()
+
+  const { onSearchCountList } = useProfessions()
+
+  const { cities, sortCriterions, onSearch } = useCities()
 
   const [params, setParams] = useState(queryString.parse(location.search))
-  const [showMobilePanel, setShowMobileCriterionsSelection] = useState(false)
-
-  const {
-    onSearchCountList,
-  } = useProfessions()
-
-  // cities
-  const {
-    cities,
-    isLoading,
-    totalCities,
-    sortCriterions,
-  } = useCities()
+  const [page, setPage] = useState(1)
   const [hoveredCityId, setHoveredCityId] = useState(null)
   const [selectedCityId, setSelectedCityId] = useState(null)
+
+  const search = useCallback(() => {
+    onSearch(
+      {
+        ...params,
+        sortBy: sortCriterions,
+        onlySearchInTension: true,
+      },
+      (!!page ? page - 1 : 0) * 10,
+      cities ?? []
+    )
+  }, [params, sortCriterions, page])
+
+  useEffect(() => {
+    search()
+    setPage(1)
+  }, [params, sortCriterions])
+
+  useEffect(() => {
+    search()
+  }, [page])
 
   const computedHelmet = useCallback(() => {
     if (
@@ -56,9 +93,7 @@ const Cities = () => {
     ) {
       return (
         <Helmet>
-          <title>
-            Où travailler en {cities[0]['newRegion.name']} | Mobiville
-          </title>
+          <title>Où travailler en {cities[0]['newRegion.name']} | Mobiville</title>
           <meta
             name="description"
             content={`Découvrez les villes qui correspondent le mieux à votre recherche d'emploi dans la région ${cities[0]['newRegion.name']} et la liste des villes les plus attractives pour votre métier`}
@@ -93,35 +128,16 @@ const Cities = () => {
     }
   }, [params, sortCriterions, cities])
 
-  const onSubmit = ({ city, environment, region }) => {
-    const data = {
-      codeRome: [params.codeRome || params.codeRomes[0].key],
-      codeRegion: [region],
-      codeCity: city,
-      codeEnvironment: environment,
-    }
+  const formattedCities = useMemo(() => {
+    if (!cities || !cities.length) return []
 
-    navigate({
-      pathname: '/villes',
-      search: queryString.stringify(data),
-    })
-  }
-
-  const showMobileCriterionsSelection = (bool) =>
-    setShowMobileCriterionsSelection(bool)
-
-  if (showMobilePanel) {
-    return (
-      <MainLayout menu={{ visible: !showMobileCriterionsSelection }}>
-        <MobileCriterionsSelection
-          paramsUrl={params}
-          onSubmit={onSubmit}
-          showMobileCriterionsSelection={showMobileCriterionsSelection}
-          total={totalCities}
-        />
-      </MainLayout>
-    )
-  }
+    return cities.map((city) => ({
+      ...city,
+      x: city.geo_point_2d_x ?? 0,
+      y: city.geo_point_2d_y ?? 0,
+      url: formatCityUrl(city, params.codeRome),
+    }))
+  }, [cities])
 
   return (
     <>
@@ -132,42 +148,31 @@ const Cities = () => {
           overflow: isMobile ? 'inherit' : '',
           minHeight: isMobile ? undefined : '',
         }}
+        topMobileMenu
       >
-        {isMobile ? (
-          <MobileCriterionsPanel
-            criterions={params}
-            showMobileCriterionsSelection={showMobileCriterionsSelection}
-            total={totalCities}
-          />
-        ) : (
-          <DesktopCriterionsPanel paramsUrl={params} />
-        )}
+        <Container $isMobile={isMobile}>
+          <CitiesSearchBar params={params} />
 
-        <Container>
           <CitiesList
             cities={cities}
-            params={params}
+            codeRome={params?.codeRome}
             selectedCityId={selectedCityId}
             setHoveredCityId={setHoveredCityId}
+            page={page}
+            onPageChange={setPage}
           />
-          {!isMobile && !isLoading && cities.length && (
-            <div style={{ height: 424, width: 424 }}>
+          {!isMobile && (
+            <MapContainer>
               <Map
-                cities={cities.map((city) => ({
-                  ...city,
-                  x: city.geo_point_2d_x ?? 0,
-                  y: city.geo_point_2d_y ?? 0,
-                  url: formatCityUrl(city, params.codeRome),
-                }))}
+                cities={formattedCities}
                 style={{ height: '100%', width: '100%', margin: 0 }}
-                zoom={7}
                 popupopen={(city) => setSelectedCityId(city.id)}
                 popupclose={() => setSelectedCityId(null)}
                 showPopUp
                 selectedCityId={selectedCityId}
                 hoveredCityId={hoveredCityId}
               />
-            </div>
+            </MapContainer>
           )}
         </Container>
       </MainLayout>
