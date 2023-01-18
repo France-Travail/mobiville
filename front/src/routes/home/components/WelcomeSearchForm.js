@@ -50,7 +50,7 @@ const WelcomeSearchForm = () => {
     // redirect to modale on mobile
     if (isMobile) {
       if (buttonId === HELPS_BUTTON_ID) {
-        navigate('/aides-search')
+        navigate('/aides-recherche')
       } else if (buttonId === CITIES_BUTTON_ID) {
         navigate('/rechercher')
       }
