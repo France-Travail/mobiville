@@ -42,7 +42,7 @@ Sentry.init({
 // we add the relevant middlewares to our API
 app.use(cors({ credentials: true })) // add cors headers to the requests
 app.use(helmet()) // adds various security headers to our API's responses
-app.use(RateLimit.middleware({ interval: { min: 1 }, max: 100 }))
+app.use(RateLimit.middleware({ interval: { min: 1 }, max: 1000 }))
 
 app.use(
   koaBody({
