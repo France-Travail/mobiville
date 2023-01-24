@@ -146,7 +146,7 @@ const CitiesList = ({
           key={city.id}
           to={formatCityUrl(city, codeRome)}
           onClickTag={() =>
-            window.smartTag({
+            (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
               name: 'acces_detail_ville',
               type: 'navigation',
               chapters: ['cities'],
@@ -179,7 +179,7 @@ const CitiesList = ({
           boundaryCount={0}
           onChange={(_, value) => {
             onPageChange(value)
-            window.smartTag({
+            (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
               name: 'pagination',
               type: 'navigation',
               chapters: ['cities'],

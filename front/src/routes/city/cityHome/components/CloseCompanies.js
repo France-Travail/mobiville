@@ -128,7 +128,7 @@ const CloseCompanies = () => {
             target="_blank"
             href="https://labonneboite.pole-emploi.fr/"
             onClick={() => {
-              window.smartTag({
+              (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
                 name: 'acces_entreprise',
                 type: 'exit',
                 chapters: ['city', 'labonneboite'],

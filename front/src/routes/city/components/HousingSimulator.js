@@ -125,7 +125,7 @@ const HousingSimulator = ({ city }) => {
               <InputLabel>Pour un loyer en location</InputLabel>
               <InputGroup
                 onClick={() => {
-                  window.smartTag({
+                  (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
                     name: 'utilisation',
                     type: 'action',
                     chapters: ['city', 'simulateur'],
@@ -164,7 +164,7 @@ const HousingSimulator = ({ city }) => {
               <InputLabel>Pour un achat de logement</InputLabel>
               <InputGroup
                 onClick={() => {
-                  window.smartTag({
+                  (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
                     name: 'utilisation',
                     type: 'action',
                     chapters: ['city', 'simulateur'],

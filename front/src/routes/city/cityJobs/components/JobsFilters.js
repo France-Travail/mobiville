@@ -116,7 +116,7 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
       date: 'date_publication',
     }
     if (!!tagsNames[name]) {
-      window.smartTag({
+      (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
         name: tagsNames[name],
         type: 'action',
         chapters: ['city-offres', 'filtres'],
@@ -179,7 +179,7 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
                     })
                   }}
                   onClick={() => {
-                    window.smartTag({
+                    (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
                       name: 'type_contrat',
                       type: 'action',
                       chapters: ['city-offres', 'filtres'],
@@ -211,7 +211,7 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
                     })
                   }}
                   onClick={() => {
-                    window.smartTag({
+                    (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
                       name: 'experience',
                       type: 'action',
                       chapters: ['city-offres', 'filtres'],
@@ -243,7 +243,7 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
                     })
                   }}
                   onClick={() => {
-                    window.smartTag({
+                    (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
                       name: 'duree_hebdomadaire',
                       type: 'action',
                       chapters: ['city-offres', 'filtres'],
@@ -289,7 +289,7 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
             })
           }
           onClickTag={() => {
-            window.smartTag({
+            (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
               name: 'distance',
               type: 'action',
               chapters: ['city-offres', 'filtres'],
@@ -308,7 +308,7 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
             })
           }
           onClickTag={() => {
-            window.smartTag({
+            (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
               name: 'date_publication',
               type: 'action',
               chapters: ['city-offres', 'filtres'],
@@ -328,7 +328,7 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
             })
           }
           onClickTag={() => {
-            window.smartTag({
+            (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
               name: 'type_contrat',
               type: 'action',
               chapters: ['city-offres', 'filtres'],
@@ -348,7 +348,7 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
             })
           }
           onClickTag={() => {
-            window.smartTag({
+            (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
               name: 'experience',
               type: 'action',
               chapters: ['city-offres', 'filtres'],
@@ -372,7 +372,7 @@ const JobsFilters = ({ filters, onFiltersChange, onReset }) => {
             })
           }
           onClickTag={() => {
-            window.smartTag({
+            (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
               name: 'duree_hebdomadaire',
               type: 'action',
               chapters: ['city-offres', 'filtres'],

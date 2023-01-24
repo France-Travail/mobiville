@@ -115,7 +115,7 @@ const CitiesFilters = ({ filters, onFiltersChange, onReset, params = [] }) => {
       opportunity: 'opportunites',
     } 
     if (!!tagsNames[name]) {
-      window.smartTag({
+      (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
         name: tagsNames[name],
         type: 'action',
         chapters: ['cities', 'recherche', 'filtres'],
