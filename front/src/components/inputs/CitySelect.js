@@ -152,7 +152,7 @@ const CitySelect = ({ value, codeRome, onSelect }) => {
   }
 
   const onClickTag = () => {
-    window.smartTag({
+    (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
       name: 'modification_ville',
       type: 'action',
       chapters: ['cities', 'recherche'],

@@ -64,7 +64,7 @@ const JobSelect = ({ value, onSelect }) => {
   }
 
   const onClickTag = () => {
-    window.smartTag({
+    (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
       name: 'modification_metier',
       type: 'action',
       chapters: ['cities', 'recherche'],
