@@ -106,6 +106,7 @@ const CitiesList = ({
     useProfessions()
 
   const [formattedCities, setFormattedCities] = useState([])
+  const [_page, _setPage] = useState(page)
 
   const itemsPerPage = 10
   const [noOfPages, setNoOfPages] = useState(0)
@@ -136,6 +137,10 @@ const CitiesList = ({
     setFormattedCities(newFormattedCities)
   }, [professionsCountList])
 
+  useEffect(() => {
+    onPageChange(_page)
+  }, [_page])
+
   return (
     <Container isMobile={isMobile} data-automation-id="cities-list">
       {formattedCities.map((city) => (
@@ -146,7 +151,7 @@ const CitiesList = ({
           key={city.id}
           to={formatCityUrl(city, codeRome)}
           onClickTag={() =>
-            (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
+            (window.smartTagPiano ? window.smartTagPiano : window.smartTag)({
               name: 'acces_detail_ville',
               type: 'navigation',
               chapters: ['cities'],
@@ -174,12 +179,12 @@ const CitiesList = ({
         <Pagination
           count={noOfPages}
           defaultPage={0}
-          page={page}
+          page={_page}
           siblingCount={2}
           boundaryCount={0}
           onChange={(_, value) => {
-            onPageChange(value)
-            (window.smartTagPiano ? window.smartTagPiano : window.smartTag )({
+            _setPage(value)
+            ;(window.smartTagPiano ? window.smartTagPiano : window.smartTag)({
               name: 'pagination',
               type: 'navigation',
               chapters: ['cities'],
